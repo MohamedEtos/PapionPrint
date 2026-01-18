@@ -1,13 +1,30 @@
-/* @import 'tailwindcss'; */
-@import 'bootstrap';
+
+
+@import '../core/css-rtl/bootstrap.css';
+@import '../core/css-rtl/bootstrap-extended.css';
+@import '../core/css-rtl/colors.css';
+@import '../core/css-rtl/components.css';
+@import '../core/css-rtl/themes/dark-layout.css';
+@import '../core/css-rtl/themes/semi-dark-layout.css';
+@import '../core/css-rtl/core/menu/menu-types/vertical-menu.css';
+@import '../core/css-rtl/core/colors/palette-gradient.css';
+@import '../core/css-rtl/pages/dashboard-ecommerce.css';
+@import '../core/css-rtl/pages/card-analytics.css';
+@import '../core/css-rtl/custom-rtl.css';
+@import '../core/css/style-rtl.css';
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-/* @import '../custome.css'; */
+
+
+
+
+
 
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
+        'Segoe UI Symbol', 'Noto Color Emoji';
 }
