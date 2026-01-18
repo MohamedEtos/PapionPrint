@@ -20,4 +20,8 @@
         </div>
     </div>
 </div>
+
+    @vite(['resources/css/custome.css'])
+
+<h1 class="test">test te2st</h1>
 @endsection
