@@ -19,8 +19,9 @@
 
     <link rel="apple-touch-icon" href=" {{Vite::asset('resources/app-assets/images/ico/apple-icon-120.png')}}">
     <link rel="shortcut icon" type="image/x-icon" href=" {{Vite::asset('resources/app-assets/images/ico/favicon.ico')}}">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css?family=Alexandria:300,400,500,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('vendors/css/vendors-rtl.min.css') }} ">
 
     <!-- Scripts -->
     @vite([  'resources/css/app.css'])
@@ -42,5 +43,6 @@
     @yield('js')
 
     @vite([  'resources/js/app.js'])
+<script src="{{ asset('vendors/js/vendors.min.js') }}"></script>
 </body>
 </html>

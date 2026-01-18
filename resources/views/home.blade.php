@@ -2,34 +2,11 @@
 
 @section('css')
 
-<link rel="stylesheet" href="{{ asset('vendors/css/vendors-rtl.min.css') }} ">
-<link rel="stylesheet" href="{{ asset('vendors/css/charts/apexcharts.css') }} ">
+<!-- <link rel="stylesheet" href="{{ asset('vendors/css/charts/apexcharts.css') }} "> -->
 
 @endsection
 
 @section('content')
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-
-
     <!-- BEGIN: Header-->
 
     <ul class="main-search-list-defaultlist d-none">
@@ -578,7 +555,6 @@
 
 @section('js')
 
-<script src="{{ asset('vendors/js/vendors.min.js') }}"></script>
 <script src="{{ asset('vendors/js/charts/apexcharts.min.js') }}"></script>
 
 @endsection
