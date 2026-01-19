@@ -79,6 +79,7 @@
                                     <th>الامتار</th>
                                     <th>الحاله</th>
                                     <th>السعر</th>
+                                    <th>التاريخ</th>
                                     <th>اجراء</th>
                                 </tr>
                             </thead>
@@ -101,8 +102,9 @@
                                         </div>
                                     </td>
                                     <td class="product-price">$69.99</td>
+                                    <td class="product-price">1-1-2026</td>
                                     <td class="product-action">
-                                        <span class=" hover_action action-info "><i class="feather icon-file"></i></span>
+                                        <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
                                         <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
                                         <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
 
@@ -182,35 +184,7 @@
                         </div>
                     </div>
 
-                        <div class="modal-size-xl mr-1 mb-1 d-inline-block">
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#xlarge">
-        Extra Large Modal
-    </button>
 
-    <!-- Modal -->
-    <div class="modal fade text-left" id="xlarge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel16">Extra Large Modal</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Cake cupcake sugar plum. Sesame snaps pudding cupcake candy canes icing cheesecake. Sweet roll
-                    pudding lollipop apple pie gummies dragée. Chocolate bar cookie caramels I love lollipop ice
-                    cream tiramisu lollipop sweet.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-                    <!-- add new sidebar ends -->
                 </section>
                 <!-- Data list view end -->
 
@@ -219,7 +193,88 @@
     </div>
     <!-- END: Content-->
 
+                    <div class="modal-size-xl mr-1 mb-1 d-inline-block">
+                        <!-- Modal -->
+                        <div class="modal fade text-left" id="xlarge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel16">تفاصيل الطلب</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Basic Tables start -->
+                                        <div class="row" id="basic-table">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h4 class="card-title">تفاصيل الطلب</h4>
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <div class="card-body">
+                                                            <div class="d-flex align-items-center">
+                                                                <p class="card-text mb-0 mr-1">هنا كل تفاصيل الاوردرا </p>
+                                                                <div><img class="w-50 ml-5 mb-1 justify-content-start" src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder"></div>
+                                                            </div>
+                                                            <!-- Table with outer spacing -->
+                                                            <div class="table-responsive">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>ID</th>
+                                                                            <th>اسم العميل</th>
+                                                                            <th>الماكينه</th>
+                                                                            <th>طول الملف</th>
+                                                                            <th>العرض</th>
+                                                                            <th>تكرار</th>
+                                                                            <th>عدد القطع</th>
+                                                                            <th>الامتار</th>
+                                                                            <th>سعر المتر</th>
+                                                                            <th>الاجمالي</th>
+                                                                            <th>المصمم</th>
+                                                                            <th>الاوبراتور</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <th scope="row">#</th>
+                                                                            <td>Leanne Graham</td>
+                                                                            <td>sincere@april.biz</td>
+                                                                            <td>sincere@april.biz</td>
+                                                                            <td>@mdo</td>
+                                                                            <td>Leanne Graham</td>
+                                                                            <td>Leanne Graham</td>
+                                                                            <td>Leanne Graham</td>
+                                                                            <td>Leanne Graham</td>
+                                                                            <td>Leanne Graham</td>
+                                                                            <td>محمد محروس</td>
+                                                                            <td>محمد محروس</td>
+                                                                        </tr>
 
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <p class="px-2"><span class="text-bold-600">  بدايه الطلب:</span> 2022-01-01</p>
+                                                        <p class="px-2 text-success" ><span class="text-bold-600 ">  نهايه الطلب:</span> 2022-01-01</p>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Basic Tables end -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 

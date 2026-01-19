@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('printers', function (Blueprint $table) {
+        Schema::create('machines', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('type')->nullable();
+            $table->string('timePrintPerHour')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('printers');
+        Schema::dropIfExists('machines');
     }
 };
