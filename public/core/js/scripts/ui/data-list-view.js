@@ -123,20 +123,20 @@ $(document).ready(function() {
     $("#data-category, #data-status").prop("selectedIndex", 0)
   })
 
-  // On Edit
-  $('.action-edit').on("click",function(e){
-    e.stopPropagation();
-    $('#data-name').val('Altec Lansing - Bluetooth Speaker');
-    $('#data-price').val('$99');
-    $(".add-new-data").addClass("show");
-    $(".overlay-bg").addClass("show");
-  });
+  // // On Edit
+  // $('.action-edit').on("click",function(e){
+  //   e.stopPropagation();
+  //   $('#data-name').val('Altec Lansing - Bluetooth Speaker');
+  //   $('#data-price').val('$992');
+  //   $(".add-new-data").addClass("show");
+  //   $(".overlay-bg").addClass("show");
+  // });
 
-  // On Delete
-  $('.action-delete').on("click", function(e){
-    e.stopPropagation();
-    $(this).closest('td').parent('tr').fadeOut();
-  });
+  // // On Delete
+  // $('.action-delete').on("click", function(e){
+  //   e.stopPropagation();
+  //   $(this).closest('td').parent('tr').fadeOut();
+  // });
 
   // dropzone init
   Dropzone.options.dataListUpload = {

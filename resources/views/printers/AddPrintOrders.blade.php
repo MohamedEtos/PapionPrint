@@ -11,6 +11,7 @@
         'resources/core/css-rtl/pages/data-list-view.css',
         'resources/core/css-rtl/custom-rtl.css',
     ])
+
 @endsection
 
 @section('content')
@@ -101,58 +102,16 @@
                                     </td>
                                     <td class="product-price">$69.99</td>
                                     <td class="product-action">
+                                        <span class=" hover_action action-info "><i class="feather icon-file"></i></span>
                                         <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
-                                        <span class=" hover_action action-file "><i class="feather icon-file"></i></span>
-                                        <span class=" hover_action action-delete text-danger "><i class="feather icon-trash"></i></span>
+                                        <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
 
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td></td>
-                                    <td class="product-img"><img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
-                                    </td>
-                                    <td class="product-name">محمد محروس</td>
-                                    <td class="product-category">DTF / 6Pass</td>
-                                    <td class="product-category"><b>60</b></td>
-                                    <td>
-                                        <div class="chip chip-warning">
-                                            <div class="chip-body">
-                                                <div class="chip-text"> جاري الطباعه</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="product-price">$69.99</td>
-                                    <td class="product-action">
-                                        <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
-                                        <span class=" hover_action action-file "><i class="feather icon-file"></i></span>
-                                        <span class=" hover_action action-delete text-danger "><i class="feather icon-trash"></i></span>
 
-                                    </td>
-                                </tr>
 
-                                <tr>
-                                    <td></td>
-                                    <td class="product-img"><img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
-                                    </td>
-                                    <td class="product-name">محمد محروس</td>
-                                    <td class="product-category">sublimation</td>
-                                    <td class="product-category"><b>60</b></td>
-                                    <td>
-                                        <div class="chip chip-success">
-                                            <div class="chip-body">
-                                                <div class="chip-text">تم الطباعه</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="product-price">$69.99</td>
-                                    <td class="product-action">
-                                        <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
-                                        <span class=" hover_action action-file "><i class="feather icon-file"></i></span>
-                                        <span class=" hover_action action-delete text-danger "><i class="feather icon-trash"></i></span>
-
-                                    </td>
-                                </tr>
+      
 
                             
                                
@@ -222,6 +181,35 @@
                             </div>
                         </div>
                     </div>
+
+                        <div class="modal-size-xl mr-1 mb-1 d-inline-block">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#xlarge">
+        Extra Large Modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade text-left" id="xlarge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel16">Extra Large Modal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Cake cupcake sugar plum. Sesame snaps pudding cupcake candy canes icing cheesecake. Sweet roll
+                    pudding lollipop apple pie gummies dragée. Chocolate bar cookie caramels I love lollipop ice
+                    cream tiramisu lollipop sweet.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                     <!-- add new sidebar ends -->
                 </section>
                 <!-- Data list view end -->
@@ -230,6 +218,10 @@
         </div>
     </div>
     <!-- END: Content-->
+
+
+
+
 
  
 
@@ -251,6 +243,8 @@
         <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
 
 
+        @vite('resources/js/pages/AddNewOrder.js')
+        @vite('resources/core/js/scripts/modal/components-modal.js')
 
 
 
