@@ -43,7 +43,5 @@
 
     @yield('js')
 
-
-
 </body>
 </html>
