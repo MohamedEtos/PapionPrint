@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('printingprices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('machineId')->constrained('machines')->cascadeOnDelete();
-            $table->foreignId('pricePerMeterId')->constrained('printers')->cascadeOnDelete();
-            $table->foreignId('totalPriceId')->constrained('printers')->cascadeOnDelete();
+            $table->foreignId('orderId')->constrained('printers')->cascadeOnDelete();
             $table->decimal('pricePerMeter', 10, 2);
             $table->decimal('totalPrice', 12, 2);
             $table->decimal('discount', 12, 2);

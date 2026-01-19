@@ -9,7 +9,7 @@ use App\Models\Machines;
 use App\Models\customers;
 use App\Models\Printers;
 use App\Models\Printingprices;
-
+use Illuminate\Support\Facades\Hash;
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
@@ -22,8 +22,9 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'محمد محروس',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('password'),
         ]);
 
         $this->call([

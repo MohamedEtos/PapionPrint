@@ -15,9 +15,8 @@ class PrintingpricesSeedere extends Seeder
         $Printingprices = [
             [
             'machineId' => 1,
-            'pricePerMeterId' => 1,
-            'totalPriceId' => 1,
-            'pricePerMeter' => 10,
+            'orderId' => 1,
+            'pricePerMeter' => 23,
             'totalPrice' => 100,
             'discount' => 10,
             'finalPrice' => 90,

@@ -14,13 +14,13 @@ class CustomersSeedere extends Seeder
     {
         $customers = [
             [
-                'name' => 'Customer 1',
+                'name' => 'محمد احمد',
                 'phone' => '1234567890',
                 'whatsAppNumber' => '1234567890',
                 'notes' => 'Notes 1',
             ],
             [
-                'name' => 'Customer 2',
+                'name' => 'احمد سعد',
                 'phone' => '1234567890',
                 'whatsAppNumber' => '1234567890',
                 'notes' => 'Notes 2',

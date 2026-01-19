@@ -18,11 +18,11 @@ return new class extends Migration
             $table->foreignId('machineId')->constrained('machines')->cascadeOnDelete();
             $table->decimal('fileHeight', 10, 2);
             $table->decimal('fileWidth', 10, 2);
-            $table->integer('fileCopies');
-            $table->integer('picInCopies');
-            $table->integer('pass');
+            $table->integer('fileCopies')->nullable();
+            $table->integer('picInCopies')->nullable();
+            $table->integer('pass')->default(1);
             $table->decimal('meters', 10, 2);
-            $table->string('status');
+            $table->string('status')->default('It hasnt started');
             $table->string('paymentStatus')->default('unpaid');
             $table->foreignId('designerId')->constrained('users')->cascadeOnDelete();
             $table->foreignId('operatorId')->constrained('users')->cascadeOnDelete();

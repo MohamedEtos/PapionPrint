@@ -32,4 +32,20 @@ class Printers extends Model
     {
         return $this->belongsTo(customers::class, 'customerId');
     }
+    public function machines()
+    {
+        return $this->belongsTo(Machines::class, 'machineId');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'designerId');
+    }
+    public function user2()
+    {
+        return $this->belongsTo(User::class, 'operatorId');
+    }
+    public function printingprices()
+    {
+        return $this->hasOne(Printingprices::class, 'pricePerMeterId');
+    }
 }

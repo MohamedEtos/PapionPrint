@@ -19,6 +19,6 @@ class Printingprices extends Model
     }
     public function printers()
     {
-        return $this->hasMany(Printers::class, 'pricePerMeterId');
+        return $this->belongsTo(Printers::class, 'pricePerMeterId');
     }
 }

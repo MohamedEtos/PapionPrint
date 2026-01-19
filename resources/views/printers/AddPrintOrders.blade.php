@@ -78,31 +78,31 @@
                                     <th>نوع الطباعه</th>
                                     <th>الامتار</th>
                                     <th>الحاله</th>
-                                    <th>السعر</th>
+                                    <th>سعر المتر</th>
                                     <th>التاريخ</th>
                                     <th>اجراء</th>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                @foreach ($Orders as $Order)
 
                                 <tr>
                                     <td></td>
                                     <td class="product-img"><img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
-                                    <td class="product-name">محمد محروس</td>
-                                    <td class="product-category">DTF / 6Pass</td>
-                                    <td class="product-category"><b>60</b></td>
+                                    <td class="product-name">{{ $Order->customers->name }}</td>
+                                    <td class="product-category">{{ $Order->machines->name}} {{ $Order->pass}} pass</td>
+                                    <td class="product-category"><b>{{ $Order->meters }}</b></td>
 
                                     <td>
                                         <div class="chip chip-sucendry">
                                             <div class="chip-body">
-                                                <div class="chip-text">بدء الطباعه</div>
+                                                <div class="chip-text">{{ $Order->status }}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="product-price">$69.99</td>
-                                    <td class="product-price">1-1-2026</td>
+                                    <td class="product-price">{{ optional($Order->printingprices)->pricePerMeter }}</td>
+                                    <td class="product-price" title="{{ $Order->created_at }}">{{ $Order->created_at->locale('ar')->diffForHumans() }}</td>
                                     <td class="product-action">
                                         <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
                                         <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
@@ -110,6 +110,7 @@
 
                                     </td>
                                 </tr>
+                                @endforeach
 
 
 
@@ -238,6 +239,7 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
+                                                                        
                                                                         <tr>
                                                                             <th scope="row">#</th>
                                                                             <td>Leanne Graham</td>

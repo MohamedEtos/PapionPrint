@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Printers;
 use Illuminate\Http\Request;
+use App\Models\Customers;
+use App\Models\Machines;
+use App\Models\User;
 
 class PrintersController extends Controller
 {
@@ -12,7 +15,12 @@ class PrintersController extends Controller
      */
     public function index()
     {
-        return view('printers.AddPrintOrders');
+        $Orders = Printers::with('printingprices')->get();
+
+        return view('printers.AddPrintOrders', 
+        [
+            'Orders'=>$Orders,
+        ]);
     }
 
     /**
