@@ -2,18 +2,23 @@
 
 @section('css')
     <!-- BEGIN: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/vendors-rtl.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/file-uploaders/dropzone.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/tables/datatable/datatables.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/tables/datatable/extensions/dataTables.checkboxes.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('core/vendors/css/file-uploaders/dropzone.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="core/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
     <!-- END: Vendor CSS-->
+
+
+    <link rel="stylesheet" type="text/css" href="core/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="core/css-rtl/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="core/css-rtl/plugins/file-uploaders/dropzone.css">
+    <link rel="stylesheet" type="text/css" href="core/css-rtl/pages/data-list-view.css">
      
+
+    <link rel="stylesheet" type="text/css" href="core/css-rtl/custom-rtl.css">
+    <link rel="stylesheet" type="text/css" href="../../../assets/css/style-rtl.css">
     <!-- BEGIN: Theme CSS-->
     @vite([
-        'resources/core/css/core/app-menu.css',
-        'resources/core/css/core/app.css',
-        'resources/core/css/scripts/components.css',
-        'resources/core/css/scripts/ui/data-list-view.css',
+
     ])
     <!-- END: Theme CSS-->
 
@@ -103,7 +108,7 @@
                             <tbody>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/apple-watch.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Apple Watch series 4 GPS</td>
                                     <td class="product-category">Computers</td>
@@ -127,7 +132,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/magic-mouse.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/magic-mouse.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Beats HeadPhones</td>
                                     <td class="product-category">Computers</td>
@@ -151,7 +156,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/iphone-x.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/iphone-x.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Altec Lansing - Bluetooth Speaker</td>
                                     <td class="product-category">Audio</td>
@@ -175,7 +180,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/ipad-pro.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/ipad-pro.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Aluratek - Bluetooth Audio Receiver</td>
                                     <td class="product-category">Computers</td>
@@ -199,7 +204,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/jbl-speaker.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/jbl-speaker.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Aluratek - Bluetooth Audio Transmitter</td>
                                     <td class="product-category">Audio</td>
@@ -223,7 +228,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/beats-headphones.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/beats-headphones.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Basis - Peak Fitness and Sleep Tracker</td>
                                     <td class="product-category">Fitness</td>
@@ -247,7 +252,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/homepod.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/homepod.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Antec - Nano Diamond Thermal Compound</td>
                                     <td class="product-category">Fitness</td>
@@ -271,7 +276,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/macbook-pro.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/macbook-pro.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Antec - SmartBean Bluetooth Adapter</td>
                                     <td class="product-category">Computer</td>
@@ -295,7 +300,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/beats-headphones.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/beats-headphones.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Beats by Dr. Dre - 3' USB-to-Micro USB Cable</td>
                                     <td class="product-category">Computer</td>
@@ -319,7 +324,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/jbl-speaker.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/jbl-speaker.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Beats by Dr. Dre - Bike Mount for Pill Speakers</td>
                                     <td class="product-category">Audio</td>
@@ -343,7 +348,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/apple-watch.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Bose® - SoundLink® Color Bluetooth Speaker</td>
                                     <td class="product-category">Fitness</td>
@@ -367,7 +372,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/macbook-pro.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/macbook-pro.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">BRAVEN - Portable Bluetooth Speaker</td>
                                     <td class="product-category">Fitness</td>
@@ -391,7 +396,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/homepod.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/homepod.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Craig - Portable Wireless Speaker</td>
                                     <td class="product-category">Computers</td>
@@ -415,7 +420,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/apple-watch.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Definitive Technology - Wireless Speaker</td>
                                     <td class="product-category">Fitness</td>
@@ -439,7 +444,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/beats-headphones.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/beats-headphones.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Fitbit - Charge HR Activity Tracker + Heart Rate (Large)</td>
                                     <td class="product-category">Audio</td>
@@ -463,7 +468,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/magic-mouse.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/magic-mouse.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Fitbit - Flex 1" USB Charging Cable</td>
                                     <td class="product-category">Fitness</td>
@@ -487,7 +492,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/iphone-x.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/iphone-x.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Fitbit - Activity Tracker</td>
                                     <td class="product-category">Fitness</td>
@@ -511,7 +516,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/ipad-pro.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/ipad-pro.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Fitbit - Charge Wireless Activity Tracker (Large)</td>
                                     <td class="product-category">Computers</td>
@@ -535,7 +540,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/apple-watch.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Craig - Tower Speaker</td>
                                     <td class="product-category">Audio</td>
@@ -559,7 +564,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/jbl-speaker.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/jbl-speaker.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">BRAVEN - Outdoor Speaker</td>
                                     <td class="product-category">Computers</td>
@@ -583,7 +588,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/homepod.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/homepod.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Bose® - Bluetooth Speaker Travel Bag</td>
                                     <td class="product-category">Computers</td>
@@ -607,7 +612,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ asset('images/elements/beats-headphones.png') }}" alt="Img placeholder">
+                                    <td class="product-img"><img src="{{ asset('core/images/elements/beats-headphones.png') }}" alt="Img placeholder">
                                     </td>
                                     <td class="product-name">Altec Lansing - Mini H2O Bluetooth Speaker</td>
                                     <td class="product-category">Fitness</td>
@@ -716,13 +721,28 @@
         'resources/core/js/scripts/ui/data-list-view.js',
     ])  
 
-   <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset('vendors/js/extensions/dropzone.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/tables/datatable/datatables.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
+
+        <script src="core/vendors/js/vendors.min.js"></script>
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="core/vendors/js/extensions/dropzone.min.js"></script>
+    <script src="core/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="core/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="core/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="core/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="core/vendors/js/tables/datatable/dataTables.select.min.js"></script>
+    <script src="core/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
     <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="core/js/core/app-menu.js"></script>
+    <script src="core/js/core/app.js"></script>
+    <script src="core/js/scripts/components.js"></script>
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="core/js/scripts/ui/data-list-view.js"></script>
+    <!-- END: Page JS-->
+
 @endsection

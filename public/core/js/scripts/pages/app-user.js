@@ -9,7 +9,7 @@
 $(document).ready(function () {
 
   var isRtl;
-  if ( $('html').attr('data-textdirection') == 'rtl' ) {
+  if ($('html').attr('data-textdirection') == 'rtl') {
     isRtl = true;
   } else {
     isRtl = false;
@@ -74,77 +74,77 @@ $(document).ready(function () {
   /*** COLUMN DEFINE ***/
 
   var columnDefs = [{
-      headerName: 'ID',
-      field: 'id',
-      width: 125,
-      filter: true,
-      checkboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      headerCheckboxSelection: true,
-    },
-    {
-      headerName: 'Username',
-      field: 'username',
-      filter: true,
-      width: 175,
-      cellRenderer: customAvatarHTML,
-    },
-    {
-      headerName: 'Email',
-      field: 'email',
-      filter: true,
-      width: 225,
-    },
-    {
-      headerName: 'Name',
-      field: 'name',
-      filter: true,
-      width: 200,
-    },
-    {
-      headerName: 'Country',
-      field: 'country',
-      filter: true,
-      width: 150,
-    },
-    {
-      headerName: 'Role',
-      field: 'role',
-      filter: true,
-      width: 150,
-    },
-    {
-      headerName: 'Status',
-      field: 'status',
-      filter: true,
-      width: 150,
-      cellRenderer: customBadgeHTML,
-      cellStyle: {
-        "text-align": "center"
-      }
-    },
-    {
-      headerName: 'Verified',
-      field: 'is_verified',
-      filter: true,
-      width: 125,
-      cellRenderer: customBulletHTML,
-      cellStyle: {
-        "text-align": "center"
-      }
-    },
-    {
-      headerName: 'Department',
-      field: 'department',
-      filter: true,
-      width: 150,
-    },
-    {
-      headerName: 'Actions',
-      field: 'transactions',
-      width: 150,
-      cellRenderer: customIconsHTML,
+    headerName: 'ID',
+    field: 'id',
+    width: 125,
+    filter: true,
+    checkboxSelection: true,
+    headerCheckboxSelectionFilteredOnly: true,
+    headerCheckboxSelection: true,
+  },
+  {
+    headerName: 'Username',
+    field: 'username',
+    filter: true,
+    width: 175,
+    cellRenderer: customAvatarHTML,
+  },
+  {
+    headerName: 'Email',
+    field: 'email',
+    filter: true,
+    width: 225,
+  },
+  {
+    headerName: 'Name',
+    field: 'name',
+    filter: true,
+    width: 200,
+  },
+  {
+    headerName: 'Country',
+    field: 'country',
+    filter: true,
+    width: 150,
+  },
+  {
+    headerName: 'Role',
+    field: 'role',
+    filter: true,
+    width: 150,
+  },
+  {
+    headerName: 'Status',
+    field: 'status',
+    filter: true,
+    width: 150,
+    cellRenderer: customBadgeHTML,
+    cellStyle: {
+      "text-align": "center"
     }
+  },
+  {
+    headerName: 'Verified',
+    field: 'is_verified',
+    filter: true,
+    width: 125,
+    cellRenderer: customBulletHTML,
+    cellStyle: {
+      "text-align": "center"
+    }
+  },
+  {
+    headerName: 'Department',
+    field: 'department',
+    filter: true,
+    width: 150,
+  },
+  {
+    headerName: 'Actions',
+    field: 'transactions',
+    width: 150,
+    cellRenderer: customIconsHTML,
+  }
   ];
 
   /*** GRID OPTIONS ***/
@@ -171,7 +171,7 @@ $(document).ready(function () {
     /*** GET TABLE DATA FROM URL ***/
     agGrid
       .simpleHttpRequest({
-        url: "../../../app-assets/data/users-list.json"
+        url: "../core/data/users-list.json"
       })
       .then(function (data) {
         gridOptions.api.setRowData(data);

@@ -1,10 +1,10 @@
 /*=========================================================================================
-	File Name: sweet-alerts.js
-	Description: A beautiful replacement for javascript alerts
-	----------------------------------------------------------------------------------------
-	Item Name: Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template
-	Author: Pixinvent
-	Author URL: hhttp://www.themeforest.net/user/pixinvent
+  File Name: sweet-alerts.js
+  Description: A beautiful replacement for javascript alerts
+  ----------------------------------------------------------------------------------------
+  Item Name: Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template
+  Author: Pixinvent
+  Author URL: hhttp://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 $(document).ready(function () {
 
@@ -208,7 +208,7 @@ $(document).ready(function () {
     Swal.fire({
       title: 'Sweet!',
       text: 'Modal with a custom image.',
-      imageUrl: '../../../app-assets/images/slider/04.jpg',
+      imageUrl: '../core/images/slider/04.jpg',
       imageWidth: 400,
       imageHeight: 200,
       imageAlt: 'Custom image',

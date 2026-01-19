@@ -7,13 +7,13 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-$(document).ready(function() {
+$(document).ready(function () {
     /***********************************
     *        js of small Slider        *
     ************************************/
 
     var sm_options = {
-        start: [30,70],
+        start: [30, 70],
         behaviour: 'drag',
         connect: true,
         range: {
@@ -28,25 +28,25 @@ $(document).ready(function() {
     /*************************************
     *        Default Score Rating        *
     **************************************/
-    $.fn.raty.defaults.path = '../../../app-assets/images/raty/';
+    $.fn.raty.defaults.path = '../core/images/raty/';
 
     $('#score-rating').raty({
         score: 3
     });
 
-    if($(".sidebar-sticky").length){
+    if ($(".sidebar-sticky").length) {
         var headerNavbarHeight,
             footerNavbarHeight;
 
         // Header & Footer offset only for right & left sticky sidebar
-        if($("body").hasClass('content-right-sidebar') || $("body").hasClass('content-left-sidebar')){
+        if ($("body").hasClass('content-right-sidebar') || $("body").hasClass('content-left-sidebar')) {
             headerNavbarHeight = $('.header-navbar').height();
             footerNavbarHeight = $('footer.footer').height();
         }
         // Header & Footer offset with padding for detached right & left dsticky sidebar
-        else{
-            headerNavbarHeight = $('.header-navbar').height()+24;
-            footerNavbarHeight = $('footer.footer').height()+10;
+        else {
+            headerNavbarHeight = $('.header-navbar').height() + 24;
+            footerNavbarHeight = $('footer.footer').height() + 10;
         }
 
         $(".sidebar-sticky").sticky({

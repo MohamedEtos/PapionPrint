@@ -7,7 +7,7 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-$(document).ready(function() {
+$(document).ready(function () {
   /*** COLUMN DEFINE ***/
   var columnDefs = [
     {
@@ -109,8 +109,8 @@ $(document).ready(function() {
   /*** GET TABLE DATA FROM URL ***/
 
   agGrid
-    .simpleHttpRequest({ url: "../../../app-assets/data/ag-grid-data.json" })
-    .then(function(data) {
+    .simpleHttpRequest({ url: "../core/data/ag-grid-data.json" })
+    .then(function (data) {
       gridOptions.api.setRowData(data);
     });
 
@@ -119,7 +119,7 @@ $(document).ready(function() {
     gridOptions.api.setQuickFilter(val);
   }
 
-  $(".ag-grid-filter").on("keyup", function() {
+  $(".ag-grid-filter").on("keyup", function () {
     updateSearchQuery($(this).val());
   });
 
@@ -128,14 +128,14 @@ $(document).ready(function() {
     gridOptions.api.paginationSetPageSize(Number(value));
   }
 
-  $(".sort-dropdown .dropdown-item").on("click", function() {
+  $(".sort-dropdown .dropdown-item").on("click", function () {
     var $this = $(this);
     changePageSize($this.text());
     $(".filter-btn").text("1 - " + $this.text() + " of 500");
   });
 
   /*** EXPORT AS CSV BTN ***/
-  $(".ag-grid-export-btn").on("click", function(params) {
+  $(".ag-grid-export-btn").on("click", function (params) {
     gridOptions.api.exportDataAsCsv();
   });
 
@@ -149,7 +149,7 @@ $(document).ready(function() {
   } else {
     gridOptions.columnApi.setColumnPinned("email", "left");
   }
-  $(window).on("resize", function() {
+  $(window).on("resize", function () {
     if ($(window).width() < 768) {
       gridOptions.columnApi.setColumnPinned("email", null);
     } else {

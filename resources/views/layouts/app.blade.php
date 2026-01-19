@@ -21,7 +21,7 @@
     <link rel="shortcut icon" type="image/x-icon" href=" {{  asset('resources/app-assets/images/ico/favicon.ico')}}">
     <link href="https://fonts.googleapis.com/css?family=Alexandria:300,400,500,600" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('core/vendors/css/vendors-rtl.min.css') }} ">
+    <!-- <link rel="stylesheet" href="{{ asset('core/vendors/css/vendors-rtl.min.css') }} "> -->
 
     <!-- Scripts -->
     @vite([  'resources/css/app.css'])
