@@ -17,7 +17,7 @@
                 <li class=" nav-item"><a href="index.html"><i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Papion</span><span class="badge badge badge-warning badge-pill float-right mr-2">2</span></a>
                     <ul class="menu-content">
 
-                        <li class="active"><a href="{{route('home')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="eCommerce">الرئيسية</span></a>
+                        <li class="{{ request()->routeIs('home') ? 'active' : '' }}"><a href="{{route('home')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="eCommerce">الرئيسية</span></a>
                         </li>
                     </ul>
                 </li>
@@ -26,7 +26,7 @@
 
                 <li class=" nav-item"><a href="#"><i class="feather icon-printer"></i><span class="menu-title" data-i18n="Ecommerce">الطباعه</span></a>
                     <ul class="menu-content">
-                        <li ><a href="{{route('AddPrintOrders')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اضافه اذن تشغل</span></a>
+                        <li class="{{ request()->routeIs('AddPrintOrders') ? 'active' : '' }}"><a href="{{route('AddPrintOrders')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اضافه اذن تشغل</span></a>
                         </li>
                         <li ><a href="app-ecommerce-shop.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">تسجيل طباعه</span></a>
                         </li>

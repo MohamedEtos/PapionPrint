@@ -86,12 +86,16 @@ $(window).on("load", function () {
     },
   }
 
-  var gainedlineChart = new ApexCharts(
-    document.querySelector("#line-area-chart-1"),
-    gainedlineChartoptions
-  );
+  var gainedlineChart;
+  if (document.querySelector("#line-area-chart-1")) {
+    gainedlineChart = new ApexCharts(
+      document.querySelector("#line-area-chart-1"),
+      gainedlineChartoptions
+    );
+    gainedlineChart.render();
+  }
 
-  gainedlineChart.render();
+  //   gainedlineChart.render();
 
 
 
@@ -157,12 +161,16 @@ $(window).on("load", function () {
     },
   }
 
-  var revenuelineChart = new ApexCharts(
-    document.querySelector("#line-area-chart-2"),
-    revenuelineChartoptions
-  );
+  var revenuelineChart;
+  if (document.querySelector("#line-area-chart-2")) {
+    revenuelineChart = new ApexCharts(
+      document.querySelector("#line-area-chart-2"),
+      revenuelineChartoptions
+    );
+    revenuelineChart.render();
+  }
 
-  revenuelineChart.render();
+  //   revenuelineChart.render();
 
 
   // Line Area Chart - 3
@@ -227,12 +235,16 @@ $(window).on("load", function () {
     },
   }
 
-  var saleslineChart = new ApexCharts(
-    document.querySelector("#line-area-chart-3"),
-    saleslineChartoptions
-  );
+  var saleslineChart;
+  if (document.querySelector("#line-area-chart-3")) {
+    saleslineChart = new ApexCharts(
+      document.querySelector("#line-area-chart-3"),
+      saleslineChartoptions
+    );
+    saleslineChart.render();
+  }
 
-  saleslineChart.render();
+  //   saleslineChart.render();
 
   // Line Area Chart - 4
   // ----------------------------------
@@ -296,12 +308,16 @@ $(window).on("load", function () {
     },
   }
 
-  var orderlineChart = new ApexCharts(
-    document.querySelector("#line-area-chart-4"),
-    orderlineChartoptions
-  );
+  var orderlineChart;
+  if (document.querySelector("#line-area-chart-4")) {
+    orderlineChart = new ApexCharts(
+      document.querySelector("#line-area-chart-4"),
+      orderlineChartoptions
+    );
+    orderlineChart.render();
+  }
 
-  orderlineChart.render();
+  //   orderlineChart.render();
 
   // revenue-chart Chart
   // -----------------------------
@@ -385,12 +401,16 @@ $(window).on("load", function () {
 
   }
 
-  var revenueChart = new ApexCharts(
-    document.querySelector("#revenue-chart"),
-    revenueChartoptions
-  );
+  var revenueChart;
+  if (document.querySelector("#revenue-chart")) {
+    revenueChart = new ApexCharts(
+      document.querySelector("#revenue-chart"),
+      revenueChartoptions
+    );
+    revenueChart.render();
+  }
 
-  revenueChart.render();
+  //   revenueChart.render();
 
 
   // Goal Overview  Chart
@@ -456,12 +476,16 @@ $(window).on("load", function () {
 
   }
 
-  var goalChart = new ApexCharts(
-    document.querySelector("#goal-overview-chart"),
-    goalChartoptions
-  );
+  var goalChart;
+  if (document.querySelector("#goal-overview-chart")) {
+    goalChart = new ApexCharts(
+      document.querySelector("#goal-overview-chart"),
+      goalChartoptions
+    );
+    goalChart.render();
+  }
 
-  goalChart.render();
+  //   goalChart.render();
 
   // Client Retention Chart
   // ----------------------------------
@@ -535,12 +559,16 @@ $(window).on("load", function () {
     },
   }
 
-  var clientChart = new ApexCharts(
-    document.querySelector("#client-retention-chart"),
-    clientChartoptions
-  );
+  var clientChart;
+  if (document.querySelector("#client-retention-chart")) {
+    clientChart = new ApexCharts(
+      document.querySelector("#client-retention-chart"),
+      clientChartoptions
+    );
+    clientChart.render();
+  }
 
-  clientChart.render();
+  //   clientChart.render();
 
   // Session Chart
   // ----------------------------------
@@ -570,12 +598,16 @@ $(window).on("load", function () {
     }
   }
 
-  var sessionChart = new ApexCharts(
-    document.querySelector("#session-chart"),
-    sessionChartoptions
-  );
+  var sessionChart;
+  if (document.querySelector("#session-chart")) {
+    sessionChart = new ApexCharts(
+      document.querySelector("#session-chart"),
+      sessionChartoptions
+    );
+    sessionChart.render();
+  }
 
-  sessionChart.render();
+  //   sessionChart.render();
 
   // Customer Chart
   // -----------------------------
@@ -613,12 +645,16 @@ $(window).on("load", function () {
     }
   }
 
-  var customerChart = new ApexCharts(
-    document.querySelector("#customer-chart"),
-    customerChartoptions
-  );
+  var customerChart;
+  if (document.querySelector("#customer-chart")) {
+    customerChart = new ApexCharts(
+      document.querySelector("#customer-chart"),
+      customerChartoptions
+    );
+    customerChart.render();
+  }
 
-  customerChart.render();
+  //   customerChart.render();
 
 });
 

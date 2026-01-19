@@ -1,44 +1,19 @@
 @extends('layouts.app')
 
 @section('css')
-    <!-- BEGIN: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('core/vendors/css/file-uploaders/dropzone.min.css') }}">
-        <link rel="stylesheet" type="text/css" href="core/vendors/css/tables/datatable/datatables.min.css">
-    <link rel="stylesheet" type="text/css" href="core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
-    <!-- END: Vendor CSS-->
-
-
-    <link rel="stylesheet" type="text/css" href="core/css-rtl/core/menu/menu-types/vertical-menu.css">
-    <link rel="stylesheet" type="text/css" href="core/css-rtl/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="core/css-rtl/plugins/file-uploaders/dropzone.css">
-    <link rel="stylesheet" type="text/css" href="core/css-rtl/pages/data-list-view.css">
-     
-
-    <link rel="stylesheet" type="text/css" href="core/css-rtl/custom-rtl.css">
-    <link rel="stylesheet" type="text/css" href="../../../assets/css/style-rtl.css">
-    <!-- BEGIN: Theme CSS-->
     @vite([
-
+        'resources/core/vendors/css/file-uploaders/dropzone.min.css',
+        'resources/core/vendors/css/tables/datatable/datatables.min.css',
+        'resources/core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css',
+        'resources/core/css-rtl/core/menu/menu-types/vertical-menu.css',
+        'resources/core/css-rtl/core/colors/palette-gradient.css',
+        'resources/core/css-rtl/plugins/file-uploaders/dropzone.css',
+        'resources/core/css-rtl/pages/data-list-view.css',
+        'resources/core/css-rtl/custom-rtl.css',
     ])
-    <!-- END: Theme CSS-->
-
 @endsection
 
 @section('content')
-
-
-
-
-    
-    
-    
-    
-    
-    <!-- END: Custom CSS-->
-
-</head>
-
-
 
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -49,14 +24,14 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">Thumb View</h2>
+                            <h2 class="content-header-title float-left mb-0">اذونات التشغيل</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a>
+                                    <li class="breadcrumb-item"><a href="index.html">الرئيسية</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#">Data List</a>
+                                    <li class="breadcrumb-item"><a href="#"> الطباعه</a>
                                     </li>
-                                    <li class="breadcrumb-item active">Thumb View
+                                    <li class="breadcrumb-item active">اذونات التشغيل
                                     </li>
                                 </ol>
                             </div>
@@ -90,17 +65,20 @@
                             </div>
                         </div>
                     </div>
+
+
                     <!-- dataTable starts -->
                     <div class="table-responsive">
                         <table class="table data-thumb-view">
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Image</th>
-                                    <th>NAME</th>
-                                    <th>CATEGORY</th>
+                                    <th>صورة</th>
+                                    <th>اسم العميل</th>
+                                    <th>نوع الطباعه</th>
+                                    <th>الامتار</th>
                                     <th>POPULARITY</th>
-                                    <th>ORDER STATUS</th>
+                                    <th>الحاله</th>
                                     <th>PRICE</th>
                                     <th>ACTION</th>
                                 </tr>
@@ -110,8 +88,9 @@
                                     <td></td>
                                     <td class="product-img"><img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
-                                    <td class="product-name">Apple Watch series 4 GPS</td>
-                                    <td class="product-category">Computers</td>
+                                    <td class="product-name">محمد محروس</td>
+                                    <td class="product-category">DTF / 6Pass</td>
+                                    <td class="product-category"><b>60</b></td>
                                     <td>
                                         <div class="progress progress-bar-success">
                                             <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="40" aria-valuemax="100" style="width:97%"></div>
@@ -714,35 +693,20 @@
 
 @section('js')
 
-    @vite([
-        'resources/core/js/core/app-menu.js',
-        'resources/core/js/core/app.js',
-        'resources/core/js/scripts/components.js',
-        'resources/core/js/scripts/ui/data-list-view.js',
-    ])  
 
 
-        <script src="core/vendors/js/vendors.min.js"></script>
-    <!-- BEGIN Vendor JS-->
 
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="core/vendors/js/extensions/dropzone.min.js"></script>
-    <script src="core/vendors/js/tables/datatable/datatables.min.js"></script>
-    <script src="core/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
-    <script src="core/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
-    <script src="core/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
-    <script src="core/vendors/js/tables/datatable/dataTables.select.min.js"></script>
-    <script src="core/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
-    <!-- END: Page Vendor JS-->
+        <script src="{{ asset('core/vendors/js/extensions/dropzone.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
+        <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
 
-    <!-- BEGIN: Theme JS-->
-    <script src="core/js/core/app-menu.js"></script>
-    <script src="core/js/core/app.js"></script>
-    <script src="core/js/scripts/components.js"></script>
-    <!-- END: Theme JS-->
 
-    <!-- BEGIN: Page JS-->
-    <script src="core/js/scripts/ui/data-list-view.js"></script>
-    <!-- END: Page JS-->
+
+
 
 @endsection

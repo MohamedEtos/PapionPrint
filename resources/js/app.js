@@ -1,14 +1,14 @@
-import $ from 'jquery';
-import * as Popper from '@popperjs/core';
+// jQuery and Popper are loaded via vendors.min.js
+// window.$ = window.jQuery = $;
+// window.Popper = Popper;
 
-window.$ = window.jQuery = $;
-window.Popper = Popper;
-
-import './bootstrap';
+import 'bootstrap';
 
 // Import ApexCharts from npm
 import ApexCharts from 'apexcharts';
 window.ApexCharts = ApexCharts;
+
+
 
 // Import core files
 import '../core/js/core/app-menu.js';

@@ -10,7 +10,7 @@
 @import '../core/css-rtl/pages/card-analytics.css';
 @import '../core/css-rtl/custom-rtl.css';
 @import '../core/vendors/css/vendors-rtl.min.css';
-/* @import '../core/css/style-rtl.css'; */
+/* @import url('/core/css/style-rtl.css'); */
 
 
 
