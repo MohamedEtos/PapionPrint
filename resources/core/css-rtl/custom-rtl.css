@@ -229,3 +229,19 @@ body .ps__rail-y {
 .ecommerce-application .sidebar-shop .range-slider.noUi-horizontal .noUi-handle {
   left : 5px !important;
 }
+
+/*========================================================
+        ALEXANDRIA FONT AS DEFAULT
+=========================================================*/
+:root {
+  --font-family-sans-serif: 'Alexandria', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+  --font-family-monospace: 'Alexandria', 'Instrument Sans', ui-monospace, 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace !important;
+}
+
+body, html {
+  font-family: 'Alexandria', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+}
+
+* {
+  font-family: 'Alexandria', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+}
