@@ -6,14 +6,15 @@ window.Popper = Popper;
 
 import './bootstrap';
 
+// Import ApexCharts from npm
+import ApexCharts from 'apexcharts';
+window.ApexCharts = ApexCharts;
 
-
-
-
-import '../core/js/core/app-menu.js'
-import '../core/js/core/app.js'
-import '../core/js/scripts/components.js'
-import '../core/js/scripts/pages/dashboard-ecommerce.js'
+// Import core files
+import '../core/js/core/app-menu.js';
+import '../core/js/core/app.js';
+import '../core/js/scripts/components.js';
+import '../core/js/scripts/pages/dashboard-ecommerce.js';
 
 
 

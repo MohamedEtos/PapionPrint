@@ -15,9 +15,10 @@
         "laravel-vite-plugin": "^2.0.0",
         "sass": "^1.56.1",
         "tailwindcss": "^4.0.0",
-        "vite": "^7.0.7"
+        "vite": "^7.3.1"
     },
     "dependencies": {
+        "apexcharts": "^3.8.6",
         "jquery": "^4.0.0"
     }
 }
