@@ -215,7 +215,69 @@ $(document).ready(function () {
   // on action-info
   $(document).on("click", ".action-info", function (e) {
     e.stopPropagation();
-    $('#xlarge').modal('show');
+    var $row = $(this).closest('tr');
+    var orderId = $row.find('.order_id').val();
+
+    if (!orderId) return;
+
+    // Show loading state or clear previous measurement
+    $('#modal-order-id').text('Loading...');
+
+    $.ajax({
+      url: "/printers/" + orderId,
+      type: "GET",
+      success: function (order) {
+        // Basic Info
+        $('#modal-order-id').text(order.id);
+        $('#modal-order-number').text(order.orderNumber || '-');
+        $('#modal-customer-name').text(order.customers ? order.customers.name : '-');
+        $('#modal-machine-name').text(order.machines ? order.machines.name : '-');
+
+        // File Details
+        $('#modal-file-height').text(order.fileHeight);
+        $('#modal-file-width').text(order.fileWidth);
+        $('#modal-file-copies').text(order.fileCopies);
+        $('#modal-pic-copies').text(order.picInCopies);
+        $('#modal-meters').text(order.meters);
+
+        // Prices
+        if (order.printingprices) {
+          $('#modal-price-per-meter').text(order.printingprices.pricePerMeter);
+          $('#modal-total-price').text(order.printingprices.totalPrice);
+        } else {
+          $('#modal-price-per-meter').text('-');
+          $('#modal-total-price').text('-');
+        }
+
+        // Statuses
+        $('#modal-status').text(order.status);
+        $('#modal-payment-status').text(order.paymentStatus);
+        $('#modal-archive').text(order.archive ? 'Yes' : 'No');
+        $('#modal-notes').text(order.notes || 'No notes');
+
+        // Users
+        $('#modal-designer').text(order.user ? order.user.name : '-');
+        $('#modal-operator').text(order.user2 ? order.user2.name : '-');
+
+        // Dates
+        $('#modal-start-date').text(order.created_at ? new Date(order.created_at).toLocaleString() : '-');
+        $('#modal-end-date').text(order.updated_at ? new Date(order.updated_at).toLocaleString() : '-');
+        $('#modal-time-end-op').text(order.timeEndOpration ? new Date(order.timeEndOpration).toLocaleString() : '-');
+
+        // Image
+        if (order.orders_imgs && order.orders_imgs.length > 0) {
+          $('#modal-order-image').attr('src', '/storage/' + order.orders_imgs[0].path);
+        } else {
+          $('#modal-order-image').attr('src', '/core/images/elements/apple-watch.png');
+        }
+
+        $('#xlarge').modal('show');
+      },
+      error: function (xhr) {
+        console.error("Error modal details:", xhr);
+        toastr.error("Could not fetch details", "Error");
+      }
+    });
   });
 
   // On Cancel / Close Sidebar

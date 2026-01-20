@@ -2,7 +2,6 @@
 
 @section('css')
     @vite([
-        'resources/core/vendors/css/file-uploaders/dropzone.min.css',
         'resources/core/vendors/css/tables/datatable/datatables.min.css',
         'resources/core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css',
         'resources/core/css-rtl/core/menu/menu-types/vertical-menu.css',
@@ -10,6 +9,7 @@
         'resources/core/css-rtl/plugins/file-uploaders/dropzone.css',
         'resources/core/css-rtl/pages/data-list-view.css',
         'resources/core/css-rtl/custom-rtl.css',
+        'resources/core/vendors/css/file-uploaders/dropzone.min.css',
     ])
 
 @endsection
@@ -107,7 +107,7 @@
                                     <td class="product-price">{{ optional($Order->printingprices)->pricePerMeter }}</td>
                                     <td class="product-price" title="{{ $Order->created_at }}">{{ $Order->created_at->locale('ar')->diffForHumans() }}</td>
                                     <td class="product-action">
-                                        <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
+                                        <span class=" hover_action action-info "><i class="feather icon-file"></i></span>
                                         <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
                                         <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
 
@@ -257,7 +257,7 @@
                                                         <div class="card-body">
                                                             <div class="d-flex align-items-center">
                                                                 <p class="card-text mb-0 mr-1">هنا كل تفاصيل الاوردرا </p>
-                                                                <div><img class="w-50 ml-5 mb-1 justify-content-start" src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder"></div>
+                                                                <div><img id="modal-order-image" class="w-50 ml-5 mb-1 justify-content-start" src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder"></div>
                                                             </div>
                                                             <!-- Table with outer spacing -->
                                                             <div class="table-responsive">
@@ -265,6 +265,7 @@
                                                                     <thead>
                                                                         <tr>
                                                                             <th>ID</th>
+                                                                            <th>رقم الطلب</th>
                                                                             <th>اسم العميل</th>
                                                                             <th>الماكينه</th>
                                                                             <th>طول الملف</th>
@@ -274,6 +275,9 @@
                                                                             <th>الامتار</th>
                                                                             <th>سعر المتر</th>
                                                                             <th>الاجمالي</th>
+                                                                            <th>الحالة</th>
+                                                                            <th>الدفع</th>
+                                                                            <th>أرشيف</th>
                                                                             <th>المصمم</th>
                                                                             <th>الاوبراتور</th>
                                                                         </tr>
@@ -281,27 +285,34 @@
                                                                     <tbody>
                                                                         
                                                                         <tr>
-                                                                            <th scope="row">#</th>
-                                                                            <td>Leanne Graham</td>
-                                                                            <td>sincere@april.biz</td>
-                                                                            <td>sincere@april.biz</td>
-                                                                            <td>@mdo</td>
-                                                                            <td>Leanne Graham</td>
-                                                                            <td>Leanne Graham</td>
-                                                                            <td>Leanne Graham</td>
-                                                                            <td>Leanne Graham</td>
-                                                                            <td>Leanne Graham</td>
-                                                                            <td>محمد محروس</td>
-                                                                            <td>محمد محروس</td>
+                                                                            <td id="modal-order-id"></td>
+                                                                            <td id="modal-order-number"></td>
+                                                                            <td id="modal-customer-name"></td>
+                                                                            <td id="modal-machine-name"></td>
+                                                                            <td id="modal-file-height"></td>
+                                                                            <td id="modal-file-width"></td>
+                                                                            <td id="modal-file-copies"></td>
+                                                                            <td id="modal-pic-copies"></td>
+                                                                            <td id="modal-meters"></td>
+                                                                            <td id="modal-price-per-meter"></td>
+                                                                            <td id="modal-total-price"></td>
+                                                                            <td id="modal-status"></td>
+                                                                            <td id="modal-payment-status"></td>
+                                                                            <td id="modal-archive"></td>
+                                                                            <td id="modal-designer"></td> 
+                                                                            <td id="modal-operator"></td> 
                                                                         </tr>
-
-
                                                                     </tbody>
                                                                 </table>
                                                             </div>
+                                                            <div class="mt-2">
+                                                                <h6>ملاحظات:</h6>
+                                                                <p id="modal-notes" class="p-1 border rounded bg-light"></p>
+                                                            </div>
                                                         </div>
-                                                        <p class="px-2"><span class="text-bold-600">  بدايه الطلب:</span> 2022-01-01</p>
-                                                        <p class="px-2 text-success" ><span class="text-bold-600 ">  نهايه الطلب:</span> 2022-01-01</p>
+                                                        <p class="px-2"><span class="text-bold-600">  بدايه الطلب:</span> <span id="modal-start-date"></span></p>
+                                                        <p class="px-2 text-success" ><span class="text-bold-600 ">  نهايه الطلب:</span> <span id="modal-end-date"></span></p>
+                                                        <p class="px-2 text-info" ><span class="text-bold-600 ">  وقت انتهاء التشغيل:</span> <span id="modal-time-end-op"></span></p>
 
 
                                                     </div>
@@ -338,10 +349,10 @@
         <script src="{{ asset('core/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
         <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
+        <script src="{{ asset('core/js/scripts/modal/components-modal.js') }}"></script>
 
 
         @vite('resources/js/pages/AddNewOrder.js')
-        @vite('resources/core/js/scripts/modal/components-modal.js')
 
 
 
