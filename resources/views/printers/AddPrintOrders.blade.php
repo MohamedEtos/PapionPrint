@@ -107,7 +107,9 @@
                                     <td class="product-price">{{ optional($Order->printingprices)->pricePerMeter }}</td>
                                     <td class="product-price" title="{{ $Order->created_at }}">{{ $Order->created_at->locale('ar')->diffForHumans() }}</td>
                                     <td class="product-action">
+                                        @role('super-admin')
                                         <span class=" hover_action action-info "><i class="feather icon-file"></i></span>
+                                        @endrole
                                         <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
                                         <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
 
