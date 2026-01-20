@@ -58,9 +58,8 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item text-danger" href="#"><i class="feather icon-trash "></i>حذف</a>
+                                    <a class="dropdown-item text-danger bulk-delete-btn" href="#"><i class="feather icon-trash "></i>حذف</a>
                                     <a class="dropdown-item" href="#"><i class="feather icon-archive"></i>ارشفة</a>
-                                    <a class="dropdown-item" href="#"><i class="feather icon-file"></i>تفاصيل</a>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +98,7 @@
                                     <td class="product-category"><b>{{ $Order->meters }}</b></td>
 
                                     <td>
-                                        <div class="chip chip-{{ $Order->status == 'تم الانتهاء' ? 'success' : 'warning' }}">
+                                        <div class="chip chip-{{ $Order->status == 'تم الانتهاء' ? 'success' : 'info' }}">
                                             <div class="chip-body status-toggle" style="cursor: pointer">
                                                 <div class="chip-text">{{ $Order->status }}</div>
                                             </div>
@@ -126,7 +125,7 @@
                                
                             </tbody>
                         </table>
-                    </div>
+                    </div> 
                     <!-- dataTable ends -->
 
                     <!-- add new sidebar starts -->

@@ -18,6 +18,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
     Route::post('printers/delete/{id}', [PrintersController::class, 'destroy'])->name('printers.delete');
     Route::post('printers/update-status/{id}', [PrintersController::class, 'updateStatus'])->name('printers.update.status');
+    Route::post('printers/bulk-delete', [PrintersController::class, 'bulkDelete'])->name('printers.bulk_delete');
     Route::get('printers/{id}', [PrintersController::class, 'show'])->name('printers.show');
     Route::put('printers/{id}', [PrintersController::class, 'update'])->name('printers.update');
 

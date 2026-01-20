@@ -384,7 +384,7 @@ $(document).ready(function () {
           $('#data-notes').val(order.notes);
 
           editingOrderId = order.id;
-          $('.new-data-title h4').text('تحديث الطلب وبدء الطباعة');
+          $('.new-data-title h4').text('تحديث الطلب وبدات الطباعة');
           $('#saveDataBtn').text('تحديث وبدء');
 
           $(".add-new-data").addClass("show");
@@ -419,6 +419,91 @@ $(document).ready(function () {
         toastr.error('Failed to update status', 'Error', {
           showMethod: "fadeIn",
           hideMethod: "fadeOut"
+        });
+      }
+    });
+  });
+
+  // Bulk Delete & Actions Visibility
+  var table = $('.data-thumb-view').DataTable();
+
+  // Initially hide actions dropdown if it exists logic isn't handled by CSS
+  // Note: data-list-view.js moves .actions-dropodown to the toolbar.
+  // We want to hide it when no rows are selected.
+  $('.actions-dropodown').hide();
+
+  table.on('select deselect', function () {
+    var selectedCount = table.rows({ selected: true }).count();
+    if (selectedCount > 0) {
+      $('.actions-dropodown').slideDown();
+    } else {
+      $('.actions-dropodown').slideUp();
+    }
+  });
+
+  $(document).on("click", ".bulk-delete-btn", function (e) {
+    e.preventDefault();
+    var selectedRows = table.rows({ selected: true });
+    var selectedIds = [];
+
+    selectedRows.nodes().each(function (row) {
+      var id = $(row).find('.order_id').val();
+      if (id) selectedIds.push(id);
+    });
+
+    if (selectedIds.length === 0) {
+      Swal.fire({
+        title: "تنبيه",
+        text: "الرجاء تحديد طلب واحد على الأقل للحذف.",
+        type: "warning",
+        confirmButtonClass: 'btn btn-primary',
+        buttonsStyling: false,
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'هل انت متاكد من حذف ' + selectedIds.length + ' طلب؟',
+      text: "لن تتمكن من التراجع عن هذا!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'نعم، احذفهم!',
+      confirmButtonClass: 'btn btn-primary',
+      cancelButtonClass: 'btn btn-danger ml-1',
+      buttonsStyling: false,
+    }).then(function (result) {
+      if (result.value) {
+        $.ajax({
+          url: "/printers/bulk-delete",
+          type: "POST",
+          data: {
+            ids: selectedIds,
+            _token: $('meta[name="csrf-token"]').attr('content')
+          },
+          success: function (response) {
+            selectedRows.remove().draw();
+            $('.actions-dropodown').hide(); // Hide actions since selection is gone
+            Swal.fire({
+              type: 'success',
+              title: 'تم الحذف!',
+              text: 'تم حذف الطلبات المحددة بنجاح.',
+              showConfirmButton: false,
+              timer: 1500,
+              buttonsStyling: false,
+            });
+          },
+          error: function (xhr) {
+            console.error("Bulk delete error:", xhr);
+            Swal.fire({
+              title: "خطأ!",
+              text: "حدث خطأ أثناء الحذف. حاول مرة أخرى.",
+              type: "error",
+              confirmButtonClass: 'btn btn-primary',
+              buttonsStyling: false,
+            });
+          }
         });
       }
     });

@@ -224,7 +224,7 @@ class PrintersController extends Controller
         
         // Auto Advance Status if requested
         if ($request->boolean('auto_advance_status') && $printer->status == 'بانتظار اجراء') {
-             $printer->status = 'بدء الطباعة'; // Next logical step
+             $printer->status = 'بدات الطباعة'; // Next logical step
         } elseif ($request->filled('status')) {
              $printer->status = $request->status;
         }
@@ -268,6 +268,16 @@ class PrintersController extends Controller
         return response()->json(['error' => 'Order not found'], 404);
     }
 
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+        if (!empty($ids)) {
+            Printers::whereIn('id', $ids)->delete();
+            return response()->json(['success' => 'Orders deleted successfully']);
+        }
+        return response()->json(['error' => 'No orders selected'], 400);
+    }
+
     public function updateStatus($id)
     {
         $order = Printers::find($id);
@@ -275,7 +285,7 @@ class PrintersController extends Controller
             return response()->json(['error' => 'Order not found'], 404);
         }
 
-        $statuses = ['بانتظار اجراء', 'بدء الطباعة', 'انتهاء الطباعة', 'تم الكبس', 'تم الانتهاء'];
+        $statuses = ['بانتظار اجراء', 'بدات الطباعة', 'انتهاء الطباعة', 'تم الكبس', 'تم الانتهاء'];
         $currentStatusIndex = array_search($order->status, $statuses);
 
         if ($currentStatusIndex !== false && $currentStatusIndex < count($statuses) - 1) {
