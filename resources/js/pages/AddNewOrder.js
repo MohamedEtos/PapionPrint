@@ -83,6 +83,18 @@ $(document).ready(function () {
     console.error("Dropzone init warning:", e);
   }
 
+  // Handle Paste Event
+  document.onpaste = function (event) {
+    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    for (var index = 0; index < items.length; index++) {
+      var item = items[index];
+      if (item.kind === 'file') {
+        // add file to dropzone
+        myDropzone.addFile(item.getAsFile());
+      }
+    }
+  };
+
   // On Edit
   $('.action-edit').on("click", function (e) {
     e.stopPropagation();
