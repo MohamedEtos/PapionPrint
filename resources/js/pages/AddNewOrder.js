@@ -114,9 +114,42 @@ $(document).ready(function () {
   // On Edit
   $('.action-edit').on("click", function (e) {
     e.stopPropagation();
-    // Logic for edit can be added here
-    $(".add-new-data").addClass("show");
-    $(".overlay-bg").addClass("show");
+    var $row = $(this).closest('tr');
+    var orderId = $row.find('.order_id').val();
+
+    if (!orderId) return;
+
+    $.ajax({
+      url: "/printers/" + orderId,
+      type: "GET",
+      success: function (order) {
+        // Populate Form
+        $('#data-customer-view').val(order.customers ? order.customers.name : '');
+        $('#data-machine').val(order.machineId);
+        $('#data-height').val(order.fileHeight);
+        $('#data-width').val(order.fileWidth);
+        $('#data-copies').val(order.fileCopies);
+        $('#data-pic-copies').val(order.picInCopies);
+        $('#data-pass').val(order.pass);
+        $('#data-meters').val(order.meters);
+        $('#data-status').val(order.status);
+        if (order.printingprices) {
+          $('#data-price').val(order.printingprices.totalPrice);
+        }
+        $('#data-notes').val(order.notes);
+
+        editingOrderId = order.id;
+        $('.new-data-title h4').text('تعديل البيانات');
+        $('#saveDataBtn').text('حفظ التعديلات');
+
+        $(".add-new-data").addClass("show");
+        $(".overlay-bg").addClass("show");
+      },
+      error: function (xhr) {
+        console.error("Error fetching order:", xhr);
+        toastr.error("Could not fetch order details.", "Error");
+      }
+    });
   });
 
   // On Delete
@@ -257,8 +290,15 @@ $(document).ready(function () {
           var $row = $('input.order_id[value="' + editingOrderId + '"]').closest('tr');
           $row.find('.product-img img').attr('src', imgPath);
           $row.find('.product-name').text(customerName);
-          $row.find('.product-category').text(machineName + ' ' + order.pass + ' pass');
-          $row.find('td:eq(4) b').text(order.meters);
+
+          // Fix: Target Machine column (index 3) explicitly
+          var $machineCell = $row.find('td').eq(3);
+          $machineCell.text(machineName + ' ' + order.pass + ' pass');
+
+          // Fix: Target Meters column (index 4) explicitly and preserve formatting
+          var $metersCell = $row.find('td').eq(4);
+          $metersCell.html('<b>' + order.meters + '</b>');
+
           $row.find('.chip-text').text(order.status);
           $row.find('.chip').removeClass('chip-success chip-warning').addClass(order.status == 'تم الانتهاء' ? 'chip-success' : 'chip-warning');
           $row.find('td:eq(6)').text(pricePerMeter);
