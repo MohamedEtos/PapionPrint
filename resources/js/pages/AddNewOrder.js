@@ -40,6 +40,22 @@ $(document).ready(function () {
 
 
 
+  // Global variable to track edit state
+  var editingOrderId = null;
+
+  function resetForm() {
+    $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes').val('');
+    $('#data-status').val('waiting');
+    $('#data-pass').val('1');
+    uploadedImagePaths = [];
+    if (typeof myDropzone !== 'undefined' && myDropzone) {
+      myDropzone.removeAllFiles();
+    }
+    editingOrderId = null;
+    $('.new-data-title h4').text('اضافه اذن تشغيل');
+    $('#saveDataBtn').text('Add Data');
+  }
+
 
   // Configure Dropzone
   Dropzone.autoDiscover = false;
@@ -174,12 +190,13 @@ $(document).ready(function () {
     e.stopPropagation();
     $(".add-new-data").removeClass("show");
     $(".overlay-bg").removeClass("show");
+    resetForm();
   });
 
   // Save Data Button Logic
   $('#saveDataBtn').on('click', function (e) {
     e.preventDefault();
-    console.log("Add Data Button Clicked");
+    console.log("Save/Update Data Button Clicked");
 
     var customerId = $('#data-customer-view').val();
     var machineId = $('#data-machine').val();
@@ -193,99 +210,101 @@ $(document).ready(function () {
     var price = $('#data-price').val();
     var notes = $('#data-notes').val();
 
+    var url = "/printers/store";
+    var type = "POST";
+    var data = {
+      customerId: customerId,
+      machineId: machineId,
+      fileHeight: height,
+      fileWidth: width,
+      fileCopies: copies,
+      picInCopies: picInCopies,
+      pass: pass,
+      meters: meters,
+      status: status,
+      price: price,
+      notes: notes,
+      image_paths: uploadedImagePaths,
+      _token: $('meta[name="csrf-token"]').attr('content')
+    };
 
-
-    // if (uploadedImagePaths.length === 0) {
-    //   // toastr.error("الرجاء رفع صورة واحدة على الأقل", "خطا");
-    //   return;
-    // }
+    if (editingOrderId) {
+      url = "/printers/" + editingOrderId;
+      data._method = 'PUT';
+      data.auto_advance_status = true;
+    }
 
     $.ajax({
-      url: "/printers/store",
-      type: "POST",
-      data: {
-        customerId: customerId,
-        machineId: machineId,
-        fileHeight: height,
-        fileWidth: width,
-        fileCopies: copies,
-        picInCopies: picInCopies,
-        pass: pass,
-        meters: meters,
-        status: status,
-        price: price,
-        notes: notes,
-        image_paths: uploadedImagePaths,
-        _token: $('meta[name="csrf-token"]').attr('content')
-      },
+      url: url,
+      type: type,
+      data: data,
       success: function (response) {
-        console.log("Order created:", response);
-        toastr.success("Order Added Successfully!", "تمت العملية بنجاح");
+        console.log("Order saved/updated:", response);
+        var message = editingOrderId ? "Order Updated Successfully!" : "Order Added Successfully!";
+        toastr.success(message, "تمت العملية بنجاح");
 
         var order = response.order;
-        // Construct Image Path
+
+        // Helper Variables
+        var customerName = order.customers ? order.customers.name : 'Unknown';
+        var machineName = order.machines ? order.machines.name : 'Unknown';
+        var pricePerMeter = order.printingprices ? order.printingprices.pricePerMeter : '';
         var imgPath = (order.orders_imgs && order.orders_imgs.length > 0)
           ? '/storage/' + order.orders_imgs[0].path
           : '/core/images/elements/apple-watch.png';
 
-        // Construct Helper Variables
-        var customerName = order.customers ? order.customers.name : 'Unknown';
-        var machineName = order.machines ? order.machines.name : 'Unknown';
-        var pricePerMeter = order.printingprices ? order.printingprices.pricePerMeter : '';
-
-        // Build Table Row HTML
-        var newRow = `
-            <tr>
-                <td></td>
-                <td class="product-img"><img src="${imgPath}" alt="Img placeholder"></td>
-                <td class="product-name">${customerName}</td>
-                <td class="product-category">${machineName} ${order.pass} pass</td>
-                <td class="product-category"><b>${order.meters}</b></td>
-                <td>
-                    <div class="chip chip-sucendry">
-                        <div class="chip-body status-toggle" style="cursor: pointer">
-                            <div class="chip-text">${order.status}</div>
+        if (editingOrderId) {
+          var $row = $('input.order_id[value="' + editingOrderId + '"]').closest('tr');
+          $row.find('.product-img img').attr('src', imgPath);
+          $row.find('.product-name').text(customerName);
+          $row.find('.product-category').text(machineName + ' ' + order.pass + ' pass');
+          $row.find('td:eq(4) b').text(order.meters);
+          $row.find('.chip-text').text(order.status);
+          $row.find('.chip').removeClass('chip-success chip-warning').addClass(order.status == 'تم الانتهاء' ? 'chip-success' : 'chip-warning');
+          $row.find('td:eq(6)').text(pricePerMeter);
+        } else {
+          var newRow = `
+                <tr>
+                    <td></td>
+                    <td class="product-img">
+                         <input type="hidden" class="order_id" value="${order.id}">
+                        <img src="${imgPath}" alt="Img placeholder">
+                    </td>
+                    <td class="product-name">${customerName}</td>
+                    <td class="product-category">${machineName} ${order.pass} pass</td>
+                    <td class="product-category"><b>${order.meters}</b></td>
+                    <td>
+                        <div class="chip chip-${order.status == 'تم الانتهاء' ? 'success' : 'warning'}">
+                            <div class="chip-body status-toggle" style="cursor: pointer">
+                                <div class="chip-text">${order.status}</div>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td class="product-price">${pricePerMeter}</td>
-                <td class="product-price" title="Just now">الآن</td>
-                <td class="product-action">
-                    <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
-                    <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
-                    <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
-                </td>
-            </tr>
-        `;
-
-        // Append to Table
-        $('table.data-thumb-view tbody').append(newRow);
-
-        // Close Sidebar
-        $(".add-new-data").removeClass("show");
-        $(".overlay-bg").removeClass("show");
-
-        // Reset Inputs
-        $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes').val('');
-        $('#data-status').val('Pending');
-        $('#data-pass').val('1'); // Reset pass default
-
-        // Reset Dropzone
-        uploadedImagePaths = [];
-        if (myDropzone) {
-          myDropzone.removeAllFiles();
+                    </td>
+                    <td class="product-price">${pricePerMeter}</td>
+                    <td class="product-price" title="Just now">الآن</td>
+                    <td class="product-action">
+                        <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
+                        <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
+                        <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
+                    </td>
+                </tr>
+            `;
+          $('table.data-thumb-view tbody').append(newRow);
         }
 
+        $(".add-new-data").removeClass("show");
+        $(".overlay-bg").removeClass("show");
+        resetForm();
       },
       error: function (xhr) {
-        console.error("Error creating order:", xhr);
+        console.error("Error processing order:", xhr);
         if (xhr.status === 422) {
           var errors = xhr.responseJSON.errors;
           $.each(errors, function (key, val) {
             toastr.error(val[0], "خطا");
           });
         } else {
-          toastr.error("Error creating order. Please try again.", "خطا");
+          toastr.error("Error processing order. Please try again.", "خطا");
         }
       }
     });
@@ -298,8 +317,46 @@ $(document).ready(function () {
     var $row = $this.closest('tr');
     var orderId = $row.find('.order_id').val();
     var $textElement = $this.find('.chip-text');
+    var currentStatus = $textElement.text().trim();
 
     if (!orderId) return;
+
+    if (currentStatus === 'waiting' || currentStatus === 'بانتظار اجراء') {
+      e.preventDefault();
+
+      $.ajax({
+        url: "/printers/" + orderId,
+        type: "GET",
+        success: function (order) {
+          // Populate Form
+          $('#data-customer-view').val(order.customers ? order.customers.name : '');
+          $('#data-machine').val(order.machineId);
+          $('#data-height').val(order.fileHeight);
+          $('#data-width').val(order.fileWidth);
+          $('#data-copies').val(order.fileCopies);
+          $('#data-pic-copies').val(order.picInCopies);
+          $('#data-pass').val(order.pass);
+          $('#data-meters').val(order.meters);
+          $('#data-status').val(order.status);
+          if (order.printingprices) {
+            $('#data-price').val(order.printingprices.totalPrice);
+          }
+          $('#data-notes').val(order.notes);
+
+          editingOrderId = order.id;
+          $('.new-data-title h4').text('تحديث الطلب وبدء الطباعة');
+          $('#saveDataBtn').text('تحديث وبدء');
+
+          $(".add-new-data").addClass("show");
+          $(".overlay-bg").addClass("show");
+        },
+        error: function (xhr) {
+          console.error("Error fetching order:", xhr);
+          toastr.error("Could not fetch order details.", "Error");
+        }
+      });
+      return;
+    }
 
     $.ajax({
       url: "/printers/update-status/" + orderId,
@@ -309,15 +366,14 @@ $(document).ready(function () {
       },
       success: function (response) {
         $textElement.text(response.status);
-        // toastr.success('Status updated to ' + response.status, 'تم التحديث');
-              Swal.fire({
-                title:   " تحديث الحالة :" + response.status,
-                text: 'Status updated to ' + response.status,
-                type: "success",
-              showConfirmButton: false,
-              timer: 1000,
-              buttonsStyling: false,
-            })
+        Swal.fire({
+          title: " تحديث الحالة :" + response.status,
+          text: 'Status updated to ' + response.status,
+          type: "success",
+          showConfirmButton: false,
+          timer: 1000,
+          buttonsStyling: false,
+        })
       },
       error: function (xhr) {
         toastr.error('Failed to update status', 'Error', {
