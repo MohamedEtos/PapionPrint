@@ -99,8 +99,8 @@
                                     <td class="product-category"><b>{{ $Order->meters }}</b></td>
 
                                     <td>
-                                        <div class="chip chip-sucendry">
-                                            <div class="chip-body">
+                                        <div class="chip chip-{{ $Order->status == 'تم الانتهاء' ? 'success' : 'warning' }}">
+                                            <div class="chip-body status-toggle" style="cursor: pointer">
                                                 <div class="chip-text">{{ $Order->status }}</div>
                                             </div>
                                         </div>
@@ -190,10 +190,12 @@
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-status">حالة الطلب</label>
                                             <select class="form-control" id="data-status">
-                                                <option value="Pending">معلق</option>
-                                                <option value="In Progress">جاري العمل</option>
-                                                <option value="Completed">مكتمل</option>
-                                                <option value="Canceled">ملغي</option>
+                                                <option selected value="waiting">بالانتظار</option>
+                                                <option value="startPrint">بدء الطباعه</option>
+                                                <option value="endPrint">انتهاء الطباعه</option>
+                                                <option value="inprising">تم الكبس</option>
+                                                <option value="completed">تم التسليم</option>
+                                                <option value="canceled">ملغي</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-12 data-field-col">

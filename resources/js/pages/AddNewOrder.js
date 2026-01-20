@@ -140,10 +140,12 @@ $(document).ready(function () {
               $(this).remove();
             });
             Swal.fire({
-              type: "success",
+              type: 'success',
               title: 'تم الحذف!',
-              text: 'تم حذف الطلب بنجاح!',
-              confirmButtonClass: 'btn btn-success',
+              showConfirmButton: false,
+              timer: 1500,
+              buttonsStyling: false,
+              confirmButtonClass: 'btn btn-primary',
             });
           },
           error: function (xhr) {
@@ -241,7 +243,7 @@ $(document).ready(function () {
                 <td class="product-category"><b>${order.meters}</b></td>
                 <td>
                     <div class="chip chip-sucendry">
-                        <div class="chip-body">
+                        <div class="chip-body status-toggle" style="cursor: pointer">
                             <div class="chip-text">${order.status}</div>
                         </div>
                     </div>
@@ -288,4 +290,42 @@ $(document).ready(function () {
       }
     });
   });
+
+  // On Status Click
+  $(document).on("click", ".status-toggle", function (e) {
+    e.stopPropagation();
+    var $this = $(this);
+    var $row = $this.closest('tr');
+    var orderId = $row.find('.order_id').val();
+    var $textElement = $this.find('.chip-text');
+
+    if (!orderId) return;
+
+    $.ajax({
+      url: "/printers/update-status/" + orderId,
+      type: "POST",
+      data: {
+        _token: $('meta[name="csrf-token"]').attr('content')
+      },
+      success: function (response) {
+        $textElement.text(response.status);
+        // toastr.success('Status updated to ' + response.status, 'تم التحديث');
+              Swal.fire({
+                title:   " تحديث الحالة :" + response.status,
+                text: 'Status updated to ' + response.status,
+                type: "success",
+              showConfirmButton: false,
+              timer: 1000,
+              buttonsStyling: false,
+            })
+      },
+      error: function (xhr) {
+        toastr.error('Failed to update status', 'Error', {
+          showMethod: "fadeIn",
+          hideMethod: "fadeOut"
+        });
+      }
+    });
+  });
+
 });

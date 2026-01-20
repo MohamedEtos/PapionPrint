@@ -101,7 +101,7 @@ class PrintersController extends Controller
             'pass' => $request->pass ?? 1,
             'meters' => $request->meters ?? 0,
             // 'totalPrice' => $request->price ?? 0, // Removed as column doesn't exist
-            'status' => $request->status ?? 'Pending',
+            'status' => $request->status ?? 'waiting',
             'notes' => $request->notes,
             'designerId' => auth()->id() ?? 1, 
             'operatorId' => 1, 
@@ -168,5 +168,27 @@ class PrintersController extends Controller
             return response()->json(['success' => 'Order deleted successfully']);
         }
         return response()->json(['error' => 'Order not found'], 404);
+    }
+
+    public function updateStatus($id)
+    {
+        $order = Printers::find($id);
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        $statuses = ['بانتظار اجراء', 'بدء الطباعة', 'انتهاء الطباعة', 'تم الكبس', 'تم الانتهاء'];
+        $currentStatusIndex = array_search($order->status, $statuses);
+
+        if ($currentStatusIndex !== false && $currentStatusIndex < count($statuses) - 1) {
+            $nextStatus = $statuses[$currentStatusIndex + 1];
+        } else {
+            $nextStatus = 'بانتظار اجراء';
+        }
+
+        $order->status = $nextStatus;
+        $order->save();
+
+        return response()->json(['success' => 'Status updated', 'status' => $nextStatus]);
     }
 }

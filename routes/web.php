@@ -17,6 +17,8 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('printers/upload-image', [PrintersController::class, 'uploadImage'])->name('printers.upload.image');
     Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
     Route::post('printers/delete/{id}', [PrintersController::class, 'destroy'])->name('printers.delete');
+    Route::post('printers/update-status/{id}', [PrintersController::class, 'updateStatus'])->name('printers.update.status');
+
 
     // Roles & Permissions
     Route::get('/roles', [App\Http\Controllers\RolesController::class, 'index'])->name('roles.index');
