@@ -112,7 +112,7 @@ $(document).ready(function () {
   };
 
   // On Edit
-  $('.action-edit').on("click", function (e) {
+  $(document).on("click", ".action-edit", function (e) {
     e.stopPropagation();
     var $row = $(this).closest('tr');
     var orderId = $row.find('.order_id').val();
@@ -153,7 +153,7 @@ $(document).ready(function () {
   });
 
   // On Delete
-  $('.action-delete').on("click", function (e) {
+  $(document).on("click", ".action-delete", function (e) {
     e.stopPropagation();
     var $row = $(this).closest('td').parent('tr');
     var orderId = $row.find('.order_id').val();
@@ -213,7 +213,7 @@ $(document).ready(function () {
   });
 
   // on action-info
-  $('.action-info').on("click", function (e) {
+  $(document).on("click", ".action-info", function (e) {
     e.stopPropagation();
     $('#xlarge').modal('show');
   });
