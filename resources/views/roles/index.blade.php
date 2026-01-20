@@ -1,0 +1,164 @@
+@extends('layouts.app')
+
+@section('css')
+    @vite([
+        'resources/core/vendors/css/tables/datatable/datatables.min.css',
+        'resources/core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css',
+        'resources/core/css-rtl/core/menu/menu-types/vertical-menu.css',
+        'resources/core/css-rtl/core/colors/palette-gradient.css',
+        'resources/core/css-rtl/pages/data-list-view.css',
+        'resources/core/css-rtl/custom-rtl.css',
+    ])
+    <style>
+        .permission-checkbox {
+            margin-right: 5px;
+        }
+    </style>
+@endsection
+
+@section('content')
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-left mb-0">الصلاحيات</h2>
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{{ route('home') }}">الرئيسية</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">الصلاحيات & الأدوار
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Data list view starts -->
+                <section id="data-thumb-view" class="data-thumb-view-header">
+                    <div class="action-btns d-none">
+                        <div class="btn-dropdown mr-1 mb-1">
+                            <div class="btn-group dropdown actions-dropodown">
+                                <button type="button" class="btn btn-white px-1 py-1 dropdown-toggle waves-effect waves-light close_modal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item text-danger" href="#"><i class="feather icon-trash "></i>حذف</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- dataTable starts -->
+                    <div class="table-responsive">
+                        <table class="table data-thumb-view">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>الاسم</th>
+                                    <th>الصلاحيات</th>
+                                    <th>تاريخ الانشاء</th>
+                                    <th>اجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($roles as $role)
+                                <tr>
+                                    <td><input type="hidden" class="role_id" value="{{ $role->id }}"></td>
+                                    <td class="product-name role-name">{{ $role->name }}</td>
+                                    <td class="product-category">
+                                        @foreach($role->permissions as $perm)
+                                            <span class="badge badge-primary">{{ $perm->name }}</span>
+                                        @endforeach
+                                        <div class="d-none role-permissions">
+                                            @foreach($role->permissions as $perm)
+                                                <span class="perm-item">{{ $perm->name }}</span>
+                                            @endforeach
+                                        </div>
+                                    </td>
+                                    <td class="product-price">{{ $role->created_at->format('Y-m-d') }}</td>
+                                    <td class="product-action">
+                                        <span class="hover_action action-edit"><i class="feather icon-edit"></i></span>
+                                        <span class="hover_action action-delete text-danger"><i class="feather icon-trash"></i></span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- dataTable ends -->
+
+                    <!-- add new sidebar starts -->
+                    <div class="add-new-data-sidebar">
+                        <div class="overlay-bg"></div>
+                        <div class="add-new-data">
+                            <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+                                <div>
+                                    <h4 class="text-uppercase">ادارة الأدوار</h4>
+                                </div>
+                                <div class="hide-data-sidebar">
+                                    <i class="feather icon-x"></i>
+                                </div>
+                            </div>
+                            <div class="data-items pb-3">
+                                <div class="data-fields px-2 mt-3">
+                                    <div class="row">
+                                        <input type="hidden" id="data-id">
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-name">اسم الدور</label>
+                                            <input type="text" class="form-control" id="data-name">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label class="mb-1">الصلاحيات</label>
+                                            <div class="row">
+                                            @foreach($permissions as $permission)
+                                                <div class="col-md-6">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input permission-checkbox" id="perm_{{ $permission->id }}" value="{{ $permission->name }}">
+                                                        <label class="custom-control-label" for="perm_{{ $permission->id }}">{{ $permission->name }}</label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+                                <div class="add-data-btn">
+                                    <button class="btn btn-primary" id="saveDataBtn">حفظ البيانات</button>
+                                </div>
+                                <div class="cancel-data-btn">
+                                    <button class="btn btn-outline-danger">الغاء</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+                <!-- Data list view end -->
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+@endsection
+
+@section('js')
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
+        <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
+
+        @vite('resources/js/pages/roles.js')
+@endsection

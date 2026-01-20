@@ -47,6 +47,12 @@
                 <li class=" nav-item"><a href="app-calender.html"><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Calender</span></a>
                 </li>
 
+                <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }} nav-item"><a href="{{ route('roles.index') }}"><i class="feather icon-lock"></i><span class="menu-title" data-i18n="Roles">الصلاحيات & الأدوار</span></a>
+                </li>
+ 
+                <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
+                </li>
+
                 <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">User</span></a>
                     <ul class="menu-content">
                         <li><a href="app-user-list.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="List">List</span></a>

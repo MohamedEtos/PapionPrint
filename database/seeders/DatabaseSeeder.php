@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             PrintersSeedere::class,
             PrintingpricesSeedere::class,
             OrdersImgSeedere::class,
+            RolesAndPermissionsSeeder::class,
         ]);
     }
 }
