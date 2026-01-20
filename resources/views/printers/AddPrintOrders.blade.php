@@ -88,9 +88,13 @@
 
                                 <tr>
                                     <td></td>
-                                    <td class="product-img"><img src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
+
+                                    <td class="product-img">
+                                        <input type="hidden" class="order_id" value="{{ $Order->id }}">
+                                        <img src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
-                                    <td class="product-name">{{ $Order->customers->name }}</td>
+                                    
+                                    <td class="product-name">{{ $Order->customers->name }} </td>
                                     <td class="product-category">{{ $Order->machines->name}} {{ $Order->pass}} pass</td>
                                     <td class="product-category"><b>{{ $Order->meters }}</b></td>
 

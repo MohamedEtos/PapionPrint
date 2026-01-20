@@ -19,7 +19,10 @@ import '../core/js/scripts/documentation.js';
 import '../core/js/scripts/customizer.js';
 import '../core/js/scripts/footer.js';
 
+
 import './custome.js';
+
+
 
 
 

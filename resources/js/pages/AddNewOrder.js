@@ -49,7 +49,59 @@ $(document).ready(function () {
   // On Delete
   $('.action-delete').on("click", function (e) {
     e.stopPropagation();
-    $(this).closest('td').parent('tr').fadeOut();
+    var $row = $(this).closest('td').parent('tr');
+    var orderId = $row.find('.order_id').val();
+
+    console.log(orderId);
+    if (!orderId) {
+      $row.fadeOut(); // Just remove from text if no ID (newly added row before refresh? though usually we reload)
+      return;
+    }
+
+    Swal.fire({
+      title: 'هل انت متاكد?',
+      text: "لن تتمكن من التراجع عن هذا!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'نعم، احذفه!',
+      confirmButtonClass: 'btn btn-primary',
+      cancelButtonClass: 'btn btn-danger ml-1',
+      buttonsStyling: false,
+    }).then(function (result) {
+      if (result.value) {
+        $.ajax({
+          url: "/printers/delete/" + orderId,
+          type: "POST",
+          data: {
+            _token: $('meta[name="csrf-token"]').attr('content')
+          },
+          success: function (response) {
+            console.log("Order deleted:", response);
+            $row.fadeOut(function () {
+              $(this).remove();
+            });
+            Swal.fire({
+              type: "success",
+              title: 'تم الحذف!',
+              text: 'تم حذف الطلب بنجاح!',
+              confirmButtonClass: 'btn btn-success',
+            });
+          },
+          error: function (xhr) {
+            console.error("Error deleting order:", xhr);
+            Swal.fire({
+              title: "Error!",
+              text: "Error deleting order. Please try again.",
+              type: "error",
+              confirmButtonClass: 'btn btn-primary',
+              buttonsStyling: false,
+            });
+          }
+        });
+      }
+    });
   });
 
   // on action-info

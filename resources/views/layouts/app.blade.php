@@ -24,6 +24,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('core/vendors/js/vendors.min.js') }}"></script>
+    <script src="{{ asset('core/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
 
     @vite([  'resources/css/app.css','resources/js/app.js'])
 

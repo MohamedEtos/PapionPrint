@@ -124,8 +124,13 @@ class PrintersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Printers $printers)
+    public function destroy($id)
     {
-        //
+        $printer = Printers::find($id);
+        if ($printer) {
+            $printer->delete();
+            return response()->json(['success' => 'Order deleted successfully']);
+        }
+        return response()->json(['error' => 'Order not found'], 404);
     }
 }

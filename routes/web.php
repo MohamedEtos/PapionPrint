@@ -16,5 +16,6 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');
     Route::post('printers/upload-image', [PrintersController::class, 'uploadImage'])->name('printers.upload.image');
     Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
+    Route::post('printers/delete/{id}', [PrintersController::class, 'destroy'])->name('printers.delete');
 
 });
