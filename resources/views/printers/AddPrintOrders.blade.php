@@ -152,7 +152,7 @@
                                                 <option data-id="{{ $customer->id }}" value="{{ $customer->name }}">
                                                 @endforeach
                                             </datalist>
-                                            <!-- <input type="hidden" id="data-customer"> -->
+                                            <input type="hidden" id="data-customer">
                                         </div>
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-category">الماكينة</label>

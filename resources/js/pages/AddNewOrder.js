@@ -179,7 +179,7 @@ $(document).ready(function () {
     e.preventDefault();
     console.log("Add Data Button Clicked");
 
-    var customerId = $('#data-customer').val();
+    var customerId = $('#data-customer-view').val();
     var machineId = $('#data-machine').val();
     var height = $('#data-height').val();
     var width = $('#data-width').val();
@@ -191,15 +191,12 @@ $(document).ready(function () {
     var price = $('#data-price').val();
     var notes = $('#data-notes').val();
 
-    // if (!customerId || !machineId) {
-    //   alert("Please select Customer and Machine.");
+
+
+    // if (uploadedImagePaths.length === 0) {
+    //   // toastr.error("الرجاء رفع صورة واحدة على الأقل", "خطا");
     //   return;
     // }
-
-    if (uploadedImagePaths.length === 0) {
-      alert("Please upload at least one image.");
-      return;
-    }
 
     $.ajax({
       url: "/printers/store",
@@ -221,7 +218,7 @@ $(document).ready(function () {
       },
       success: function (response) {
         console.log("Order created:", response);
-        alert("Order Added Successfully!");
+        toastr.success("Order Added Successfully!", "تمت العملية بنجاح");
 
         var order = response.order;
         // Construct Image Path
@@ -280,7 +277,14 @@ $(document).ready(function () {
       },
       error: function (xhr) {
         console.error("Error creating order:", xhr);
-        alert("Error adding order. Check console.");
+        if (xhr.status === 422) {
+          var errors = xhr.responseJSON.errors;
+          $.each(errors, function (key, val) {
+            toastr.error(val[0], "خطا");
+          });
+        } else {
+          toastr.error("Error creating order. Please try again.", "خطا");
+        }
       }
     });
   });

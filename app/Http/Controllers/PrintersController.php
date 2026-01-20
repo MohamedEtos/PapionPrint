@@ -53,8 +53,41 @@ class PrintersController extends Controller
      */
     public function store(Request $request)
     {
+
+
+        $request->validate([
+            'customerId' => 'required|string|max:255',
+            'machineId' => 'required|exists:machines,id',
+            'fileHeight' => 'nullable|numeric',
+            'fileWidth' => 'nullable|numeric',
+            'fileCopies' => 'nullable|integer',
+            'picInCopies' => 'nullable|integer',
+            'pass' => 'nullable|integer',
+            'meters' => 'nullable|numeric',
+            'price' => 'nullable|numeric',
+        ], [
+            'required' => 'حقل :attribute مطلوب.',
+            'numeric' => 'حقل :attribute يجب أن يكون رقماً.',
+            'integer' => 'حقل :attribute يجب أن يكون عدداً صحيحاً.',
+            'exists' => 'القيمة المختارة لـ :attribute غير موجودة.',
+            'string' => 'حقل :attribute يجب أن يكون نصاً.',
+            'max' => 'حقل :attribute يجب أن لا يتجاوز :max حرفاً.',
+        ], [
+            'customerId' => 'اسم العميل',
+            'machineId' => 'الماكينة',
+            'fileHeight' => 'الطول',
+            'fileWidth' => 'العرض',
+            'fileCopies' => 'عدد النسخ',
+            'picInCopies' => 'الصور في النسخة',
+            'pass' => 'عدد الوجوه (Pass)',
+            'meters' => 'الأمتار',
+            'price' => 'السعر',
+        ]);
+
+
+
         $customers = Customers::create([
-            'name' => $request->name,
+            'name' => $request->customerId,
         ]);
         // Demonstration Logic
         $printer = Printers::create([

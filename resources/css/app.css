@@ -10,6 +10,8 @@
 @import '../core/css-rtl/pages/dashboard-ecommerce.css';
 @import '../core/css-rtl/pages/card-analytics.css';
 @import '../core/css-rtl/custom-rtl.css';
+@import '../core/vendors/css/extensions/toastr.css';
+@import '../core/css-rtl/plugins/extensions/toastr.css';
 @import './custome.css';
 /* @import url('/core/css/style-rtl.css'); */
 

@@ -22,11 +22,18 @@
     <link href="https://fonts.googleapis.com/css?family=Alexandria:300,400,500,600" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
 
+
     <!-- Scripts -->
     <script src="{{ asset('core/vendors/js/vendors.min.js') }}"></script>
     <script src="{{ asset('core/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('core/vendors/js/extensions/toastr.min.js') }}"></script>
+
+
+
 
     @vite([  'resources/css/app.css','resources/js/app.js'])
+
+
 
     @yield('css')
 
@@ -43,6 +50,7 @@
     @include('components.footer')
 
     @yield('js')
+
 
 </body>
 </html>
