@@ -54,7 +54,7 @@
                     <div class=" hover_action action-btns d-none">
                         <div class="btn-dropdown mr-1 mb-1">
                             <div class="btn-group dropdown actions-dropodown">
-                                <button type="button" class="btn btn-white px-1 py-1 dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-white px-1 py-1 dropdown-toggle waves-effect waves-light close_modal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Actions
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -141,33 +141,67 @@
                                 <div class="data-fields px-2 mt-3">
                                     <div class="row">
                                         <div class="col-sm-12 data-field-col">
-                                            <label for="data-name">Name</label>
-                                            <input type="text" class="form-control" id="data-name">
-                                        </div>
-                                        <div class="col-sm-12 data-field-col">
-                                            <label for="data-category"> Category </label>
-                                            <select class="form-control" id="data-category">
-                                                <option>Audio</option>
-                                                <option>Computers</option>
-                                                <option>Fitness</option>
-                                                <option>Appliance</option>
+                                            <label for="data-name">اسم العميل</label>
+                                            <select class="form-control" id="data-customer">
+                                                <option value="">اختر العميل</option>
+                                                @foreach($customers as $customer)
+                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-12 data-field-col">
-                                            <label for="data-status">Order Status</label>
+                                            <label for="data-category">الماكينة</label>
+                                            <select class="form-control" id="data-machine">
+                                                <option value="">اختر الماكينة</option>
+                                                @foreach($machines as $machine)
+                                                <option value="{{ $machine->id }}">{{ $machine->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-height">الطول</label>
+                                            <input type="number" step="0.01" class="form-control" id="data-height">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-width">العرض</label>
+                                            <input type="number" step="0.01" class="form-control" id="data-width">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-copies">نسخ الملف</label>
+                                            <input type="number" class="form-control" id="data-copies">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-pic-copies">صور في النسخة</label>
+                                            <input type="number" class="form-control" id="data-pic-copies">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-pass">Pass</label>
+                                            <input type="number" class="form-control" id="data-pass" value="1">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-meters">الأمتار</label>
+                                            <input type="number" step="0.01" class="form-control" id="data-meters">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-status">حالة الطلب</label>
                                             <select class="form-control" id="data-status">
-                                                <option>Pending</option>
-                                                <option>Canceled</option>
-                                                <option>Delivered</option>
-                                                <option>On Hold</option>
+                                                <option value="Pending">معلق</option>
+                                                <option value="In Progress">جاري العمل</option>
+                                                <option value="Completed">مكتمل</option>
+                                                <option value="Canceled">ملغي</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-12 data-field-col">
-                                            <label for="data-price">Price</label>
-                                            <input type="text" class="form-control" id="data-price">
+                                            <label for="data-price">السعر الإجمالي</label>
+                                            <input type="number" step="0.01" class="form-control" id="data-price">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-notes">ملاحظات</label>
+                                            <textarea class="form-control" id="data-notes"></textarea>
                                         </div>
                                         <div class="col-sm-12 data-field-col data-list-upload">
-                                            <form action="#" class="dropzone dropzone-area" id="dataListUpload">
+                                            <form action="{{ route('printers.upload.image') }}" method="POST" enctype="multipart/form-data" class="dropzone dropzone-area" id="dataListUpload">
+                                                @csrf
                                                 <div class="dz-message">Upload Image</div>
                                             </form>
                                         </div>
@@ -176,7 +210,7 @@
                             </div>
                             <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
                                 <div class="add-data-btn">
-                                    <button class="btn btn-primary">Add Data</button>
+                                    <button type="submit" class="btn btn-primary" id="saveDataBtn">Add Data</button>
                                 </div>
                                 <div class="cancel-data-btn">
                                     <button class="btn btn-outline-danger">Cancel</button>
