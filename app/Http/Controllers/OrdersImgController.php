@@ -2,25 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Printers;
+use App\Models\OrdersImg;
 use Illuminate\Http\Request;
-use App\Models\Customers;
-use App\Models\Machines;
-use App\Models\User;
 
-class PrintersController extends Controller
+class OrdersImgController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $Orders = Printers::with('printingprices','ordersImgs')->get();
-
-        return view('printers.AddPrintOrders', 
-        [
-            'Orders'=>$Orders,
-        ]);
+        //
     }
 
     /**
@@ -42,7 +34,7 @@ class PrintersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Printers $printers)
+    public function show(OrdersImg $ordersImg)
     {
         //
     }
@@ -50,7 +42,7 @@ class PrintersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Printers $printers)
+    public function edit(OrdersImg $ordersImg)
     {
         //
     }
@@ -58,7 +50,7 @@ class PrintersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Printers $printers)
+    public function update(Request $request, OrdersImg $ordersImg)
     {
         //
     }
@@ -66,7 +58,7 @@ class PrintersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Printers $printers)
+    public function destroy(OrdersImg $ordersImg)
     {
         //
     }

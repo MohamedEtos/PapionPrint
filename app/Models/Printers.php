@@ -18,7 +18,7 @@ class Printers extends Model
         'picInCopies',
         'pass',
         'meters',
-        'pricePerMeterId',
+        // 'pricePerMeterId',
         'totalPrice',
         'status',
         'paymentStatus',
@@ -46,6 +46,10 @@ class Printers extends Model
     }
     public function printingprices()
     {
-        return $this->hasOne(Printingprices::class, 'pricePerMeterId');
+        return $this->hasOne(Printingprices::class, 'orderId');
     }
+    public function ordersImgs()
+    {
+        return $this->hasMany(OrdersImg::class, 'orderId');
+    }   
 }

@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             CustomersSeedere::class,
             PrintersSeedere::class,
             PrintingpricesSeedere::class,
+            OrdersImgSeedere::class,
         ]);
     }
 }

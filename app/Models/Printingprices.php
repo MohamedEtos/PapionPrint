@@ -8,6 +8,7 @@ class Printingprices extends Model
 {
     protected $fillable = [
         'machineId',
+        'orderId',
         'pricePerMeter',
         'totalPrice',
         'discount',
@@ -19,6 +20,6 @@ class Printingprices extends Model
     }
     public function printers()
     {
-        return $this->belongsTo(Printers::class, 'pricePerMeterId');
+        return $this->belongsTo(Printers::class, 'orderId');
     }
 }
