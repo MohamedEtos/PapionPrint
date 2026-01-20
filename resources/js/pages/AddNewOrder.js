@@ -1,4 +1,46 @@
 $(document).ready(function () {
+
+  // culculate meters 
+
+  $('#data-copies, #data-height,  #data-price').on('input', function () {
+    var copies = parseFloat($('#data-copies').val()) || 0;
+    var height = parseFloat($('#data-height').val()) || 0;
+    var price = parseFloat($('#data-price').val()) || 0;
+
+    var meters = copies * height;
+    $('#data-meters').val((meters / 100));
+
+    var total = meters * price;
+    $('#data-total').val(total);
+
+    // Disable meters input if valid calculation exists
+    if (copies > 0 && height > 0) {
+      $('#data-meters').prop('disabled', true);
+    } else {
+      $('#data-meters').prop('disabled', false);
+    }
+  });
+
+  // Handle Machine Selection
+  $('#data-machine').on('change', function () {
+    var selectedText = $(this).find("option:selected").text().toLowerCase();
+
+    if (selectedText.includes('dtf')) {
+      $('#data-width').val(58);
+      $('#data-pass').val(4).prop('disabled', false);
+    } else if (selectedText.includes('sublimation')) {
+      $('#data-width').val(150);
+      $('#data-pass').val(1).prop('disabled', true);
+    } else {
+      $('#data-pass').prop('disabled', false);
+    }
+  });
+
+
+
+
+
+
   // Configure Dropzone
   Dropzone.autoDiscover = false;
 
@@ -16,6 +58,9 @@ $(document).ready(function () {
       maxFiles: 10,
       acceptedFiles: 'image/*',
       addRemoveLinks: true,
+      resizeHeight: 110,
+      resizeMimeType: 'image/webp',
+      resizeQuality: 0.9,
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
@@ -210,7 +255,7 @@ $(document).ready(function () {
         $(".overlay-bg").removeClass("show");
 
         // Reset Inputs
-        $('#data-customer, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes').val('');
+        $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes').val('');
         $('#data-status').val('Pending');
         $('#data-pass').val('1'); // Reset pass default
 

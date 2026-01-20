@@ -135,7 +135,7 @@
                         <div class="add-new-data">
                             <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
                                 <div>
-                                    <h4 class="text-uppercase">Thumb View Data</h4>
+                                    <h4 class="text-uppercase">اضافه اذن تشغيل</h4>
                                 </div>
                                 <div class="hide-data-sidebar">
                                     <i class="feather icon-x"></i>
@@ -145,13 +145,14 @@
                                 <div class="data-fields px-2 mt-3">
                                     <div class="row">
                                         <div class="col-sm-12 data-field-col">
-                                            <label for="data-name">اسم العميل</label>
-                                            <select class="form-control" id="data-customer">
-                                                <option value="">اختر العميل</option>
+                                            <label for="data-customer-view">اسم العميل</label>
+                                            <input type="text" class="form-control" id="data-customer-view" list="customers-list" placeholder="ابحث عن العميل...">
+                                            <datalist id="customers-list">
                                                 @foreach($customers as $customer)
-                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                                <option data-id="{{ $customer->id }}" value="{{ $customer->name }}">
                                                 @endforeach
-                                            </select>
+                                            </datalist>
+                                            <input type="hidden" id="data-customer">
                                         </div>
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-category">الماكينة</label>
