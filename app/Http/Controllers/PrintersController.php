@@ -32,8 +32,25 @@ class PrintersController extends Controller
     {
         if($request->hasFile('file')){
             $file = $request->file('file');
-            $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('images/orders', $filename, 'public');
+            
+            // Use Intervention Image Manager with GD Driver
+            $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+            
+            // Read and process image
+            $image = $manager->read($file);
+            
+            // Scale to max height 220 (maintains aspect ratio)
+            $image->scale(height: 220);
+            
+            // Encode to WebP
+            $encoded = $image->toWebp(90);
+            
+            $filename = uniqid() . '_' . time() . '.webp';
+            $path = 'images/orders/' . $filename;
+            
+            // Save using Storage facade
+            \Illuminate\Support\Facades\Storage::disk('public')->put($path, (string) $encoded);
+            
             return response()->json(['success' => $filename, 'path' => $path]);
         }
         return response()->json(['error' => 'No file uploaded'], 400);
