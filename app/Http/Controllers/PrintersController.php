@@ -53,10 +53,13 @@ class PrintersController extends Controller
      */
     public function store(Request $request)
     {
+        $customers = Customers::create([
+            'name' => $request->name,
+        ]);
         // Demonstration Logic
         $printer = Printers::create([
             'orderNumber' => 'ORD-' . time(),
-            'customerId' => $request->customerId, 
+            'customerId' => $customers->id, 
             'machineId' => $request->machineId,
             'fileHeight' => $request->fileHeight ?? 0,
             'fileWidth' => $request->fileWidth ?? 0,

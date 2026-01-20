@@ -191,10 +191,10 @@ $(document).ready(function () {
     var price = $('#data-price').val();
     var notes = $('#data-notes').val();
 
-    if (!customerId || !machineId) {
-      alert("Please select Customer and Machine.");
-      return;
-    }
+    // if (!customerId || !machineId) {
+    //   alert("Please select Customer and Machine.");
+    //   return;
+    // }
 
     if (uploadedImagePaths.length === 0) {
       alert("Please upload at least one image.");

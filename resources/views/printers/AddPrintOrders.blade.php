@@ -146,13 +146,13 @@
                                     <div class="row">
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-customer-view">اسم العميل</label>
-                                            <input type="text" class="form-control" id="data-customer-view" list="customers-list" placeholder="ابحث عن العميل...">
+                                            <input type="text" class="form-control" name="name" id="data-customer-view" list="customers-list" placeholder="ابحث عن العميل...">
                                             <datalist id="customers-list">
                                                 @foreach($customers as $customer)
                                                 <option data-id="{{ $customer->id }}" value="{{ $customer->name }}">
                                                 @endforeach
                                             </datalist>
-                                            <input type="hidden" id="data-customer">
+                                            <!-- <input type="hidden" id="data-customer"> -->
                                         </div>
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-category">الماكينة</label>
