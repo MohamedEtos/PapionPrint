@@ -77,6 +77,7 @@
                                     <th>نوع الطباعه</th>
                                     <th>الامتار</th>
                                     <th>الحاله</th>
+                                    <th>سعر المتر</th>
                                     <th>التاريخ</th>
                                     <th>اجراء</th>
                                 </tr>
@@ -190,10 +191,6 @@
                                         <div class="col12 data-field-col text-muted">
                                             <label for="data-meters text-muted">اجمالي القطع</label>
                                             <span id="data-total-pic" class="">0</span>
-                                        </div>
-                                        <div class="col12 data-field-col text-muted">
-                                            <label for="data-price-pic text-muted">سعر القطعه</label>
-                                            <span id="data-price-pic" class="">0</span>
                                         </div>
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-status">حالة الطلب</label>
