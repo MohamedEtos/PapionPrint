@@ -188,6 +188,14 @@
                                             <label for="data-meters">الأمتار</label>
                                             <input type="number" step="0.01" class="form-control" id="data-meters">
                                         </div>
+                                        <div class="col12 data-field-col text-muted">
+                                            <label for="data-meters text-muted">اجمالي القطع</label>
+                                            <span id="data-total-pic" class="">0</span>
+                                        </div>
+                                        <div class="col12 data-field-col text-muted">
+                                            <label for="data-price-pic text-muted">سعر القطعه</label>
+                                            <span id="data-price-pic" class="">0</span>
+                                        </div>
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-status">حالة الطلب</label>
                                             <select class="form-control" id="data-status">

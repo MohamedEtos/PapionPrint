@@ -2,7 +2,7 @@ $(document).ready(function () {
 
   // culculate meters 
 
-  $('#data-copies, #data-height,  #data-price').on('input', function () {
+  $('#data-copies, #data-height,  #data-price ,#data-pic-copies').on('input', function () {
     var copies = parseFloat($('#data-copies').val()) || 0;
     var height = parseFloat($('#data-height').val()) || 0;
     var price = parseFloat($('#data-price').val()) || 0;
@@ -13,6 +13,15 @@ $(document).ready(function () {
     var total = meters * price;
     $('#data-total').val(total);
 
+
+      var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
+      var priceperpic = parseFloat(170) || 0;
+      var totalpic = copies * picCopies;
+      var price = (height / 100  ) / picCopies * priceperpic;
+
+      $('#data-price-pic').text(price);
+      $('#data-total-pic').text(totalpic);
+
     // Disable meters input if valid calculation exists
     if (copies > 0 && height > 0) {
       $('#data-meters').prop('disabled', true);
@@ -20,6 +29,11 @@ $(document).ready(function () {
       $('#data-meters').prop('disabled', false);
     }
   });
+
+
+
+
+
 
   // Handle Machine Selection
   $('#data-machine').on('change', function () {
@@ -137,6 +151,12 @@ $(document).ready(function () {
           $('#data-price').val(order.printingprices.totalPrice);
         }
         $('#data-notes').val(order.notes);
+
+          // calc pic 
+          var copies = parseFloat($('#data-copies').val()) || 0;
+          var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
+          var totalpic = copies * picCopies;
+          $('#data-total-pic').text(totalpic);
 
         editingOrderId = order.id;
         $('.new-data-title h4').text('تعديل البيانات');
@@ -421,9 +441,14 @@ $(document).ready(function () {
     var $textElement = $this.find('.chip-text');
     var currentStatus = $textElement.text().trim();
 
+    if (currentStatus === 'تم الكبس') {
+      $row.fadeOut();
+      return;
+    }
+
     if (!orderId) return;
 
-    if (currentStatus === 'waiting' || currentStatus === 'بانتظار اجراء') {
+    if (currentStatus === 'بانتظار اجراء' || currentStatus === 'بانتظار اجراء') {
       e.preventDefault();
 
       $.ajax({

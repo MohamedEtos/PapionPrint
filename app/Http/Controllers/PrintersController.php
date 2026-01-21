@@ -16,7 +16,7 @@ class PrintersController extends Controller
      */
     public function index()
     {
-        $Orders = Printers::with('printingprices','ordersImgs')->get();
+        $Orders = Printers::with('printingprices','ordersImgs')->where('archive', '0')->get();
         $customers = Customers::all();
         $machines = Machines::all();
 
@@ -309,6 +309,10 @@ class PrintersController extends Controller
             $nextStatus = $statuses[$currentStatusIndex + 1];
         } else {
             $nextStatus = 'بانتظار اجراء';
+        }
+
+        if($nextStatus == 'تم الانتهاء') {
+            $order->archive = 1;
         }
 
         $order->status = $nextStatus;
