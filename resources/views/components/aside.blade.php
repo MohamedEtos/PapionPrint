@@ -30,7 +30,9 @@
                         </li>
                         <li ><a href="app-ecommerce-shop.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">تسجيل طباعه</span></a>
                         </li>
-                        <li ><a href="app-ecommerce-shop.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سجل الطباعه </span></a>
+                        <li class="{{ request()->routeIs('print_log') ? 'active' : '' }}"><a href="{{ route('print_log') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سجل الطباعه </span></a>
+                        </li>
+                        <li class="{{ request()->routeIs('printers.trash') ? 'active' : '' }}"><a href="{{ route('printers.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
                         </li>
                         <li><a href="app-ecommerce-wishlist.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Wish List">المكبس</span></a>
                         </li>

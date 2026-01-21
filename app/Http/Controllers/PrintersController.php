@@ -28,6 +28,20 @@ class PrintersController extends Controller
         ]);
     }
 
+    public function printLog()
+    {
+        $Orders = Printers::with(['printingprices','ordersImgs', 'customers', 'machines', 'user', 'user2'])->orderBy('id', 'desc')->get();
+        $customers = Customers::all();
+        $machines = Machines::all();
+
+        return view('printers.print_log', 
+        [
+            'Orders'=>$Orders,
+            'customers' => $customers,
+            'machines' => $machines,
+        ]);
+    }
+
     public function uploadImage(Request $request)
     {
         if($request->hasFile('file')){
@@ -319,5 +333,43 @@ class PrintersController extends Controller
         $order->save();
 
         return response()->json(['success' => 'Status updated', 'status' => $nextStatus]);
+    }
+    public function trash()
+    {
+        $Orders = Printers::onlyTrashed()->with(['customers', 'machines', 'printingprices', 'ordersImgs'])->orderBy('deleted_at', 'desc')->get();
+        // We might not need all logic like customers/machines lists if we just display, but consistency helps
+        $customers = Customers::all(); 
+        $machines = Machines::all();
+
+        return view('printers.trash', 
+        [
+            'Orders'=>$Orders,
+            'customers' => $customers,
+            'machines' => $machines,
+        ]);
+    }
+
+    public function restore($id)
+    {
+        $printer = Printers::withTrashed()->find($id); // search in trashed too
+        if ($printer && $printer->trashed()) {
+            $printer->restore();
+            return response()->json(['success' => 'Order restored successfully']);
+        }
+        return response()->json(['error' => 'Order not found or not deleted'], 404);
+    }
+
+    public function forceDelete($id)
+    {
+        $printer = Printers::withTrashed()->find($id);
+        if ($printer) {
+            // Delete related images from storage? 
+            // Ideally yes, but for now let's just delete the record.
+            // Soft delete on relations? If not cascade, we might leave orphans. 
+            // Assuming simpler logic for now.
+            $printer->forceDelete();
+            return response()->json(['success' => 'Order permanently deleted']);
+        }
+        return response()->json(['error' => 'Order not found'], 404);
     }
 }
