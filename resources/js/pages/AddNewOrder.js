@@ -86,7 +86,7 @@ $(document).ready(function () {
       url: "/printers/upload-image",
       paramName: "file",
       maxFiles: 10,
-      acceptedFiles: 'image/*',
+      acceptedFiles: '.jpg,.jpeg,.png,.gif',
       addRemoveLinks: true,
       resizeHeight: 110,
       resizeMimeType: 'image/webp',
@@ -97,6 +97,8 @@ $(document).ready(function () {
       success: function (file, response) {
         uploadedImagePaths.push(response.path);
         console.log("Images uploaded:", uploadedImagePaths);
+        toastr.success("uploadedImagePaths");
+
       },
       removedfile: function (file) {
         if (file.previewElement != null && file.previewElement.parentNode != null) {
@@ -106,11 +108,11 @@ $(document).ready(function () {
         return _updateMaxFilesReachedClass();
       },
       error: function (file, response) {
-        console.error("Upload failed:", response);
+        toastr.error("Upload failed:", response);
       }
     });
   } catch (e) {
-    console.error("Dropzone init warning:", e);
+    toastr.error("Dropzone init warning:", e);
   }
 
   // Handle Paste Event

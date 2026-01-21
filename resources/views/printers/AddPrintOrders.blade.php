@@ -136,9 +136,9 @@
                                             <label for="data-customer-view">اسم العميل</label>
                                             <input type="text" class="form-control" name="name" id="data-customer-view" list="customers-list" placeholder="ابحث عن العميل...">
                                             <datalist id="customers-list">
-                                                @foreach($customers as $customer)
-                                                <option data-id="{{ $customer->id }}" value="{{ $customer->name }}">
-                                                @endforeach
+                                                @foreach($customers->unique('name') as $customer)
+    <option data-id="{{ $customer->id }}" value="{{ $customer->name }}">
+@endforeach
                                             </datalist>
                                             <input type="hidden" id="data-customer">
                                         </div>
