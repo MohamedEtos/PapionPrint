@@ -41,7 +41,7 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ route('home') }}">الرئيسية</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#"> الطباعه</a>
+                                    <li class="breadcrumb-item"><a href="#"> الطباعة</a>
                                     </li>
                                     <li class="breadcrumb-item active">سلة المحذوفات
                                     </li>
@@ -63,7 +63,7 @@
                                     <th></th>
                                     <th>صورة</th>
                                     <th>اسم العميل</th>
-                                    <th>نوع الطباعه</th>
+                                    <th>نوع الطباعة</th>
                                     <th>الامتار</th>
                                     <th>الحاله</th>
                                     <th>تاريخ الحذف</th>

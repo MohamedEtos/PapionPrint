@@ -7,7 +7,7 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-$(document).ready(function() {
+$(document).ready(function () {
   "use strict"
   // init list view datatable
   var dataListView = $(".data-list-view").DataTable({
@@ -29,13 +29,13 @@ $(document).ready(function() {
     select: {
       style: "multi"
     },
-    order: [[1, "asc"]],
+    order: [[1, "desc"]],
     bInfo: false,
     pageLength: 4,
     buttons: [
       {
         text: "<i class='feather icon-plus'></i> Add New",
-        action: function() {
+        action: function () {
           $(this).removeClass("btn-secondary")
           $(".add-new-data").addClass("show")
           $(".overlay-bg").addClass("show")
@@ -45,13 +45,13 @@ $(document).ready(function() {
         className: "btn-outline-primary"
       }
     ],
-    initComplete: function(settings, json) {
+    initComplete: function (settings, json) {
       $(".dt-buttons .btn").removeClass("btn-secondary")
     }
   });
 
-  dataListView.on('draw.dt', function(){
-    setTimeout(function(){
+  dataListView.on('draw.dt', function () {
+    setTimeout(function () {
       if (navigator.userAgent.indexOf("Mac OS X") != -1) {
         $(".dt-checkboxes-cell input, .dt-checkboxes").addClass("mac-checkbox")
       }
@@ -78,13 +78,13 @@ $(document).ready(function() {
     select: {
       style: "multi"
     },
-    order: [[1, "asc"]],
+    order: [[1, "desc"]],
     bInfo: false,
     pageLength: 4,
     buttons: [
       {
         text: "<i class='feather icon-plus'></i> Add New",
-        action: function() {
+        action: function () {
           $(this).removeClass("btn-secondary")
           $(".add-new-data").addClass("show")
           $(".overlay-bg").addClass("show")
@@ -92,13 +92,13 @@ $(document).ready(function() {
         className: "btn-outline-primary"
       }
     ],
-    initComplete: function(settings, json) {
+    initComplete: function (settings, json) {
       $(".dt-buttons .btn").removeClass("btn-secondary")
     }
   })
 
-  dataThumbView.on('draw.dt', function(){
-    setTimeout(function(){
+  dataThumbView.on('draw.dt', function () {
+    setTimeout(function () {
       if (navigator.userAgent.indexOf("Mac OS X") != -1) {
         $(".dt-checkboxes-cell input, .dt-checkboxes").addClass("mac-checkbox")
       }
@@ -116,7 +116,7 @@ $(document).ready(function() {
   }
 
   // Close sidebar
-  $(".hide-data-sidebar, .cancel-data-btn, .overlay-bg").on("click", function() {
+  $(".hide-data-sidebar, .cancel-data-btn, .overlay-bg").on("click", function () {
     $(".add-new-data").removeClass("show")
     $(".overlay-bg").removeClass("show")
     $("#data-name, #data-price").val("")
@@ -124,7 +124,7 @@ $(document).ready(function() {
   })
 
   // On Edit
-  $('.action-edit').on("click",function(e){
+  $('.action-edit').on("click", function (e) {
     e.stopPropagation();
     $('#data-name').val('Altec Lansing - Bluetooth Speaker');
     $('#data-price').val('$99');
@@ -133,20 +133,20 @@ $(document).ready(function() {
   });
 
   // On Delete
-  $('.action-delete').on("click", function(e){
+  $('.action-delete').on("click", function (e) {
     e.stopPropagation();
     $(this).closest('td').parent('tr').fadeOut();
   });
 
   // dropzone init
   Dropzone.options.dataListUpload = {
-    complete: function(files) {
+    complete: function (files) {
       var _this = this
       // checks files in class dropzone and remove that files
       $(".hide-data-sidebar, .cancel-data-btn, .actions .dt-buttons").on(
         "click",
-        function() {
-          $(".dropzone")[0].dropzone.files.forEach(function(file) {
+        function () {
+          $(".dropzone")[0].dropzone.files.forEach(function (file) {
             file.previewElement.remove()
           })
           $(".dropzone").removeClass("dz-started")

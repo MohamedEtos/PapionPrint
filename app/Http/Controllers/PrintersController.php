@@ -71,17 +71,6 @@ class PrintersController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
 
@@ -132,7 +121,7 @@ class PrintersController extends Controller
             'pass' => $request->pass ?? 1,
             'meters' => $request->meters ?? 0,
             // 'totalPrice' => $request->price ?? 0, // Removed as column doesn't exist
-            'status' => $request->status ?? 'waiting',
+            'status' => $request->status ?? 'بانتظار اجراء ',
             'notes' => $request->notes,
             'designerId' => auth()->id() ?? 1,
             'operatorId' => 1,
@@ -164,9 +153,9 @@ class PrintersController extends Controller
         return response()->json(['success' => 'Order created successfully', 'order' => $printer]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+
+
     public function show($id)
     {
         $printer = Printers::with(['customers', 'machines', 'printingprices', 'ordersImgs', 'user', 'user2'])->find($id);
@@ -178,13 +167,7 @@ class PrintersController extends Controller
         return response()->json($printer);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Printers $printers)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -286,6 +269,9 @@ class PrintersController extends Controller
         return response()->json(['success' => 'Order updated successfully', 'order' => $printer]);
     }
 
+
+
+
     /**
      * Remove the specified resource from storage.
      */
@@ -299,6 +285,8 @@ class PrintersController extends Controller
         return response()->json(['error' => 'Order not found'], 404);
     }
 
+
+
     public function bulkDelete(Request $request)
     {
         $ids = $request->ids;
@@ -309,6 +297,8 @@ class PrintersController extends Controller
         return response()->json(['error' => 'No orders selected'], 400);
     }
 
+    
+
     public function updateStatus($id)
     {
         $order = Printers::find($id);
@@ -316,7 +306,7 @@ class PrintersController extends Controller
             return response()->json(['error' => 'Order not found'], 404);
         }
 
-        $statuses = ['بانتظار اجراء', 'بدات الطباعة', 'انتهاء الطباعة', 'تم الكبس', 'تم الانتهاء'];
+        $statuses = ['بانتظار اجراء', 'بدات الطباعة', 'انتهت الطباعة', ];
         $currentStatusIndex = array_search($order->status, $statuses);
 
         if ($currentStatusIndex !== false && $currentStatusIndex < count($statuses) - 1) {
@@ -325,7 +315,7 @@ class PrintersController extends Controller
             $nextStatus = 'بانتظار اجراء';
         }
 
-        if($nextStatus == 'تم الانتهاء') {
+        if($nextStatus == 'انتهت الطباعة') {
             $order->archive = 1;
         }
 

@@ -14,13 +14,13 @@ $(document).ready(function () {
     $('#data-total').val(total);
 
 
-      var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
-      var priceperpic = parseFloat(170) || 0;
-      var totalpic = copies * picCopies;
-      var price = (height / 100  ) / picCopies * priceperpic;
+    var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
+    var priceperpic = parseFloat(170) || 0;
+    var totalpic = copies * picCopies;
+    var price = (height / 100) / picCopies * priceperpic;
 
-      $('#data-price-pic').text(price);
-      $('#data-total-pic').text(totalpic);
+    $('#data-price-pic').text(price);
+    $('#data-total-pic').text(totalpic);
 
     // Disable meters input if valid calculation exists
     if (copies > 0 && height > 0) {
@@ -125,7 +125,7 @@ $(document).ready(function () {
     }
   };
 
-  // On Edit
+  ////////////////////////////// On Edit /////////////////////////
   $(document).on("click", ".action-edit", function (e) {
     e.stopPropagation();
     var $row = $(this).closest('tr');
@@ -152,11 +152,11 @@ $(document).ready(function () {
         }
         $('#data-notes').val(order.notes);
 
-          // calc pic 
-          var copies = parseFloat($('#data-copies').val()) || 0;
-          var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
-          var totalpic = copies * picCopies;
-          $('#data-total-pic').text(totalpic);
+        // calc pic 
+        var copies = parseFloat($('#data-copies').val()) || 0;
+        var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
+        var totalpic = copies * picCopies;
+        $('#data-total-pic').text(totalpic);
 
         editingOrderId = order.id;
         $('.new-data-title h4').text('تعديل البيانات');
@@ -172,7 +172,7 @@ $(document).ready(function () {
     });
   });
 
-  // On Delete
+  //////////////////////// On Delete ////////////////////////////
   $(document).on("click", ".action-delete", function (e) {
     e.stopPropagation();
     var $row = $(this).closest('td').parent('tr');
@@ -232,73 +232,73 @@ $(document).ready(function () {
     });
   });
 
-  // on action-info
-  $(document).on("click", ".action-info", function (e) {
-    e.stopPropagation();
-    var $row = $(this).closest('tr');
-    var orderId = $row.find('.order_id').val();
+  ///////////////////////////// on action-info /////////////////////////////////
+  // $(document).on("click", ".action-info", function (e) {
+  //   e.stopPropagation();
+  //   var $row = $(this).closest('tr');
+  //   var orderId = $row.find('.order_id').val();
 
-    if (!orderId) return;
+  //   if (!orderId) return;
 
-    // Show loading state or clear previous measurement
-    $('#modal-order-id').text('Loading...');
+  //   // Show loading state or clear previous measurement
+  //   $('#modal-order-id').text('Loading...');
 
-    $.ajax({
-      url: "/printers/" + orderId,
-      type: "GET",
-      success: function (order) {
-        // Basic Info
-        $('#modal-order-id').text(order.id);
-        $('#modal-order-number').text(order.orderNumber || '-');
-        $('#modal-customer-name').text(order.customers ? order.customers.name : '-');
-        $('#modal-machine-name').text(order.machines ? order.machines.name : '-');
+  //   $.ajax({
+  //     url: "/printers/" + orderId,
+  //     type: "GET",
+  //     success: function (order) {
+  //       // Basic Info
+  //       $('#modal-order-id').text(order.id);
+  //       $('#modal-order-number').text(order.orderNumber || '-');
+  //       $('#modal-customer-name').text(order.customers ? order.customers.name : '-');
+  //       $('#modal-machine-name').text(order.machines ? order.machines.name : '-');
 
-        // File Details
-        $('#modal-file-height').text(order.fileHeight);
-        $('#modal-file-width').text(order.fileWidth);
-        $('#modal-file-copies').text(order.fileCopies);
-        $('#modal-pic-copies').text(order.picInCopies);
-        $('#modal-meters').text(order.meters);
+  //       // File Details
+  //       $('#modal-file-height').text(order.fileHeight);
+  //       $('#modal-file-width').text(order.fileWidth);
+  //       $('#modal-file-copies').text(order.fileCopies);
+  //       $('#modal-pic-copies').text(order.picInCopies);
+  //       $('#modal-meters').text(order.meters);
 
-        // Prices
-        if (order.printingprices) {
-          $('#modal-price-per-meter').text(order.printingprices.pricePerMeter);
-          $('#modal-total-price').text(order.printingprices.totalPrice);
-        } else {
-          $('#modal-price-per-meter').text('-');
-          $('#modal-total-price').text('-');
-        }
+  //       // Prices
+  //       if (order.printingprices) {
+  //         $('#modal-price-per-meter').text(order.printingprices.pricePerMeter);
+  //         $('#modal-total-price').text(order.printingprices.totalPrice);
+  //       } else {
+  //         $('#modal-price-per-meter').text('-');
+  //         $('#modal-total-price').text('-');
+  //       }
 
-        // Statuses
-        $('#modal-status').text(order.status);
-        $('#modal-payment-status').text(order.paymentStatus);
-        $('#modal-archive').text(order.archive ? 'Yes' : 'No');
-        $('#modal-notes').text(order.notes || 'No notes');
+  //       // Statuses
+  //       $('#modal-status').text(order.status);
+  //       $('#modal-payment-status').text(order.paymentStatus);
+  //       $('#modal-archive').text(order.archive ? 'Yes' : 'No');
+  //       $('#modal-notes').text(order.notes || 'No notes');
 
-        // Users
-        $('#modal-designer').text(order.user ? order.user.name : '-');
-        $('#modal-operator').text(order.user2 ? order.user2.name : '-');
+  //       // Users
+  //       $('#modal-designer').text(order.user ? order.user.name : '-');
+  //       $('#modal-operator').text(order.user2 ? order.user2.name : '-');
 
-        // Dates
-        $('#modal-start-date').text(order.created_at ? new Date(order.created_at).toLocaleString() : '-');
-        $('#modal-end-date').text(order.updated_at ? new Date(order.updated_at).toLocaleString() : '-');
-        $('#modal-time-end-op').text(order.timeEndOpration ? new Date(order.timeEndOpration).toLocaleString() : '-');
+  //       // Dates
+  //       $('#modal-start-date').text(order.created_at ? new Date(order.created_at).toLocaleString() : '-');
+  //       $('#modal-end-date').text(order.updated_at ? new Date(order.updated_at).toLocaleString() : '-');
+  //       $('#modal-time-end-op').text(order.timeEndOpration ? new Date(order.timeEndOpration).toLocaleString() : '-');
 
-        // Image
-        if (order.orders_imgs && order.orders_imgs.length > 0) {
-          $('#modal-order-image').attr('src', '/storage/' + order.orders_imgs[0].path);
-        } else {
-          $('#modal-order-image').attr('src', '/core/images/elements/apple-watch.png');
-        }
+  //       // Image
+  //       if (order.orders_imgs && order.orders_imgs.length > 0) {
+  //         $('#modal-order-image').attr('src', '/storage/' + order.orders_imgs[0].path);
+  //       } else {
+  //         $('#modal-order-image').attr('src', '/core/images/elements/apple-watch.png');
+  //       }
 
-        $('#xlarge').modal('show');
-      },
-      error: function (xhr) {
-        console.error("Error modal details:", xhr);
-        toastr.error("Could not fetch details", "Error");
-      }
-    });
-  });
+  //       $('#xlarge').modal('show');
+  //     },
+  //     error: function (xhr) {
+  //       console.error("Error modal details:", xhr);
+  //       toastr.error("Could not fetch details", "Error");
+  //     }
+  //   });
+  // });
 
   // On Cancel / Close Sidebar
   $('.hide-data-sidebar, .cancel-data-btn, .overlay-bg').on("click", function (e) {
@@ -308,7 +308,9 @@ $(document).ready(function () {
     resetForm();
   });
 
-  // Save Data Button Logic
+
+
+  // //////////////////////////Save Data Button Logic ////////////////////////////////
   $('#saveDataBtn').on('click', function (e) {
     e.preventDefault();
     console.log("Save/Update Data Button Clicked");
@@ -382,7 +384,7 @@ $(document).ready(function () {
           $metersCell.html('<b>' + order.meters + '</b>');
 
           $row.find('.chip-text').text(order.status);
-          $row.find('.chip').removeClass('chip-success chip-warning').addClass(order.status == 'تم الانتهاء' ? 'chip-success' : 'chip-warning');
+          $row.find('.chip').removeClass('chip-success chip-warning').addClass(order.status == 'انتهت الطباعة' ? 'chip-success' : 'chip-info');
           $row.find('td:eq(6)').text(pricePerMeter);
         } else {
           var newRow = `
@@ -396,21 +398,21 @@ $(document).ready(function () {
                     <td class="product-category">${machineName} ${order.pass} pass</td>
                     <td class="product-category"><b>${order.meters}</b></td>
                     <td>
-                        <div class="chip chip-${order.status == 'تم الانتهاء' ? 'success' : 'warning'}">
+                        <div class="chip chip-${order.status == 'انتهت الطباعة' ? 'success' : 'info'}">
                             <div class="chip-body status-toggle" style="cursor: pointer">
                                 <div class="chip-text">${order.status}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="product-price">${pricePerMeter}</td>
                     <td class="product-price" title="Just now">الآن</td>
                     <td class="product-action">
-                        <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
                         <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
                         <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
                     </td>
                 </tr>
             `;
+                                    // <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
+
           $('table.data-thumb-view tbody').append(newRow);
         }
 
@@ -432,7 +434,8 @@ $(document).ready(function () {
     });
   });
 
-  // On Status Click
+  /////////////////// On Status Click //////////////////////////
+
   $(document).on("click", ".status-toggle", function (e) {
     e.stopPropagation();
     var $this = $(this);
@@ -441,7 +444,7 @@ $(document).ready(function () {
     var $textElement = $this.find('.chip-text');
     var currentStatus = $textElement.text().trim();
 
-    if (currentStatus === 'تم الكبس') {
+    if (currentStatus === 'انتهت الطباعة') {
       $row.fadeOut();
       return;
     }
@@ -511,7 +514,10 @@ $(document).ready(function () {
     });
   });
 
-  // Bulk Delete & Actions Visibility
+
+
+  // ///////////// multiple Bulk Delete & Actions Visibility ///////////////////////
+
   var table = $('.data-thumb-view').DataTable();
 
   // Initially hide actions dropdown if it exists logic isn't handled by CSS
