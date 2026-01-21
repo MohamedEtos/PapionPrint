@@ -19,13 +19,14 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
     Route::post('printers/delete/{id}', [PrintersController::class, 'destroy'])->name('printers.delete');
     Route::post('printers/update-status/{id}', [PrintersController::class, 'updateStatus'])->name('printers.update.status');
+    Route::post('printers/update-price/{id}', [PrintersController::class, 'updatePrice'])->name('printers.update.price');
     Route::post('printers/bulk-delete', [PrintersController::class, 'bulkDelete'])->name('printers.bulk_delete');
     Route::get('printers/{id}', [PrintersController::class, 'show'])->name('printers.show');
     Route::put('printers/{id}', [PrintersController::class, 'update'])->name('printers.update');
-    
+
     // Trash Routes
     Route::get('trash/printers', [PrintersController::class, 'trash'])->name('printers.trash');
-    Route::post('printers/restore/{id}', [PrintersController::class, 'restore'])->name('printers.restore'); 
+    Route::post('printers/restore/{id}', [PrintersController::class, 'restore'])->name('printers.restore');
     Route::delete('printers/force-delete/{id}', [PrintersController::class, 'forceDelete'])->name('printers.force_delete');
 
 

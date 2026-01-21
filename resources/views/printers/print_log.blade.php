@@ -42,7 +42,7 @@
             <div class="content-body">
                 <!-- Data list view starts -->
                 <section id="data-thumb-view" class="data-thumb-view-header">
-                    
+
                     <!-- dataTable starts -->
                     <div class="table-responsive">
                         <table class="table data-thumb-view">
@@ -50,13 +50,26 @@
                                 <tr>
                                     <th></th>
                                     <th>صورة</th>
+                                    <th>رقم الطلب</th>
                                     <th>اسم العميل</th>
-                                    <th>نوع الطباعه</th>
+                                    <th>الماكينة</th>
+                                    <th>الطول</th>
+                                    <th>العرض</th>
+                                    <th>النسخ</th>
+                                    <th>الصور/نسخة</th>
                                     <th>الامتار</th>
-                                    <th>الحاله</th>
+                                    {{-- <th>الحاله</th> --}}
+                                    <th>حالة الدفع</th>
+                                    <th>المصمم</th>
+                                    {{-- <th>المشغل</th> --}}
                                     <th>سعر المتر</th>
-                                    <th>التاريخ</th>
-                                    <th>اجراء</th>
+                                    <th>السعر الإجمالي</th>
+                                    <th>الخصم</th>
+                                    <th>السعر النهائي</th>
+                                    <th>الملاحظات</th>
+                                    <th>تاريخ الإنشاء</th>
+                                    {{-- <th>تاريخ التحديث</th> --}}
+                                    <th>تاريخ الانتهاء</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,29 +82,69 @@
                                         <input type="hidden" class="order_id" value="{{ $Order->id }}">
                                         <img src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
-                                    
-                                    <td class="product-name">{{ $Order->customers->name }} </td>
-                                    <td class="product-category">{{ $Order->machines->name}} {{ $Order->pass}} pass</td>
-                                    <td class="product-category"><b>{{ $Order->meters }}</b></td>
 
-                                    <td>
-                                        <div class="chip chip-{{ $Order->status == 'تم الانتهاء' ? 'success' : 'info' }}">
+                                    <td class="product-name">{{ $Order->orderNumber }}</td>
+                                    <td class="product-name">{{ $Order->customers->name ?? 'غير محدد' }}</td>
+                                    <td class="product-category">{{ $Order->machines->name ?? 'غير محدد' }} {{ $Order->pass }} Pass</td>
+                                    <td class="product-category">{{ $Order->fileHeight }} </td>
+                                    <td class="product-category">{{ $Order->fileWidth }} </td>
+                                    <td class="product-category">{{ $Order->fileCopies ?? 0 }}</td>
+                                    <td class="product-category">{{ $Order->picInCopies ?? 0 }}</td>
+                                    <td class="product-category"><b>{{ $Order->meters }} متر</b></td>
+
+                                    {{-- <td>
+                                        <div class="chip chip-{{ $Order->status == 'تم الانتهاء' ? 'success' : ($Order->status == 'بانتظار اجراء' ? 'warning' : 'info') }}">
                                             <div class="chip-body status-toggle" style="cursor: pointer">
                                                 <div class="chip-text">{{ $Order->status }}</div>
                                             </div>
                                         </div>
+                                    </td> --}}
+
+                                    <td>
+                                        <div class="chip chip-{{ $Order->paymentStatus == 'paid' ? 'success' : 'danger' }}">
+                                            <div class="chip-body">
+                                                <div class="chip-text">{{ $Order->paymentStatus == 'paid' ? 'مدفوع' : 'غير مدفوع' }}</div>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td class="product-price">{{ optional($Order->printingprices)->pricePerMeter }}</td>
-                                    <td class="product-price" title="{{ $Order->created_at }}">{{ $Order->created_at->locale('ar')->diffForHumans() }}</td>
-                                    <td class="product-action">
-                                         <!-- Actions can be limited in log, but user requested "bring all data" -->
-                                        <span class=" hover_action action-edit "><i class="feather icon-eye"></i></span>
+
+                                    <td class="product-price">{{ $Order->user->name ?? 'غير محدد' }}</td>
+                                    {{-- <td class="product-price">{{ $Order->user2->name ?? 'غير محدد' }}</td> --}}
+                                    <td class="product-price">
+                                        <input type="number" step="0.01" class="form-control price-input"
+                                               data-field="pricePerMeter"
+                                               data-order-id="{{ $Order->id }}"
+                                               value="{{ number_format(optional($Order->printingprices)->pricePerMeter ?? 0, 2, '.', '') }}">
                                     </td>
+                                    <td class="product-price">
+                                        <input type="number" step="0.01" class="form-control price-input"
+                                               data-field="totalPrice"
+                                               data-order-id="{{ $Order->id }}"
+                                               value="{{ number_format(optional($Order->printingprices)->totalPrice ?? 0, 2, '.', '') }}">
+                                    </td>
+                                    <td class="product-price">
+                                        <input type="number" step="0.01" class="form-control price-input"
+                                               data-field="discount"
+                                               data-order-id="{{ $Order->id }}"
+                                               value="{{ number_format(optional($Order->printingprices)->discount ?? 0, 2, '.', '') }}">
+                                    </td>
+                                    <td class="product-price">
+                                        <input type="number" step="0.01" class="form-control price-input"
+                                               data-field="finalPrice"
+                                               data-order-id="{{ $Order->id }}"
+                                               value="{{ number_format(optional($Order->printingprices)->finalPrice ?? 0, 2, '.', '') }}">
+                                    </td>
+                                    <td class="product-price">{{ $Order->notes ?? '-' }}</td>
+                                    <td class="product-price" title="{{ $Order->created_at }}">{{ \Carbon\Carbon::parse($Order->created_at)->locale('ar')->format('Y/m/d H:i') }}</td>
+                                    {{-- <td class="product-price" title="{{ $Order->updated_at }}">{{ \Carbon\Carbon::parse($Order->updated_at)->locale('ar')->format('Y/m/d H:i') }}</td> --}}
+                                    <td class="product-price">{{ $Order->timeEndOpration ? \Carbon\Carbon::parse($Order->timeEndOpration)->locale('ar')->format('Y/m/d H:i') : '-' }}</td>
+
+
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                    </div> 
+                    </div>
                     <!-- dataTable ends -->
 
                 </section>
@@ -113,4 +166,83 @@
         <script src="{{ asset('core/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
         <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
+
+        <script>
+            $(document).ready(function() {
+                // Handle price input changes
+                $('.price-input').on('keypress', function(e) {
+                    if (e.which === 13) { // Enter key
+                        e.preventDefault();
+                        updatePrice($(this));
+                    }
+                });
+
+                $('.price-input').on('blur', function() {
+                    updatePrice($(this));
+                });
+
+                function updatePrice($input) {
+                    const orderId = $input.data('order-id');
+                    const field = $input.data('field');
+                    const value = parseFloat($input.val()) || 0;
+
+                    // Show loading state
+                    $input.prop('disabled', true);
+
+                    $.ajax({
+                        url: '{{ route("printers.update.price", ":id") }}'.replace(':id', orderId),
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            field: field,
+                            value: value
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Show success notification
+                                showNotification('تم تحديث السعر بنجاح!', 'success');
+
+                                // Update the input value with formatted number
+                                $input.val(value.toFixed(2));
+                            } else {
+                                showNotification('حدث خطأ في تحديث السعر', 'error');
+                            }
+                        },
+                        error: function(xhr) {
+                            let message = 'حدث خطأ في تحديث السعر';
+                            if (xhr.responseJSON && xhr.responseJSON.error) {
+                                message = xhr.responseJSON.error;
+                            }
+                            showNotification(message, 'error');
+                        },
+                        complete: function() {
+                            $input.prop('disabled', false);
+                        }
+                    });
+                }
+
+                function showNotification(message, type) {
+                    // Create notification element
+                    const notification = $('<div class="alert alert-' + (type === 'success' ? 'success' : 'danger') + ' alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">')
+                        .html('<strong>' + message + '</strong><button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>');
+
+                    // Add to body
+                    $('body').append(notification);
+
+                    // Auto remove after 5 seconds
+                    setTimeout(function() {
+                        notification.fadeOut(function() {
+                            notification.remove();
+                        });
+                    }, 5000);
+
+                    // Remove on close button click
+                    notification.find('.close').on('click', function() {
+                        notification.fadeOut(function() {
+                            notification.remove();
+                        });
+                    });
+                }
+            });
+        </script>
 @endsection

@@ -20,7 +20,7 @@ class PrintersController extends Controller
         $customers = Customers::all();
         $machines = Machines::all();
 
-        return view('printers.AddPrintOrders', 
+        return view('printers.AddPrintOrders',
         [
             'Orders'=>$Orders,
             'customers' => $customers,
@@ -34,7 +34,7 @@ class PrintersController extends Controller
         $customers = Customers::all();
         $machines = Machines::all();
 
-        return view('printers.print_log', 
+        return view('printers.print_log',
         [
             'Orders'=>$Orders,
             'customers' => $customers,
@@ -46,31 +46,31 @@ class PrintersController extends Controller
     {
         if($request->hasFile('file')){
             $file = $request->file('file');
-            
+
             // Use Intervention Image Manager with GD Driver
             $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
-            
+
             // Read and process image
             $image = $manager->read($file);
-            
+
             // Scale to max height 220 (maintains aspect ratio)
             $image->scale(height: 220);
-            
+
             // Encode to WebP
             $encoded = $image->toWebp(90);
-            
+
             $filename = uniqid() . '_' . time() . '.webp';
             $path = 'images/orders/' . $filename;
-            
+
             // Save using Storage facade
             \Illuminate\Support\Facades\Storage::disk('public')->put($path, (string) $encoded);
-            
+
             return response()->json(['success' => $filename, 'path' => $path]);
         }
         return response()->json(['error' => 'No file uploaded'], 400);
     }
 
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -123,7 +123,7 @@ class PrintersController extends Controller
         // Demonstration Logic
         $printer = Printers::create([
             'orderNumber' => 'ORD-' . time(),
-            'customerId' => $customers->id, 
+            'customerId' => $customers->id,
             'machineId' => $request->machineId,
             'fileHeight' => $request->fileHeight ?? 0,
             'fileWidth' => $request->fileWidth ?? 0,
@@ -134,8 +134,8 @@ class PrintersController extends Controller
             // 'totalPrice' => $request->price ?? 0, // Removed as column doesn't exist
             'status' => $request->status ?? 'waiting',
             'notes' => $request->notes,
-            'designerId' => auth()->id() ?? 1, 
-            'operatorId' => 1, 
+            'designerId' => auth()->id() ?? 1,
+            'operatorId' => 1,
         ]);
 
         // Create Price Record
@@ -157,7 +157,7 @@ class PrintersController extends Controller
                 ]);
             }
         }
-        
+
         // Eager load relationships for the frontend response
         $printer->load(['customers', 'machines', 'printingprices', 'ordersImgs']);
 
@@ -191,7 +191,7 @@ class PrintersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
 
         $printer = Printers::find($id);
         if (!$printer) {
@@ -228,16 +228,16 @@ class PrintersController extends Controller
         ]);
 
         // Update Customer if name changed (Optional: usually we pick existing, but here we might just verify)
-        // For simplicity/safety, we might skip updating customer relation *link* based on name unless strict logic exists. 
-        // Assuming customerId passed is name string from datalist. 
+        // For simplicity/safety, we might skip updating customer relation *link* based on name unless strict logic exists.
+        // Assuming customerId passed is name string from datalist.
         // If it's a new name, we create new customer? Or just update existing?
         // logic in store() was: $customers = Customers::create(['name' => $request->customerId]);
         // This implies we create a new customer every time? That seems like a potential duplicate issue but I will stick to existing patterns or minimal changes.
-        // Let's assume for update we simply update fields on the Printer. 
+        // Let's assume for update we simply update fields on the Printer.
 
         // If 'customerId' input is actually a name string:
         if ($request->filled('customerId')) {
-            // Check if customer exists or create new? 
+            // Check if customer exists or create new?
             // Better to find existing by name first implementation in store() was naive.
             // For update, let's respect the ID pattern if possible, or just create new if name changed.
              $customer = Customers::firstOrCreate(['name' => $request->customerId]);
@@ -252,7 +252,7 @@ class PrintersController extends Controller
         if ($request->filled('pass')) $printer->pass = $request->pass;
         if ($request->filled('meters')) $printer->meters = $request->meters;
         if ($request->filled('notes')) $printer->notes = $request->notes;
-        
+
         // Auto Advance Status if requested
         if ($request->boolean('auto_advance_status') && $printer->status == 'بانتظار اجراء') {
              $printer->status = 'بدات الطباعة'; // Next logical step
@@ -279,7 +279,7 @@ class PrintersController extends Controller
                 'finalPrice' => $request->price ?? 0,
             ]);
         }
-        
+
         // Return updated object with relations
         $printer->load(['customers', 'machines', 'printingprices', 'ordersImgs']);
 
@@ -334,14 +334,62 @@ class PrintersController extends Controller
 
         return response()->json(['success' => 'Status updated', 'status' => $nextStatus]);
     }
+
+    public function updatePrice($id)
+    {
+        $request = request();
+
+        $order = Printers::find($id);
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        $field = $request->field;
+        $value = $request->value;
+
+        // Validate field
+        $allowedFields = ['pricePerMeter', 'totalPrice', 'discount', 'finalPrice'];
+        if (!in_array($field, $allowedFields)) {
+            return response()->json(['error' => 'Invalid field'], 400);
+        }
+
+        // Validate value
+        if (!is_numeric($value)) {
+            return response()->json(['error' => 'Value must be numeric'], 400);
+        }
+
+        // Find or create printingprices record
+        $priceRecord = \App\Models\Printingprices::where('orderId', $order->id)->first();
+        if (!$priceRecord) {
+            $priceRecord = \App\Models\Printingprices::create([
+                'machineId' => $order->machineId,
+                'orderId' => $order->id,
+                'pricePerMeter' => 0,
+                'totalPrice' => 0,
+                'discount' => 0,
+                'finalPrice' => 0,
+            ]);
+        }
+
+        // Update the specific field
+        $priceRecord->$field = $value;
+        $priceRecord->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Price updated successfully',
+            'field' => $field,
+            'value' => $value
+        ]);
+    }
     public function trash()
     {
         $Orders = Printers::onlyTrashed()->with(['customers', 'machines', 'printingprices', 'ordersImgs'])->orderBy('deleted_at', 'desc')->get();
         // We might not need all logic like customers/machines lists if we just display, but consistency helps
-        $customers = Customers::all(); 
+        $customers = Customers::all();
         $machines = Machines::all();
 
-        return view('printers.trash', 
+        return view('printers.trash',
         [
             'Orders'=>$Orders,
             'customers' => $customers,
@@ -363,9 +411,9 @@ class PrintersController extends Controller
     {
         $printer = Printers::withTrashed()->find($id);
         if ($printer) {
-            // Delete related images from storage? 
+            // Delete related images from storage?
             // Ideally yes, but for now let's just delete the record.
-            // Soft delete on relations? If not cascade, we might leave orphans. 
+            // Soft delete on relations? If not cascade, we might leave orphans.
             // Assuming simpler logic for now.
             $printer->forceDelete();
             return response()->json(['success' => 'Order permanently deleted']);
