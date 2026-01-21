@@ -31,6 +31,16 @@ class PrintersController extends Controller
 
     public function uploadImage(Request $request)
     {
+        $request->validate([
+            'file' => 'image|mimes:jpeg,png,jpg,gif|max:5000',
+        ], [
+            'image' => 'يجب أن يكون :attribute صورة.',
+            'mimes' => 'يجب أن يكون :attribute من نوع: :values.',
+            'max' => 'حجم :attribute يجب أن لا يتجاوز :max كيلوبايت.',
+        ], [
+            'file' => 'الملف',
+        ]);
+
         if($request->hasFile('file')){
             $file = $request->file('file');
 
@@ -304,6 +314,7 @@ class PrintersController extends Controller
 
         if($nextStatus == 'انتهت الطباعة') {
             $order->archive = 1;
+        $order->timeEndOpration = now();
         }
         $order->operatorId = auth()->id();
         $order->status = $nextStatus;
