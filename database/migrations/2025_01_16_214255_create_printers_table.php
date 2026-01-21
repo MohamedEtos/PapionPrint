@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('status')->default('It hasnt started');
             $table->string('paymentStatus')->default('unpaid');
             $table->foreignId('designerId')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('operatorId')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('operatorId')->constrained('users')->cascadeOnDelete()->nullable();
             $table->text('notes')->nullable();
             $table->boolean('archive')->default(false);
             $table->timestamp('timeEndOpration')->nullable();

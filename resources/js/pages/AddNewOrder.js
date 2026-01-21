@@ -356,69 +356,81 @@ $(document).ready(function () {
       type: type,
       data: data,
       success: function (response) {
-        console.log("Order saved/updated:", response);
-        var message = editingOrderId ? "Order Updated Successfully!" : "Order Added Successfully!";
-        toastr.success(message, "تمت العملية بنجاح");
+        try {
+          console.log("Order saved/updated:", response);
+          var message = editingOrderId ? "Order Updated Successfully!" : "Order Added Successfully!";
+          toastr.success(message, "تمت العملية بنجاح");
 
-        var order = response.order;
+          if (!response || !response.order) {
+            console.warn("Response missing 'order' object:", response);
+            return;
+          }
 
-        // Helper Variables
-        var customerName = order.customers ? order.customers.name : 'Unknown';
-        var machineName = order.machines ? order.machines.name : 'Unknown';
-        var pricePerMeter = order.printingprices ? order.printingprices.pricePerMeter : '';
-        var imgPath = (order.orders_imgs && order.orders_imgs.length > 0)
-          ? '/storage/' + order.orders_imgs[0].path
-          : '/core/images/elements/apple-watch.png';
+          var order = response.order;
 
-        if (editingOrderId) {
-          var $row = $('input.order_id[value="' + editingOrderId + '"]').closest('tr');
-          $row.find('.product-img img').attr('src', imgPath);
-          $row.find('.product-name').text(customerName);
+          // Helper Variables
+          var customerName = order.customers ? order.customers.name : 'Unknown';
+          var machineName = order.machines ? order.machines.name : 'Unknown';
+          var pricePerMeter = order.printingprices ? order.printingprices.pricePerMeter : '';
+          var imgPath = (order.orders_imgs && order.orders_imgs.length > 0)
+            ? '/storage/' + order.orders_imgs[0].path
+            : '/core/images/elements/apple-watch.png';
 
-          // Fix: Target Machine column (index 3) explicitly
-          var $machineCell = $row.find('td').eq(3);
-          $machineCell.text(machineName + ' ' + order.pass + ' pass');
+          if (editingOrderId) {
+            var $row = $('input.order_id[value="' + editingOrderId + '"]').closest('tr');
+            if ($row.length) {
+              $row.find('.product-img img').attr('src', imgPath);
+              $row.find('.product-name').text(customerName);
 
-          // Fix: Target Meters column (index 4) explicitly and preserve formatting
-          var $metersCell = $row.find('td').eq(4);
-          $metersCell.html('<b>' + order.meters + '</b>');
+              // Fix: Target Machine column (index 3) explicitly
+              var $machineCell = $row.find('td').eq(3);
+              $machineCell.text(machineName + ' ' + order.pass + ' pass');
 
-          $row.find('.chip-text').text(order.status);
-          $row.find('.chip').removeClass('chip-success chip-warning').addClass(order.status == 'انتهت الطباعة' ? 'chip-success' : 'chip-info');
-          $row.find('td:eq(6)').text(pricePerMeter);
-        } else {
-          var newRow = `
-                <tr>
-                    <td></td>
-                    <td class="product-img">
-                         <input type="hidden" class="order_id" value="${order.id}">
-                        <img src="${imgPath}" alt="Img placeholder">
-                    </td>
-                    <td class="product-name">${customerName}</td>
-                    <td class="product-category">${machineName} ${order.pass} pass</td>
-                    <td class="product-category"><b>${order.meters}</b></td>
-                    <td>
-                        <div class="chip chip-${order.status == 'انتهت الطباعة' ? 'success' : 'info'}">
-                            <div class="chip-body status-toggle" style="cursor: pointer">
-                                <div class="chip-text">${order.status}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="product-price" title="Just now">الآن</td>
-                    <td class="product-action">
-                        <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
-                        <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
-                    </td>
-                </tr>
-            `;
-                                    // <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
+              // Fix: Target Meters column (index 4) explicitly and preserve formatting
+              var $metersCell = $row.find('td').eq(4);
+              $metersCell.html('<b>' + order.meters + '</b>');
 
-          $('table.data-thumb-view tbody').append(newRow);
+              $row.find('.chip-text').text(order.status);
+              $row.find('.chip').removeClass('chip-success chip-warning').addClass(order.status == 'انتهت الطباعة' ? 'chip-success' : 'chip-info');
+              $row.find('td:eq(6)').text(pricePerMeter);
+            }
+          } else {
+            var newRow = `
+                        <tr>
+                            <td></td>
+                            <td class="product-img">
+                                <input type="hidden" class="order_id" value="${order.id}">
+                                <img src="${imgPath}" alt="Img placeholder">
+                            </td>
+                            <td class="product-name">${customerName}</td>
+                            <td class="product-category">${machineName} ${order.pass} pass</td>
+                            <td class="product-category"><b>${order.meters}</b></td>
+                            <td>
+                                <div class="chip chip-${order.status == 'انتهت الطباعة' ? 'success' : 'info'}">
+                                    <div class="chip-body status-toggle" style="cursor: pointer">
+                                        <div class="chip-text">${order.status}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="product-price" title="Just now">الآن</td>
+                            <td class="product-action">
+                                <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
+                                <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
+                            </td>
+                        </tr>
+                    `;
+            // <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
+
+            $('table.data-thumb-view tbody').append(newRow);
+          }
+        } catch (err) {
+          console.error("Error updating UI:", err);
+          toastr.warning("Order saved, but UI update encountered an issue. Please refresh.", "Warning");
+        } finally {
+          $(".add-new-data").removeClass("show");
+          $(".overlay-bg").removeClass("show");
+          resetForm();
         }
-
-        $(".add-new-data").removeClass("show");
-        $(".overlay-bg").removeClass("show");
-        resetForm();
       },
       error: function (xhr) {
         console.error("Error processing order:", xhr);

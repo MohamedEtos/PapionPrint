@@ -99,7 +99,7 @@
                                     <td>
                                         <div class="chip chip-{{ $Order->status == 'تم الانتهاء' ? 'success' : 'info' }}">
                                             <div class="chip-body status-toggle" style="cursor: pointer">
-                                                <div class="chip-text">{{ $Order->status }}</div>
+                                                <div class="chip-text hover_action">{{ $Order->status }}</div>
                                             </div>
                                         </div>
                                     </td>

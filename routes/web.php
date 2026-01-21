@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PrintersController;
+use App\Http\Controllers\PrinterlogsController;
 
 
 
@@ -13,7 +14,6 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () {
 
-    Route::get('print-log', [PrintersController::class, 'printLog'])->name('print_log');
     Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');
     Route::post('printers/upload-image', [PrintersController::class, 'uploadImage'])->name('printers.upload.image');
     Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
@@ -23,6 +23,14 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('printers/bulk-delete', [PrintersController::class, 'bulkDelete'])->name('printers.bulk_delete');
     Route::get('printers/{id}', [PrintersController::class, 'show'])->name('printers.show');
     Route::put('printers/{id}', [PrintersController::class, 'update'])->name('printers.update');
+
+
+
+    Route::get('print-log', [PrinterlogsController::class, 'printLog'])->name('print_log');
+
+
+
+
 
     // Trash Routes
     Route::get('trash/printers', [PrintersController::class, 'trash'])->name('printers.trash');

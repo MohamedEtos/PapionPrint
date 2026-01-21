@@ -28,19 +28,6 @@ class PrintersController extends Controller
         ]);
     }
 
-    public function printLog()
-    {
-        $Orders = Printers::with(['printingprices','ordersImgs', 'customers', 'machines', 'user', 'user2'])->orderBy('id', 'desc')->get();
-        $customers = Customers::all();
-        $machines = Machines::all();
-
-        return view('printers.print_log',
-        [
-            'Orders'=>$Orders,
-            'customers' => $customers,
-            'machines' => $machines,
-        ]);
-    }
 
     public function uploadImage(Request $request)
     {
@@ -106,7 +93,7 @@ class PrintersController extends Controller
 
 
 
-        $customers = Customers::create([
+        $customers = Customers::firstOrCreate([
             'name' => $request->customerId,
         ]);
         // Demonstration Logic
@@ -121,10 +108,10 @@ class PrintersController extends Controller
             'pass' => $request->pass ?? 1,
             'meters' => $request->meters ?? 0,
             // 'totalPrice' => $request->price ?? 0, // Removed as column doesn't exist
-            'status' => $request->status ?? 'بانتظار اجراء ',
+            'status' => $request->status ?? 'بانتظار اجراء',
             'notes' => $request->notes,
             'designerId' => auth()->id() ?? 1,
-            'operatorId' => 1,
+            'operatorId' => auth()->id() ?? 1,
         ]);
 
         // Create Price Record
@@ -237,7 +224,7 @@ class PrintersController extends Controller
         if ($request->filled('notes')) $printer->notes = $request->notes;
 
         // Auto Advance Status if requested
-        if ($request->boolean('auto_advance_status') && $printer->status == 'بانتظار اجراء') {
+        if ($request->boolean('auto_advance_status') && trim($printer->status) == 'بانتظار اجراء') {
              $printer->status = 'بدات الطباعة'; // Next logical step
         } elseif ($request->filled('status')) {
              $printer->status = $request->status;
@@ -318,7 +305,7 @@ class PrintersController extends Controller
         if($nextStatus == 'انتهت الطباعة') {
             $order->archive = 1;
         }
-
+        $order->operatorId = auth()->id();
         $order->status = $nextStatus;
         $order->save();
 

@@ -43,6 +43,20 @@
                 <!-- Data list view starts -->
                 <section id="data-thumb-view" class="data-thumb-view-header">
 
+                    <div class=" hover_action action-btns d-none">
+                        <div class="btn-dropdown mr-1 mb-1">
+                            <div class="btn-group dropdown actions-dropodown">
+                                <button type="button" class="btn btn-white px-1 py-1 dropdown-toggle waves-effect waves-light close_modal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item text-danger bulk-delete-btn" href="#"><i class="feather icon-trash "></i>حذف</a>
+                                    <a class="dropdown-item" href="#"><i class="feather icon-archive"></i>ارشفة</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- dataTable starts -->
                     <div class="table-responsive">
                         <table class="table data-thumb-view">
@@ -61,11 +75,7 @@
                                     {{-- <th>الحاله</th> --}}
                                     <th>حالة الدفع</th>
                                     <th>المصمم</th>
-                                    {{-- <th>المشغل</th> --}}
-                                    <th>سعر المتر</th>
-                                    <th>السعر الإجمالي</th>
-                                    <th>الخصم</th>
-                                    <th>السعر النهائي</th>
+                                     <th>المشغل</th> 
                                     <th>الملاحظات</th>
                                     <th>تاريخ الإنشاء</th>
                                     {{-- <th>تاريخ التحديث</th> --}}
@@ -109,31 +119,7 @@
                                     </td>
 
                                     <td class="product-price">{{ $Order->user->name ?? 'غير محدد' }}</td>
-                                    {{-- <td class="product-price">{{ $Order->user2->name ?? 'غير محدد' }}</td> --}}
-                                    <td class="product-price">
-                                        <input type="number" step="0.01" class="form-control price-input"
-                                               data-field="pricePerMeter"
-                                               data-order-id="{{ $Order->id }}"
-                                               value="{{ number_format(optional($Order->printingprices)->pricePerMeter ?? 0, 2, '.', '') }}">
-                                    </td>
-                                    <td class="product-price">
-                                        <input type="number" step="0.01" class="form-control price-input"
-                                               data-field="totalPrice"
-                                               data-order-id="{{ $Order->id }}"
-                                               value="{{ number_format(optional($Order->printingprices)->totalPrice ?? 0, 2, '.', '') }}">
-                                    </td>
-                                    <td class="product-price">
-                                        <input type="number" step="0.01" class="form-control price-input"
-                                               data-field="discount"
-                                               data-order-id="{{ $Order->id }}"
-                                               value="{{ number_format(optional($Order->printingprices)->discount ?? 0, 2, '.', '') }}">
-                                    </td>
-                                    <td class="product-price">
-                                        <input type="number" step="0.01" class="form-control price-input"
-                                               data-field="finalPrice"
-                                               data-order-id="{{ $Order->id }}"
-                                               value="{{ number_format(optional($Order->printingprices)->finalPrice ?? 0, 2, '.', '') }}">
-                                    </td>
+                                    <td class="product-price">{{ $Order->user2->name ?? 'غير محدد' }}</td> 
                                     <td class="product-price">{{ $Order->notes ?? '-' }}</td>
                                     <td class="product-price" title="{{ $Order->created_at }}">{{ \Carbon\Carbon::parse($Order->created_at)->locale('ar')->format('Y/m/d H:i') }}</td>
                                     {{-- <td class="product-price" title="{{ $Order->updated_at }}">{{ \Carbon\Carbon::parse($Order->updated_at)->locale('ar')->format('Y/m/d H:i') }}</td> --}}
@@ -167,7 +153,7 @@
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
         <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
 
-        @vite('resources/pages/PrinterLog.js')
+        @vite('resources/js/pages/PrinterLog.js')
 
 
 @endsection
