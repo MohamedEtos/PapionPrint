@@ -57,6 +57,18 @@
                         </div>
                     </div>
 
+                    <!-- Filter Options -->
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label>من تاريخ:</label>
+                            <input type="date" id="min-date" class="form-control" name="min">
+                        </div>
+                        <div class="col-md-3">
+                            <label>إلى تاريخ:</label>
+                            <input type="date" id="max-date" class="form-control" name="max">
+                        </div>
+                    </div>
+
                     <!-- dataTable starts -->
                     <div class="table-responsive">
                         <table class="table data-thumb-view">
@@ -128,7 +140,7 @@
                                     <td class="product-price">{{ $Order->user->name ?? 'غير محدد ' }}</td>
                                     <td class="product-price">{{ $Order->user2->name ?? 'غير محدد ' }}</td>
                                     <td class="product-price">{{ $Order->notes ?? '-' }}</td>
-                                    <td class="product-price" title="{{ $Order->created_at }}">{{ \Carbon\Carbon::parse($Order->created_at)->locale('ar')->format('Y/m/d H:i') }}</td>
+                                    <td class="product-price" data-date="{{ \Carbon\Carbon::parse($Order->created_at)->format('Y-m-d') }}" title="{{ $Order->created_at }}">{{ \Carbon\Carbon::parse($Order->created_at)->locale('ar')->format('Y/m/d H:i') }}</td>
                                     {{-- <td class="product-price" title="{{ $Order->updated_at }}">{{ \Carbon\Carbon::parse($Order->updated_at)->locale('ar')->format('Y/m/d H:i') }}</td> --}}
                                     <td class="product-price">{{ $Order->timeEndOpration ? \Carbon\Carbon::parse($Order->timeEndOpration)->locale('ar')->format('Y/m/d H:i') : '-' }}</td>
 
@@ -136,6 +148,13 @@
                                 </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="10" style="text-align:left">الإجمالي:</th>
+                                    <th id="total-meters">0 متر</th>
+                                    <th colspan="5"></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     <!-- dataTable ends -->

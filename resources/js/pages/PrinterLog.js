@@ -79,7 +79,39 @@ $(document).ready(function () {
 
   /////////////// multiple Bulk Delete & Actions Visibility ///////////////////////
 
+  // Custom filtering function which will search data in column four between two values
+  $.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+      var min = $('#min-date').val();
+      var max = $('#max-date').val();
+      // Assuming the date is in the 'data-date' attribute of the column with index 14 (Created At)
+      // We need to fetch the node to get the attribute, or use the render data if configured.
+      // Since we didn't configure columns data, we can try to look at the DOM or pass it in invisible column.
+      // A better way with existing setup:
+      var dateCell = settings.aoData[dataIndex].anCells[14]; // Adjust index if needed (14 seems to be created_at based on visual count)
+      // Let's verify index:
+      // 0: empty, 1: actions, 2: img, 3: order#, 4: cust, 5: machine, 6: H, 7: W, 8: Copies, 9: PicCopies, 10: Meters, 11: User, 12: User2, 13: Notes, 14: CreatedAt, 15: End At
+
+      var createdAt = $(dateCell).data('date') || ""; // "YYYY-MM-DD"
+
+      if (
+        (min === "" && max === "") ||
+        (min === "" && createdAt <= max) ||
+        (min <= createdAt && max === "") ||
+        (min <= createdAt && createdAt <= max)
+      ) {
+        return true;
+      }
+      return false;
+    }
+  );
+
   var table = $('.data-thumb-view').DataTable();
+
+  // Event listener to the two range filtering inputs to redraw on input
+  $('#min-date, #max-date').on('change', function () {
+    table.draw();
+  });
 
   // Initially hide actions dropdown if it exists logic isn't handled by CSS
   // Note: data-list-view.js moves .actions-dropodown to the toolbar.
@@ -240,5 +272,43 @@ $(document).ready(function () {
 
 
 
+
+  // Calculate Total Meters
+  function updateTotalMeters() {
+    var total = 0;
+    var rows = table.rows({ selected: true });
+
+    // If no rows are selected, use current filtered rows
+    if (rows.count() === 0) {
+      rows = table.rows({ search: 'applied' });
+    }
+
+    rows.data().each(function (data) {
+      // data is an array of column values. Index 10 is Meters.
+      // The data might be HTML string "<b>25 متر</b>". We need to parse it.
+      // Or if using objects, access property. DataTables defaults to array of cell content usually.
+      // Let's inspect the data logic. Since it's DOM sourced:
+      var metersHtml = data[10];
+      // Extract number. Regex for float
+      var match = metersHtml.match(/([\d\.]+)/);
+      if (match) {
+        total += parseFloat(match[1]);
+      }
+    });
+
+    $('#total-meters').text(total.toFixed(2) + ' متر');
+  }
+
+  // Update total on draw (filtering) and select/deselect
+  table.on('draw', function () {
+    updateTotalMeters();
+  });
+
+  table.on('select deselect', function () {
+    updateTotalMeters();
+  });
+
+  // Initial calculation
+  updateTotalMeters();
 
 });
