@@ -27,6 +27,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
 
 
     Route::get('print-log', [PrinterlogsController::class, 'printLog'])->name('print_log');
+    Route::post('printers/duplicate/{id}', [PrinterlogsController::class, 'duplicate'])->name('printers.duplicate');
 
 
 

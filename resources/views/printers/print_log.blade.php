@@ -63,6 +63,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
+                                    <th>اجراءات</th>
                                     <th>صورة</th>
                                     <th>رقم الطلب</th>
                                     <th>اسم العميل</th>
@@ -87,6 +88,12 @@
 
                                 <tr>
                                     <td></td>
+                                    
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-flat-primary duplicate-order-btn" title="إعادة تشغيل">
+                                            <i class="feather icon-copy"></i>
+                                        </button>
+                                    </td>
 
                                     <td class="product-img">
                                         <input type="hidden" class="order_id" value="{{ $Order->id }}">
