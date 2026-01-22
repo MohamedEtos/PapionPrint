@@ -14,15 +14,81 @@ class PrinterlogsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function printLog()
+    public function printLog(Request $request)
     {
-        $Orders = Printers::with(['printingprices','ordersImgs', 'customers', 'machines', 'user', 'user2'])->where('archive', 1)->orderBy('id', 'desc')->get();
+        if ($request->ajax()) {
+            $query = Printers::with(['printingprices', 'ordersImgs', 'customers', 'machines', 'user', 'user2'])
+                ->where('archive', 1);
+
+            // Date Filter
+            if ($request->has('min') && $request->min != '') {
+                $query->whereDate('created_at', '>=', $request->min);
+            }
+            if ($request->has('max') && $request->max != '') {
+                $query->whereDate('created_at', '<=', $request->max);
+            }
+
+            // Global Search
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $searchValue = $request->search['value'];
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('orderNumber', 'like', "%{$searchValue}%")
+                      ->orWhereHas('customers', function ($q) use ($searchValue) {
+                          $q->where('name', 'like', "%{$searchValue}%");
+                      })
+                      ->orWhereHas('machines', function ($q) use ($searchValue) {
+                          $q->where('name', 'like', "%{$searchValue}%");
+                      })
+                      ->orWhere('notes', 'like', "%{$searchValue}%");
+                });
+            }
+
+            // Sorting
+            if ($request->has('order')) {
+                $orderColumnIndex = $request->order[0]['column'];
+                $orderDirection = $request->order[0]['dir'];
+                $columns = $request->columns;
+                $columnName = $columns[$orderColumnIndex]['data'];
+                
+                // Handle specific columns sorting if needed, otherwise default
+                if ($columnName && $columnName != 'action' && $columnName != 'image') {
+                     // specific handling for related columns can be added here
+                     // for now basic sorting
+                     if (in_array($columnName, ['orderNumber', 'fileHeight', 'fileWidth', 'fileCopies', 'picInCopies', 'meters', 'created_at'])) {
+                         $query->orderBy($columnName, $orderDirection);
+                     } else {
+                         $query->orderBy('id', 'desc'); 
+                     }
+                } else {
+                    $query->orderBy('id', 'desc');
+                }
+            } else {
+                $query->orderBy('id', 'desc');
+            }
+
+            $totalRecords = Printers::where('archive', 1)->count();
+            $filteredRecords = $query->count();
+
+            // Pagination
+            if ($request->has('start') && $request->length != -1) {
+                $query->skip($request->start)->take($request->length);
+            }
+
+            $data = $query->get();
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $filteredRecords,
+                'data' => $data
+            ]);
+        }
+
         $customers = Customers::all();
         $machines = Machines::all();
 
         return view('printers.print_log',
         [
-            'Orders'=>$Orders,
             'customers' => $customers,
             'machines' => $machines,
         ]);

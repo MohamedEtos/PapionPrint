@@ -59,11 +59,11 @@
 
                     <!-- Filter Options -->
                     <div class="row mb-2">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label>من تاريخ:</label>
                             <input type="date" id="min-date" class="form-control" name="min">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label>إلى تاريخ:</label>
                             <input type="date" id="max-date" class="form-control" name="max">
                         </div>
@@ -96,57 +96,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($Orders as $Order)
-
-                                <tr>
-                                    <td></td>
-                                    
-                                    <td>
-                                        <button type="button" class="btn btn-icon btn-flat-primary duplicate-order-btn" title="إعادة تشغيل">
-                                            <i class="feather icon-copy"></i>
-                                        </button>
-                                    </td>
-
-                                    <td class="product-img">
-                                        <input type="hidden" class="order_id" value="{{ $Order->id }}">
-                                        <img style=" height: 50px;" src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
-                                    </td>
-
-                                    <td class="product-name">{{ $Order->orderNumber }}</td>
-                                    <td class="product-name">{{ $Order->customers->name ?? 'غير محدد' }}</td>
-                                    <td class="product-category">{{ $Order->machines->name ?? 'غير محدد' }} {{ $Order->pass }} Pass</td>
-                                    <td class="product-category">{{ $Order->fileHeight }} </td>
-                                    <td class="product-category">{{ $Order->fileWidth }} </td>
-                                    <td class="product-category">{{ $Order->fileCopies ?? 0 }}</td>
-                                    <td class="product-category">{{ $Order->picInCopies ?? 0 }}</td>
-                                    <td class="product-category"><b>{{ $Order->meters }} متر</b></td>
-
-                                    {{-- <td>
-                                        <div class="chip chip-{{ $Order->status == 'تم الانتهاء' ? 'success' : ($Order->status == 'بانتظار اجراء' ? 'warning' : 'info') }}">
-                                            <div class="chip-body status-toggle" style="cursor: pointer">
-                                                <div class="chip-text">{{ $Order->status }}</div>
-                                            </div>
-                                        </div>
-                                    </td> --}}
-
-                                    <!-- <td>
-                                        <div class="chip chip-{{ $Order->paymentStatus == 'paid' ? 'success' : 'danger' }}">
-                                            <div class="chip-body">
-                                                <div class="chip-text">{{ $Order->paymentStatus == 'paid' ? 'مدفوع' : 'غير مدفوع' }}</div>
-                                            </div>
-                                        </div>
-                                    </td> -->
-
-                                    <td class="product-price">{{ $Order->user->name ?? 'غير محدد ' }}</td>
-                                    <td class="product-price">{{ $Order->user2->name ?? 'غير محدد ' }}</td>
-                                    <td class="product-price">{{ $Order->notes ?? '-' }}</td>
-                                    <td class="product-price" data-date="{{ \Carbon\Carbon::parse($Order->created_at)->format('Y-m-d') }}" title="{{ $Order->created_at }}">{{ \Carbon\Carbon::parse($Order->created_at)->locale('ar')->format('Y/m/d H:i') }}</td>
-                                    {{-- <td class="product-price" title="{{ $Order->updated_at }}">{{ \Carbon\Carbon::parse($Order->updated_at)->locale('ar')->format('Y/m/d H:i') }}</td> --}}
-                                    <td class="product-price">{{ $Order->timeEndOpration ? \Carbon\Carbon::parse($Order->timeEndOpration)->locale('ar')->format('Y/m/d H:i') : '-' }}</td>
-
-
-                                </tr>
-                                @endforeach
+                                <!-- Rows will be populated via AJAX -->
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -177,7 +127,7 @@
         <script src="{{ asset('core/vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
-        <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
+        {{-- <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script> --}}
 
         @vite('resources/js/pages/PrinterLog.js')
 

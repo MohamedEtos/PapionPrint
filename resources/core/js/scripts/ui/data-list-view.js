@@ -12,6 +12,7 @@ $(document).ready(function () {
   // init list view datatable
   var dataListView = $(".data-list-view").DataTable({
     responsive: false,
+    deferRender: true,
     columnDefs: [
       {
         orderable: true,
@@ -61,6 +62,7 @@ $(document).ready(function () {
   // init thumb view datatable
   var dataThumbView = $(".data-thumb-view").DataTable({
     responsive: false,
+    deferRender: true,
     columnDefs: [
       {
         orderable: true,
