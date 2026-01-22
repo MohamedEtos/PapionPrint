@@ -120,8 +120,7 @@ class PrintersController extends Controller
             // 'totalPrice' => $request->price ?? 0, // Removed as column doesn't exist
             'status' => $request->status ?? 'بانتظار اجراء',
             'notes' => $request->notes,
-            'designerId' => auth()->id() ?? 1,
-            'operatorId' => auth()->id() ?? 1,
+            'designerId' => auth()->id() ,
         ]);
 
         // Create Price Record

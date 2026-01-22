@@ -26,10 +26,9 @@
 
                 <li class=" nav-item"><a href="#"><i class="feather icon-printer"></i><span class="menu-title" data-i18n="Ecommerce">الطباعة</span></a>
                     <ul class="menu-content">
-                        <li class="{{ request()->routeIs('AddPrintOrders') ? 'active' : '' }}"><a href="{{route('AddPrintOrders')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اضافه اذن تشغل</span></a>
+                        <li class="{{ request()->routeIs('AddPrintOrders') ? 'active' : '' }}"><a href="{{route('AddPrintOrders')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">  التشغيل</span></a>
                         </li>
-                        <li ><a href="app-ecommerce-shop.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">تسجيل طباعه</span></a>
-                        </li>
+
                         <li class="{{ request()->routeIs('print_log') ? 'active' : '' }}"><a href="{{ route('print_log') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سجل الطباعة </span></a>
                         </li>
                         <li class="{{ request()->routeIs('printers.trash') ? 'active' : '' }}"><a href="{{ route('printers.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>

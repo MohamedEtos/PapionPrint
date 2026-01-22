@@ -3,6 +3,7 @@
 // window.Popper = Popper;
 
 import 'bootstrap';
+import './loader.js';
 
 // Import ApexCharts from npm
 import ApexCharts from 'apexcharts';

@@ -23,6 +23,7 @@ export default defineConfig({
                 'resources/core/css-rtl/custom-rtl.css',
                 'resources/core/vendors/css/file-uploaders/dropzone.min.css',
                 'resources/js/pages/AddNewOrder.js',
+                'resources/js/pages/PrinterLog.js',
             ],
             refresh: true,
         }),

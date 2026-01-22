@@ -73,7 +73,7 @@
                                     <th>الصور/نسخة</th>
                                     <th>الامتار</th>
                                     {{-- <th>الحاله</th> --}}
-                                    <th>حالة الدفع</th>
+                                    <!-- <th>حالة الدفع</th> -->
                                     <th>المصمم</th>
                                      <th>المشغل</th> 
                                     <th>الملاحظات</th>
@@ -90,7 +90,7 @@
 
                                     <td class="product-img">
                                         <input type="hidden" class="order_id" value="{{ $Order->id }}">
-                                        <img src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
+                                        <img style=" height: 50px;" src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
 
                                     <td class="product-name">{{ $Order->orderNumber }}</td>
@@ -110,16 +110,16 @@
                                         </div>
                                     </td> --}}
 
-                                    <td>
+                                    <!-- <td>
                                         <div class="chip chip-{{ $Order->paymentStatus == 'paid' ? 'success' : 'danger' }}">
                                             <div class="chip-body">
                                                 <div class="chip-text">{{ $Order->paymentStatus == 'paid' ? 'مدفوع' : 'غير مدفوع' }}</div>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> -->
 
-                                    <td class="product-price">{{ $Order->user->name ?? 'غير محدد' }}</td>
-                                    <td class="product-price">{{ $Order->user2->name ?? 'غير محدد' }}</td> 
+                                    <td class="product-price">{{ $Order->user->name ?? 'غير محدد ' }}</td>
+                                    <td class="product-price">{{ $Order->user2->name ?? 'غير محدد ' }}</td>
                                     <td class="product-price">{{ $Order->notes ?? '-' }}</td>
                                     <td class="product-price" title="{{ $Order->created_at }}">{{ \Carbon\Carbon::parse($Order->created_at)->locale('ar')->format('Y/m/d H:i') }}</td>
                                     {{-- <td class="product-price" title="{{ $Order->updated_at }}">{{ \Carbon\Carbon::parse($Order->updated_at)->locale('ar')->format('Y/m/d H:i') }}</td> --}}

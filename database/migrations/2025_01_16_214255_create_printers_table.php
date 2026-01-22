@@ -24,8 +24,8 @@ return new class extends Migration
             $table->decimal('meters', 10, 2);
             $table->string('status')->default('It hasnt started');
             $table->string('paymentStatus')->default('unpaid');
-            $table->foreignId('designerId')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('operatorId')->constrained('users')->cascadeOnDelete()->nullable();
+            $table->foreignId('designerId')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('operatorId')->nullable()->constrained('users')->cascadeOnDelete();
             $table->text('notes')->nullable();
             $table->boolean('archive')->default(false);
             $table->timestamp('timeEndOpration')->nullable();

@@ -60,7 +60,7 @@ $(document).ready(function () {
 
   // init thumb view datatable
   var dataThumbView = $(".data-thumb-view").DataTable({
-    responsive: false,
+    responsive: true,
     columnDefs: [
       {
         orderable: true,

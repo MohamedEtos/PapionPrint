@@ -84,7 +84,8 @@ $(document).ready(function() {
   // Initially hide actions dropdown if it exists logic isn't handled by CSS
   // Note: data-list-view.js moves .actions-dropodown to the toolbar.
   // We want to hide it when no rows are selected.
-
+      $('.actions-dropodown').hide();
+      $('.dt-buttons ,.btn-group').hide();
   table.on('select deselect', function () {
     var selectedCount = table.rows({ selected: true }).count();
     if (selectedCount > 0) {
