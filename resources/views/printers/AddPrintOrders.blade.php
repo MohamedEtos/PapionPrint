@@ -10,7 +10,7 @@
         'resources/core/css-rtl/pages/data-list-view.css',
         'resources/core/css-rtl/custom-rtl.css',
         'resources/core/vendors/css/file-uploaders/dropzone.min.css',
-    ])
+    ]) 
 
 @endsection
 

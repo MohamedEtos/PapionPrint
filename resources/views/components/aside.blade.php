@@ -33,8 +33,10 @@
                         </li>
                         <li class="{{ request()->routeIs('printers.trash') ? 'active' : '' }}"><a href="{{ route('printers.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
                         </li>
-                        <li><a href="app-ecommerce-wishlist.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Wish List">المكبس</span></a>
+                        <li class="{{ request()->routeIs('accounts.index') ? 'active' : '' }}"><a href="{{ route('accounts.index') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Accounts">الحسابات</span></a>
                         </li>
+                        <!-- <li><a href="app-ecommerce-wishlist.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Wish List">المكبس</span></a>
+                        </li> -->
 
                     </ul>
                 </li>

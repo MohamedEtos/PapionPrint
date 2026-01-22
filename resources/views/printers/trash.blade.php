@@ -123,54 +123,6 @@
         <script src="{{ asset('core/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
         <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
-        <script>
-            $(document).ready(function() {
-                // Restore Action
-                $(document).on('click', '.action-restore', function() {
-                    var url = $(this).data('url');
-                    var tr = $(this).closest('tr');
-                    
-                    $.ajax({
-                        url: url,
-                        type: 'POST', // or PUT, but we set route to POST
-                        data: {
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            tr.fadeOut(300, function() {
-                                $(this).remove();
-                            });
-                             // Optional: Toast message
-                        },
-                        error: function(xhr) {
-                            alert('حدث خطأ أثناء الاسترجاع');
-                        }
-                    });
-                });
 
-                // Force Delete Action
-                $(document).on('click', '.action-delete-forever', function() {
-                    var url = $(this).data('url');
-                    var tr = $(this).closest('tr');
-                    if(confirm('هل أنت متأكد من الحذف النهائي للطلب؟ لا يمكن التراجع عن هذا الإجراء.')) {
-                        $.ajax({
-                            url: url,
-                            type: 'DELETE',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(response) {
-                                tr.fadeOut(300, function() {
-                                    $(this).remove();
-                                });
-                                // Optional: Show toast or alert
-                            },
-                            error: function(xhr) {
-                                alert('حدث خطأ أثناء الحذف');
-                            }
-                        });
-                    }
-                });
-            });
-        </script>
+        @vite('resources/js/pages/trash.js')
 @endsection

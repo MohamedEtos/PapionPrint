@@ -24,6 +24,7 @@ export default defineConfig({
                 'resources/core/vendors/css/file-uploaders/dropzone.min.css',
                 'resources/js/pages/AddNewOrder.js',
                 'resources/js/pages/PrinterLog.js',
+                'resources/js/pages/trash.js',
             ],
             refresh: true,
         }),

@@ -50,4 +50,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('/users/update/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('users.update');
     Route::post('/users/delete/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');
 
+    // Accounts
+    Route::get('/accounts', [App\Http\Controllers\AccountsController::class, 'index'])->name('accounts.index');
+    Route::post('/accounts/update-price', [App\Http\Controllers\AccountsController::class, 'updatePrice'])->name('accounts.update_price');
 });
