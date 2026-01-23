@@ -17,6 +17,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::prefix('charts')->group(function () {
         Route::get('/meters', [App\Http\Controllers\ChartController::class, 'getMeterData'])->name('charts.meters');
         Route::get('/orders', [App\Http\Controllers\ChartController::class, 'getOrdersData'])->name('charts.orders');
+        Route::get('/customers', [App\Http\Controllers\ChartController::class, 'getCustomersData'])->name('charts.customers');
     });
 
     Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');

@@ -110,8 +110,8 @@
                                             <i class="feather icon-users text-primary font-medium-5"></i>
                                         </div>
                                     </div>
-                                    <h2 class="text-bold-700 mt-1">92.6k</h2>
-                                    <p class="mb-0">Subscribers Gained</p>
+                                    <h2 class="text-bold-700 mt-1" id="customers-gained-total">0</h2>
+                                    <p class="mb-0">العملاء</p>
                                 </div>
                                 <div class="card-content">
                                     <div id="line-area-chart-1"></div>

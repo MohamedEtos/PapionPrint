@@ -243,4 +243,95 @@ $(document).ready(function () {
             }
         });
     }
+    // Customers Chart Logic
+    var $primary = '#7367F0';
+    var customersChartoptions = {
+        chart: {
+            height: 100,
+            type: 'area',
+            toolbar: {
+                show: false,
+            },
+            sparkline: {
+                enabled: true
+            },
+            grid: {
+                show: false,
+                padding: {
+                    left: 0,
+                    right: 0
+                }
+            },
+        },
+        colors: [$primary],
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 2.5
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 0.9,
+                opacityFrom: 0.7,
+                opacityTo: 0.5,
+                stops: [0, 80, 100]
+            }
+        },
+        series: [{
+            name: 'العملاء',
+            data: []
+        }],
+        xaxis: {
+            labels: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            }
+        },
+        yaxis: [{
+            y: 0,
+            offsetX: 0,
+            offsetY: 0,
+            padding: { left: 0, right: 0 },
+        }],
+        tooltip: {
+            x: { show: true }
+        },
+    };
+
+    var customersChart;
+    if (document.querySelector("#line-area-chart-1")) {
+        customersChart = new ApexCharts(
+            document.querySelector("#line-area-chart-1"),
+            customersChartoptions
+        );
+        customersChart.render();
+        updateCustomersChart();
+    }
+
+    function updateCustomersChart() {
+        $.ajax({
+            url: '/charts/customers',
+            type: 'GET',
+            success: function (response) {
+                $('#customers-gained-total').text(response.totalCustomers);
+                customersChart.updateOptions({
+                    xaxis: {
+                        categories: response.labels
+                    }
+                });
+                customersChart.updateSeries([{
+                    name: 'العملاء',
+                    data: response.series[0].data
+                }]);
+            },
+            error: function (xhr) {
+                console.error("Error fetching customers data", xhr);
+            }
+        });
+    }
 });

@@ -86,6 +86,7 @@ $(window).on("load", function () {
     },
   }
 
+  /*
   var gainedlineChart;
   if (document.querySelector("#line-area-chart-1")) {
     gainedlineChart = new ApexCharts(
@@ -94,6 +95,7 @@ $(window).on("load", function () {
     );
     gainedlineChart.render();
   }
+  */
 
   //   gainedlineChart.render();
 
