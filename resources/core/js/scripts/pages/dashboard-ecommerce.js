@@ -9,6 +9,13 @@
 
 $(window).on("load", function () {
 
+
+
+  const lastMonthSeries = (window.dashboardData && window.dashboardData.lastMonthSeries) ? window.dashboardData.lastMonthSeries : [0, 0, 0, 0, 0, 0, 0];
+  const thisMonthSeries = (window.dashboardData && window.dashboardData.thisMonthSeries) ? window.dashboardData.thisMonthSeries : [0, 0, 0, 0, 0, 0, 0];
+  const customerSeries = (window.dashboardData && window.dashboardData.customerSeries) ? window.dashboardData.customerSeries : [0, 0, 0, 0, 0, 0, 0];
+
+
   var $primary = '#7367F0';
   var $success = '#28C76F';
   var $danger = '#EA5455';
@@ -64,7 +71,7 @@ $(window).on("load", function () {
     },
     series: [{
       name: 'Subscribers',
-      data: [28, 40, 36, 52, 38, 60, 55]
+      data: customerSeries
     }],
 
     xaxis: {
@@ -369,7 +376,7 @@ $(window).on("load", function () {
       axisTicks: {
         show: false,
       },
-      categories: ['01', '05', '09', '13', '17', '21', '26', '31'],
+      categories: (window.dashboardData && window.dashboardData.daysLabels) ? window.dashboardData.daysLabels : ['01', '05', '09', '13', '17', '21', '26', '31'],
       axisBorder: {
         show: false,
       },
@@ -382,7 +389,7 @@ $(window).on("load", function () {
           color: $strok_color,
         },
         formatter: function (val) {
-          return val > 999 ? (val / 1000).toFixed(1) + 'k' : val;
+          return val > 999 ? (val / 1000).toFixed(1) + 'الف' : val;
         }
       }
     },
@@ -390,12 +397,12 @@ $(window).on("load", function () {
       x: { show: false }
     },
     series: [{
-      name: "This Month",
-      data: [45000, 47000, 44800, 47500, 45500, 48000, 46500, 48600]
+      name: "الشهر الحالي",
+      data: thisMonthSeries
     },
     {
-      name: "Last Month",
-      data: [46000, 48000, 45500, 46600, 44500, 46500, 45000, 47000]
+      name: "الشهر السابق",
+      data: lastMonthSeries
     }
     ],
 
