@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\Charts\MeterChartService;
+use App\Services\Charts\OrdersChartService;
 
 class ChartController extends Controller
 {
+    public function getOrdersData(OrdersChartService $service)
+    {
+        $data = $service->getOrdersData();
+        return response()->json($data);
+    }
+
     public function getMeterData(Request $request, MeterChartService $service)
     {
         $period = $request->input('period', 'month');

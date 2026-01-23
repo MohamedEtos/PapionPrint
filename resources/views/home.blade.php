@@ -158,8 +158,8 @@
                                             <i class="feather icon-package text-warning font-medium-5"></i>
                                         </div>
                                     </div>
-                                    <h2 class="text-bold-700 mt-1">97.5K</h2>
-                                    <p class="mb-0">Orders Received</p>
+                                    <h2 class="text-bold-700 mt-1" id="orders-received-total">0</h2>
+                                    <p class="mb-0">اوردرات طباعه </p>
                                 </div>
                                 <div class="card-content">
                                     <div id="line-area-chart-4"></div>

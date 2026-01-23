@@ -308,6 +308,7 @@ $(window).on("load", function () {
     },
   }
 
+  /*
   var orderlineChart;
   if (document.querySelector("#line-area-chart-4")) {
     orderlineChart = new ApexCharts(
@@ -316,6 +317,7 @@ $(window).on("load", function () {
     );
     orderlineChart.render();
   }
+  */
 
   //   orderlineChart.render();
 

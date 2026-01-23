@@ -67,7 +67,7 @@ $(document).ready(function () {
                     color: $strok_color,
                 },
                 formatter: function (val) {
-                    return val > 999 ? (val / 1000).toFixed(1) + 'k' : val;
+                    return val > 999 ? (val / 1000).toFixed(1) + 'الف' : val;
                 }
             }
         },
@@ -151,4 +151,96 @@ $(document).ready(function () {
         currentMachine = machine;
         updateChart(currentPeriod, currentMachine);
     });
+
+    // Orders Chart Logic
+    var $warning = '#FF9F43';
+    var orderChartoptions = {
+        chart: {
+            height: 100,
+            type: 'area',
+            toolbar: {
+                show: false,
+            },
+            sparkline: {
+                enabled: true
+            },
+            grid: {
+                show: false,
+                padding: {
+                    left: 0,
+                    right: 0
+                }
+            },
+        },
+        colors: [$warning],
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 2.5
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 0.9,
+                opacityFrom: 0.7,
+                opacityTo: 0.5,
+                stops: [0, 80, 100]
+            }
+        },
+        series: [{
+            name: 'الطلبات',
+            data: []
+        }],
+        xaxis: {
+            labels: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            }
+        },
+        yaxis: [{
+            y: 0,
+            offsetX: 0,
+            offsetY: 0,
+            padding: { left: 0, right: 0 },
+        }],
+        tooltip: {
+            x: { show: true } // Show day name on hover
+        },
+    };
+
+    var orderChart;
+    if (document.querySelector("#line-area-chart-4")) {
+        orderChart = new ApexCharts(
+            document.querySelector("#line-area-chart-4"),
+            orderChartoptions
+        );
+        orderChart.render();
+        updateOrdersChart();
+    }
+
+    function updateOrdersChart() {
+        $.ajax({
+            url: '/charts/orders',
+            type: 'GET',
+            success: function (response) {
+                $('#orders-received-total').text(response.totalOrders);
+                orderChart.updateOptions({
+                    xaxis: {
+                        categories: response.labels
+                    }
+                });
+                orderChart.updateSeries([{
+                    name: 'الطلبات',
+                    data: response.series[0].data
+                }]);
+            },
+            error: function (xhr) {
+                console.error("Error fetching orders data", xhr);
+            }
+        });
+    }
 });
