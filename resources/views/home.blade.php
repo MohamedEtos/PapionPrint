@@ -114,7 +114,7 @@
                                     <p class="mb-0">العملاء</p>
                                 </div>
                                 <div class="card-content">
-                                    <div id="line-area-chart-1"></div>
+                                    <div  id="line-area-chart-1"></div>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                                     <p class="mb-0">Quarterly Sales</p>
                                 </div>
                                 <div class="card-content">
-                                    <div id="line-area-chart-3"></div>
+                                    <div  id="line-area-chart-3"></div>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                                     <p class="mb-0">اوردرات طباعه </p>
                                 </div>
                                 <div class="card-content">
-                                    <div id="line-area-chart-4"></div>
+                                    <div  id="line-area-chart-4"></div>
                                 </div>
                             </div>
                         </div>
@@ -308,6 +308,16 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Client Retention</h4>
+                                    <div class="dropdown chart-dropdown">
+                                        <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="clientRetentionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            ايام الشهر
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="clientRetentionDropdown">
+                                            <a class="dropdown-item client-retention-period" href="#" data-period="week">ايام الاسبوع</a>
+                                            <a class="dropdown-item client-retention-period" href="#" data-period="month">ايام الشهر</a>
+                                            <a class="dropdown-item client-retention-period" href="#" data-period="year">شهور السنة</a>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">

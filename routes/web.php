@@ -18,6 +18,11 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/meters', [App\Http\Controllers\ChartController::class, 'getMeterData'])->name('charts.meters');
         Route::get('/orders', [App\Http\Controllers\ChartController::class, 'getOrdersData'])->name('charts.orders');
         Route::get('/customers', [App\Http\Controllers\ChartController::class, 'getCustomersData'])->name('charts.customers');
+        Route::get('/client-retention', [App\Http\Controllers\ChartController::class, 'getClientRetentionData'])->name('charts.client_retention');
+    });
+
+    Route::prefix('Rollpress')->group(function () {
+        Route::get('/addpressorder', [App\Http\Controllers\RollpressController::class, 'index'])->name('Rollpress');
     });
 
     Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');

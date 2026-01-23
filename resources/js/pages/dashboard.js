@@ -334,4 +334,120 @@ $(document).ready(function () {
             }
         });
     }
+    // Client Retention Chart Logic
+    var clientChartoptions = {
+        chart: {
+            stacked: true,
+            type: 'bar',
+            toolbar: { show: false },
+            height: 300,
+        },
+        plotOptions: {
+            bar: {
+                columnWidth: '10%'
+            }
+        },
+        colors: [$primary, $danger],
+        series: [{
+            name: 'New Clients',
+            data: []
+        }, {
+            name: 'Retained Clients',
+            data: []
+        }],
+        grid: {
+            borderColor: $label_color,
+            padding: {
+                left: 0,
+                right: 0
+            }
+        },
+        legend: {
+            show: true,
+            position: 'top',
+            horizontalAlign: 'left',
+            offsetX: 0,
+            fontSize: '14px',
+            markers: {
+                radius: 50,
+                width: 10,
+                height: 10,
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        xaxis: {
+            labels: {
+                style: {
+                    colors: $strok_color,
+                }
+            },
+            axisTicks: {
+                show: false,
+            },
+            categories: [],
+            axisBorder: {
+                show: false,
+            },
+        },
+        yaxis: {
+            tickAmount: 5,
+            labels: {
+                style: {
+                    color: $strok_color,
+                }
+            }
+        },
+        tooltip: {
+            x: { show: false }
+        },
+    }
+
+    var clientChart;
+    if (document.querySelector("#client-retention-chart")) {
+        clientChart = new ApexCharts(
+            document.querySelector("#client-retention-chart"),
+            clientChartoptions
+        );
+        clientChart.render();
+        updateClientRetentionChart('month');
+    }
+
+    function updateClientRetentionChart(period) {
+        $.ajax({
+            url: '/charts/client-retention',
+            type: 'GET',
+            data: {
+                period: period
+            },
+            success: function (response) {
+                clientChart.updateOptions({
+                    xaxis: {
+                        categories: response.labels
+                    }
+                });
+                clientChart.updateSeries([{
+                    name: 'New Clients',
+                    data: response.series[0].data
+                }, {
+                    name: 'Retained Clients',
+                    data: response.series[1].data
+                }]);
+            },
+            error: function (xhr) {
+                console.error("Error fetching client retention data", xhr);
+            }
+        });
+    }
+
+    // Event listener for Client Retention Period dropdown
+    $('.client-retention-period').on('click', function (e) {
+        e.preventDefault();
+        var period = $(this).data('period');
+        var label = $(this).text();
+        $('#clientRetentionDropdown').text(label); // Update button text
+        updateClientRetentionChart(period);
+    });
+
 });

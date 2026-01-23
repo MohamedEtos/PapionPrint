@@ -26,6 +26,8 @@ export default defineConfig({
                 'resources/js/pages/PrinterLog.js',
                 'resources/js/pages/trash.js',
                 'resources/js/pages/dashboard.js',
+                'resources/core/css-rtl/plugins/forms/wizard.css',
+                'resources/core/js/scripts/forms/wizard-steps.js',
             ],
             refresh: true,
         }),

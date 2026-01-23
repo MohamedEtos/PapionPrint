@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\Charts\MeterChartService;
 use App\Services\Charts\OrdersChartService;
 use App\Services\Charts\CustomerChartService;
+use App\Services\Charts\ClientRetentionChartService;
 
 class ChartController extends Controller
 {
@@ -32,6 +33,13 @@ class ChartController extends Controller
             return response()->json($data, 404);
         }
 
+        return response()->json($data);
+    }
+
+    public function getClientRetentionData(Request $request, ClientRetentionChartService $service)
+    {
+        $period = $request->input('period', 'month');
+        $data = $service->getChartData($period);
         return response()->json($data);
     }
 }

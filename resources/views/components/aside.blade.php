@@ -40,6 +40,12 @@
 
                     </ul>
                 </li>
+                <li class=" nav-item"><a href="#"><i class="feather icon-sunset"></i><span class="menu-title" data-i18n="Ecommerce">المكبس</span></a>
+                    <ul class="menu-content">
+                        <li class="{{ request()->routeIs('Rollpress') ? 'active' : '' }}"><a href="{{route('Rollpress')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">  تسجيل اوردر </span></a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class=" nav-item"><a href="app-email.html"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Email">Email</span></a>
                 </li>
