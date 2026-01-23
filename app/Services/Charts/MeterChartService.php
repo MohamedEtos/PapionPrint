@@ -24,11 +24,13 @@ class MeterChartService
         $currentData = [];
         $lastData = [];
 
+        Carbon::setLocale('ar');
+
         if ($period == 'week') {
             // Last 7 days vs previous 7 days
             for ($i = 0; $i < 7; $i++) {
                 $date = $now->copy()->subDays(6 - $i);
-                $labels[] = $date->format('D');
+                $labels[] = $date->locale('ar')->translatedFormat('l');
 
                 // Current Period
                 $currentData[] = (clone $query)->whereDate('created_at', $date->toDateString())->sum('meters');
@@ -59,7 +61,7 @@ class MeterChartService
         } elseif ($period == 'year') {
              // This Year vs Last Year (Monthly breakdown)
              for ($i = 1; $i <= 12; $i++) {
-                 $labels[] = Carbon::create()->month($i)->format('M');
+                 $labels[] = Carbon::create()->month($i)->locale('ar')->translatedFormat('M');
 
                  // Current Year
                  $currentData[] = (clone $query)->whereYear('created_at', $now->year)
