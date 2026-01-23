@@ -14,8 +14,11 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () {
 
+    Route::prefix('charts')->group(function () {
+        Route::get('/meters', [App\Http\Controllers\ChartController::class, 'getMeterData'])->name('charts.meters');
+    });
+
     Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');
-    Route::get('/chart-data', [App\Http\Controllers\HomeController::class, 'getChartData'])->name('chart-data');
     Route::post('printers/upload-image', [PrintersController::class, 'uploadImage'])->name('printers.upload.image');
     Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
     Route::post('printers/delete/{id}', [PrintersController::class, 'destroy'])->name('printers.delete');

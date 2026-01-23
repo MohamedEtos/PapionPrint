@@ -91,12 +91,18 @@ $(document).ready(function () {
     );
     revenueChart.render();
 
+    var currentPeriod = 'month';
+    var currentMachine = 'sublimation';
+
     // Fetch and update data
-    function updateChart(period) {
+    function updateChart(period, machine) {
         $.ajax({
-            url: '/chart-data',
+            url: '/charts/meters',
             type: 'GET',
-            data: { period: period },
+            data: {
+                period: period,
+                machine: machine
+            },
             success: function (response) {
                 // Update specific elements
                 $('#current-revenue').text(response.currentTotal.toLocaleString());
@@ -109,10 +115,10 @@ $(document).ready(function () {
                 });
 
                 revenueChart.updateSeries([{
-                    name: "This Period",
+                    name: "الحالي",
                     data: response.currentData
                 }, {
-                    name: "Last Period",
+                    name: "السابق",
                     data: response.lastData
                 }]);
             },
@@ -123,14 +129,26 @@ $(document).ready(function () {
     }
 
     // Initial load
-    updateChart('month');
+    updateChart(currentPeriod, currentMachine);
 
-    // Event listener for dropdown
-    $('.chart-dropdown .dropdown-item').on('click', function (e) {
+    // Event listener for Period dropdown
+    $('.chart-dropdown .dropdown-item:not(.machine-item)').on('click', function (e) {
         e.preventDefault();
         var period = $(this).data('period');
         var label = $(this).text();
         $('#dropdownItem2').text(label); // Update button text
-        updateChart(period);
+        currentPeriod = period;
+        updateChart(currentPeriod, currentMachine);
+    });
+
+    // Event listener for Machine dropdown
+    $('.machine-item').on('click', function (e) {
+        e.preventDefault();
+        var machine = $(this).data('machine');
+        var label = $(this).text();
+        $('#dropdownMachine').text(label); // Update button text
+        $('#chart-title').text(label); // Update card title
+        currentMachine = machine;
+        updateChart(currentPeriod, currentMachine);
     });
 });

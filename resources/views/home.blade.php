@@ -171,8 +171,18 @@
                         <div class="col-lg-8 col-md-6 col-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-end">
-                                    <h4 class="card-title">سبلميشن</h4>
-                                    <div class="dropdown chart-dropdown">
+                                    <h4 class="card-title" id="chart-title">Sublimation</h4>
+                                    <div class="d-flex">
+                                        <div class="dropdown chart-dropdown mr-1">
+                                            <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="dropdownMachine" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Sublimation
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMachine">
+                                                <a class="dropdown-item machine-item" href="#" data-machine="sublimation">Sublimation</a>
+                                                <a class="dropdown-item machine-item" href="#" data-machine="dtf">DTF</a>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown chart-dropdown">
                                         <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="dropdownItem2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             ايام الشهر 
                                         </button>
@@ -183,6 +193,7 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                                 <div class="card-content">
                                     <div class="card-body pb-0">
                                         <div class="d-flex justify-content-start">
