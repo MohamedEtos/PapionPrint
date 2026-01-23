@@ -51,21 +51,5 @@ class Printers extends Model
     public function ordersImgs()
     {
         return $this->hasMany(OrdersImg::class, 'orderId');
-    }
-
-    /* -------------------------------------------------------------------------- */
-    /*                                   Scopes                                   */
-    /* -------------------------------------------------------------------------- */
-
-    public function scopeActive($query)
-    {
-        return $query->whereNot('archive', '0')->whereNull('deleted_at');
-    }
-
-    public function scopeSublimation($query)
-    {
-        return $query->whereHas('machines', function ($q) {
-            $q->where('name', 'sublimation');
-        });
-    }
+    }   
 }

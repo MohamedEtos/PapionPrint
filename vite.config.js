@@ -25,6 +25,7 @@ export default defineConfig({
                 'resources/js/pages/AddNewOrder.js',
                 'resources/js/pages/PrinterLog.js',
                 'resources/js/pages/trash.js',
+                'resources/js/pages/dashboard.js',
             ],
             refresh: true,
         }),
