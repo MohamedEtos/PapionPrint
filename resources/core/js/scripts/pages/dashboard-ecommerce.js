@@ -565,6 +565,7 @@ $(window).on("load", function () {
     },
   }
 
+  /*
   var clientChart;
   if (document.querySelector("#client-retention-chart")) {
     clientChart = new ApexCharts(
@@ -573,6 +574,7 @@ $(window).on("load", function () {
     );
     clientChart.render();
   }
+  */
 
   //   clientChart.render();
 

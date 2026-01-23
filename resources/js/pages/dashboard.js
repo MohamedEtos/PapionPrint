@@ -6,6 +6,7 @@ $(document).ready(function () {
     var $label_color = '#e7e7e7';
     var $primary_light = '#A9A2F6';
     var $danger_light = '#f29292';
+    var $danger = '#EA5455';
 
     var revenueChartoptions = {
         chart: {
@@ -99,6 +100,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/charts/meters',
             type: 'GET',
+            cache: false,
             data: {
                 period: period,
                 machine: machine
@@ -226,6 +228,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/charts/orders',
             type: 'GET',
+            cache: false,
             success: function (response) {
                 $('#orders-received-total').text(response.totalOrders);
                 orderChart.updateOptions({
@@ -317,6 +320,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/charts/customers',
             type: 'GET',
+            cache: false,
             success: function (response) {
                 $('#customers-gained-total').text(response.totalCustomers);
                 customersChart.updateOptions({
@@ -418,6 +422,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/charts/client-retention',
             type: 'GET',
+            cache: false,
             data: {
                 period: period
             },
@@ -442,12 +447,50 @@ $(document).ready(function () {
     }
 
     // Event listener for Client Retention Period dropdown
+    var currentClientRetentionPeriod = 'month';
     $('.client-retention-period').on('click', function (e) {
         e.preventDefault();
         var period = $(this).data('period');
         var label = $(this).text();
         $('#clientRetentionDropdown').text(label); // Update button text
+        currentClientRetentionPeriod = period;
         updateClientRetentionChart(period);
     });
+
+    // Event listener for Client Retention Period dropdown
+    var currentClientRetentionPeriod = 'month';
+    $('.client-retention-period').on('click', function (e) {
+        e.preventDefault();
+        var period = $(this).data('period');
+        var label = $(this).text();
+        $('#clientRetentionDropdown').text(label); // Update button text
+        currentClientRetentionPeriod = period;
+        updateClientRetentionChart(period);
+    });
+
+    console.log("Dashboard Auto-Refresh Initialized");
+
+    // Auto-refresh all charts every 5 seconds
+    setInterval(function () {
+        console.log("Auto-refresh triggered...");
+
+        // Refresh Meter Chart (main chart)
+        updateChart(currentPeriod, currentMachine);
+
+        // Refresh Orders Chart
+        if (orderChart) {
+            updateOrdersChart();
+        }
+
+        // Refresh Customers Chart
+        if (customersChart) {
+            updateCustomersChart();
+        }
+
+        // Refresh Client Retention Chart
+        if (clientChart) {
+            updateClientRetentionChart(currentClientRetentionPeriod);
+        }
+    }, 30000); // 5 seconds
 
 });
