@@ -34,6 +34,7 @@ $(document).ready(function () {
     columnDefs: [
       {
         targets: 0,
+        
         orderable: false,
         className: 'dt-checkboxes-cell',
         render: function (data, type, full, meta) {
@@ -97,15 +98,16 @@ $(document).ready(function () {
     oLanguage: {
       sLengthMenu: "_MENU_",
       sSearch: ""
+      
     },
-    aLengthMenu: [[4, 10, 15, 20], [4, 10, 15, 20]],
+    aLengthMenu: [[10, 20, 50, 100, 200], [10, 20, 50, 100, 200]],
     select: {
       style: "multi"
     },
     // Server-side ordering mapping if needed, else DataTables sends columns[i][data]
     order: [[14, "desc"]], // Sort by created_at by default
     bInfo: false,
-    pageLength: 4,
+    pageLength: 10,
     buttons: [
       // Reuse existing buttons logic or Keep empty if specific buttons are added via DOM manipulation in previous script
       // The previous script had "Add New" but this is "Print Log" so maybe not needed/visible?

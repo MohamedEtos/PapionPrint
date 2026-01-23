@@ -78,7 +78,7 @@
 
                                     <td class="product-img">
                                         <input type="hidden" class="order_id" value="{{ $Order->id }}">
-                                        <img src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
+                                        <img style="height: 50px;" src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
                                     </td>
                                     
                                     <td class="product-name">{{ $Order->customers->name }} </td>
