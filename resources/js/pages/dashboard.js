@@ -353,10 +353,10 @@ $(document).ready(function () {
         },
         colors: [$primary, $danger],
         series: [{
-            name: 'New Clients',
+            name: 'العملاء الجدد',
             data: []
         }, {
-            name: 'Retained Clients',
+            name: 'العملاء المستمرون',
             data: []
         }],
         grid: {
@@ -433,10 +433,10 @@ $(document).ready(function () {
                     }
                 });
                 clientChart.updateSeries([{
-                    name: 'New Clients',
+                    name: 'العملاء الجدد',
                     data: response.series[0].data
                 }, {
-                    name: 'Retained Clients',
+                    name: 'العملاء المستمرون',
                     data: response.series[1].data
                 }]);
             },

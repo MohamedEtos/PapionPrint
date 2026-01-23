@@ -42,7 +42,9 @@
                 </li>
                 <li class=" nav-item"><a href="#"><i class="feather icon-sunset"></i><span class="menu-title" data-i18n="Ecommerce">المكبس</span></a>
                     <ul class="menu-content">
-                        <li class="{{ request()->routeIs('Rollpress') ? 'active' : '' }}"><a href="{{route('Rollpress')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">  تسجيل اوردر </span></a>
+                        <li class="{{ request()->routeIs('AddRollpress') ? 'active' : '' }}"><a href="{{route('AddRollpress')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">  تسجيل اوردر </span></a>
+                        </li>
+                        <li class="{{ request()->routeIs('presslist') ? 'active' : '' }}"><a href="{{route('presslist')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سجل المكبس </span></a>
                         </li>
                     </ul>
                 </li>

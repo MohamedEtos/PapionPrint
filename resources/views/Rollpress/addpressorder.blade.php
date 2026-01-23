@@ -234,4 +234,4 @@
 
     @vite(['resources/core/js/scripts/forms/wizard-steps.js'])
 
-@endsectionu
+@endsection

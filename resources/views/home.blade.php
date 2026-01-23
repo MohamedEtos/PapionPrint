@@ -307,7 +307,7 @@
                         <div class="col-md-8 col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Client Retention</h4>
+                                    <h4 class="card-title">العملاء الجدد والمتمرين</h4>
                                     <div class="dropdown chart-dropdown">
                                         <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="clientRetentionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             ايام الشهر

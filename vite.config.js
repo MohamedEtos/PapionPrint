@@ -28,6 +28,7 @@ export default defineConfig({
                 'resources/js/pages/dashboard.js',
                 'resources/core/css-rtl/plugins/forms/wizard.css',
                 'resources/core/js/scripts/forms/wizard-steps.js',
+                'resources/js/pages/presslist.js',
             ],
             refresh: true,
         }),
