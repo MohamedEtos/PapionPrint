@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('fileWidth', 10, 2);
             $table->integer('fileCopies')->nullable();
             $table->integer('picInCopies')->nullable();
+            $table->string('fabric_type')->nullable();
             $table->integer('pass')->default(1);
             $table->decimal('meters', 10, 2);
             $table->string('status')->default('It hasnt started');

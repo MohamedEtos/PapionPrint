@@ -58,7 +58,7 @@ $(document).ready(function () {
   var editingOrderId = null;
 
   function resetForm() {
-    $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes').val('');
+    $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes, #data-fabric-type').val('');
     $('#data-status').val('waiting');
     $('#data-pass').val('1');
     uploadedImagePaths = [];
@@ -146,6 +146,7 @@ $(document).ready(function () {
         $('#data-width').val(order.fileWidth);
         $('#data-copies').val(order.fileCopies);
         $('#data-pic-copies').val(order.picInCopies);
+        $('#data-fabric-type').val(order.fabric_type);
         $('#data-pass').val(order.pass);
         $('#data-meters').val(order.meters);
         $('#data-status').val(order.status);
@@ -326,7 +327,9 @@ $(document).ready(function () {
     var pass = $('#data-pass').val();
     var meters = $('#data-meters').val();
     var status = $('#data-status').val();
+    var fabric_type = $('#data-fabric-type').val();
     var price = $('#data-price').val();
+    var fabricType = $('#data-fabric-type').val();
     var notes = $('#data-notes').val();
 
     var url = "/printers/store";
@@ -342,6 +345,7 @@ $(document).ready(function () {
       meters: meters,
       status: status,
       price: price,
+      fabric_type: fabric_type,
       notes: notes,
       image_paths: uploadedImagePaths,
       _token: $('meta[name="csrf-token"]').attr('content')
@@ -481,6 +485,7 @@ $(document).ready(function () {
           $('#data-pic-copies').val(order.picInCopies);
           $('#data-pass').val(order.pass);
           $('#data-meters').val(order.meters);
+          $('#data-fabric-type').val(order.fabric_type);
           $('#data-status').val(order.status);
           if (order.printingprices) {
             $('#data-price').val(order.printingprices.totalPrice);

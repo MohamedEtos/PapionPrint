@@ -34,7 +34,7 @@ $(document).ready(function () {
     columnDefs: [
       {
         targets: 0,
-        
+
         orderable: false,
         className: 'dt-checkboxes-cell',
         render: function (data, type, full, meta) {
@@ -59,8 +59,8 @@ $(document).ready(function () {
           // Determine image path
           let imgPath = assetPath + 'core/images/elements/apple-watch.png'; // Fallback
 
-          if (full.ordersImgs && full.ordersImgs.length > 0) {
-            imgPath = '/storage/' + full.ordersImgs[0].path;
+          if (full.orders_imgs && full.orders_imgs.length > 0) {
+            imgPath = '/storage/' + full.orders_imgs[0].path;
           }
 
           return `<input type="hidden" class="order_id" value="${full.id}">
@@ -98,7 +98,7 @@ $(document).ready(function () {
     oLanguage: {
       sLengthMenu: "_MENU_",
       sSearch: ""
-      
+
     },
     aLengthMenu: [[10, 20, 50, 100, 200], [10, 20, 50, 100, 200]],
     select: {

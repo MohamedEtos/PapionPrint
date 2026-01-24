@@ -25,6 +25,7 @@ class Printers extends Model
         'designerId',
         'operatorId',
         'notes',
+        'fabric_type',
         'archive',
         'timeEndOpration',
     ];
@@ -52,4 +53,8 @@ class Printers extends Model
     {
         return $this->hasMany(OrdersImg::class, 'orderId');
     }   
+    public function rollpress()
+    {
+        return $this->hasOne(Rollpress::class, 'orderId');
+    }
 }

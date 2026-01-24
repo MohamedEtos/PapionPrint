@@ -1,5 +1,127 @@
 $(document).ready(function () {
 
+  // --- Wizard Initialization ---
+  var form = $(".steps-validation").show();
+
+  $(".steps-validation").steps({
+    headerTag: "h6",
+    bodyTag: "fieldset",
+    transitionEffect: "fade",
+    titleTemplate: '<span class="step">#index#</span> #title#',
+    labels: {
+      finish: 'Submit'
+    },
+    onStepChanging: function (event, currentIndex, newIndex) {
+      // Allways allow previous action even if the current form is not valid!
+      if (currentIndex > newIndex) {
+        return true;
+      }
+      // Needed in some cases if the user went back (clean up)
+      if (currentIndex < newIndex) {
+        // To remove error styles
+        form.find(".body:eq(" + newIndex + ") label.error").remove();
+        form.find(".body:eq(" + newIndex + ") .error").removeClass("error");
+      }
+      form.validate().settings.ignore = ":disabled,:hidden";
+      return form.valid();
+    },
+    onFinishing: function (event, currentIndex) {
+      form.validate().settings.ignore = ":disabled";
+      return form.valid();
+    },
+    onFinished: function (event, currentIndex) {
+      submitWizardData();
+    }
+  });
+
+  // Initialize validation
+  $(".steps-validation").validate({
+    ignore: 'input[type=hidden]', // ignore hidden fields
+    errorClass: 'danger',
+    successClass: 'success',
+    highlight: function (element, errorClass) {
+      $(element).removeClass(errorClass);
+    },
+    unhighlight: function (element, errorClass) {
+      $(element).removeClass(errorClass);
+    },
+    errorPlacement: function (error, element) {
+      error.insertAfter(element);
+    },
+    rules: {
+      email: {
+        email: true
+      }
+    }
+  });
+  // --- End Wizard Initialization ---
+
+  // --- DataTable Initialization (Merged from data-list-view.js) ---
+  var table = $(".data-thumb-view").DataTable({
+    responsive: false,
+    deferRender: true,
+    columnDefs: [
+      {
+        orderable: true,
+        targets: 0,
+        checkboxes: { selectRow: true }
+      }
+    ],
+    dom:
+      '<"top"<"actions action-btns"B><"action-filters"lf>><"clear">rt<"bottom"<"actions">p>',
+    oLanguage: {
+      sLengthMenu: "_MENU_",
+      sSearch: ""
+    },
+    aLengthMenu: [[4, 10, 15, 20], [4, 10, 15, 20]],
+    select: {
+      style: "multi"
+    },
+    order: [[1, "desc"]],
+    bInfo: false,
+    pageLength: 4,
+    buttons: [
+      {
+        text: "<i class='feather icon-plus'></i> Add New",
+        action: function () {
+          // Slide down logic for the wizard form
+          $('#validation').slideToggle();
+        },
+        className: "btn-outline-primary"
+      }
+    ],
+    initComplete: function (settings, json) {
+      $(".dt-buttons .btn").removeClass("btn-secondary")
+    }
+  });
+
+  table.on('draw.dt', function () {
+    setTimeout(function () {
+      if (navigator.userAgent.indexOf("Mac OS X") != -1) {
+        $(".dt-checkboxes-cell input, .dt-checkboxes").addClass("mac-checkbox")
+      }
+    }, 50);
+  });
+
+  // To append actions dropdown before add new button
+  var actionDropdown = $(".actions-dropodown")
+  actionDropdown.insertBefore($(".top .actions .dt-buttons"))
+
+  // Check if scrollbar exists
+  if ($(".data-items").length > 0) {
+    new PerfectScrollbar(".data-items", { wheelPropagation: false })
+  }
+
+  // Close sidebar logic (if sidebar still exists)
+  $(".hide-data-sidebar, .cancel-data-btn, .overlay-bg").on("click", function () {
+    $(".add-new-data").removeClass("show")
+    $(".overlay-bg").removeClass("show")
+    $("#data-name, #data-price").val("")
+    $("#data-category, #data-status").prop("selectedIndex", 0)
+  })
+
+  // --- End DataTable Initialization ---
+
   // Handle Machine Selection
   $('#data-machine').on('change', function () {
     var selectedText = $(this).find("option:selected").text().toLowerCase();
@@ -23,62 +145,19 @@ $(document).ready(function () {
   var editingOrderId = null;
 
   function resetForm() {
-    $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes').val('');
-    $('#data-status').val('waiting');
-    $('#data-pass').val('1');
-    uploadedImagePaths = [];
-    if (typeof myDropzone !== 'undefined' && myDropzone) {
-      myDropzone.removeAllFiles();
-    }
+    $('#data-customer, #data-customer-view, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes').val('');
+    $('#data-status').val('بانتظار اجراء');
+    $('#data-payment-status').val('0');
+    $('#data-image-upload').val(''); // Reset file input
     editingOrderId = null;
     $('.new-data-title h4').text('اضافه اذن تشغيل');
     $('#saveDataBtn').text('Add Data');
   }
 
 
-  // Configure Dropzone
-  Dropzone.autoDiscover = false;
+  // Dropzone removed in favor of simple file input
+  var uploadedImagePaths = []; // Keep for compatibility if needed, though mostly unused now for upload
 
-  var uploadedImagePaths = [];
-
-  // Initialize Dropzone safely
-  if (Dropzone.instances.length > 0) {
-    Dropzone.instances.forEach(dz => dz.destroy());
-  }
-
-  try {
-    var myDropzone = new Dropzone("#dataListUpload", {
-      url: "/printers/upload-image",
-      paramName: "file",
-      maxFiles: 10,
-      acceptedFiles: '.jpg,.jpeg,.png,.gif',
-      addRemoveLinks: true,
-      resizeHeight: 110,
-      resizeMimeType: 'image/webp',
-      resizeQuality: 0.9,
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      success: function (file, response) {
-        uploadedImagePaths.push(response.path);
-        console.log("Images uploaded:", uploadedImagePaths);
-        toastr.success("uploadedImagePaths");
-
-      },
-      removedfile: function (file) {
-        if (file.previewElement != null && file.previewElement.parentNode != null) {
-          file.previewElement.parentNode.removeChild(file.previewElement);
-        }
-        // Ideally we should also remove from uploadedImagePaths array here
-        return _updateMaxFilesReachedClass();
-      },
-      error: function (file, response) {
-        toastr.error("Upload failed:", response);
-      }
-    });
-  } catch (e) {
-    toastr.error("Dropzone init warning:", e);
-  }
 
   // Handle Paste Event
   document.onpaste = function (event) {
@@ -106,24 +185,16 @@ $(document).ready(function () {
       success: function (order) {
         // Populate Form
         $('#data-customer-view').val(order.customers ? order.customers.name : '');
-        $('#data-machine').val(order.machineId);
-        $('#data-height').val(order.fileHeight);
-        $('#data-width').val(order.fileWidth);
-        $('#data-copies').val(order.fileCopies);
-        $('#data-pic-copies').val(order.picInCopies);
-        $('#data-pass').val(order.pass);
+        $('#data-fabric-type').val(order.fabrictype);
+        $('#data-source').val(order.fabricsrc);
+        $('#data-code').val(order.fabriccode);
+        $('#data-width').val(order.fabricwidth);
+        $('#data-paper-shield').val(order.papyershild);
         $('#data-meters').val(order.meters);
         $('#data-status').val(order.status);
-        if (order.printingprices) {
-          $('#data-price').val(order.printingprices.totalPrice);
-        }
+        $('#data-payment-status').val(order.paymentstatus);
+        $('#data-price').val(order.price);
         $('#data-notes').val(order.notes);
-
-        // calc pic 
-        var copies = parseFloat($('#data-copies').val()) || 0;
-        var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
-        var totalpic = copies * picCopies;
-        $('#data-total-pic').text(totalpic);
 
         editingOrderId = order.id;
         $('.new-data-title h4').text('تعديل البيانات');
@@ -141,121 +212,84 @@ $(document).ready(function () {
 
 
   // //////////////////////////Save Data Button Logic ////////////////////////////////
-  $('#saveDataBtn').on('click', function (e) {
-    e.preventDefault();
+  function submitWizardData() {
+    console.log("Submitting Wizard Data");
+    // e.preventDefault() is not needed here as it's not an event handler directly
     console.log("Save/Update Data Button Clicked");
 
-    var customerId = $('#data-customer-view').val();
-    var machineId = $('#data-machine').val();
-    var height = $('#data-height').val();
-    var width = $('#data-width').val();
-    var copies = $('#data-copies').val();
-    var picInCopies = $('#data-pic-copies').val();
-    var pass = $('#data-pass').val();
-    var meters = $('#data-meters').val();
-    var status = $('#data-status').val();
-    var price = $('#data-price').val();
-    var notes = $('#data-notes').val();
+    var formData = new FormData();
 
-    var url = "/printers/store";
+    // Customer Logic: If hidden ID is empty, use the text value as name (for new customer)
+    var customerId = $('#data-customer').val(); // Assuming you have a hidden input for ID
+    var customerName = $('#data-customer-view').val();
+
+    // If we have an ID, we send it. If not, we send the name.
+    // However, existing controller likely expects 'customerId'. 
+    // We'll let the controller handle "if ID is null/not found, create by name".
+    // Or we send both and let controller decide.
+    // Let's send 'customer_name' always, and 'customer_id' if we have it.
+
+    // Note: The datalist implementation in blade needs to ensure we capture the ID if selected.
+    // If the user types a name that exists, we might miss the ID if not careful with the input change event.
+    // For now, let's look up the ID from the datalist based on the name if the hidden ID is empty.
+    if (!customerId) {
+      var val = $('#data-customer-view').val();
+      var opt = $('#customers-list option[value="' + val + '"]');
+      if (opt.length > 0) {
+        customerId = opt.attr('data-id');
+      }
+    }
+
+    formData.append('customerId', customerId || '');
+    formData.append('customerName', customerName); // Send name for creation if ID null
+
+    formData.append('fabrictype', $('#data-fabric-type').val());
+    formData.append('fabricsrc', $('#data-source').val());
+    formData.append('fabriccode', $('#data-code').val());
+    formData.append('fabricwidth', $('#data-width').val());
+    formData.append('papyershild', $('#data-paper-shield').val());
+    formData.append('meters', $('#data-meters').val());
+    formData.append('status', $('#data-status').val());
+    formData.append('paymentstatus', $('#data-payment-status').val());
+    formData.append('price', $('#data-price').val());
+    formData.append('notes', $('#data-notes').val());
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+    // Image Upload
+    var imageFile = $('#data-image-upload')[0].files[0];
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+
+    var url = "/Rollpress/store"; // Correct case matches Route prefix
     var type = "POST";
-    var data = {
-      customerId: customerId,
-      machineId: machineId,
-      fileHeight: height,
-      fileWidth: width,
-      fileCopies: copies,
-      picInCopies: picInCopies,
-      pass: pass,
-      meters: meters,
-      status: status,
-      price: price,
-      notes: notes,
-      image_paths: uploadedImagePaths,
-      _token: $('meta[name="csrf-token"]').attr('content')
-    };
 
     if (editingOrderId) {
-      url = "/printers/" + editingOrderId;
-      data._method = 'PUT';
-      data.auto_advance_status = true;
+      url = "/rollpress/update/" + editingOrderId; // Need update route too
+      // For PUT with FormData in Laravel, utilize _method field
+      formData.append('_method', 'PUT');
     }
 
     $.ajax({
       url: url,
-      type: type,
-      data: data,
+      type: type, // POST (even for PUT via _method)
+      data: formData,
+      processData: false,
+      contentType: false,
       success: function (response) {
         try {
           console.log("Order saved/updated:", response);
           var message = editingOrderId ? "Order Updated Successfully!" : "Order Added Successfully!";
           toastr.success(message, "تمت العملية بنجاح");
 
-          if (!response || !response.order) {
-            console.warn("Response missing 'order' object:", response);
-            return;
-          }
+          // Refresh page or update table. Since validation logic is simple, let's reload for now to reflect new data from DB properly
+          setTimeout(function () {
+            location.reload();
+          }, 1000);
 
-          var order = response.order;
-
-          // Helper Variables
-          var customerName = order.customers ? order.customers.name : 'Unknown';
-          var machineName = order.machines ? order.machines.name : 'Unknown';
-          var pricePerMeter = order.printingprices ? order.printingprices.pricePerMeter : '';
-          var imgPath = (order.orders_imgs && order.orders_imgs.length > 0)
-            ? '/storage/' + order.orders_imgs[0].path
-            : '/core/images/elements/apple-watch.png';
-
-          if (editingOrderId) {
-            var $row = $('input.order_id[value="' + editingOrderId + '"]').closest('tr');
-            if ($row.length) {
-              $row.find('.product-img img').attr('src', imgPath);
-              $row.find('.product-name').text(customerName);
-
-              // Fix: Target Machine column (index 3) explicitly
-              var $machineCell = $row.find('td').eq(3);
-              $machineCell.text(machineName + ' ' + order.pass + ' pass');
-
-              // Fix: Target Meters column (index 4) explicitly and preserve formatting
-              var $metersCell = $row.find('td').eq(4);
-              $metersCell.html('<b>' + order.meters + '</b>');
-
-              $row.find('.chip-text').text(order.status);
-              $row.find('.chip').removeClass('chip-success chip-warning').addClass(order.status == 'انتهت الطباعة' ? 'chip-success' : 'chip-info');
-              $row.find('td:eq(6)').text(pricePerMeter);
-            }
-          } else {
-            var newRow = `
-                        <tr>
-                            <td></td>
-                            <td class="product-img">
-                                <input type="hidden" class="order_id" value="${order.id}">
-                                <img src="${imgPath}" alt="Img placeholder">
-                            </td>
-                            <td class="product-name">${customerName}</td>
-                            <td class="product-category">${machineName} ${order.pass} pass</td>
-                            <td class="product-category"><b>${order.meters}</b></td>
-                            <td>
-                                <div class="chip chip-${order.status == 'انتهت الطباعة' ? 'success' : 'info'}">
-                                    <div class="chip-body status-toggle" style="cursor: pointer">
-                                        <div class="chip-text">${order.status}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="product-price" title="Just now">الآن</td>
-                            <td class="product-action">
-                                <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
-                                <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
-                            </td>
-                        </tr>
-                    `;
-            // <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
-
-            $('table.data-thumb-view tbody').append(newRow);
-          }
         } catch (err) {
           console.error("Error updating UI:", err);
-          toastr.warning("Order saved, but UI update encountered an issue. Please refresh.", "Warning");
+          toastr.warning("Order saved, but UI update encountered an issue. See console.", "Warning");
         } finally {
           $(".add-new-data").removeClass("show");
           $(".overlay-bg").removeClass("show");
@@ -274,6 +308,12 @@ $(document).ready(function () {
         }
       }
     });
+  }
+
+  // Bind the old button to the new function
+  $('#saveDataBtn').on('click', function (e) {
+    e.preventDefault();
+    submitWizardData();
   });
 
   /////////////////// On Status Click //////////////////////////
@@ -360,7 +400,8 @@ $(document).ready(function () {
 
   // ///////////// multiple Bulk Delete & Actions Visibility ///////////////////////
 
-  var table = $('.data-thumb-view').DataTable();
+  // Use the table variable initialized above.
+  // We do NOT re-initialize it here.
 
   // Initially hide actions dropdown if it exists logic isn't handled by CSS
   // Note: data-list-view.js moves .actions-dropodown to the toolbar.

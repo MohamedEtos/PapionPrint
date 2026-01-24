@@ -190,10 +190,10 @@
                                                 <option value="ملغي">ملغي</option>
                                             </select>
                                         </div>
-                                        <!-- <div class="col-sm-12 data-field-col">
-                                            <label for="data-price">السعر الإجمالي</label>
-                                            <input type="number" step="0.01" class="form-control" id="data-price">
-                                        </div> -->
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-fabric-type">نوع القماش </label>
+                                            <input type="text" class="form-control" id="data-fabric-type">
+                                        </div>
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-notes">ملاحظات</label>
                                             <textarea class="form-control" id="data-notes"></textarea>

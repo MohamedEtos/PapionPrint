@@ -129,6 +129,9 @@
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
         {{-- <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script> --}}
 
+        <script>
+            var assetPath = "{{ asset('') }}";
+        </script>
         @vite('resources/js/pages/PrinterLog.js')
 
 

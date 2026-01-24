@@ -10,6 +10,7 @@
         'resources/core/css-rtl/pages/data-list-view.css',
         'resources/core/css-rtl/custom-rtl.css',
         'resources/core/vendors/css/file-uploaders/dropzone.min.css',
+        'resources/core/css-rtl/plugins/forms/wizard.css',
     ]) 
 
 @endsection
@@ -49,6 +50,136 @@
                 </div>
             </div>
             <div class="content-body">
+                <!-- Form wizard with step validation section start -->
+                <section id="validation" style="display:none;" class="mb-2">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">إضافة طلب</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <form action="#" class="steps-validation wizard-circle">
+                                            <!-- Step 1 -->
+                                            <h6><i class="step-icon feather icon-home"></i> البيانات الأساسية</h6>
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-customer-view">اسم العميل</label>
+                                                            <input type="text" class="form-control required" name="name" id="data-customer-view" list="customers-list" placeholder="ابحث عن العميل...">
+                                                            <datalist id="customers-list">
+                                                                @foreach($customers->unique('name') as $customer)
+                                                                    <option data-id="{{ $customer->id }}" value="{{ $customer->name }}">
+                                                                @endforeach
+                                                            </datalist>
+                                                            <input type="hidden" id="data-customer">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-status">الحالة</label>
+                                                            <select class="form-control" id="data-status" name="status">
+                                                                <option selected value="بانتظار اجراء">بانتظار اجراء</option>
+                                                                <option value="تم الانتهاء">تم الانتهاء</option>
+                                                                <option value="جاري العمل">جاري العمل</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-payment-status">حالة الدفع</label>
+                                                            <select class="form-control" id="data-payment-status" name="payment_status">
+                                                                <option value="0">غير مدفوع</option>
+                                                                <option value="1">مدفوع</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+
+                                            <!-- Step 2 -->
+                                            <h6><i class="step-icon feather icon-briefcase"></i> مواصفات القماش</h6>
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-fabric-type">نوع القماش</label>
+                                                            <input type="text" class="form-control required" id="data-fabric-type" name="fabric_type">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-source">المصدر</label>
+                                                            <select class="form-control" id="data-source" name="source">
+                                                                <option value="العميل">العميل</option>
+                                                                <option value="AP Group">AP Group</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-code">كود التوب</label>
+                                                            <input type="text" class="form-control" id="data-code" name="code">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-width">عرض القماش</label>
+                                                            <input type="number" step="0.01" class="form-control required" id="data-width" name="width">
+                                                        </div>
+                                                    </div>
+                                                     <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-paper-shield">ورق حماية</label>
+                                                            <input type="text" class="form-control" id="data-paper-shield" name="paper_shield">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+
+                                            <!-- Step 3 -->
+                                            <h6><i class="step-icon feather icon-image"></i> التفاصيل والإضافات</h6>
+                                            <fieldset>
+                                                <div class="row">
+                                                     <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-meters">الأمتار</label>
+                                                            <input type="number" step="0.01" class="form-control required" id="data-meters" name="meters">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label for="data-price">السعر</label>
+                                                            <input type="number" step="0.01" class="form-control" id="data-price" name="price">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="data-notes">ملاحظات</label>
+                                                            <textarea class="form-control" id="data-notes" name="notes"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                           <label>صورة التصميم</label>
+                                                             <input type="file" class="form-control" id="data-image-upload" name="image" capture="environment" accept="image/*">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Form wizard with step validation section end -->
+
                 <!-- Data list view starts -->
                 <section id="data-thumb-view" class="data-thumb-view-header">
                     <!-- dataTable starts -->
@@ -65,9 +196,7 @@
                                     <th>عرض القماش</th>
                                     <th>الامتار</th>
                                     <th>الحاله</th>
-                                    <th>حالة الدفع</th>
                                     <th>ورق حمايه</th>
-                                    <th>السعر</th>
                                     <th>ملاحظات</th>
                                     <th>التاريخ</th>
                                 </tr>
@@ -84,69 +213,27 @@
                                     </td>
                                     
                                     <td class="product-name">{{ $Order->customers->name ?? '-' }} </td>
-                                    <td class="product-category"><b>{{ $Order->fabrictype ?? '-' }}   </b></td>
-                                    <td class="product-category">-</td>
-                                    <td class="product-category">-</td>
-                                    <td class="product-category">-</td>
+                                    <td class="product-category"><b>{{  $Order->fabrictype  ?? $Order->rollpress->fabrictype ?? '-' }}   </b></td>
+                                    <td class="product-category">{{ $Order->rollpress->fabricsrc ?? '-' }}</td>
+                                    <td class="product-category">{{ $Order->rollpress->fabriccode ?? '-' }}</td>
+                                    <td class="product-category">{{ $Order->rollpress->fabricwidth ?? $Order->fileWidth ?? '-' }}</td>
                                     <td class="product-category"><b>{{ $Order->meters ?? '-' }}</b></td>
 
                                     <td>
                                         <div class="chip chip-info">
                                             <div class="chip-body status-toggle" style="cursor: pointer">
-                                                <div class="chip-text hover_action">{{ $Order->status }}</div>
+                                                <div class="chip-text hover_action">{{ $Order->rollpress->status ?? 'بدء التشغيل' }}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="product-category">{{ $Order->paymentStatus ?? '-' }}</td>
-                                    <td class="product-category">-</td>
-                                    <td class="product-price">{{ $Order->totalPrice ?? '-' }}</td>
+                                    <td class="product-category">{{ $Order->rollpress->papyershild ?? '-' }}</td>
                                     <td class="product-category">{{ $Order->notes ?? '-' }}</td>
                                     <td class="product-price" title="{{ $Order->created_at }}">{{ $Order->created_at->locale('ar')->diffForHumans() }}</td>
 
                                 </tr>
                                 @endforeach
 
-                                @foreach ($Rolls as $Roll)
-                                <tr>
-                                    <td></td>
 
-                                    <td class="product-img">
-                                        <input type="hidden" class="roll_id" value="{{ $Roll->id }}">
-                                        @if($Roll->order && $Roll->order->ordersImgs->first())
-                                            <img src="{{ asset('storage/'.$Roll->order->ordersImgs->first()->path) }}" alt="Img placeholder">
-                                        @else
-                                            <img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
-                                        @endif
-                                    </td>
-                                    
-                                    <td class="product-name">{{ $Roll->order->customers->name ?? '-' }} </td>
-                                    <td class="product-category"><b>{{ $Roll->fabrictype ?? '-' }}   </b></td>
-                                    <td class="product-category">{{ $Roll->fabricsrc ?? '-' }}</td>
-                                    <td class="product-category">{{ $Roll->fabriccode ?? '-' }}</td>
-                                    <td class="product-category">{{ $Roll->fabricwidth ?? '-' }}</td>
-                                    <td class="product-category"><b>{{ $Roll->meters ?? '-' }}</b></td>
-
-                                    <td>
-                                        <div class="chip chip-{{ $Roll->status ? 'success' : 'info' }}">
-                                            <div class="chip-body status-toggle" style="cursor: pointer">
-                                                <div class="chip-text hover_action">{{ $Roll->status ? 'تم الانتهاء' : 'جاري العمل' }}</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="product-category">
-                                        <div class="chip chip-{{ $Roll->paymentstatus ? 'success' : 'danger' }}">
-                                            <div class="chip-body">
-                                                <div class="chip-text">{{ $Roll->paymentstatus ? 'مدفوع' : 'غير مدفوع' }}</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="product-category">{{ $Roll->papyershild ?? '-' }}</td>
-                                    <td class="product-price">{{ $Roll->price ?? '-' }}</td>
-                                    <td class="product-category">{{ $Roll->notes ?? '-' }}</td>
-                                    <td class="product-price" title="{{ $Roll->created_at }}">{{ $Roll->created_at->locale('ar')->diffForHumans() }}</td>
-
-                                </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div> 
@@ -187,9 +274,11 @@
     <script src="{{ asset('core/vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
     <script src="{{ asset('core/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
     <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
-    <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
+    <script src="{{ asset('core/vendors/js/extensions/jquery.steps.min.js') }}"></script>
+    <script src="{{ asset('core/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
+    {{-- <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script> --}}
     <script src="{{ asset('core/js/scripts/modal/components-modal.js') }}"></script>
 
-    @vite('resources/js/pages/rollpress.js')
+    @vite('resources/js/pages/presslist.js')
 
 @endsection

@@ -24,6 +24,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::prefix('Rollpress')->group(function () {
         Route::get('/addpressorder', [App\Http\Controllers\RollpressController::class, 'index'])->name('AddRollpress');
         Route::get('/presslist', [App\Http\Controllers\RollpressController::class, 'presslist'])->name('presslist');
+        Route::post('/store', [App\Http\Controllers\RollpressController::class, 'store'])->name('rollpress.store');
     });
 
     Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');

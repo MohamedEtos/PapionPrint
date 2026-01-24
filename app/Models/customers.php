@@ -15,4 +15,9 @@ class customers extends Model
     {
         return $this->hasMany(Printers::class,'customerId');
     }
+
+    public function rollpresses()
+    {
+        return $this->hasMany(Rollpress::class, 'customerId');
+    }
 }

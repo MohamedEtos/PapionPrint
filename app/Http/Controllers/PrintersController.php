@@ -120,6 +120,7 @@ class PrintersController extends Controller
             // 'totalPrice' => $request->price ?? 0, // Removed as column doesn't exist
             'status' => $request->status ?? 'بانتظار اجراء',
             'notes' => $request->notes,
+            'fabric_type' => $request->fabric_type,
             'designerId' => auth()->id() ,
         ]);
 
@@ -231,6 +232,7 @@ class PrintersController extends Controller
         if ($request->filled('pass')) $printer->pass = $request->pass;
         if ($request->filled('meters')) $printer->meters = $request->meters;
         if ($request->filled('notes')) $printer->notes = $request->notes;
+        if ($request->filled('fabric_type')) $printer->fabric_type = $request->fabric_type;
 
         // Auto Advance Status if requested
         if ($request->boolean('auto_advance_status') && trim($printer->status) == 'بانتظار اجراء') {
