@@ -155,7 +155,7 @@ class PrintersController extends Controller
 
     public function show($id)
     {
-        $printer = Printers::with(['customers', 'machines', 'printingprices', 'ordersImgs', 'user', 'user2'])->find($id);
+        $printer = Printers::with(['customers', 'machines', 'printingprices', 'ordersImgs', 'user', 'user2', 'rollpress'])->find($id);
 
         if (!$printer) {
             return response()->json(['error' => 'Order not found'], 404);

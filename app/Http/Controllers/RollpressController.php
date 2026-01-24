@@ -65,6 +65,9 @@ class RollpressController extends Controller
 
         // 3. Create Rollpress Record
         $rollpress = new Rollpress();
+        if ($request->filled('orderId')) {
+             $rollpress->orderId = $request->input('orderId');
+        }
         $rollpress->customerId = $customerId; // New Link
         $rollpress->fabrictype = $request->input('fabrictype');
         $rollpress->fabricsrc = $request->input('fabricsrc');

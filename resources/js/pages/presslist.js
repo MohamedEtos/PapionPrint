@@ -143,6 +143,7 @@ $(document).ready(function () {
 
   // Global variable to track edit state
   var editingOrderId = null;
+  var linkedOrderId = null; // New variable to track the linked Printer Order ID
 
   function resetForm() {
     $('#data-customer, #data-customer-view, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes').val('');
@@ -150,6 +151,7 @@ $(document).ready(function () {
     $('#data-payment-status').val('0');
     $('#data-image-upload').val(''); // Reset file input
     editingOrderId = null;
+    linkedOrderId = null; // Reset linked order
     $('.new-data-title h4').text('اضافه اذن تشغيل');
     $('#saveDataBtn').text('Add Data');
   }
@@ -253,6 +255,10 @@ $(document).ready(function () {
     formData.append('paymentstatus', $('#data-payment-status').val());
     formData.append('price', $('#data-price').val());
     formData.append('notes', $('#data-notes').val());
+    formData.append('notes', $('#data-notes').val());
+    if (linkedOrderId) {
+      formData.append('orderId', linkedOrderId);
+    }
     formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
     // Image Upload
@@ -333,34 +339,80 @@ $(document).ready(function () {
 
     if (!orderId) return;
 
-    if (currentStatus === 'بانتظار اجراء' || currentStatus === 'بانتظار اجراء') {
+    if (currentStatus === 'بانتظار اجراء' || currentStatus === 'بدء التشغيل') { // Updated to match user phrasing if needed, but 'بانتظار اجراء' is standard
       e.preventDefault();
+
+      // Show loading or visual feedback?
 
       $.ajax({
         url: "/printers/" + orderId,
         type: "GET",
         success: function (order) {
-          // Populate Form
-          $('#data-customer-view').val(order.customers ? order.customers.name : '');
-          $('#data-machine').val(order.machineId);
-          $('#data-height').val(order.fileHeight);
-          $('#data-width').val(order.fileWidth);
-          $('#data-copies').val(order.fileCopies);
-          $('#data-pic-copies').val(order.picInCopies);
-          $('#data-pass').val(order.pass);
-          $('#data-meters').val(order.meters);
-          $('#data-status').val(order.status);
-          if (order.printingprices) {
+          // Populate Wizard Form
+          // Use Rollpress data if available, else Printer data
+          var data = order.rollpress ? order.rollpress : order;
+
+          // Customer Name
+          var customerName = order.customers ? order.customers.name : '';
+          $('#data-customer-view').val(customerName);
+          // Assuming we might need to set data-id on hidden field if logic requires, but wizard logic relies on name lookup or id field
+          // If we have customer Id from printer order
+          $('#data-customer').val(order.customerId);
+
+          // Fields mapping
+          // Fabric Type
+          $('#data-fabric-type').val(data.fabrictype || data.fabric_type || '');
+          // Note: Printer has fabric_type, Rollpress has fabrictype. Handle both.
+
+          $('#data-source').val(data.fabricsrc || 'العميل'); // Default to Customer if not set
+          $('#data-code').val(data.fabriccode || '');
+          $('#data-width').val(data.fabricwidth || order.fileWidth || ''); // Fallback to fileWidth
+          $('#data-paper-shield').val(data.papyershild || '');
+          $('#data-meters').val(data.meters || order.meters || '');
+
+          // Status - Set to "In Progress" or "Started" equivalent? 
+          // The form has "بانتظار اجراء" etc. user wants "Start Operation".
+          // Let's keep it as is or default to "جاري العمل" if starting?
+          $('#data-status').val(data.status && data.status != 0 ? 'تم الانتهاء' : 'جاري العمل');
+          // Note: rollpress status is boolean (0/1) or string? Migration says boolean. select has strings.
+          // Let's set default for new start:
+          if (!order.rollpress) {
+            $('#data-status').val('جاري العمل');
+          } else {
+            // Map boolean/string
+            // If rollpress status is 1 -> 'تم الانتهاء', 0 -> 'جاري العمل'
+            $('#data-status').val(data.status ? 'تم الانتهاء' : 'جاري العمل');
+          }
+
+          $('#data-payment-status').val(data.paymentstatus || 0);
+          $('#data-price').val(data.price || order.totalPrice || ''); // Printer has totalPrice? or printingprices.totalPrice
+          if (!data.price && order.printingprices) {
             $('#data-price').val(order.printingprices.totalPrice);
           }
-          $('#data-notes').val(order.notes);
 
-          editingOrderId = order.id;
-          $('.new-data-title h4').text('تحديث الطلب وبدات الطباعة');
-          $('#saveDataBtn').text('تحديث وبدء');
+          $('#data-notes').val(data.notes || order.notes || '');
 
-          $(".add-new-data").addClass("show");
-          $(".overlay-bg").addClass("show");
+          // Set Tracking Variables
+          if (order.rollpress) {
+            editingOrderId = order.rollpress.id; // We are editing the existing Rollpress ticket
+            linkedOrderId = order.id; // Keep link just in case
+            $('.new-data-title h4').text('تعديل طلب المكبس');
+            $('#saveDataBtn').text('حفظ التعديلات');
+          } else {
+            editingOrderId = null; // New Rollpress Ticket
+            linkedOrderId = order.id; // Correctly link to Printer Order
+            $('.new-data-title h4').text('بدء تشغيل طلب جديد');
+            $('#saveDataBtn').text('بدء التشغيل');
+          }
+
+          // Show Wizard
+          $('#validation').slideDown();
+
+          // Scroll to Wizard
+          $('html, body').animate({
+            scrollTop: $("#validation").offset().top - 100
+          }, 500);
+
         },
         error: function (xhr) {
           console.error("Error fetching order:", xhr);

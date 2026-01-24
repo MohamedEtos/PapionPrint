@@ -213,7 +213,7 @@
                                     </td>
                                     
                                     <td class="product-name">{{ $Order->customers->name ?? '-' }} </td>
-                                    <td class="product-category"><b>{{  $Order->fabrictype  ?? $Order->rollpress->fabrictype ?? '-' }}   </b></td>
+                                    <td class="product-category"><b>{{  $Order->fabric_type  ?? $Order->rollpress->fabrictype ?? '-' }}   </b></td>
                                     <td class="product-category">{{ $Order->rollpress->fabricsrc ?? '-' }}</td>
                                     <td class="product-category">{{ $Order->rollpress->fabriccode ?? '-' }}</td>
                                     <td class="product-category">{{ $Order->rollpress->fabricwidth ?? $Order->fileWidth ?? '-' }}</td>
