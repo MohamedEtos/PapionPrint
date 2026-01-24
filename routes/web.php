@@ -25,6 +25,9 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/addpressorder', [App\Http\Controllers\RollpressController::class, 'index'])->name('AddRollpress');
         Route::get('/presslist', [App\Http\Controllers\RollpressController::class, 'presslist'])->name('presslist');
         Route::post('/store', [App\Http\Controllers\RollpressController::class, 'store'])->name('rollpress.store');
+        Route::get('/archive', [App\Http\Controllers\RollpressController::class, 'archive'])->name('rollpress.archive');
+        Route::post('/bulk-delete', [App\Http\Controllers\RollpressController::class, 'bulkDelete'])->name('rollpress.bulk_delete');
+        Route::put('/update/{id}', [App\Http\Controllers\RollpressController::class, 'update'])->name('rollpress.update');
     });
 
     Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');

@@ -23,7 +23,6 @@
                 </li>
                 <li class=" navigation-header"><span>الطباعة</span>
                 </li>
-
                 <li class=" nav-item"><a href="#"><i class="feather icon-printer"></i><span class="menu-title" data-i18n="Ecommerce">الطباعة</span></a>
                     <ul class="menu-content">
                         <li class="{{ request()->routeIs('AddPrintOrders') ? 'active' : '' }}"><a href="{{route('AddPrintOrders')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">  التشغيل</span></a>
@@ -42,9 +41,12 @@
                 </li>
                 <li class=" nav-item"><a href="#"><i class="feather icon-sunset"></i><span class="menu-title" data-i18n="Ecommerce">المكبس</span></a>
                     <ul class="menu-content">
+               
+                        <li class="{{ request()->routeIs('presslist') ? 'active' : '' }}"><a href="{{route('presslist')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اوردات المكبس </span></a>
+                        </li>
                         <li class="{{ request()->routeIs('AddRollpress') ? 'active' : '' }}"><a href="{{route('AddRollpress')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">  تسجيل اوردر </span></a>
                         </li>
-                        <li class="{{ request()->routeIs('presslist') ? 'active' : '' }}"><a href="{{route('presslist')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سجل المكبس </span></a>
+                        <li class="{{ request()->routeIs('rollpress.archive') ? 'active' : '' }}"><a href="{{route('rollpress.archive')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">ارشيف المكبس</span></a>
                         </li>
                     </ul>
                 </li>

@@ -30,8 +30,13 @@ class RollpressController extends Controller
         ->whereHas('machines', function ($query) {
             $query->where('name', 'sublimation');
         })
+        ->whereDoesntHave('rollpress', function ($query) {
+            $query->where('status', 1);
+        })
         ->get();
-        $Rolls = Rollpress::with('customer', 'order.customers', 'order.ordersImgs')->get();
+        $Rolls = Rollpress::with('customer', 'order.customers', 'order.ordersImgs')
+            ->where('status', '!=', 1)
+            ->get();
         $customers = Customers::all();
         $machines = Machines::all();
 
@@ -46,9 +51,26 @@ class RollpressController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Handle Customer
-        $customerId = $request->input('customerId');
-        $customerName = $request->input('customerName');
+        // 1. Validation with Arabic Messages
+        $messages = [
+            'customerName.required' => 'اسم العميل مطلوب',
+            'fabrictype.required' => 'نوع القماش مطلوب',
+            'fabricwidth.required' => 'عرض القماش مطلوب',
+            'fabricwidth.numeric' => 'عرض القماش يجب أن يكون رقم',
+            'meters.required' => 'الامتار مطلوبة',
+            'meters.numeric' => 'الامتار يجب أن تكون رقم',
+        ];
+
+        $request->validate([
+            'customerName' => 'required',
+            'fabrictype' => 'required',
+            'fabricwidth' => 'required|numeric',
+            'meters' => 'required|numeric',
+        ], $messages);
+
+        // 2. Handle Customer
+        $customerId = $request->customerId;
+        $customerName = $request->customerName;
 
         if (!$customerId && $customerName) {
             // Check if exists by name to avoid duplicates if ID missing
@@ -61,41 +83,169 @@ class RollpressController extends Controller
             }
         }
 
-  
-
         // 3. Create Rollpress Record
         $rollpress = new Rollpress();
+        
         if ($request->filled('orderId')) {
-             $rollpress->orderId = $request->input('orderId');
+             $rollpress->orderId = $request->orderId;
         }
-        $rollpress->customerId = $customerId; // New Link
-        $rollpress->fabrictype = $request->input('fabrictype');
-        $rollpress->fabricsrc = $request->input('fabricsrc');
-        $rollpress->fabriccode = $request->input('fabriccode');
-        $rollpress->fabricwidth = $request->input('fabricwidth');
-        $rollpress->meters = $request->input('meters');
-        $rollpress->status = $request->input('status') == 'تم الانتهاء' ? 1 : 0; 
-        $rollpress->paymentstatus = $request->input('paymentstatus') == '1' ? 1 : 0;
-        $rollpress->papyershild = $request->input('papyershild');
-        $rollpress->price = $request->input('price');
-        $rollpress->notes = $request->input('notes');
+
+
+        $rollpress->customerId = $customerId;
+        $rollpress->fabrictype = $request->fabrictype;
+        $rollpress->fabricsrc = $request->fabricsrc;
+        $rollpress->fabriccode = $request->fabriccode;
+        $rollpress->fabricwidth = $request->fabricwidth;
+        $rollpress->meters = $request->meters;
+        $rollpress->status = 1; 
+        $rollpress->paymentstatus = $request->paymentstatus == '1' ? 1 : 0;
+        $rollpress->papyershild = $request->papyershild;
+        $rollpress->price = $request->price;
+        $rollpress->notes = $request->notes;
         $rollpress->save();
+        
+        return response()->json(['success' => true, 'rollpress' => $rollpress]);
+    }
 
-        // 4. Handle Image Upload - TEMPORARILY DISABLED (Requires Schema Update for Rollpress Images)
-        /*
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $path = $file->store('orders-images', 'public');
+    public function archive(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Rollpress::with('customer', 'order.customers', 'order.ordersImgs');
+            // Filter by Status (Archive usually means history, so maybe show all? Or just status=1?)
+            // User said "Archive page... add all data found in table".
+            // Let's show ALL data for now, or maybe allow filtering.
+            // If it's strictly "Archive", maybe we filter by status=1?
+            // "Archive page... add all data found in table" implies listing the table.
             
-            // Assuming OrdersImg model
-            $imageStart = new \App\Models\OrdersImg();
-            $imageStart->orderId = $printer->id; // Printer no longer exists here
-            $imageStart->path = $path;
-            $imageStart->type = 'start'; 
-            $imageStart->save();
-        }
-        */
+            // Search logic refined to avoid errors if relations missing
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $searchValue = $request->search['value'];
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('id', 'like', "%{$searchValue}%")
+                      ->orWhere('fabrictype', 'like', "%{$searchValue}%")
+                      ->orWhere('fabriccode', 'like', "%{$searchValue}%")
+                      ->orWhere('notes', 'like', "%{$searchValue}%")
+                      ->orWhereHas('customer', function ($q) use ($searchValue) {
+                          $q->where('name', 'like', "%{$searchValue}%");
+                      });
+                });
+            }
 
+            // Sorting
+            if ($request->has('order')) {
+                $orderColumnIndex = $request->order[0]['column'];
+                $orderDirection = $request->order[0]['dir'];
+                $columns = $request->columns;
+                $columnName = $columns[$orderColumnIndex]['data'];
+                
+                // Map column names if necessary, for now assuming data matches db columns
+                if ($columnName && !in_array($columnName, ['action', 'image', 'customer.name', 'customerName'])) {
+                    // Check if column exists in table to avoid SQL error
+                    // For now, rely on frontend sending correct data names.
+                     $query->orderBy($columnName, $orderDirection);
+                } else {
+                     $query->orderBy('created_at', 'desc');
+                }
+            } else {
+                $query->orderBy('created_at', 'desc');
+            }
+
+            $totalRecords = Rollpress::count();
+            $filteredRecords = $query->count();
+
+            // Pagination
+            if ($request->has('start') && $request->length != -1) {
+                $query->skip($request->start)->take($request->length);
+            }
+
+            $data = $query->get();
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $filteredRecords,
+                'data' => $data
+            ]);
+        }
+        
+        $customers = Customers::all();
+
+        return view('rollpress.archive', ['customers' => $customers]);
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+        if (!empty($ids)) {
+            Rollpress::whereIn('id', $ids)->delete();
+            return response()->json(['success' => 'Orders deleted successfully']);
+        }
+        return response()->json(['error' => 'No orders selected'], 400);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $rollpress = Rollpress::find($id);
+        if (!$rollpress) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        // Validation - Similar to store but nullable mostly?
+        // Let's use same validation or simplified if partial updates allowed.
+        // User asked for "Edit", implying full form submit logic.
+        // Replicating store validation but allowing updates.
+        
+        $messages = [
+            'customerName.required' => 'اسم العميل مطلوب',
+            'fabrictype.required' => 'نوع القماش مطلوب',
+            'fabricwidth.required' => 'عرض القماش مطلوب',
+            'fabricwidth.numeric' => 'عرض القماش يجب أن يكون رقم',
+            'meters.required' => 'الامتار مطلوبة',
+            'meters.numeric' => 'الامتار يجب أن تكون رقم',
+        ];
+
+        // If editing via wizard, we likely send all fields.
+        $request->validate([
+            'customerName' => 'required',
+            'fabrictype' => 'required',
+            'fabricwidth' => 'required|numeric',
+            'meters' => 'required|numeric',
+        ], $messages);
+
+        // Handle Customer Update if name changed
+        $customerId = $request->customerId;
+        $customerName = $request->customerName;
+
+        if ($request->filled('customerName')) {
+             $existingCustomer = Customers::where('name', $customerName)->first();
+             if ($existingCustomer) {
+                 $customerId = $existingCustomer->id;
+             } else {
+                 $newCustomer = Customers::create(['name' => $customerName]);
+                 $customerId = $newCustomer->id;
+             }
+        }
+        
+        $rollpress->customerId = $customerId;
+        $rollpress->fabrictype = $request->fabrictype;
+        $rollpress->fabricsrc = $request->fabricsrc;
+        $rollpress->fabriccode = $request->fabriccode;
+        $rollpress->fabricwidth = $request->fabricwidth;
+        $rollpress->meters = $request->meters;
+        $rollpress->paymentstatus = $request->paymentstatus == '1' ? 1 : 0;
+        $rollpress->papyershild = $request->papyershild;
+        $rollpress->price = $request->price;
+        $rollpress->notes = $request->notes;
+        
+        // Handle Status update if provided, mapping string/int
+        if ($request->filled('status')) {
+             // If incoming is "تم الانتهاء" or "1", set to 1. Else 0.
+             $statusInput = $request->status;
+             $rollpress->status = ($statusInput == '1' || $statusInput == 'تم الانتهاء') ? 1 : 0;
+        }
+
+        $rollpress->save();
+        
         return response()->json(['success' => true, 'rollpress' => $rollpress]);
     }
 

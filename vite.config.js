@@ -29,6 +29,7 @@ export default defineConfig({
                 'resources/core/css-rtl/plugins/forms/wizard.css',
                 'resources/core/js/scripts/forms/wizard-steps.js',
                 'resources/js/pages/presslist.js',
+                'resources/js/pages/rollpress_archive.js',
             ],
             refresh: true,
         }),

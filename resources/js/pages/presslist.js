@@ -82,10 +82,13 @@ $(document).ready(function () {
     pageLength: 4,
     buttons: [
       {
-        text: "<i class='feather icon-plus'></i> Add New",
-        action: function () {
+        text: "<i class='feather icon-plus'></i> تشفغيل خارجي",
+        action: function (e, dt, node, config) {
           // Slide down logic for the wizard form
-          $('#validation').slideToggle();
+          $('#validation').slideToggle(function () {
+            var isVisible = $(this).is(':visible');
+            dt.button(node).text(isVisible ? '<i class="feather icon-x"></i> اغـــلاق' : "<i class='feather icon-plus'></i> تشفغيل خارجي");
+          });
         },
         className: "btn-outline-primary"
       }
@@ -122,20 +125,7 @@ $(document).ready(function () {
 
   // --- End DataTable Initialization ---
 
-  // Handle Machine Selection
-  $('#data-machine').on('change', function () {
-    var selectedText = $(this).find("option:selected").text().toLowerCase();
 
-    if (selectedText.includes('dtf')) {
-      $('#data-width').val(58);
-      $('#data-pass').val(4).prop('disabled', false);
-    } else if (selectedText.includes('sublimation')) {
-      $('#data-width').val(150);
-      $('#data-pass').val(1).prop('disabled', true);
-    } else {
-      $('#data-pass').prop('disabled', false);
-    }
-  });
 
 
 
@@ -157,60 +147,9 @@ $(document).ready(function () {
   }
 
 
-  // Dropzone removed in favor of simple file input
-  var uploadedImagePaths = []; // Keep for compatibility if needed, though mostly unused now for upload
 
 
-  // Handle Paste Event
-  document.onpaste = function (event) {
-    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-    for (var index = 0; index < items.length; index++) {
-      var item = items[index];
-      if (item.kind === 'file') {
-        // add file to dropzone
-        myDropzone.addFile(item.getAsFile());
-      }
-    }
-  };
 
-  ////////////////////////////// On Edit /////////////////////////
-  $(document).on("click", ".action-edit", function (e) {
-    e.stopPropagation();
-    var $row = $(this).closest('tr');
-    var orderId = $row.find('.order_id').val();
-
-    if (!orderId) return;
-
-    $.ajax({
-      url: "/printers/" + orderId,
-      type: "GET",
-      success: function (order) {
-        // Populate Form
-        $('#data-customer-view').val(order.customers ? order.customers.name : '');
-        $('#data-fabric-type').val(order.fabrictype);
-        $('#data-source').val(order.fabricsrc);
-        $('#data-code').val(order.fabriccode);
-        $('#data-width').val(order.fabricwidth);
-        $('#data-paper-shield').val(order.papyershild);
-        $('#data-meters').val(order.meters);
-        $('#data-status').val(order.status);
-        $('#data-payment-status').val(order.paymentstatus);
-        $('#data-price').val(order.price);
-        $('#data-notes').val(order.notes);
-
-        editingOrderId = order.id;
-        $('.new-data-title h4').text('تعديل البيانات');
-        $('#saveDataBtn').text('حفظ التعديلات');
-
-        $(".add-new-data").addClass("show");
-        $(".overlay-bg").addClass("show");
-      },
-      error: function (xhr) {
-        console.error("Error fetching order:", xhr);
-        toastr.error("Could not fetch order details.", "Error");
-      }
-    });
-  });
 
 
   // //////////////////////////Save Data Button Logic ////////////////////////////////
@@ -244,7 +183,6 @@ $(document).ready(function () {
 
     formData.append('customerId', customerId || '');
     formData.append('customerName', customerName); // Send name for creation if ID null
-
     formData.append('fabrictype', $('#data-fabric-type').val());
     formData.append('fabricsrc', $('#data-source').val());
     formData.append('fabriccode', $('#data-code').val());
@@ -286,12 +224,27 @@ $(document).ready(function () {
         try {
           console.log("Order saved/updated:", response);
           var message = editingOrderId ? "Order Updated Successfully!" : "Order Added Successfully!";
-          toastr.success(message, "تمت العملية بنجاح");
+          Swal.fire({
+            type: 'success',
+            title: 'تم التسجيل بنجاح!',
+            showConfirmButton: false,
+            timer: 1500,
+            buttonsStyling: false,
+            confirmButtonClass: 'btn btn-primary',
+          });
 
-          // Refresh page or update table. Since validation logic is simple, let's reload for now to reflect new data from DB properly
-          setTimeout(function () {
-            location.reload();
-          }, 1000);
+          // Close Wizard
+          $('#validation').slideUp();
+
+          // Remove Row logic
+          if (linkedOrderId) {
+            var $row = $('input.order_id[value="' + linkedOrderId + '"]').closest('tr');
+            table.row($row).remove().draw();
+          }
+          if (editingOrderId) {
+            var $row = $('input.roll_id[value="' + editingOrderId + '"]').closest('tr');
+            table.row($row).remove().draw();
+          }
 
         } catch (err) {
           console.error("Error updating UI:", err);
@@ -452,89 +405,11 @@ $(document).ready(function () {
 
   // ///////////// multiple Bulk Delete & Actions Visibility ///////////////////////
 
-  // Use the table variable initialized above.
-  // We do NOT re-initialize it here.
-
-  // Initially hide actions dropdown if it exists logic isn't handled by CSS
-  // Note: data-list-view.js moves .actions-dropodown to the toolbar.
-  // We want to hide it when no rows are selected.
-  $('.actions-dropodown').hide();
-
-  table.on('select deselect', function () {
-    var selectedCount = table.rows({ selected: true }).count();
-    if (selectedCount > 0) {
-      $('.actions-dropodown').slideDown();
-    } else {
-      $('.actions-dropodown').slideUp();
+  // Auto-refresh every 30 seconds if wizard is not active
+  setInterval(function () {
+    if (!$('#validation').is(':visible')) {
+      location.reload();
     }
-  });
-
-  $(document).on("click", ".bulk-delete-btn", function (e) {
-    e.preventDefault();
-    var selectedRows = table.rows({ selected: true });
-    var selectedIds = [];
-
-    selectedRows.nodes().each(function (row) {
-      var id = $(row).find('.order_id').val();
-      if (id) selectedIds.push(id);
-    });
-
-    if (selectedIds.length === 0) {
-      Swal.fire({
-        title: "تنبيه",
-        text: "الرجاء تحديد طلب واحد على الأقل للحذف.",
-        type: "warning",
-        confirmButtonClass: 'btn btn-primary',
-        buttonsStyling: false,
-      });
-      return;
-    }
-
-    Swal.fire({
-      title: 'هل انت متاكد من حذف ' + selectedIds.length + ' طلب؟',
-      text: "لن تتمكن من التراجع عن هذا!",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'نعم، احذفهم!',
-      confirmButtonClass: 'btn btn-primary',
-      cancelButtonClass: 'btn btn-danger ml-1',
-      buttonsStyling: false,
-    }).then(function (result) {
-      if (result.value) {
-        $.ajax({
-          url: "/printers/bulk-delete",
-          type: "POST",
-          data: {
-            ids: selectedIds,
-            _token: $('meta[name="csrf-token"]').attr('content')
-          },
-          success: function (response) {
-            selectedRows.remove().draw();
-            $('.actions-dropodown').hide(); // Hide actions since selection is gone
-            Swal.fire({
-              type: 'success',
-              title: 'تم الحذف!',
-              text: 'تم حذف الطلبات المحددة بنجاح.',
-              showConfirmButton: false,
-              timer: 1500,
-              buttonsStyling: false,
-            });
-          },
-          error: function (xhr) {
-            console.error("Bulk delete error:", xhr);
-            Swal.fire({
-              title: "خطأ!",
-              text: "حدث خطأ أثناء الحذف. حاول مرة أخرى.",
-              type: "error",
-              confirmButtonClass: 'btn btn-primary',
-              buttonsStyling: false,
-            });
-          }
-        });
-      }
-    });
-  });
+  }, 30000);
 
 });
