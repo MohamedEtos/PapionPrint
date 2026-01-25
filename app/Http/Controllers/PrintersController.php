@@ -32,7 +32,7 @@ class PrintersController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'file' => 'image|mimes:jpeg,png,jpg,gif|max:5000',
+            'file' => 'image|mimes:jpeg,png,jpg,gif,tiff,tif,webp|max:25000',
         ], [
             'image' => 'يجب أن يكون :attribute صورة.',
             'mimes' => 'يجب أن يكون :attribute من نوع: :values.',

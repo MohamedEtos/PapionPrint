@@ -86,7 +86,7 @@ $(document).ready(function () {
       url: "/printers/upload-image",
       paramName: "file",
       maxFiles: 10,
-      acceptedFiles: '.jpg,.jpeg,.png,.gif',
+      acceptedFiles: '.jpg,.jpeg,.png,.gif,.tiff,.tif,.webp',
       addRemoveLinks: true,
       resizeHeight: 110,
       resizeMimeType: 'image/webp',
@@ -118,7 +118,7 @@ $(document).ready(function () {
         return _updateMaxFilesReachedClass();
       },
       error: function (file, response) {
-        toastr.error("Upload failed:", response);
+        toastr.error("Upload failed:", response.message);
       }
     });
   } catch (e) {
