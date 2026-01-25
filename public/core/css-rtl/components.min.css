@@ -867,7 +867,7 @@ body.fixed-footer footer.footer-dark {
 }
 
 .main-menu .navbar-header .navbar-brand .brand-logo {
-    background: url(core/images/logo/vuexy-logo.png) -65px -54px no-repeat;
+    background: url(core/images/logo/vuexy-logo.svg) -65px -54px no-repeat;
     height: 24px;
     width: 35px
 }
