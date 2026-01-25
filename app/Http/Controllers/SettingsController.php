@@ -12,7 +12,7 @@ class SettingsController extends Controller
         $setting = Setting::first();
         if (!$setting) {
             $setting = Setting::create([
-                'site_name' => 'Papion Print',
+                'site_name' => 'Papion System',
                 'primary_color' => '#7367F0',
                 'secondary_color' => '#EA5455',
             ]);

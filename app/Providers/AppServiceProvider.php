@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
                      // Fallback in case migration ran but no seed, though migration inserts it.
                      // Just an empty object or defaults to avoid errors.
                     $setting = new \App\Models\Setting([
-                        'site_name' => 'Papion Print',
+                        'site_name' => 'Papion System',
                         'primary_color' => '#7367F0',
                         'secondary_color' => '#EA5455',
                     ]);
