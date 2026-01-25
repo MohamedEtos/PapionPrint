@@ -50,18 +50,18 @@ $(document).ready(function () {
             { data: 'action', orderable: false, searchable: false, defaultContent: '' }, // 1
             { data: 'image', orderable: false, searchable: false, defaultContent: '' }, // 2
             { data: 'customer.name', defaultContent: '-' }, // 3
-            { data: 'fabrictype' }, // 4
-            { data: 'fabricsrc' }, // 5
-            { data: 'fabriccode' }, // 6
-            { data: 'fabricwidth' }, // 7
-            { data: 'meters' }, // 8
-            { data: 'status' }, // 9
-            { data: 'papyershild' }, // 10
-            { data: 'paymentstatus' }, // 11
-            { data: 'price' }, // 12
-            { data: 'notes' }, // 13
-            { data: 'created_at' }, // 14
-            { data: 'updated_at' } // 15
+            { data: 'fabrictype',defaultContent: '-' }, // 4
+            { data: 'fabricsrc',defaultContent: '-' }, // 5
+            { data: 'fabriccode',defaultContent: '-' }, // 6
+            { data: 'fabricwidth',defaultContent: '-' }, // 7
+            { data: 'meters',defaultContent: '-' }, // 8
+            { data: 'status',defaultContent: '-' }, // 9
+            { data: 'papyershild',defaultContent: '-' }, // 10
+            { data: 'paymentstatus',defaultContent: '-' }, // 11
+            { data: 'price',defaultContent: '-' }, // 12
+            { data: 'notes',defaultContent: '-' }, // 13
+            { data: 'created_at',defaultContent: '-' }, // 14
+            { data: 'updated_at',defaultContent: '-' } // 15
         ],
         columnDefs: [
             {

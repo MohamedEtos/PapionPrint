@@ -28,6 +28,9 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/archive', [App\Http\Controllers\RollpressController::class, 'archive'])->name('rollpress.archive');
         Route::post('/bulk-delete', [App\Http\Controllers\RollpressController::class, 'bulkDelete'])->name('rollpress.bulk_delete');
         Route::put('/update/{id}', [App\Http\Controllers\RollpressController::class, 'update'])->name('rollpress.update');
+        Route::get('/trash', [App\Http\Controllers\RollpressController::class, 'trash'])->name('rollpress.trash');
+        Route::post('/restore/{id}', [App\Http\Controllers\RollpressController::class, 'restore'])->name('rollpress.restore');
+        Route::delete('/force-delete/{id}', [App\Http\Controllers\RollpressController::class, 'forceDelete'])->name('rollpress.force_delete');
     });
 
     Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');

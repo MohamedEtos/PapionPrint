@@ -40,6 +40,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
+                    <div class="form-group breadcrum-right">
+                        <a href="{{ route('rollpress.trash') }}" class="btn-icon btn btn-danger btn-round btn-sm" type="button"><i class="feather icon-trash-2"></i> المحذوفات</a>
+                    </div>
+                </div>
             </div>
             <div class="content-body">
                 <!-- Form wizard for Editing (Hidden by default) -->

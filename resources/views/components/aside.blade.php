@@ -44,9 +44,10 @@
                
                         <li class="{{ request()->routeIs('presslist') ? 'active' : '' }}"><a href="{{route('presslist')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اوردات المكبس </span></a>
                         </li>
-                        <li class="{{ request()->routeIs('AddRollpress') ? 'active' : '' }}"><a href="{{route('AddRollpress')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">  تسجيل اوردر </span></a>
-                        </li>
+
                         <li class="{{ request()->routeIs('rollpress.archive') ? 'active' : '' }}"><a href="{{route('rollpress.archive')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">ارشيف المكبس</span></a>
+                        </li>
+                        <li class="{{ request()->routeIs('rollpress.trash') ? 'active' : '' }}"><a href="{{route('rollpress.trash')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
                         </li>
                     </ul>
                 </li>

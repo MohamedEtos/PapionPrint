@@ -249,4 +249,67 @@ class RollpressController extends Controller
         return response()->json(['success' => true, 'rollpress' => $rollpress]);
     }
 
+    public function trash(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Rollpress::onlyTrashed()->with('customer', 'order.customers', 'order.ordersImgs');
+            
+            // Search logic refined
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $searchValue = $request->search['value'];
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('id', 'like', "%{$searchValue}%")
+                      ->orWhere('fabrictype', 'like', "%{$searchValue}%")
+                      ->orWhere('fabriccode', 'like', "%{$searchValue}%")
+                      ->orWhere('notes', 'like', "%{$searchValue}%")
+                      ->orWhereHas('customer', function ($q) use ($searchValue) {
+                          $q->where('name', 'like', "%{$searchValue}%");
+                      });
+                });
+            }
+
+            $query->orderBy('deleted_at', 'desc');
+
+            $totalRecords = Rollpress::onlyTrashed()->count();
+            $filteredRecords = $query->count();
+
+            if ($request->has('start') && $request->length != -1) {
+                $query->skip($request->start)->take($request->length);
+            }
+
+            $data = $query->get();
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $filteredRecords,
+                'data' => $data
+            ]);
+        }
+        
+        $customers = Customers::all();
+
+        return view('rollpress.trash', ['customers' => $customers]);
+    }
+
+    public function restore($id)
+    {
+        $rollpress = Rollpress::withTrashed()->find($id);
+        if ($rollpress && $rollpress->trashed()) {
+            $rollpress->restore();
+            return response()->json(['success' => 'Order restored successfully']);
+        }
+        return response()->json(['error' => 'Order not found or not deleted'], 404);
+    }
+
+    public function forceDelete($id)
+    {
+        $rollpress = Rollpress::withTrashed()->find($id);
+        if ($rollpress) {
+            $rollpress->forceDelete();
+            return response()->json(['success' => 'Order permanently deleted']);
+        }
+        return response()->json(['error' => 'Order not found'], 404);
+    }
+
 }
