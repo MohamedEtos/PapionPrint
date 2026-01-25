@@ -95,16 +95,26 @@ $(document).ready(function () {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
       success: function (file, response) {
+        file.serverFileName = response.path; // Store server path on file object
         uploadedImagePaths.push(response.path);
         console.log("Images uploaded:", uploadedImagePaths);
-        toastr.success("uploadedImagePaths");
-
+        toastr.success("Image uploaded successfully");
       },
       removedfile: function (file) {
         if (file.previewElement != null && file.previewElement.parentNode != null) {
           file.previewElement.parentNode.removeChild(file.previewElement);
         }
-        // Ideally we should also remove from uploadedImagePaths array here
+
+        // Remove from uploadedImagePaths array
+        var path = file.serverFileName;
+        if (path) {
+          var index = uploadedImagePaths.indexOf(path);
+          if (index !== -1) {
+            uploadedImagePaths.splice(index, 1);
+            console.log("Image removed. Remaining:", uploadedImagePaths);
+          }
+        }
+
         return _updateMaxFilesReachedClass();
       },
       error: function (file, response) {
@@ -154,6 +164,23 @@ $(document).ready(function () {
           $('#data-price').val(order.printingprices.totalPrice);
         }
         $('#data-notes').val(order.notes);
+
+        // Populate Images in Dropzone
+        uploadedImagePaths = []; // Clear current
+        if (typeof myDropzone !== 'undefined' && myDropzone) {
+          myDropzone.removeAllFiles(true); // true to avoid triggering removedfile events that might mess up logic if not careful, but we reset array anyway
+
+          if (order.orders_imgs && order.orders_imgs.length > 0) {
+            order.orders_imgs.forEach(function (img) {
+              var mockFile = { name: "Image", size: 12345, serverFileName: img.path };
+              myDropzone.emit("addedfile", mockFile);
+              myDropzone.emit("thumbnail", mockFile, "/storage/" + img.path);
+              myDropzone.emit("complete", mockFile);
+              myDropzone.files.push(mockFile); // Add to files array for Dropzone to track count
+              uploadedImagePaths.push(img.path);
+            });
+          }
+        }
 
         // calc pic 
         var copies = parseFloat($('#data-copies').val()) || 0;

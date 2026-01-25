@@ -243,6 +243,36 @@ class PrintersController extends Controller
 
         $printer->save();
 
+        // Sync Images
+        // If image_paths is present (array), we sync. If key is missing, we do nothing (assume no change).
+        // Frontend 'AddNewOrder.js' typically sends 'image_paths' array.
+            
+        if ($request->has('image_paths')) {
+            $newImages = $request->image_paths ?? []; // ensure array
+            $currentImages = $printer->ordersImgs()->pluck('path')->toArray();
+
+            // Determine deleted (In Current but Not in New)
+            $toDelete = array_diff($currentImages, $newImages);
+            // Determine added (In New but Not in Current)
+            $toAdd = array_diff($newImages, $currentImages); 
+            
+            // Delete removed
+            if (!empty($toDelete)) {
+                 \App\Models\OrdersImg::where('orderId', $printer->id)->whereIn('path', $toDelete)->delete();
+                 // Optionally delete file from storage:
+                 // foreach($toDelete as $path) Storage::disk('public')->delete($path);
+            }
+
+            // Add new
+            foreach ($toAdd as $path) {
+                 \App\Models\OrdersImg::create([ 
+                     'orderId' => $printer->id, 
+                     'path' => $path, 
+                     'type' => 'image'
+                 ]);
+            }
+        }
+
         // Update Price
         $priceRecord = \App\Models\Printingprices::where('orderId', $printer->id)->first();
         if ($priceRecord) {
