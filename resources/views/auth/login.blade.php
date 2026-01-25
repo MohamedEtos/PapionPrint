@@ -71,8 +71,8 @@
                                               <form method="POST" action="{{ route('login') }}">
                                                 @csrf
                                                     <fieldset class="form-label-group form-group position-relative has-icon-left">
-                                                       <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                                                        @error('email')
+                                                       <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                                                        @error('username')
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
@@ -80,7 +80,7 @@
                                                         <div class="form-control-position">
                                                             <i class="feather icon-user"></i>
                                                         </div>
-                                                        <label for="user-name">Username</label>
+                                                        <label for="username">اسم المستخدم</label>
                                                     </fieldset>
 
                                                     <fieldset class="form-label-group position-relative has-icon-left">
@@ -100,15 +100,13 @@
                                                         <div class="text-left">
                                                             <fieldset class="checkbox">
                                                                 <div class="vs-checkbox-con vs-checkbox-primary">
-                                                                    <input type="checkbox">
+                                                                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                                                     <span class="vs-checkbox">
                                                                         <span class="vs-checkbox--check">
                                                                             <i class="vs-icon feather icon-check"></i>
                                                                         </span>
-                                                                        <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                                                     </span>
-
-                                                                    <label class="form-check-label" for="remember">
+                                                                    <label class="" for="remember">
                                                                         {{ __('Remember Me') }}
                                                                     </label>                                              
                                                                 </div>

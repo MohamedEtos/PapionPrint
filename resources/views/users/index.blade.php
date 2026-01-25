@@ -63,6 +63,7 @@
                                 <tr>
                                     <th></th>
                                     <th>الاسم</th>
+                                    <th>اسم المستخدم</th>
                                     <th>البريد الالكتروني</th>
                                     <th>الأدوار</th>
                                     <th>تاريخ الانشاء</th>
@@ -74,6 +75,7 @@
                                 <tr>
                                     <td><input type="hidden" class="user_id" value="{{ $user->id }}"></td>
                                     <td class="product-name user-name">{{ $user->name }}</td>
+                                    <td class="product-category user-username">{{ $user->username }}</td>
                                     <td class="product-category user-email">{{ $user->email }}</td>
                                     <td class="product-category">
                                         @foreach($user->roles as $role)
@@ -90,6 +92,7 @@
                                         <span class="hover_action action-edit"
                                               data-id="{{ $user->id }}"
                                               data-name="{{ $user->name }}"
+                                              data-username="{{ $user->username }}"
                                               data-email="{{ $user->email }}">
                                             <i class="feather icon-edit"></i>
                                         </span>
@@ -121,6 +124,10 @@
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-name">اسم المستخدم</label>
                                             <input type="text" class="form-control" id="data-name">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-username">Username</label>
+                                            <input type="text" class="form-control" id="data-username">
                                         </div>
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-email">البريد الالكتروني</label>

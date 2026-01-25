@@ -4,6 +4,7 @@ $(document).ready(function () {
     $(".dt-buttons .btn-outline-primary").on("click", function () {
         $('#data-id').val('');
         $('#data-name').val('');
+        $('#data-username').val('');
         $('#data-email').val('');
         $('#data-password').val('');
         $('.role-checkbox').prop('checked', false);
@@ -27,6 +28,7 @@ $(document).ready(function () {
         // Try getting data from attribute first, then fallback to DOM parsing
         var userId = $btn.data('id') || $row.find('.user_id').val();
         var userName = $btn.data('name') || $row.find('.user-name').text().trim();
+        var userUsername = $btn.data('username') || $row.find('.user-username').text().trim();
         var userEmail = $btn.data('email') || $row.find('.user-email').text().trim();
         var roles = [];
 
@@ -36,6 +38,7 @@ $(document).ready(function () {
 
         $('#data-id').val(userId);
         $('#data-name').val(userName);
+        $('#data-username').val(userUsername);
         $('#data-email').val(userEmail);
         $('#data-password').val('');
 
@@ -113,6 +116,7 @@ $(document).ready(function () {
 
         var id = $('#data-id').val();
         var name = $('#data-name').val();
+        var username = $('#data-username').val();
         var email = $('#data-email').val();
         var password = $('#data-password').val();
         var selectedRoles = [];
@@ -121,10 +125,10 @@ $(document).ready(function () {
             selectedRoles.push($(this).val());
         });
 
-        if (!name || !email) {
+        if (!name || !email || !username) {
             Swal.fire({
                 title: "خطأ!",
-                text: "يرجى ادخال الاسم والبريد الالكتروني",
+                text: "يرجى ادخال الاسم واسم المستخدم والبريد الالكتروني",
                 type: "error",
                 confirmButtonClass: 'btn btn-primary',
                 buttonsStyling: false,
@@ -150,6 +154,7 @@ $(document).ready(function () {
             type: "POST",
             data: {
                 name: name,
+                username: username,
                 email: email,
                 password: password,
                 roles: selectedRoles,

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'محمد محروس',
+            'username' => 'admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);
@@ -34,7 +35,7 @@ class DatabaseSeeder extends Seeder
             PrintingpricesSeedere::class,
             OrdersImgSeedere::class,
             RolesAndPermissionsSeeder::class,
-            // ArchivedOrdersSeeder::class,
+            ArchivedOrdersSeeder::class,
         ]);
     }
 }
