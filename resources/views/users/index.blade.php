@@ -87,7 +87,12 @@
                                     </td>
                                     <td class="product-price">{{ $user->created_at->format('Y-m-d') }}</td>
                                     <td class="product-action">
-                                        <span class="hover_action action-edit"><i class="feather icon-edit"></i></span>
+                                        <span class="hover_action action-edit"
+                                              data-id="{{ $user->id }}"
+                                              data-name="{{ $user->name }}"
+                                              data-email="{{ $user->email }}">
+                                            <i class="feather icon-edit"></i>
+                                        </span>
                                         <span class="hover_action action-delete text-danger"><i class="feather icon-trash"></i></span>
                                     </td>
                                 </tr>

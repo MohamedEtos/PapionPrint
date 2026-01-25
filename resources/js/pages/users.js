@@ -19,12 +19,15 @@ $(document).ready(function () {
     });
 
     // On Edit
-    $('.action-edit').on("click", function (e) {
+    $(document).on("click", ".action-edit", function (e) {
         e.stopPropagation();
-        var $row = $(this).closest('td').parent('tr');
-        var userId = $row.find('.user_id').val();
-        var userName = $row.find('.user-name').text();
-        var userEmail = $row.find('.user-email').text();
+        var $row = $(this).closest('tr');
+        var $btn = $(this);
+
+        // Try getting data from attribute first, then fallback to DOM parsing
+        var userId = $btn.data('id') || $row.find('.user_id').val();
+        var userName = $btn.data('name') || $row.find('.user-name').text().trim();
+        var userEmail = $btn.data('email') || $row.find('.user-email').text().trim();
         var roles = [];
 
         $row.find('.role-item').each(function () {
@@ -49,7 +52,7 @@ $(document).ready(function () {
     });
 
     // On Delete
-    $('.action-delete').on("click", function (e) {
+    $(document).on("click", ".action-delete", function (e) {
         e.stopPropagation();
         var $row = $(this).closest('td').parent('tr');
         var userId = $row.find('.user_id').val();
@@ -119,12 +122,24 @@ $(document).ready(function () {
         });
 
         if (!name || !email) {
-            alert("يرجى ادخال الاسم والبريد الالكتروني");
+            Swal.fire({
+                title: "خطأ!",
+                text: "يرجى ادخال الاسم والبريد الالكتروني",
+                type: "error",
+                confirmButtonClass: 'btn btn-primary',
+                buttonsStyling: false,
+            });
             return;
         }
 
         if (!id && !password) {
-            alert("يرجى ادخال كلمة المرور للمستخدم الجديد");
+            Swal.fire({
+                title: "خطأ!",
+                text: "يرجى ادخال كلمة المرور للمستخدم الجديد",
+                type: "error",
+                confirmButtonClass: 'btn btn-primary',
+                buttonsStyling: false,
+            });
             return;
         }
 
@@ -138,6 +153,7 @@ $(document).ready(function () {
                 email: email,
                 password: password,
                 roles: selectedRoles,
+                update_roles: true,
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function (response) {
@@ -155,11 +171,25 @@ $(document).ready(function () {
             },
             error: function (xhr) {
                 console.error("Error saving user:", xhr);
-                var message = "Error saving user";
+                var message = "حدث خطأ أثناء الحفظ";
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     message = xhr.responseJSON.message;
                 }
-                alert(message);
+                // Check for validation errors
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    message = "";
+                    $.each(xhr.responseJSON.errors, function (key, value) {
+                        message += value[0] + "\n";
+                    });
+                }
+
+                Swal.fire({
+                    title: "خطأ!",
+                    text: message,
+                    type: "error",
+                    confirmButtonClass: 'btn btn-primary',
+                    buttonsStyling: false,
+                });
             }
         });
     });

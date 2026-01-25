@@ -43,7 +43,7 @@ class UsersController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$id,
-            'roles' => 'array'
+            'roles' => 'nullable|array'
         ]);
 
         $user = User::findOrFail($id);
@@ -56,8 +56,13 @@ class UsersController extends Controller
             $user->update(['password' => Hash::make($request->password)]);
         }
 
-        if($request->has('roles')){
-            $user->syncRoles($request->roles);
+        // Always sync roles if the request contains 'update_roles' flag, 
+        // or if 'roles' is present. If 'roles' is missing but we are updating, 
+        // it might mean unchecking all roles (if we send an empty array from frontend).
+        // Best practice: Frontend should send 'roles' as empty array if none selected.
+        
+        if ($request->has('roles') || $request->has('update_roles')) {
+            $user->syncRoles($request->roles ?? []);
         }
 
         return response()->json(['success' => 'User updated successfully', 'user' => $user->load('roles')]);
