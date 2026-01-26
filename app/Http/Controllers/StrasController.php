@@ -30,13 +30,15 @@ class StrasController extends Controller
             'customerId' => 'nullable|exists:customers,id',
             'height' => 'nullable|numeric',
             'width' => 'nullable|numeric',
+            'cards_count' => 'nullable|integer',
+            'pieces_per_card' => 'nullable|integer',
             'layers' => 'required|array',
             'layers.*.size' => 'required|string',
             'layers.*.count' => 'required|numeric',
             'image' => 'nullable|image',
         ]);
 
-        $data = $request->only(['customerId', 'height', 'width', 'notes']);
+        $data = $request->only(['customerId', 'height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('stras_images', 'public');
@@ -69,11 +71,13 @@ class StrasController extends Controller
             'customerId' => 'nullable|exists:customers,id',
             'height' => 'nullable|numeric',
             'width' => 'nullable|numeric',
+            'cards_count' => 'nullable|integer',
+            'pieces_per_card' => 'nullable|integer',
             'layers' => 'nullable|array',
             'image' => 'nullable|image',
         ]);
 
-        $data = $request->only(['customerId', 'height', 'width', 'notes']);
+        $data = $request->only(['customerId', 'height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
         
         if ($request->hasFile('image')) {
              $data['image_path'] = $request->file('image')->store('stras_images', 'public');

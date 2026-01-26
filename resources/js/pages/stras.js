@@ -2,6 +2,17 @@ $(document).ready(function () {
     // --- Wizard Initialization ---
     var form = $(".steps-validation").show();
 
+    // --- Calculation Helper ---
+    $('#data-required-pieces, #data-pieces-per-card').on('input', function () {
+        var required = parseFloat($('#data-required-pieces').val());
+        var perCard = parseFloat($('#data-pieces-per-card').val());
+
+        if (required > 0 && perCard > 0) {
+            var cards = Math.ceil(required / perCard);
+            $('#data-cards-count').val(cards);
+        }
+    });
+
     $(".steps-validation").steps({
         headerTag: "h6",
         bodyTag: "fieldset",
@@ -169,7 +180,7 @@ $(document).ready(function () {
     });
 
     function resetForm() {
-        $('#data-customer, #data-customer-view, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes, #data-height').val('');
+        $('#data-customer, #data-customer-view, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes, #data-height, #data-cards-count, #data-pieces-per-card, #data-required-pieces').val('');
         $('#data-status').val('بانتظار اجراء');
         $('#data-payment-status').val('0');
         $('#data-image-upload').val('');
@@ -195,6 +206,8 @@ $(document).ready(function () {
 
         formData.append('height', $('#data-height').val());
         formData.append('width', $('#data-width').val());
+        formData.append('cards_count', $('#data-cards-count').val());
+        formData.append('pieces_per_card', $('#data-pieces-per-card').val());
         formData.append('notes', $('#data-notes').val());
 
         // Layers
@@ -316,23 +329,31 @@ $(document).ready(function () {
 
     function calculateTotals() {
         var totals = {};
+        var totalHeight = 0;
+        var totalPiecesCalc = 0; // For cards * pieces_per_card
 
         // Get selected rows data
         var selectedRows = table.rows({ selected: true }).nodes();
         var anyChecked = selectedRows.length > 0;
 
         $.each(selectedRows, function (index, row) {
-            // Find the checkbox or hidden input with layers data in this row
-            // Since we added data-layers to the custom checkbox, let's try to find it.
-            // But DataTable might have replaced the first column content.
-            // Let's check how we populated the data. 
-            // We put it on: <input type="checkbox" class="stras-checkbox" data-layers="...">
+            var $row = $(row);
+            var height = parseFloat($row.data('height')) || 0;
+            var cardsCount = parseFloat($row.data('cards-count')) || 0;
+            var piecesPerCard = parseFloat($row.data('pieces-per-card')) || 0;
 
-            // If DataTable checkbox plugin is used, it might keep the original input or replace it.
-            // The safely fallback is to retrieve it from the TR itself, 
-            // assuming we moved data-layers to the TR in the blade file.
+            if (cardsCount > 0) {
+                totalHeight += height * cardsCount / 100; // Assuming height is cm and we want meters as per previous code logic? Previous logic had /100.
+                // Wait, previous file content showed /100 added by user manually? 
+                // In step 318 user pasted full file content. It had `/100`.
+                // I will preserve that.
+            }
 
-            var layersData = $(row).data('layers');
+            if (cardsCount > 0 && piecesPerCard > 0) {
+                totalPiecesCalc += cardsCount * piecesPerCard;
+            }
+
+            var layersData = $row.data('layers');
 
             if (layersData) {
                 if (typeof layersData === 'string') {
@@ -359,7 +380,22 @@ $(document).ready(function () {
         var resultsContainer = $('#stras-calculator-results');
 
         if (anyChecked) {
-            var html = '<i class="feather icon-bar-chart-2"></i> اجمالي الاستراس: &nbsp;&nbsp;';
+            var html = '';
+
+            // Total Height
+            if (totalHeight > 0) {
+                html += '<span class="badge badge-info mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-maximize-2"></i>  طول الورق : ' + totalHeight.toFixed(2) + ' متر</span>';
+            }
+
+            // Total Calculated Pieces (Cards * Pieces/Card)
+            if (totalPiecesCalc > 0) {
+                html += '<span class="badge badge-warning mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-package"></i> اجمالي القطع : ' + totalPiecesCalc + ' </span><br>';
+            } else if (totalHeight > 0) {
+                // Break line if we have height but no pieces calc, just for layout
+                html += '<br>';
+            }
+
+            html += '<i class="feather icon-bar-chart-2"></i> اجمالي الاستراس: &nbsp;&nbsp;';
             var parts = [];
 
             Object.keys(totals).sort((a, b) => a - b).forEach(function (size) {

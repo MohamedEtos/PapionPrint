@@ -70,14 +70,32 @@
                                                     </div>
                                                      <div class="col-md-6">
                                                         <div class="form-group">
-                                                             <label for="data-height">الطول</label>
-                                                             <input type="number" step="0.01" class="form-control" id="data-height" name="height">
+                                                             <label for="data-height ">الطول</label>
+                                                             <input type="number" step="0.01" class="form-control required " id="data-height" name="height">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                              <label for="data-width">العرض</label>
-                                                             <input type="number" step="0.01" class="form-control" id="data-width" name="width">
+                                                             <input type="number" step="0.01" class="form-control required " value="24" id="data-width" name="width">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                             <label for="data-required-pieces">عدد القطع المطلوبة </label>
+                                                             <input type="number" class="form-control" id="data-required-pieces" placeholder="ادخال لحساب عدد الكروت">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                             <label for="data-cards-count">عدد الكروت </label>
+                                                             <input type="number" class="form-control required " id="data-cards-count" name="cards_count" >
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                             <label for="data-pieces-per-card">عدد القطع في الكارت </label>
+                                                             <input type="number" class="form-control required " id="data-pieces-per-card" name="pieces_per_card" >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -171,6 +189,7 @@
                                     <th>اسم العميل</th>
                                     <th>الطول</th>
                                     <th>العرض</th>
+                                    <th>اجمالي القطع</th>
                                     <th>المراحل</th>
                                     <th>ملاحظات</th>
                                     <th>التاريخ</th>
@@ -179,7 +198,7 @@
                             <tbody>
                                 {{-- Loop through Stras Records --}}
                                 @foreach ($Records as $Record)
-                                <tr data-layers="{{ json_encode($Record->layers) }}">
+                                <tr data-layers="{{ json_encode($Record->layers) }}" data-height="{{ $Record->height }}" data-cards-count="{{ $Record->cards_count }}" data-pieces-per-card="{{ $Record->pieces_per_card }}">
                                     <td>
                                         <div class="vs-checkbox-con vs-checkbox-primary">
                                             <input type="checkbox" class="stras-checkbox">
@@ -201,6 +220,13 @@
                                     <td class="product-name">{{ $Record->customer->name ?? '-' }} </td>
                                     <td class="product-category">{{ $Record->height ?? '-' }}</td>
                                     <td class="product-category">{{ $Record->width ?? '-' }}</td>
+                                    <td class="product-category">
+                                        @if($Record->cards_count && $Record->pieces_per_card)
+                                            {{ $Record->cards_count * $Record->pieces_per_card }}
+                                        @else
+                                            <span class="text-muted">لم يحسب</span>
+                                        @endif
+                                    </td>
                                     <td class="product-category">
                                         @foreach($Record->layers as $layer)
                                             <span class="badge badge-primary">{{ $layer->size }}: {{ $layer->count }}</span>

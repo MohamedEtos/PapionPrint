@@ -14,6 +14,8 @@ class Stras extends Model
         'customerId',
         'height',
         'width',
+        'cards_count',
+        'pieces_per_card',
         'image_path',
         'notes',
     ];
