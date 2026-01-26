@@ -77,4 +77,18 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     // Settings Routes
     Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
+
+    // Error Logs
+    Route::get('/error-logs', [App\Http\Controllers\Admin\ErrorLogController::class, 'index'])->name('admin.error_logs.index');
+    Route::get('/error-logs/{id}', [App\Http\Controllers\Admin\ErrorLogController::class, 'show'])->name('admin.error_logs.show');
+    Route::delete('/error-logs/{id}', [App\Http\Controllers\Admin\ErrorLogController::class, 'destroy'])->name('admin.error_logs.destroy');
+    Route::post('/error-logs/destroy-all', [App\Http\Controllers\Admin\ErrorLogController::class, 'destroyAll'])->name('admin.error_logs.destroy_all');
+
+    // Stras Routes
+    Route::prefix('stras')->group(function () {
+        Route::get('/', [App\Http\Controllers\StrasController::class, 'index'])->name('stras.index');
+        Route::post('/store', [App\Http\Controllers\StrasController::class, 'store'])->name('stras.store');
+        Route::put('/update/{id}', [App\Http\Controllers\StrasController::class, 'update'])->name('stras.update');
+        Route::delete('/delete/{id}', [App\Http\Controllers\StrasController::class, 'destroy'])->name('stras.delete');
+    });
 });

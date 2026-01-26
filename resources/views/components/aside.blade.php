@@ -53,6 +53,14 @@
                     </ul>
                 </li>
 
+                {{-- Stras Menu Item --}}
+                <li class=" nav-item"><a href="#"><i class="feather icon-star"></i><span class="menu-title" data-i18n="Ecommerce">الاستراس</span></a>
+                    <ul class="menu-content">
+                        <li class="{{ request()->routeIs('stras.index') ? 'active' : '' }}"><a href="{{route('stras.index')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اوردات الاستراس</span></a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class=" nav-item"><a href="app-email.html"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Email">Email</span></a>
                 </li>
                 <li class=" nav-item"><a href="app-chat.html"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
@@ -68,12 +76,19 @@
                 <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
                 </li>
 
-                <li class=" nav-item {{ request()->routeIs('settings.index') ? 'active' : '' }}">
-                    <a href="{{ route('settings.index') }}">
-                        <i class="feather icon-settings"></i>
-                        <span class="menu-title" data-i18n="Settings">اعدادات الموقع</span>
-                    </a>
-                </li>
+    <li class=" nav-item {{ request()->routeIs('settings.index') ? 'active' : '' }}">
+        <a href="{{ route('settings.index') }}">
+            <i class="feather icon-settings"></i>
+            <span class="menu-title" data-i18n="Settings">اعدادات الموقع</span>
+        </a>
+    </li>
+
+    <li class=" nav-item {{ request()->routeIs('admin.error_logs.*') ? 'active' : '' }}">
+        <a href="{{ route('admin.error_logs.index') }}">
+            <i class="feather icon-alert-triangle"></i>
+            <span class="menu-title" data-i18n="Error Logs">تقارير الأخطاء</span>
+        </a>
+    </li>
 
                 <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">User</span></a>
                     <ul class="menu-content">
