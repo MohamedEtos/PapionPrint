@@ -12,15 +12,9 @@ class Stras extends Model
     protected $fillable = [
         'orderId',
         'customerId',
-        'fabrictype',
-        'fabricsrc',
-        'fabriccode',
-        'fabricwidth',
-        'meters',
-        'status',
-        'paymentstatus',
-        'papyershild',
-        'price',
+        'height',
+        'width',
+        'image_path',
         'notes',
     ];
 
@@ -32,5 +26,10 @@ class Stras extends Model
     public function customer()
     {
         return $this->belongsTo(Customers::class, 'customerId');
+    }
+
+    public function layers()
+    {
+        return $this->hasMany(StrasLayer::class, 'stras_id');
     }
 }

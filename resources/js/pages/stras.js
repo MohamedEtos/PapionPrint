@@ -104,8 +104,72 @@ $(document).ready(function () {
     var editingOrderId = null;
     var linkedOrderId = null;
 
+    // --- Dynamic Layers Logic ---
+    let layerIndex = 1;
+
+    $('#add-layer-btn').on('click', function () {
+        var firstRow = $('#layers-container .layer-row').first();
+        var newRow = firstRow.clone();
+
+        // Update names to have unique index
+        newRow.find('.layer-size').attr('name', 'layers[' + layerIndex + '][size]').val('');
+        newRow.find('.layer-count').attr('name', 'layers[' + layerIndex + '][count]').val('');
+
+        $('#layers-container').append(newRow);
+        layerIndex++;
+    });
+
+    $(document).on('click', '.remove-layer-btn', function () {
+        if ($('#layers-container .layer-row').length > 1) {
+            $(this).closest('.layer-row').remove();
+        } else {
+            // If only one row, just clear it
+            $(this).closest('.layer-row').find('input, select').val('');
+        }
+    });
+
+    // --- Image Paste Logic ---
+    // Listed to paste on the document (or focus area)
+    $(document).on('paste', function (e) {
+        var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        for (var index in items) {
+            var item = items[index];
+            if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                var blob = item.getAsFile();
+                var file = new File([blob], "pasted-image.png", { type: blob.type });
+
+                // Set to file input
+                let container = new DataTransfer();
+                container.items.add(file);
+                $('#data-image-upload')[0].files = container.files;
+
+                // Preview
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    $('#pasted-image-preview img').attr('src', event.target.result);
+                    $('#pasted-image-preview').show();
+                };
+                reader.readAsDataURL(blob);
+
+                toastr.success("Image pasted successfully!", "Success");
+            }
+        }
+    });
+
+    // Handle normal file input change for preview
+    $('#data-image-upload').on('change', function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#pasted-image-preview img').attr('src', e.target.result);
+                $('#pasted-image-preview').show();
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
     function resetForm() {
-        $('#data-customer, #data-customer-view, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes').val('');
+        $('#data-customer, #data-customer-view, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes, #data-height').val('');
         $('#data-status').val('بانتظار اجراء');
         $('#data-payment-status').val('0');
         $('#data-image-upload').val('');
@@ -119,28 +183,29 @@ $(document).ready(function () {
         var formData = new FormData();
 
         var customerId = $('#data-customer').val();
+        // If user typed name but didn't select from datalist, try to find ID
         var customerName = $('#data-customer-view').val();
-
         if (!customerId) {
-            var val = $('#data-customer-view').val();
-            var opt = $('#customers-list option[value="' + val + '"]');
-            if (opt.length > 0) {
-                customerId = opt.attr('data-id');
-            }
+            var opt = $('#customers-list option[value="' + customerName + '"]');
+            if (opt.length > 0) customerId = opt.attr('data-id');
         }
 
         formData.append('customerId', customerId || '');
-        formData.append('customerName', customerName);
-        formData.append('fabrictype', $('#data-fabric-type').val());
-        formData.append('fabricsrc', $('#data-source').val());
-        formData.append('fabriccode', $('#data-code').val());
-        formData.append('fabricwidth', $('#data-width').val());
-        formData.append('papyershild', $('#data-paper-shield').val());
-        formData.append('meters', $('#data-meters').val());
-        formData.append('status', $('#data-status').val());
-        formData.append('paymentstatus', $('#data-payment-status').val());
-        formData.append('price', $('#data-price').val());
+        // formData.append('customerName', customerName); // Backend might not need name if ID is validated
+
+        formData.append('height', $('#data-height').val());
+        formData.append('width', $('#data-width').val());
         formData.append('notes', $('#data-notes').val());
+
+        // Layers
+        $('#layers-container .layer-row').each(function (index, element) {
+            var size = $(element).find('.layer-size').val();
+            var count = $(element).find('.layer-count').val();
+            if (size && count) {
+                formData.append('layers[' + index + '][size]', size);
+                formData.append('layers[' + index + '][count]', count);
+            }
+        });
 
         if (linkedOrderId) {
             formData.append('orderId', linkedOrderId);
@@ -234,5 +299,83 @@ $(document).ready(function () {
         e.preventDefault();
         submitWizardData();
     });
+
+    // --- Stras Calculator Logic ---
+
+    // Using DataTables select events since 'checkboxes' plugin is active
+    table.on('select deselect', function (e, dt, type, indexes) {
+        if (type === 'row') {
+            calculateTotals();
+        }
+    });
+
+    // Also listen for draw event to re-calculate if needed (e.g. page change with preserved selection)
+    table.on('draw', function () {
+        // calculateTotals(); // Optional if selection persists
+    });
+
+    function calculateTotals() {
+        var totals = {};
+
+        // Get selected rows data
+        var selectedRows = table.rows({ selected: true }).nodes();
+        var anyChecked = selectedRows.length > 0;
+
+        $.each(selectedRows, function (index, row) {
+            // Find the checkbox or hidden input with layers data in this row
+            // Since we added data-layers to the custom checkbox, let's try to find it.
+            // But DataTable might have replaced the first column content.
+            // Let's check how we populated the data. 
+            // We put it on: <input type="checkbox" class="stras-checkbox" data-layers="...">
+
+            // If DataTable checkbox plugin is used, it might keep the original input or replace it.
+            // The safely fallback is to retrieve it from the TR itself, 
+            // assuming we moved data-layers to the TR in the blade file.
+
+            var layersData = $(row).data('layers');
+
+            if (layersData) {
+                if (typeof layersData === 'string') {
+                    try {
+                        layersData = JSON.parse(layersData);
+                    } catch (e) {
+                        console.error("Error parsing layers data", e);
+                        return;
+                    }
+                }
+
+                $.each(layersData, function (index, layer) {
+                    var size = layer.size;
+                    var count = parseFloat(layer.count) || 0;
+
+                    if (!totals[size]) {
+                        totals[size] = 0;
+                    }
+                    totals[size] += count;
+                });
+            }
+        });
+
+        var resultsContainer = $('#stras-calculator-results');
+
+        if (anyChecked) {
+            var html = '<i class="feather icon-bar-chart-2"></i> اجمالي الاستراس: &nbsp;&nbsp;';
+            var parts = [];
+
+            Object.keys(totals).sort((a, b) => a - b).forEach(function (size) {
+                parts.push('<span class="badge badge-success" style="font-size: 1em; margin-left:5px;"> مقاس ' + size + ': ' + totals[size] + ' </span>');
+            });
+
+            if (parts.length === 0) {
+                html += 'لا توجد طبقات محددة';
+            } else {
+                html += parts.join(' ');
+            }
+
+            resultsContainer.html(html).slideDown();
+        } else {
+            resultsContainer.slideUp();
+        }
+    }
 
 });

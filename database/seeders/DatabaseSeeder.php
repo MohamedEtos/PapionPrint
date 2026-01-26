@@ -34,8 +34,10 @@ class DatabaseSeeder extends Seeder
             PrintersSeedere::class,
             PrintingpricesSeedere::class,
             OrdersImgSeedere::class,
+            StrasPricesSeeder::class,
             RolesAndPermissionsSeeder::class,
-            ArchivedOrdersSeeder::class,
+            // ArchivedOrdersSeeder::class,
+            StrasPricesSeeder::class,
         ]);
     }
 }

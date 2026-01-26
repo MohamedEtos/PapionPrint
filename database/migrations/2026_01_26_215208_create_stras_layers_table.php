@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stras', function (Blueprint $table) {
+        Schema::create('stras_layers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('orderId')->nullable();
-            $table->unsignedBigInteger('customerId')->nullable();
-            $table->double('height')->nullable(); // 
-            $table->double('width')->nullable();
-            $table->text('notes')->nullable();
-            $table->softDeletes();
+            $table->foreignId('stras_id')->constrained('stras')->onDelete('cascade');
+            $table->string('size');
+            $table->integer('count');
+            $table->decimal('price', 10, 2)->nullable(); // Snapshot of price per piece
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stras');
+        Schema::dropIfExists('stras_layers');
     }
 };

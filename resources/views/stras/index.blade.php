@@ -52,7 +52,7 @@
                                 <div class="card-content">
                                     <div class="card-body">
                                         <form action="#" class="steps-validation wizard-circle">
-                                            <!-- Step 1 -->
+                                    <!-- Step 1 -->
                                             <h6><i class="step-icon feather icon-home"></i> البيانات الأساسية</h6>
                                             <fieldset>
                                                 <div class="row">
@@ -68,65 +68,52 @@
                                                             <input type="hidden" id="data-customer">
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-6">
+                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="data-status">الحالة</label>
-                                                            <select class="form-control" id="data-status" name="status">
-                                                                <option selected value="بانتظار اجراء">بانتظار اجراء</option>
-                                                                <option value="تم الانتهاء">تم الانتهاء</option>
-                                                                <option value="جاري العمل">جاري العمل</option>
-                                                            </select>
+                                                             <label for="data-height">الطول</label>
+                                                             <input type="number" step="0.01" class="form-control" id="data-height" name="height">
                                                         </div>
                                                     </div>
-
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="data-payment-status">حالة الدفع</label>
-                                                            <select class="form-control" id="data-payment-status" name="payment_status">
-                                                                <option value="0">غير مدفوع</option>
-                                                                <option value="1">مدفوع</option>
-                                                            </select>
+                                                             <label for="data-width">العرض</label>
+                                                             <input type="number" step="0.01" class="form-control" id="data-width" name="width">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </fieldset>
 
                                             <!-- Step 2 -->
-                                            <h6><i class="step-icon feather icon-briefcase"></i> مواصفات القماش</h6>
+                                            <h6><i class="step-icon feather icon-layers"></i> المراحل</h6>
                                             <fieldset>
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="data-fabric-type">نوع القماش</label>
-                                                            <input type="text" class="form-control required" id="data-fabric-type" name="fabric_type">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="data-source">المصدر</label>
-                                                            <select class="form-control" id="data-source" name="source">
-                                                                <option value="العميل">العميل</option>
-                                                                <option value="AP Group">AP Group</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="data-code">كود التوب</label>
-                                                            <input type="text" class="form-control" id="data-code" name="code">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="data-width">عرض القماش</label>
-                                                            <input type="number" step="0.01" class="form-control required" id="data-width" name="width">
-                                                        </div>
-                                                    </div>
-                                                     <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="data-paper-shield">ورق حماية</label>
-                                                            <input type="text" class="form-control" id="data-paper-shield" name="paper_shield">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-outline-primary mb-2" id="add-layer-btn">
+                                                            <i class="feather icon-plus"></i> إضافة طبقة
+                                                        </button>
+                                                        <div id="layers-container">
+                                                            <!-- Dynamic layers will optionally appear here -->
+                                                             <div class="layer-row row mb-1">
+                                                                <div class="col-md-5">
+                                                                    <div class="form-group">
+                                                                        <label>المقاس</label>
+                                                                        <select class="form-control layer-size" name="layers[0][size]">
+                                                                             @foreach($prices as $price)
+                                                                                <option value="{{ $price->size }}">{{ $price->size }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-5">
+                                                                    <div class="form-group">
+                                                                        <label>العدد</label>
+                                                                        <input type="number" class="form-control layer-count" name="layers[0][count]" placeholder="عدد الحبات">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2 d-flex align-items-center">
+                                                                    <button type="button" class="btn btn-danger btn-icon remove-layer-btn"><i class="feather icon-trash"></i></button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -136,18 +123,6 @@
                                             <h6><i class="step-icon feather icon-image"></i> التفاصيل والإضافات</h6>
                                             <fieldset>
                                                 <div class="row">
-                                                     <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="data-meters">الأمتار</label>
-                                                            <input type="number" step="0.01" class="form-control required" id="data-meters" name="meters">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                         <div class="form-group">
-                                                            <label for="data-price">السعر</label>
-                                                            <input type="number" step="0.01" class="form-control" id="data-price" name="price">
-                                                        </div>
-                                                    </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label for="data-notes">ملاحظات</label>
@@ -156,8 +131,12 @@
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                           <label>صورة التصميم</label>
+                                                           <label>صورة التصميم (أو الصق الصورة Ctrl+V)</label>
                                                              <input type="file" class="form-control" id="data-image-upload" name="image" capture="environment" accept="image/*">
+                                                             <div id="pasted-image-preview" class="mt-2 text-center" style="display:none;">
+                                                                 <img src="" style="max-height: 200px; border: 1px solid #ddd; padding: 5px;">
+                                                                 <p class="text-muted mt-1">صورة تم لصقها</p>
+                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -178,80 +157,70 @@
                         <table class="table data-thumb-view">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>
+                                        <div class="vs-checkbox-con vs-checkbox-primary">
+                                            <input type="checkbox" id="select-all-stras">
+                                            <span class="vs-checkbox">
+                                                <span class="vs-checkbox--check">
+                                                    <i class="vs-icon feather icon-check"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </th>
                                     <th>صورة</th>
                                     <th>اسم العميل</th>
-                                    <th>نوع القماش</th>
-                                    <th>المصدر</th>
-                                    <th>كود التوب</th>
-                                    <th>عرض القماش</th>
-                                    <th>الامتار</th>
-                                    <th>الحاله</th>
-                                    <th>ورق حمايه</th>
+                                    <th>الطول</th>
+                                    <th>العرض</th>
+                                    <th>المراحل</th>
                                     <th>ملاحظات</th>
-                                    <th>النوع</th>
                                     <th>التاريخ</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Loop through Printers Orders (Pending Stras?) --}}
-                                @foreach ($Orders as $Order)
-                                <tr>
-                                    <td></td>
-                                    <td class="product-img">
-                                        <input type="hidden" class="order_id" value="{{ $Order->id }}">
-                                        <img src="{{ $Order->ordersImgs->first() ? asset('storage/'.$Order->ordersImgs->first()->path) : asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
-                                    </td>
-                                    <td class="product-name">{{ $Order->customers->name ?? '-' }} </td>
-                                    <td class="product-category"><b>{{  $Order->fabric_type ?? '-' }}   </b></td>
-                                    <td class="product-category">-</td>
-                                    <td class="product-category">-</td>
-                                    <td class="product-category">{{ $Order->fileWidth ?? '-' }}</td>
-                                    <td class="product-category"><b>{{ $Order->meters ?? '-' }}</b></td>
-                                    <td>
-                                        <div class="chip chip-warning">
-                                            <div class="chip-body status-toggle" style="cursor: pointer">
-                                                <div class="chip-text hover_action">تحويل للاستراس</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="product-category">-</td>
-                                    <td class="product-category">{{ $Order->notes ?? '-' }}</td>
-                                    <td><span class="badge badge-primary">طباعة</span></td>
-                                    <td class="product-price" title="{{ $Order->created_at }}">{{ $Order->created_at->locale('ar')->diffForHumans() }}</td>
-                                </tr>
-                                @endforeach
-
                                 {{-- Loop through Stras Records --}}
                                 @foreach ($Records as $Record)
-                                <tr>
-                                    <td></td>
-                                    <td class="product-img">
-                                        <input type="hidden" class="stras_id" value="{{ $Record->id }}">
-                                        {{-- Image logic? Stras might not have images or linked to order --}}
-                                        <img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Img placeholder">
-                                    </td>
-                                    <td class="product-name">{{ $Record->customer->name ?? '-' }} </td>
-                                    <td class="product-category"><b>{{ $Record->fabrictype ?? '-' }}</b></td>
-                                    <td class="product-category">{{ $Record->fabricsrc ?? '-' }}</td>
-                                    <td class="product-category">{{ $Record->fabriccode ?? '-' }}</td>
-                                    <td class="product-category">{{ $Record->fabricwidth ?? '-' }}</td>
-                                    <td class="product-category"><b>{{ $Record->meters ?? '-' }}</b></td>
+                                <tr data-layers="{{ json_encode($Record->layers) }}">
                                     <td>
-                                        <div class="chip chip-info">
-                                            <div class="chip-body status-toggle" style="cursor: pointer">
-                                                <div class="chip-text hover_action">{{ $Record->status ? 'تم الانتهاء' : 'جاري العمل' }}</div>
-                                            </div>
+                                        <div class="vs-checkbox-con vs-checkbox-primary">
+                                            <input type="checkbox" class="stras-checkbox">
+                                            <span class="vs-checkbox">
+                                                <span class="vs-checkbox--check">
+                                                    <i class="vs-icon feather icon-check"></i>
+                                                </span>
+                                            </span>
                                         </div>
                                     </td>
-                                    <td class="product-category">{{ $Record->papyershild ?? '-' }}</td>
+                                    <td class="product-img">
+                                        <input type="hidden" class="stras_id" value="{{ $Record->id }}">
+                                        @if($Record->image_path)
+                                            <img src="{{ asset('storage/'.$Record->image_path) }}" alt="Img">
+                                        @else
+                                            <img src="{{ asset('core/images/elements/apple-watch.png') }}" alt="Placeholder">
+                                        @endif
+                                    </td>
+                                    <td class="product-name">{{ $Record->customer->name ?? '-' }} </td>
+                                    <td class="product-category">{{ $Record->height ?? '-' }}</td>
+                                    <td class="product-category">{{ $Record->width ?? '-' }}</td>
+                                    <td class="product-category">
+                                        @foreach($Record->layers as $layer)
+                                            <span class="badge badge-primary">{{ $layer->size }}: {{ $layer->count }}</span>
+                                        @endforeach
+                                    </td>
                                     <td class="product-category">{{ $Record->notes ?? '-' }}</td>
-                                    <td><span class="badge badge-success">استراس خارجي</span></td>
-                                    <td class="product-price" title="{{ $Record->created_at }}">{{ $Record->created_at->locale('ar')->diffForHumans() }}</td>
+                                    <td class="product-price" title="{{ $Record->created_at }}">{{ $Record->created_at ? $Record->created_at->locale('ar')->diffForHumans() : '-' }}</td>
                                 </tr>
                                 @endforeach
 
                             </tbody>
+                             <tfoot>
+                                <tr>
+                                    <td colspan="8">
+                                        <div id="stras-calculator-results" class="alert alert-primary mb-0" style="display:none; font-weight: bold; font-size: 1.1em;">
+                                            <!-- Totals will appear here -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div> 
                     <!-- dataTable ends -->
