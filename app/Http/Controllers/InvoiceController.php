@@ -42,7 +42,7 @@ class InvoiceController extends Controller
     {
         $validated = $request->validate([
             'ids' => 'required|array',
-            'type' => 'required|string|in:stras,tarter,printer,rollpress'
+            'type' => 'required|string|in:stras,tarter,printer,rollpress,rollpress_archive'
         ]);
 
         $invoice = Invoice::firstOrCreate(
@@ -56,32 +56,38 @@ class InvoiceController extends Controller
             $itemId = $id;
 
             // Resolve Rollpress ID if we received a Printer ID (which is likely from presslist)
-            if ($type === 'rollpress') {
-               // Check if the ID provided is a Rollpress ID or Printer ID. 
-               // Since presslist.js sends order_id (Printer ID), we assume it's Printer ID.
-               // We try to find the linked Rollpress record.
-               $rollpress = \App\Models\Rollpress::where('orderId', $id)->first();
-               
-               if ($rollpress) {
-                   $itemId = $rollpress->id;
-               } else {
-                   // Record doesn't exist. 
-                   // Option 1: Create it?
-                   // Option 2: Skip?
-                   // For now, let's create a default one or skip. 
-                   // If we skip, the user sees nothing.
-                   // Let's try to find it. If not found, we assume the user might have passed a Rollpress ID? 
-                   // (Unlikely given JS).
-                   // Let's check if the ID passed IS a Rollpress ID (by checking existence).
-                   if (!\App\Models\Rollpress::find($id)) {
-                        continue; // Skip if no valid Rollpress record found relative to this ID
+            if ($type === 'rollpress' || $type === 'rollpress_archive') {
+               // For rollpress_archive, IDs are already Rollpress IDs from archive page
+               // For rollpress from presslist, ID might be Printer/order ID
+               if ($type === 'rollpress') {
+                   // Check if the ID provided is a Rollpress ID or Printer ID. 
+                   // Since presslist.js sends order_id (Printer ID), we assume it's Printer ID.
+                   // We try to find the linked Rollpress record.
+                   $rollpress = \App\Models\Rollpress::where('orderId', $id)->first();
+                   
+                   if ($rollpress) {
+                       $itemId = $rollpress->id;
+                   } else {
+                       // Record doesn't exist. 
+                       // Option 1: Create it?
+                       // Option 2: Skip?
+                       // For now, let's create a default one or skip. 
+                       // If we skip, the user sees nothing.
+                       // Let's try to find it. If not found, we assume the user might have passed a Rollpress ID? 
+                       // (Unlikely given JS).
+                       // Let's check if the ID passed IS a Rollpress ID (by checking existence).
+                       if (!\App\Models\Rollpress::find($id)) {
+                            continue; // Skip if no valid Rollpress record found relative to this ID
+                       }
+                       // If it was found by find($id), then $itemId is already correct.
                    }
-                   // If it was found by find($id), then $itemId is already correct.
                }
+               // For rollpress_archive, $itemId from $id is already correct (Rollpress ID)
             }
 
-            // Calculate Price
-            $customPrice = $this->calculatePrice($type, $itemId);
+            // Calculate Price - pass normalized type for price calculation
+            $priceCalcType = ($type === 'rollpress_archive') ? 'rollpress' : $type;
+            $customPrice = $this->calculatePrice($priceCalcType, $itemId);
 
             InvoiceItem::firstOrCreate([
                 'invoice_id' => $invoice->id,
@@ -96,7 +102,27 @@ class InvoiceController extends Controller
         // Update Invoice Total
         $this->updateInvoiceTotal($invoice);
 
-        return response()->json(['success' => 'Added to calculator']);
+        // Prepare data for cart view - load relationships conditionally
+        $invoice->load(['items.itemable']);
+        
+        // Load ordersImgs only for Printer items
+        $invoice->items->each(function ($item) {
+            if ($item->itemable_type === 'App\Models\Printers' && $item->itemable) {
+                $item->itemable->load('ordersImgs');
+            }
+        });
+        
+        $cartCount = $invoice->items->count();
+        $cartItems = $invoice->items;
+
+        // Render cart dropdown HTML
+        $cartHtml = view('components.cart_dropdown', compact('cartItems'))->render();
+
+        return response()->json([
+            'success' => 'Added to calculator',
+            'cart_count' => $cartCount,
+            'cart_html' => $cartHtml
+        ]);
     }
 
     public function removeItem($id)
@@ -107,6 +133,36 @@ class InvoiceController extends Controller
         $invoice = Invoice::where('user_id', Auth::id() ?? 1)->where('status', 'draft')->first();
         if ($invoice) $this->updateInvoiceTotal($invoice);
 
+        // Prepare data for cart view
+        if ($invoice) {
+            $invoice->load(['items.itemable']);
+            
+            // Load ordersImgs only for Printer items
+            $invoice->items->each(function ($item) {
+                if ($item->itemable_type === 'App\Models\Printers' && $item->itemable) {
+                    $item->itemable->load('ordersImgs');
+                }
+            });
+            
+            $cartCount = $invoice->items->count();
+            $cartItems = $invoice->items;
+        } else {
+            $cartCount = 0;
+            $cartItems = collect();
+        }
+
+        // Render cart dropdown HTML
+        $cartHtml = view('components.cart_dropdown', compact('cartItems'))->render();
+
+        // Check if request is AJAX
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => 'Item removed',
+                'cart_count' => $cartCount,
+                'cart_html' => $cartHtml
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Item removed');
     }
     
@@ -115,9 +171,23 @@ class InvoiceController extends Controller
         $invoice = Invoice::where('user_id', Auth::id() ?? 1)->where('status', 'draft')->first();
         if ($invoice) {
             $invoice->items()->delete();
-            $invoice->delete(); // Or just delete items? Usually clearing cart implies empty.
-            // If we delete invoice, next showCart creates new one.
+            $invoice->delete();
         }
+
+        // Empty cart data
+        $cartCount = 0;
+        $cartItems = collect();
+        $cartHtml = view('components.cart_dropdown', compact('cartItems'))->render();
+
+        // Check if request is AJAX
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => 'Cart cleared',
+                'cart_count' => $cartCount,
+                'cart_html' => $cartHtml
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Cart cleared');
     }
 
@@ -147,7 +217,7 @@ class InvoiceController extends Controller
             'stras' => Stras::class,
             'tarter' => Tarter::class,
             'printer' => Printers::class,
-            'rollpress' => \App\Models\Rollpress::class,
+            'rollpress', 'rollpress_archive' => \App\Models\Rollpress::class,
              default => throw new \Exception("Invalid Type"),
         };
     }

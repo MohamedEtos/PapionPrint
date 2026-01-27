@@ -23,7 +23,7 @@ import '../core/js/scripts/footer.js';
 
 
 import './custome.js';
-
+import './cart.js';
 
 
 

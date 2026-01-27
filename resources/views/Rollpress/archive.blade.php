@@ -223,7 +223,8 @@
                         Actions
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item bulk-delete-btn" href="#"><i class="feather icon-trash"></i> Delete</a>
+                        <a class="dropdown-item bulk-delete-btn" href="#"><i class="feather icon-trash"></i> جذف </a>
+                        <a class="dropdown-item add-to-invoice-btn" href="#"><i class="feather icon-file-text"></i> انشاء  فاتوره  </a>
                     </div>
                 </div>
 

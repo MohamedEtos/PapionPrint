@@ -51,8 +51,7 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item text-danger bulk-delete-btn" href="#"><i class="feather icon-trash "></i>حذف</a>
-                                    <a class="dropdown-item" href="#"><i class="feather icon-archive"></i>ارشفة</a>
-                                    <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-shopping-cart"></i> اضافة للفاتورة</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-file-text"></i> انشاء  فاتوره  </a>
                                 </div>
                             </div>
                         </div>

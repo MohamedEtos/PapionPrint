@@ -50,18 +50,18 @@ $(document).ready(function () {
             { data: 'action', orderable: false, searchable: false, defaultContent: '' }, // 1
             { data: 'image', orderable: false, searchable: false, defaultContent: '' }, // 2
             { data: 'customer.name', defaultContent: '-' }, // 3
-            { data: 'fabrictype',defaultContent: '-' }, // 4
-            { data: 'fabricsrc',defaultContent: '-' }, // 5
-            { data: 'fabriccode',defaultContent: '-' }, // 6
-            { data: 'fabricwidth',defaultContent: '-' }, // 7
-            { data: 'meters',defaultContent: '-' }, // 8
-            { data: 'status',defaultContent: '-' }, // 9
-            { data: 'papyershild',defaultContent: '-' }, // 10
-            { data: 'paymentstatus',defaultContent: '-' }, // 11
-            { data: 'price',defaultContent: '-' }, // 12
-            { data: 'notes',defaultContent: '-' }, // 13
-            { data: 'created_at',defaultContent: '-' }, // 14
-            { data: 'updated_at',defaultContent: '-' } // 15
+            { data: 'fabrictype', defaultContent: '-' }, // 4
+            { data: 'fabricsrc', defaultContent: '-' }, // 5
+            { data: 'fabriccode', defaultContent: '-' }, // 6
+            { data: 'fabricwidth', defaultContent: '-' }, // 7
+            { data: 'meters', defaultContent: '-' }, // 8
+            { data: 'status', defaultContent: '-' }, // 9
+            { data: 'papyershild', defaultContent: '-' }, // 10
+            { data: 'paymentstatus', defaultContent: '-' }, // 11
+            { data: 'price', defaultContent: '-' }, // 12
+            { data: 'notes', defaultContent: '-' }, // 13
+            { data: 'created_at', defaultContent: '-' }, // 14
+            { data: 'updated_at', defaultContent: '-' } // 15
         ],
         columnDefs: [
             {
@@ -320,6 +320,50 @@ $(document).ready(function () {
             }
         });
     }
+
+    // Add to Invoice
+    $(document).on("click", ".add-to-invoice-btn", function (e) {
+        e.preventDefault();
+        var selectedRows = table.rows({ selected: true });
+        var selectedIds = [];
+        var data = selectedRows.data();
+        for (var i = 0; i < data.length; i++) {
+            selectedIds.push(data[i].id);
+        }
+        // Fallback
+        if (selectedIds.length === 0) {
+            $('.dt-checkboxes:checked').each(function () {
+                selectedIds.push($(this).val());
+            });
+            selectedIds = [...new Set(selectedIds)];
+        }
+
+        if (selectedIds.length === 0) {
+            Swal.fire({ title: "تنبيه", text: "الرجاء تحديد طلب واحد على الأقل للإضافة.", type: "warning", confirmButtonClass: 'btn btn-primary', buttonsStyling: false });
+            return;
+        }
+
+        $.post('/invoices/add', {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            ids: selectedIds,
+            type: 'rollpress_archive'
+        }, function (response) {
+            toastr.success('تمت الاضافة للفاتورة');
+
+            // Update cart count
+            if (response.cart_count !== undefined) {
+                $('.cart-item-count').text(response.cart_count);
+                $('.badge.badge-up.cart-item-count').text(response.cart_count);
+            }
+
+            // Update cart dropdown HTML
+            if (response.cart_html) {
+                $('#cart-dropdown-items').html(response.cart_html);
+            }
+        }).fail(function () {
+            toastr.error('حدث خطأ');
+        });
+    });
 
     function resetForm() {
         $('form.steps-validation')[0].reset();

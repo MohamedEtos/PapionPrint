@@ -61,6 +61,7 @@
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th>صورة</th>
                                         <th>النوع</th>
                                         <th>التفاصيل</th>
                                         <th>الكمية/العدد</th>
@@ -120,6 +121,19 @@
                                                 $detailText = $roll->fabrictype;
                                             }
 
+                                            // Image Handling
+                                            $imgPath = null;
+                                            if ($item->itemable_type == 'App\Models\Stras') {
+                                                $imgPath = $item->itemable->image_path ?? null;
+                                            } elseif ($item->itemable_type == 'App\Models\Tarter') {
+                                                $imgPath = $item->itemable->image_path ?? null;
+                                            } elseif ($item->itemable_type == 'App\Models\Printers') {
+                                                $imgObj = $item->itemable->ordersImgs->first();
+                                                $imgPath = $imgObj ? $imgObj->path : null;
+                                            }
+                                            
+                                            $imgUrl = $imgPath ? asset('storage/' . $imgPath) : '';
+
                                             // Check for Custom Price Override
                                             if($item->custom_price) {
                                                 $price = $item->custom_price;
@@ -133,7 +147,14 @@
 
                                             $grandTotal += $total;
                                         @endphp
-                                        <tr>
+                                        <tr data-img-url="{{ $imgUrl }}">
+                                            <td style="width: 60px;">
+                                                @if($imgUrl)
+                                                    <img src="{{ $imgUrl }}" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                                @else
+                                                    <i class="feather icon-image font-medium-3 text-muted"></i>
+                                                @endif
+                                            </td>
                                             <td>{{ $typeLabel }}</td>
                                             <td>{{ $detailText }}</td>
                                             <td class="item-qty" data-qty="{{ $qty }}">{{ $qty }}</td>
@@ -149,7 +170,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="4" class="text-right">الاجمالي الكلي</th>
+                                        <th colspan="5" class="text-right">الاجمالي الكلي</th>
                                         <th id="grand-total">{{ round($grandTotal, 2) }}</th>
                                         <th></th>
                                     </tr>
@@ -270,17 +291,30 @@
         var items = [];
         
         $('.table tbody tr').each(function() {
-             var type = $(this).find('td:eq(0)').text();
-             var details = $(this).find('td:eq(1)').text();
+             // Updated to account for image column
+             var type = $(this).find('td:eq(1)').text(); // Type is now column 1 (after image)
+             var details = $(this).find('td:eq(2)').text(); // Details is column 2
+             var qty = $(this).find('td:eq(3)').text(); // Quantity
              var itemTotal = $(this).find('.item-total').text();
-             items.push(type + " (" + details + "): " + itemTotal);
+             var imgUrl = $(this).attr('data-img-url');
+             
+             var itemText = "• " + type + "\n";
+             itemText += "  التفاصيل: " + details + "\n";
+             itemText += "  الكمية: " + qty + "\n";
+             itemText += "  السعر: " + itemTotal + " ج.م";
+             
+             if(imgUrl) {
+                 itemText += "\n  🖼️ صورة: " + imgUrl;
+             }
+             
+             items.push(itemText);
         });
 
-        var text = "فاتورة حساب للسيد/ " + customerName + "\n";
-        text += "------------------\n";
-        text += items.join("\n");
-        text += "\n------------------\n";
-        text += "الاجمالي: " + total;
+        var text = " *فاتورة للسيد/ة* " + customerName + "\n";
+        text += "━━━━━━━━━━━━━━━━━━\n\n";
+        text += items.join("\n\n");
+        text += "\n\n━━━━━━━━━━━━━━━━━━\n";
+        text += " *الإجمالي:* " + total + " ج.م";
 
         var phone = $('#customer-phone').val();
          // Check if phone exists and add mandatory '2' if not present

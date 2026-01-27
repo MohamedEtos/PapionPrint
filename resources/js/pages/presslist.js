@@ -478,6 +478,17 @@ $(document).ready(function () {
       type: 'rollpress'
     }, function (response) {
       toastr.success('تمت الاضافة للفاتورة');
+
+      // Update cart count
+      if (response.cart_count !== undefined) {
+        $('.cart-item-count').text(response.cart_count);
+        $('.badge.badge-up.cart-item-count').text(response.cart_count);
+      }
+
+      // Update cart dropdown HTML
+      if (response.cart_html) {
+        $('#cart-dropdown-items').html(response.cart_html);
+      }
     }).fail(function () {
       toastr.error('حدث خطأ');
     });
