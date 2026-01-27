@@ -182,6 +182,18 @@
 
                 <!-- Data list view starts -->
                 <section id="data-thumb-view" class="data-thumb-view-header">
+                    <div class="action-btns" style="display:none; margin-bottom: 10px;">
+                        <div class="btn-dropdown mr-1 mb-1">
+                            <div class="btn-group dropdown actions-dropodown">
+                                <button type="button" class="btn btn-white px-1 py-1 dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    الإجراءات
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-shopping-cart"></i> اضافة للفاتورة</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- dataTable starts -->
                     <div class="table-responsive">
                         <table class="table data-thumb-view">

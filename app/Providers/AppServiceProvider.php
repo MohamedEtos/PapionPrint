@@ -36,5 +36,8 @@ class AppServiceProvider extends ServiceProvider
         } catch (\Exception $e) {
             // Failsafe for initial migrations
         }
+
+        // Register Cart Composer
+        \Illuminate\Support\Facades\View::composer('components.navbar', \App\Http\ViewComposers\CartComposer::class);
     }
 }

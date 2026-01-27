@@ -128,4 +128,14 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     // Machine Pricing Routes
     Route::get('/machines/pricing', [App\Http\Controllers\MachinesController::class, 'pricing'])->name('machines.pricing');
     Route::post('/machines/pricing/update', [App\Http\Controllers\MachinesController::class, 'updatePrice'])->name('machines.update_price');
+
+    // Invoice System Routes
+    Route::prefix('invoices')->group(function () {
+        Route::get('/create', [App\Http\Controllers\InvoiceController::class, 'showCart'])->name('invoice.create');
+        Route::post('/add', [App\Http\Controllers\InvoiceController::class, 'addToCart'])->name('invoice.add');
+        Route::get('/remove/{id}', [App\Http\Controllers\InvoiceController::class, 'removeItem'])->name('invoice.remove');
+        Route::get('/clear', [App\Http\Controllers\InvoiceController::class, 'clearCart'])->name('invoice.clear');
+        Route::post('/update-customer', [App\Http\Controllers\InvoiceController::class, 'updateCustomer'])->name('invoice.update_customer');
+        Route::post('/update-customer-phone', [App\Http\Controllers\InvoiceController::class, 'updateCustomerPhone'])->name('invoice.update_customer_phone');
+    });
 });

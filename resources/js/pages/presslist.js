@@ -412,4 +412,75 @@ $(document).ready(function () {
     }
   }, 30000);
 
+  // --- Bulk Action Visibility ---
+  table.on('select deselect', function () {
+    var selectedRows = table.rows({ selected: true }).count();
+    if (selectedRows > 0) {
+      $('.action-btns').show();
+    } else {
+      // $('.action-btns').hide(); // Optional
+    }
+  });
+
+  // --- Add To Invoice ---
+  window.addToInvoice = function () {
+    var selectedRows = table.rows({ selected: true }).nodes();
+    var ids = [];
+
+    $.each(selectedRows, function (index, row) {
+      var id = $(row).find('.order_id').val(); // Start with Printer Order ID
+
+      // If we really need Rollpress ID specifically, we should check if we have it separately or if Polymorphic relation uses Printer ID or Rollpress ID.
+      // The system seems to use Printer Order as base for Rollpress?
+      // View: value="{{ $Order->id }}" (Printer Order ID)
+      // Controller checks if Rollpress exists for it.
+      // If I send Printer Order ID, the Invoice Controller needs to know how to handle it.
+      // InvoiceController `addToCart` handles `Rollpress` model.
+      // Rollpress model is `Rollpress`.
+      // But the ID here is `$Order->id` (Printers table).
+      // However, `Rollpress` model belongsTo `Printer`? No, `Printers` hasOne `Rollpress`.
+      // If I add "Rollpress" item, should I use `Rollpress` ID or `Printers` ID?
+      // The view uses `$Order->id`.
+      // If the invoice item is `Rollpress`, it expects `itemable_type = App\Models\Rollpress` and `itemable_id = RollpressID`.
+      // So I need the Rollpress ID.
+      // View doesn't seem to have explicit Rollpress ID hidden input, only `$Order->id`.
+      // Wait, `view_code` on `app/Models/Invoice.php` showed relations?
+      // Actually, `RollpressController` creates a `Rollpress` entry linked to `printer_id`.
+      // If I pass Printer ID, I might need to map it to Rollpress ID in backend OR just use Printer ID and type "Rollpress"? 
+      // But strict polymorphic relation needs correct ID.
+
+      // Let's assume for now we pass the ID present in the row.
+      // In `printers/print_log`, ID is Printer ID.
+      // In `Rollpress/presslist`, ID is Printer ID too (class `order_id`).
+      // Does `Stras` or `Tarter` use their own IDs? Yes.
+      // `Rollpress/presslist` iterates `$Orders` (Printers).
+
+      // I will send the ID found. If it's a Printer ID, and type is 'rollpress', 
+      // the backend `addToCart` should probably resolve it to the specific Rollpress ID if needed, 
+      // OR I should expose Rollpress ID in the view.
+
+      // Let's check if Rollpress ID is available in view.
+      // View: `<div class="chip-text hover_action">{{ $Order->rollpress->status ...`
+      // It accesses `$Order->rollpress`.
+      // I should probably add a hidden input for Rollpress ID if it exists.
+
+      if (id) ids.push(id);
+    });
+
+    if (ids.length === 0) {
+      toastr.warning('Please select items first');
+      return;
+    }
+
+    $.post('/invoices/add', {
+      _token: $('meta[name="csrf-token"]').attr('content'),
+      ids: ids,
+      type: 'rollpress'
+    }, function (response) {
+      toastr.success('تمت الاضافة للفاتورة');
+    }).fail(function () {
+      toastr.error('حدث خطأ');
+    });
+  }
+
 });

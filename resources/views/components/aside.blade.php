@@ -79,20 +79,21 @@
                     </ul>
                 </li>
 
-                <!-- <li class=" nav-item"><a href="app-email.html"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Email">Email</span></a>
+                {{-- Unified Invoice --}}
+                <li class="{{ request()->routeIs('invoice.create') ? 'active' : '' }} nav-item">
+                    <a href="{{ route('invoice.create') }}">
+                        <i class="feather icon-file-text"></i>
+                        <span class="menu-title" data-i18n="Invoice">الفاتورة المجمعة</span>
+                    </a>
                 </li>
-                <li class=" nav-item"><a href="app-chat.html"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
+
+                <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
                 </li>
-                <li class=" nav-item"><a href="app-todo.html"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Todo</span></a>
-                </li>
-                <li class=" nav-item"><a href="app-calender.html"><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Calender</span></a>
-                </li> -->
 
                 <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }} nav-item"><a href="{{ route('roles.index') }}"><i class="feather icon-lock"></i><span class="menu-title" data-i18n="Roles">الصلاحيات & الأدوار</span></a>
                 </li>
  
-                <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
-                </li>
+
 
                 <li class=" nav-item {{ request()->routeIs('settings.index') ? 'active' : '' }}">
                     <a href="{{ route('settings.index') }}">

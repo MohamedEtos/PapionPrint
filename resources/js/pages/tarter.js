@@ -644,4 +644,30 @@ $(document).ready(function () {
         }
     }
 
+    // --- Add To Invoice ---
+    window.addToInvoice = function () {
+        var selectedRows = table.rows({ selected: true }).nodes();
+        var ids = [];
+
+        $.each(selectedRows, function (index, row) {
+            var id = $(row).find('.tarter_id').val();
+            if (id) ids.push(id);
+        });
+
+        if (ids.length === 0) {
+            toastr.warning('Please select items first');
+            return;
+        }
+
+        $.post('/invoices/add', {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            ids: ids,
+            type: 'tarter'
+        }, function (response) {
+            toastr.success('تمت الاضافة للفاتورة');
+        }).fail(function () {
+            toastr.error('حدث خطأ');
+        });
+    }
+
 });

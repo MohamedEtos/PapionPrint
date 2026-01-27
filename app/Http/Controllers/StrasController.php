@@ -44,7 +44,11 @@ class StrasController extends Controller
             'image' => 'nullable|image',
         ]);
 
-        $data = $request->only(['customerId', 'height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
+        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
+
+        if($request->has('customerId')){
+            $data['customer_id'] = $request->customerId;
+        }
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('stras_images', 'public');
@@ -83,7 +87,11 @@ class StrasController extends Controller
             'image' => 'nullable|image',
         ]);
 
-        $data = $request->only(['customerId', 'height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
+        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
+        
+        if($request->has('customerId')){
+             $data['customer_id'] = $request->customerId;
+        }
         
         if ($request->hasFile('image')) {
              $data['image_path'] = $request->file('image')->store('stras_images', 'public');

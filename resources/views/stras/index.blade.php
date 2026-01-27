@@ -188,6 +188,7 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" href="javascript:void(0)" id="bulk-delete-btn"><i class="feather icon-trash"></i> حذف المحدد</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-shopping-cart"></i> اضافة للفاتورة</a>
                                 </div>
                             </div>
                         </div>

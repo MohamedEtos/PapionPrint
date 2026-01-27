@@ -352,4 +352,29 @@ $(document).ready(function () {
   // Price Input Logic (if used anywhere else or kept just in case)
   // ... (previous logic seemed unused in view but safe to keep or remove. I'll remove as it seems irrelevant to pagination task and likely dead code)
 
+  // --- Add To Invoice ---
+  window.addToInvoice = function () {
+    var selectedRows = table.rows({ selected: true }).data();
+    var ids = [];
+
+    selectedRows.each(function (row) {
+      ids.push(row.id);
+    });
+
+    if (ids.length === 0) {
+      toastr.warning('Please select items first');
+      return;
+    }
+
+    $.post('/invoices/add', {
+      _token: $('meta[name="csrf-token"]').attr('content'),
+      ids: ids,
+      type: 'printer'
+    }, function (response) {
+      toastr.success('تمت الاضافة للفاتورة');
+    }).fail(function () {
+      toastr.error('حدث خطأ');
+    });
+  }
+
 });
