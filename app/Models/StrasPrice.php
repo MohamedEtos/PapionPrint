@@ -11,6 +11,8 @@ class StrasPrice extends Model
 
     protected $fillable = [
         'size',
+        'size',
         'price',
+        'type', // stras, paper, global
     ];
 }

@@ -16,9 +16,24 @@ class StrasPricesSeeder extends Seeder
         
         foreach ($sizes as $size) {
             \App\Models\StrasPrice::firstOrCreate(
-                ['size' => $size],
+                ['size' => $size, 'type' => 'stras'],
                 ['price' => 0.020]
             );
         }
+
+        // Paper Prices (3 Sizes)
+        $papers = ['size 24', 'size 32', 'size 40'];
+        foreach ($papers as $paper) {
+             \App\Models\StrasPrice::firstOrCreate(
+                ['size' => $paper, 'type' => 'paper'],
+                ['price' => 1.00]
+            );
+        }
+
+        // Operating Cost (Global)
+        \App\Models\StrasPrice::firstOrCreate(
+            ['size' => 'operating_cost', 'type' => 'global'],
+            ['price' => 2.00] // Default value
+        );
     }
 }

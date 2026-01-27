@@ -98,5 +98,9 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/trash', [App\Http\Controllers\StrasController::class, 'trash'])->name('stras.trash');
         Route::post('/restore/{id}', [App\Http\Controllers\StrasController::class, 'restore'])->name('stras.restore');
         Route::delete('/force-delete/{id}', [App\Http\Controllers\StrasController::class, 'forceDelete'])->name('stras.force_delete');
+        
+        // Pricing
+        Route::get('/pricing', [App\Http\Controllers\StrasController::class, 'pricing'])->name('stras.pricing');
+        Route::post('/pricing/update', [App\Http\Controllers\StrasController::class, 'updatePrice'])->name('stras.update_price');
     });
 });

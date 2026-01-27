@@ -185,4 +185,28 @@ class StrasController extends Controller
          }
          return response()->json(['error' => 'Not found'], 404);
     }
+
+    public function pricing()
+    {
+        $strasPrices = \App\Models\StrasPrice::where('type', 'stras')->get();
+        $paperPrices = \App\Models\StrasPrice::where('type', 'paper')->get();
+        $otherPrices = \App\Models\StrasPrice::where('type', 'global')->get();
+
+        return view('stras.pricing', compact('strasPrices', 'paperPrices', 'otherPrices'));
+    }
+
+    public function updatePrice(Request $request)
+    {
+        $id = $request->id;
+        $price = $request->price;
+        
+        $record = \App\Models\StrasPrice::find($id);
+        if ($record) {
+            $record->price = $price;
+            $record->save();
+             return response()->json(['success' => 'Price updated successfully']);
+        }
+         return response()->json(['error' => 'Not found'], 404);
+
+    }
 }
