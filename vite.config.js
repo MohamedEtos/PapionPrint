@@ -33,6 +33,7 @@ export default defineConfig({
                 'resources/core/vendors/css/forms/select/select2.min.css',
                 'resources/core/css-rtl/plugins/forms/validation/form-validation.css',
                 'resources/core/vendors/css/pickers/pickadate/pickadate.css',
+                'resources/js/pages/invoice_history.js',
             ],
             refresh: true,
         }),

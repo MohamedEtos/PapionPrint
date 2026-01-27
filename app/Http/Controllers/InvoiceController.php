@@ -211,6 +211,215 @@ class InvoiceController extends Controller
         return response()->json(['error' => 'Customer not found'], 404);
     }
 
+    public function updateInvoiceItem(Request $request)
+    {
+        \Log::info('updateInvoiceItem endpoint hit', $request->all());
+
+        $validated = $request->validate([
+            'item_id' => 'required|exists:invoice_items,id',
+            'quantity' => 'nullable|numeric',
+            'custom_price' => 'nullable|numeric',
+            'custom_details' => 'nullable|string',
+            'sent_date' => 'nullable|date',
+            'sent_status' => 'nullable|in:pending,sent,delivered'
+        ]);
+
+        $item = InvoiceItem::find($request->item_id);
+        
+        if ($request->has('quantity')) {
+            $item->quantity = $request->quantity;
+        }
+        
+        if ($request->has('custom_price')) {
+            $item->custom_price = $request->custom_price;
+        }
+        
+        if ($request->has('custom_details')) {
+            $item->custom_details = $request->custom_details;
+        }
+        
+        if ($request->has('sent_date')) {
+            $item->sent_date = $request->sent_date;
+        }
+        
+        if ($request->has('sent_status')) {
+            $item->sent_status = $request->sent_status;
+        }
+        
+        $item->save();
+        
+        
+        
+        try {
+            \Log::info('Archiving Invoice Item', [
+                'invoice_id' => $item->invoice_id,
+                'order_id' => $item->itemable_id,
+                'order_type' => $item->itemable_type,
+                'quantity' => $item->quantity,
+                'price' => $item->custom_price
+            ]);
+
+            // Sync with InvoiceArchive
+            $archive = \App\Models\InvoiceArchive::updateOrCreate(
+                [
+                    'invoice_id' => $item->invoice_id,
+                    'order_id' => $item->itemable_id,
+                    'order_type' => $item->itemable_type
+                ],
+                [
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->custom_price,
+                    'total_price' => $item->custom_price * $item->quantity,
+                    'sent_date' => $item->sent_date,
+                    'sent_status' => $item->sent_status ?? 'pending',
+                    'customer_name' => optional($item->invoice->customer)->name
+                ]
+            );
+            
+            \Log::info('Archive Saved/Updated', ['id' => $archive->id]);
+
+        } catch (\Exception $e) {
+            \Log::error('Failed to archive invoice item: ' . $e->getMessage());
+            return response()->json(['error' => 'Saved locally but failed to archive: ' . $e->getMessage()], 500);
+        }
+        
+        // Recalculate invoice total
+        $this->updateInvoiceTotal($item->invoice);
+        
+        return response()->json(['success' => true]);
+    }
+
+    public function invoiceHistory()
+    {
+        return view('invoices.history');
+    }
+
+    public function invoiceHistoryData(Request $request)
+    {
+        $query = \App\Models\InvoiceArchive::with(['itemable']);
+        
+        \Log::info('Fetching History Data');
+        
+        // Handle searching
+        if ($request->has('search') && !empty($request->search['value'])) {
+            $searchValue = $request->search['value'];
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('customer_name', 'like', "%{$searchValue}%")
+                  ->orWhere('quantity', 'like', "%{$searchValue}%")
+                  ->orWhere('unit_price', 'like', "%{$searchValue}%");
+            });
+        }
+        
+        // Handle ordering
+        if ($request->has('order')) {
+            $orderColumnIndex = $request->order[0]['column'];
+            $orderDirection = $request->order[0]['dir'];
+            $columns = $request->columns;
+            $columnName = $columns[$orderColumnIndex]['name'] ?? null;
+            
+            // Map to actual database columns
+            $orderableColumns = ['created_at', 'sent_date', 'quantity', 'unit_price'];
+            if ($columnName && in_array($columnName, $orderableColumns)) {
+                $query->orderBy($columnName, $orderDirection);
+            } else {
+                $query->orderBy('created_at', 'desc');
+            }
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+        
+        $totalRecords = \App\Models\InvoiceArchive::count();
+        $filteredRecords = $query->count();
+        
+        // Handle pagination
+        if ($request->has('start') && $request->length != -1) {
+            $query->skip($request->start)->take($request->length);
+        }
+        
+        $items = $query->get();
+        
+        // Format data for DataTables
+        $data = $items->map(function($item) {
+            // Image column
+            $imgPath = null;
+            if ($item->order_type === 'App\Models\Printers' && $item->itemable) {
+                $imgObj = $item->itemable->ordersImgs->first();
+                $imgPath = $imgObj ? $imgObj->path : null;
+            } elseif ($item->order_type === 'App\Models\Stras' && $item->itemable) {
+                $imgPath = $item->itemable->image_path;
+            } elseif ($item->order_type === 'App\Models\Tarter' && $item->itemable) {
+                $imgPath = $item->itemable->image_path;
+            }
+            
+            $image = '';
+            if ($imgPath) {
+                $fullPath = asset('storage/' . $imgPath);
+                $image = '<img src="' . $fullPath . '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />';
+            } else {
+                $image = '<i class="feather icon-image font-medium-3 text-muted"></i>';
+            }
+            
+            // Type column
+            $typeMap = [
+                'App\Models\Stras' => 'استراس',
+                'App\Models\Tarter' => 'ترتر',
+                'App\Models\Printers' => 'طباعة',
+                'App\Models\Rollpress' => 'مكبس'
+            ];
+            $type = $typeMap[$item->order_type] ?? class_basename($item->order_type);
+            
+            // Details column
+            $details = '-';
+            if ($item->itemable) {
+                if ($item->order_type === 'App\Models\Stras') {
+                    $stras = $item->itemable;
+                    $details = 'عميل: ' . ($stras->customer_name ?? '-');
+                    if ($stras->design_name) $details .= ' | تصميم: ' . $stras->design_name;
+                } elseif ($item->order_type === 'App\Models\Tarter') {
+                    $tarter = $item->itemable;
+                    $details = 'عميل: ' . ($tarter->customer_name ?? '-');
+                    if ($tarter->design_name) $details .= ' | تصميم: ' . $tarter->design_name;
+                } elseif ($item->order_type === 'App\Models\Printers') {
+                    $printer = $item->itemable;
+                    $machine = $printer->machines;
+                    $details = ($machine ? $machine->name : '-') . ' (' . ($printer->pass ?? '-') . ' pass)';
+                } elseif ($item->order_type === 'App\Models\Rollpress') {
+                    $rollpress = $item->itemable;
+                    $details = 'عميل: ' . ($rollpress->customer ?? '-');
+                    if ($rollpress->design) $details .= ' | تصميم: ' . $rollpress->design;
+                }
+            }
+            
+            // Status column
+            $statusMap = [
+                'pending' => '<span class="badge badge-warning">قيد الانتظار</span>',
+                'sent' => '<span class="badge badge-info">تم الإرسال</span>',
+                'delivered' => '<span class="badge badge-success">تم التسليم</span>'
+            ];
+            $sent_status = $statusMap[$item->sent_status] ?? '-';
+            
+            return [
+                'image' => $image,
+                'type' => $type,
+                'details' => $details,
+                'customer_name' => $item->customer_name ?? '-',
+                'quantity' => number_format($item->quantity, 2),
+                'unit_price' => number_format($item->unit_price, 2) . ' ج.م',
+                'total' => number_format($item->total_price, 2) . ' ج.م',
+                'sent_date' => $item->sent_date ?? '-',
+                'sent_status' => $sent_status,
+                'created_at' => $item->created_at->format('Y-m-d H:i')
+            ];
+        });
+        
+        return response()->json([
+            'draw' => intval($request->draw),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data
+        ]);
+    }
+
     private function getModelClass($type)
     {
         return match ($type) {

@@ -1,5 +1,16 @@
 @extends('layouts.app')
-
+@section('css')
+    @vite([
+        'resources/core/vendors/css/tables/datatable/datatables.min.css',
+        'resources/core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css',
+        'resources/core/css-rtl/core/menu/menu-types/vertical-menu.css',
+        'resources/core/css-rtl/core/colors/palette-gradient.css',
+        'resources/core/css-rtl/plugins/file-uploaders/dropzone.css',
+        'resources/core/css-rtl/pages/data-list-view.css',
+        'resources/core/css-rtl/custom-rtl.css',
+        'resources/core/vendors/css/file-uploaders/dropzone.min.css',
+    ])
+@endsection 
 @section('content')
 <style>
     @keyframes flash-green {
@@ -9,6 +20,19 @@
     }
     .flash-input {
         animation: flash-green 1s ease-out;
+    }
+    .borderless-input {
+        border: none !important;
+        background: transparent !important;
+        padding: 8px;
+        width: 100%;
+        text-align: center;
+    }
+    .borderless-input:focus {
+        border: 1px solid #7367F0 !important;
+        background: #f8f8f8 !important;
+        outline: none;
+        border-radius: 4px;
     }
 </style>
 <div class="app-content content">
@@ -52,6 +76,7 @@
                             </div>
                              <div class="col-md-6 text-right">
                                 <button class="btn btn-success mt-2" onclick="sendWhatsApp()"> <i class="fa fa-whatsapp"></i> ارسال واتس اب</button>
+                                <button class="btn btn-warning mt-2" id="save-invoice-changes"><i class="feather icon-save"></i> حفظ</button>
                                 <button class="btn btn-danger mt-2" onclick="clearCart()"> <i class="fa fa-trash"></i> تفريغ السلة</button>
                             </div>
                         </div>
@@ -156,10 +181,14 @@
                                                 @endif
                                             </td>
                                             <td>{{ $typeLabel }}</td>
-                                            <td>{{ $detailText }}</td>
-                                            <td class="item-qty" data-qty="{{ $qty }}">{{ $qty }}</td>
                                             <td>
-                                                <input type="number" step="0.01" class="form-control item-price" data-id="{{ $item->id }}" value="{{ round($unitPrice, 2) }}">
+                                                <input type="text" class="borderless-input item-details" data-id="{{ $item->id }}" value="{{ $item->custom_details ?? $detailText }}">
+                                            </td>
+                                            <td>
+                                                <input type="number" step="0.01" class="borderless-input editable-qty item-qty" data-id="{{ $item->id }}" value="{{ $qty }}">
+                                            </td>
+                                            <td>
+                                                <input type="number" step="0.01" class="borderless-input item-price" data-id="{{ $item->id }}" value="{{ round($unitPrice, 2) }}">
                                             </td>
                                             <td class="item-total">{{ round($total, 2) }}</td>
                                             <td>
@@ -187,6 +216,19 @@
 
 @section('js')
 <script>
+
+            <script src="{{ asset('core/vendors/js/extensions/dropzone.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/buttons.print.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/buttons.html5.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
+        <script src="{{ asset('core/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
+
+        <script>
+            var assetPath = "{{ asset('') }}";
     // Dynamic Calculation
     $(document).on('input', '.item-price', function() {
         var row = $(this).closest('tr');
@@ -324,5 +366,107 @@
         var url = "https://wa.me/" + (phone ? phone : "") + "?text=" + encodeURIComponent(text);
         window.open(url, '_blank');
     }
+
+    // Enter key to blur (save)
+    $(document).on('keypress', '.editable-qty, .item-price, .item-details', function(e) {
+        if(e.which === 13) {
+            e.preventDefault();
+            $(this).blur();
+        }
+    });
+
+    // Auto-update invoice items on blur
+    $(document).on('blur change', '.editable-qty, .item-price, .item-details', function() {
+        var $input = $(this);
+        var itemId = $input.data('id');
+        var $row = $input.closest('tr');
+        
+        var quantity = $row.find('.editable-qty').val();
+        var price = $row.find('.item-price').val();
+        var details = $row.find('.item-details').val();
+        
+        // Update total for this row
+        var rowTotal = (parseFloat(quantity) || 0) * (parseFloat(price) || 0);
+        $row.find('.item-total').text(rowTotal.toFixed(2));
+        
+        // Recalculate grand total
+        calculateGrandTotal();
+        
+        // Save to backend
+        $.post('/invoices/update-item', {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            item_id: itemId,
+            quantity: quantity,
+            custom_price: price,
+            custom_details: details
+        }, function(response) {
+            console.log('Item updated');
+            
+            // Trigger Animation
+            $input.removeClass('flash-input');
+            void $input.get(0).offsetWidth; // Trigger reflow
+            $input.addClass('flash-input');
+            
+            setTimeout(function () {
+                $input.removeClass('flash-input');
+            }, 1000);
+
+        }).fail(function(xhr) {
+            var errorMsg = 'حدث خطأ أثناء الحفظ';
+            if(xhr.responseJSON && xhr.responseJSON.error) {
+                errorMsg += ': ' + xhr.responseJSON.error;
+            }
+            toastr.error(errorMsg);
+        });
+    });
+
+    // Save all changes button
+    $('#save-invoice-changes').click(function() {
+        var $button = $(this);
+        $button.prop('disabled', true).html('<i class="feather icon-loader"></i> جاري الحفظ...');
+        
+        var totalItems = $('.item-qty').length;
+        var savedItems = 0;
+        var hasError = false;
+        
+        if (totalItems === 0) {
+            toastr.warning('لا توجد عناصر للحفظ');
+            $button.prop('disabled', false).html('<i class="feather icon-save"></i> حفظ');
+            return;
+        }
+        
+        // Save all items
+        $('tbody tr').each(function() {
+            var $row = $(this);
+            var itemId = $row.find('.editable-qty').data('id');
+            var quantity = $row.find('.editable-qty').val();
+            var price = $row.find('.item-price').val();
+            var details = $row.find('.item-details').val();
+            
+            if (itemId) {
+                $.post('/invoices/update-item', {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    item_id: itemId,
+                    quantity: quantity,
+                    custom_price: price,
+                    custom_details: details
+                }, function(response) {
+                    savedItems++;
+                    if (savedItems === totalItems && !hasError) {
+                        toastr.success('تم حفظ جميع التعديلات (' + totalItems + ' عنصر)');
+                        $button.prop('disabled', false).html('<i class="feather icon-save"></i> حفظ');
+                    }
+                }).fail(function(xhr) {
+                    hasError = true;
+                    var errorMsg = 'حدث خطأ أثناء حفظ بعض العناصر';
+                    if(xhr.responseJSON && xhr.responseJSON.error) {
+                        errorMsg += ': ' + xhr.responseJSON.error;
+                    }
+                    toastr.error(errorMsg);
+                    $button.prop('disabled', false).html('<i class="feather icon-save"></i> حفظ');
+                });
+            }
+        });
+    });
 </script>
 @endsection

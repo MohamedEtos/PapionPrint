@@ -87,6 +87,14 @@
                     </a>
                 </li>
 
+                {{-- Invoice History --}}
+                <li class="{{ request()->routeIs('invoice.history') ? 'active' : '' }} nav-item">
+                    <a href="{{ route('invoice.history') }}">
+                        <i class="feather icon-archive"></i>
+                        <span class="menu-title" data-i18n="Invoice History">سجل الفواتير</span>
+                    </a>
+                </li>
+
                 <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
                 </li>
 
