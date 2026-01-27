@@ -32,7 +32,9 @@
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
+
             </div>
             <div class="content-body">
                 <!-- Data list view starts -->

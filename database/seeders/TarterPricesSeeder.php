@@ -18,7 +18,7 @@ class TarterPricesSeeder extends Seeder
         // I will stick to what user likely expects based on context or use standard.
         // User said "replace grain size with needle size".
         // I'll populate a few common ones.
-        $needles = ['9', '11', '14', '16', '18']; // Common needle sizes
+        $needles = ['1,2', '3,4', '5,6', '7,8,9', ]; // Common needle sizes
         
         foreach ($needles as $size) {
             \App\Models\TarterPrice::firstOrCreate(

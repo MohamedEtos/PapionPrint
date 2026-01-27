@@ -7,59 +7,25 @@ use Illuminate\Http\Request;
 
 class MachinesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function pricing()
     {
-        //
+        $machines = Machines::all();
+        return view('machines.pricing', compact('machines'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updatePrice(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'id' => 'required|exists:machines,id',
+            'field' => 'required|in:price_1_pass,price_4_pass,price_6_pass',
+            'value' => 'required|numeric|min:0',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $machine = Machines::find($request->id);
+        $machine->update([
+            $request->field => $request->value
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Machines $machines)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Machines $machines)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Machines $machines)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Machines $machines)
-    {
-        //
+        return response()->json(['success' => 'updated successfully']);
     }
 }

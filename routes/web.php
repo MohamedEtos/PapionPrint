@@ -123,5 +123,9 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         // Pricing
         Route::get('/pricing', [App\Http\Controllers\TarterController::class, 'pricing'])->name('tarter.pricing');
         Route::post('/pricing/update', [App\Http\Controllers\TarterController::class, 'updatePrice'])->name('tarter.update_price');
-    });
+    }); 
+    
+    // Machine Pricing Routes
+    Route::get('/machines/pricing', [App\Http\Controllers\MachinesController::class, 'pricing'])->name('machines.pricing');
+    Route::post('/machines/pricing/update', [App\Http\Controllers\MachinesController::class, 'updatePrice'])->name('machines.update_price');
 });

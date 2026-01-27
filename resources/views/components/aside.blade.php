@@ -33,7 +33,9 @@
                         </li>
                         <li class="{{ request()->routeIs('printers.trash') ? 'active' : '' }}"><a href="{{ route('printers.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
                         </li>
-                        <li class="{{ request()->routeIs('accounts.index') ? 'active' : '' }}"><a href="{{ route('accounts.index') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Accounts">الحسابات</span></a>
+                        <!-- <li class="{{ request()->routeIs('accounts.index') ? 'active' : '' }}"><a href="{{ route('accounts.index') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Accounts">الحسابات</span></a>
+                        </li> -->
+                        <li class="{{ request()->routeIs('machines.pricing') ? 'active' : '' }}"><a href="{{ route('machines.pricing') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Accounts">اسعار الطباعه</span></a>
                         </li>
                         <!-- <li><a href="app-ecommerce-wishlist.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Wish List">المكبس</span></a>
                         </li> -->
@@ -77,14 +79,14 @@
                     </ul>
                 </li>
 
-                <li class=" nav-item"><a href="app-email.html"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Email">Email</span></a>
+                <!-- <li class=" nav-item"><a href="app-email.html"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Email">Email</span></a>
                 </li>
                 <li class=" nav-item"><a href="app-chat.html"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>
                 </li>
                 <li class=" nav-item"><a href="app-todo.html"><i class="feather icon-check-square"></i><span class="menu-title" data-i18n="Todo">Todo</span></a>
                 </li>
                 <li class=" nav-item"><a href="app-calender.html"><i class="feather icon-calendar"></i><span class="menu-title" data-i18n="Calender">Calender</span></a>
-                </li>
+                </li> -->
 
                 <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }} nav-item"><a href="{{ route('roles.index') }}"><i class="feather icon-lock"></i><span class="menu-title" data-i18n="Roles">الصلاحيات & الأدوار</span></a>
                 </li>
@@ -92,21 +94,21 @@
                 <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
                 </li>
 
-    <li class=" nav-item {{ request()->routeIs('settings.index') ? 'active' : '' }}">
-        <a href="{{ route('settings.index') }}">
-            <i class="feather icon-settings"></i>
-            <span class="menu-title" data-i18n="Settings">اعدادات الموقع</span>
-        </a>
-    </li>
+                <li class=" nav-item {{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                    <a href="{{ route('settings.index') }}">
+                        <i class="feather icon-settings"></i>
+                        <span class="menu-title" data-i18n="Settings">اعدادات الموقع</span>
+                    </a>
+                </li>
 
-    <li class=" nav-item {{ request()->routeIs('admin.error_logs.*') ? 'active' : '' }}">
-        <a href="{{ route('admin.error_logs.index') }}">
-            <i class="feather icon-alert-triangle"></i>
-            <span class="menu-title" data-i18n="Error Logs">تقارير الأخطاء</span>
-        </a>
-    </li>
+                <li class=" nav-item {{ request()->routeIs('admin.error_logs.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.error_logs.index') }}">
+                        <i class="feather icon-alert-triangle"></i>
+                        <span class="menu-title" data-i18n="Error Logs">تقارير الأخطاء</span>
+                    </a>
+                </li>
 
-                <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">User</span></a>
+                <!-- <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">User</span></a>
                     <ul class="menu-content">
                         <li><a href="app-user-list.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="List">List</span></a>
                         </li>
@@ -377,7 +379,7 @@
                 <li class=" nav-item"><a href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation"><i class="feather icon-folder"></i><span class="menu-title" data-i18n="Documentation">Documentation</span></a>
                 </li>
                 <li class=" nav-item"><a href="https://pixinvent.ticksy.com/"><i class="feather icon-life-buoy"></i><span class="menu-title" data-i18n="Raise Support">Raise Support</span></a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

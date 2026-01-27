@@ -100,9 +100,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="10" style="text-align:left">الإجمالي:</th>
-                                    <th id="total-meters">0 متر</th>
-                                    <th colspan="5"></th>
+                                    <td colspan="16">
+                                        <div id="printer-log-calculator-results" class="alert alert-primary mb-0" style="display:none; font-weight: bold; font-size: 1.1em;">
+                                            <!-- Totals will appear here -->
+                                        </div>
+                                    </td>
                                 </tr>
                             </tfoot>
                         </table>

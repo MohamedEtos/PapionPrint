@@ -128,8 +128,6 @@ $(document).ready(function () {
       }
     },
     drawCallback: function () {
-      // Recalculate Total Meters on every draw
-      updateTotalMeters();
 
       // Mac fix
       if (navigator.userAgent.indexOf("Mac OS X") != -1) {
@@ -149,7 +147,7 @@ $(document).ready(function () {
     table.draw();
   });
 
-  // Actions Dropdown Visibility
+  // Actions Dropdown Visibility & Calculator
   table.on('select deselect', function () {
     var selectedCount = table.rows({ selected: true }).count();
     if (selectedCount > 0) {
@@ -157,7 +155,7 @@ $(document).ready(function () {
     } else {
       $('.actions-dropodown').slideUp();
     }
-    updateTotalMeters();
+    calculateTotals();
   });
 
   // Bulk Delete
@@ -307,28 +305,48 @@ $(document).ready(function () {
     });
   });
 
-  // Calculate Total Meters
-  function updateTotalMeters() {
-    var total = 0;
+  function calculateTotals() {
+    var totalMeters = 0;
+    var totalCost = 0;
 
-    // Calculate total from data in current page (table.rows().data() returns all data in current page)
-    var data = table.rows().data();
+    var selectedRows = table.rows({ selected: true }).data();
+    var anyChecked = selectedRows.count() > 0;
 
-    // Check if filtered by selection - Wait, server-side select is tricky. 
-    // Client-side select api works on visible rows usually. 
-    var selectedRows = table.rows({ selected: true });
+    if (anyChecked) {
+      selectedRows.each(function (row) {
+        var meters = parseFloat(row.meters) || 0;
+        var pass = parseInt(row.pass) || 0;
+        var machine = row.machines; // Assuming 'machines' object is available
 
-    if (selectedRows.count() > 0) {
-      data = selectedRows.data();
+        totalMeters += meters;
+
+        var price = 0;
+        if (machine) {
+          if (pass === 1) {
+            price = parseFloat(machine.price_1_pass) || 0;
+          } else if (pass === 4) {
+            price = parseFloat(machine.price_4_pass) || 0;
+          } else if (pass === 6) {
+            price = parseFloat(machine.price_6_pass) || 0;
+          }
+        }
+
+        totalCost += meters * price;
+      });
+
+      var html = '';
+      if (totalMeters > 0) {
+        html += '<span class="badge badge-info mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-maximize-2"></i>  طول الورق : ' + totalMeters.toFixed(2) + ' متر</span>';
+      }
+
+      if (totalCost > 0) {
+        html += '<span class="badge badge-primary mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-dollar-sign"></i> الاجمالي : ' + totalCost.toFixed(2) + ' جنيه</span>';
+      }
+
+      $('#printer-log-calculator-results').html(html).slideDown();
+    } else {
+      $('#printer-log-calculator-results').slideUp();
     }
-
-    // Iterate
-    for (var i = 0; i < data.length; i++) {
-      let meters = parseFloat(data[i].meters) || 0;
-      total += meters;
-    }
-
-    $('#total-meters').text(total.toFixed(2) + ' متر');
   }
 
   // Price Input Logic (if used anywhere else or kept just in case)

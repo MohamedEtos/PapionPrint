@@ -50,6 +50,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
+                     <a href="{{ route('print_log') }}" class="btn btn-primary pull-right"> <i class="feather icon-arrow-right"></i>  العودة للطلبات</a>
+                </div>
             </div>
             <div class="content-body">
                 <!-- Data list view starts -->

@@ -10,6 +10,9 @@ class Machines extends Model
         'name',
         'type',
         'status',
+        'price_1_pass',
+        'price_4_pass',
+        'price_6_pass',
     ];
     public function printers()
     {
