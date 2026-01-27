@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('type')->nullable();
             $table->string('timePrintPerHour')->nullable();
+            $table->decimal('price_1_pass', 10, 2)->default(0);
+            $table->decimal('price_4_pass', 10, 2)->default(0);
+            $table->decimal('price_6_pass', 10, 2)->default(0);
             $table->timestamps();
         });
     }

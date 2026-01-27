@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable(); // Creator
             $table->unsignedBigInteger('customer_id')->nullable(); 
             $table->string('status')->default('draft'); // draft, sent
-            $table->decimal('total_amount', 10, 2)->default(0);
+            $table->decimal('total_amount', 10, 2)->default(0); 
             $table->timestamps();
         });
 
@@ -28,7 +28,11 @@ return new class extends Migration
             $table->string('itemable_type');
             $table->decimal('custom_price', 10, 2)->nullable(); // Override calculated price if needed
             $table->integer('quantity')->default(1); 
+            $table->text('custom_details')->nullable();
+            $table->date('sent_date')->nullable();
+            $table->enum('sent_status', ['pending', 'sent', 'delivered'])->default('pending');
             $table->timestamps();
+
         });
     }
 

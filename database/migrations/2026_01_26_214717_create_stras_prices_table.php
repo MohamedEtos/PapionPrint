@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('size')->unique();
             $table->decimal('price', 10, 2);
+            $table->string('type')->default('stras'); // stras, paper, global
+
             $table->timestamps();
         });
     }
