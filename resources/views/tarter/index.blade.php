@@ -35,12 +35,12 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">تشغيل الاستراس</h2>
+                            <h2 class="content-header-title float-left mb-0">تشغيل الترتر</h2>
                             <div class="breadcrumb-wrapper col-12">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ route('home') }}">الرئيسية</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#"> الاستراس</a>
+                                    <li class="breadcrumb-item"><a href="#"> الترتر</a>
                                     </li>
                                     <li class="breadcrumb-item active"> قائمة الطلبات
                                     </li>
@@ -57,7 +57,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">إضافة طلب استراس</h4>
+                                    <h4 class="card-title">إضافة طلب ترتر</h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
@@ -108,6 +108,12 @@
                                                              <input type="number" class="form-control required " id="data-pieces-per-card" name="pieces_per_card" >
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                             <label for="data-machine-time">وقت تشغيل الماكينة (دقائق)</label>
+                                                             <input type="number" class="form-control" id="data-machine-time" name="machine_time" placeholder="الوقت بالدقائق">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </fieldset>
 
@@ -124,11 +130,13 @@
                                                              <div class="layer-row row mb-1">
                                                                 <div class="col-md-5">
                                                                     <div class="form-group">
-                                                                        <label>المقاس</label>
+                                                                        <label>مقاس الإبرة</label>
                                                                         <select class="form-control layer-size" name="layers[0][size]">
                                                                              @foreach($prices as $price)
-                                                                                <option value="{{ $price->size }}">{{ $price->size }}</option>
-                                                                            @endforeach
+                                                                                 @if($price->type == 'needle')
+                                                                                     <option value="{{ $price->size }}">{{ $price->size }}</option>
+                                                                                 @endif
+                                                                             @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -199,7 +207,7 @@
                                 <tr>
                                     <th>
                                         <div class="vs-checkbox-con vs-checkbox-primary">
-                                            <input type="checkbox" id="select-all-stras">
+                                            <input type="checkbox" id="select-all-tarter">
                                             <span class="vs-checkbox">
                                                 <span class="vs-checkbox--check">
                                                     <i class="vs-icon feather icon-check"></i>
@@ -209,26 +217,27 @@
                                     </th>
                                     <th>صورة</th>
                                     <th>اسم العميل</th>
-                                    <th>الطول</th>
-                                    <th>العرض</th>
+                                    <th>الطول/العرض</th> <!-- Combo for space -->
                                     <th>اجمالي القطع</th>
-                                    <th>المراحل</th>
+                                    <th>وقت الماكينة</th>
+                                    <th>المراحل (الإبر)</th>
                                     <th>ملاحظات</th>
                                     <th>التاريخ</th>
                                     <th>الإجراءات</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Loop through Stras Records --}}
+                                {{-- Loop through Tarter Records --}}
                                 @foreach ($Records as $Record)
                                 <tr data-layers="{{ json_encode($Record->layers) }}" 
                                     data-height="{{ $Record->height }}" 
-                                    data-width="{{ $Record->width }}"
                                     data-cards-count="{{ $Record->cards_count }}" 
-                                    data-pieces-per-card="{{ $Record->pieces_per_card }}">
+                                    data-pieces-per-card="{{ $Record->pieces_per_card }}"
+                                    data-machine-time="{{ $Record->machine_time }}"
+                                    data-width="{{ $Record->width }}">
                                     <td>
                                         <div class="vs-checkbox-con vs-checkbox-primary">
-                                            <input type="checkbox" class="stras-checkbox">
+                                            <input type="checkbox" class="tarter-checkbox">
                                             <span class="vs-checkbox">
                                                 <span class="vs-checkbox--check">
                                                     <i class="vs-icon feather icon-check"></i>
@@ -237,7 +246,7 @@
                                         </div>
                                     </td>
                                     <td class="product-img">
-                                        <input type="hidden" class="stras_id" value="{{ $Record->id }}">
+                                        <input type="hidden" class="tarter_id" value="{{ $Record->id }}">
                                         @if($Record->image_path)
                                             <img src="{{ asset('storage/'.$Record->image_path) }}" alt="Img">
                                         @else
@@ -245,15 +254,19 @@
                                         @endif
                                     </td>
                                     <td class="product-name">{{ $Record->customer->name ?? '-' }} </td>
-                                    <td class="product-category">{{ $Record->height ?? '-' }}</td>
-                                    <td class="product-category">{{ $Record->width ?? '-' }}</td>
+                                    <td class="product-category">
+                                        {{ $Record->height ?? '-' }} x {{ $Record->width ?? '-' }}
+                                    </td>
                                     <td class="product-category">
                                         @if($Record->cards_count && $Record->pieces_per_card)
                                             {{ $Record->cards_count * $Record->pieces_per_card }}
+                                            <br>
+                                            <small class="text-muted">({{ $Record->cards_count }} كارت)</small>
                                         @else
                                             <span class="text-muted">لم يحسب</span>
                                         @endif
                                     </td>
+                                    <td class="product-category">{{ $Record->machine_time }} دقيقة</td>
                                     <td class="product-category">
                                         @foreach($Record->layers as $layer)
                                             <span class="badge badge-primary">{{ $layer->size }}: {{ $layer->count }}</span>
@@ -262,9 +275,9 @@
                                     <td class="product-category">{{ $Record->notes ?? '-' }}</td>
                                     <td class="product-price" title="{{ $Record->created_at }}">{{ $Record->created_at ? $Record->created_at->locale('ar')->diffForHumans() : '-' }}</td>
                                     <td class="product-action">
-                                        <span class="action-edit" onclick="editStras({{ $Record->id }})"><i class="feather icon-edit"></i></span>
-                                        <span class="action-delete" onclick="deleteStras({{ $Record->id }})"><i class="feather icon-trash"></i></span>
-                                        <span class="action-restart" onclick="restartStras({{ $Record->id }})" title="إعادة تشغيل"><i class="feather icon-refresh-cw"></i></span>
+                                        <span class="action-edit" onclick="editTarter({{ $Record->id }})"><i class="feather icon-edit"></i></span>
+                                        <span class="action-delete" onclick="deleteTarter({{ $Record->id }})"><i class="feather icon-trash"></i></span>
+                                        <span class="action-restart" onclick="restartTarter({{ $Record->id }})" title="إعادة تشغيل"><i class="feather icon-refresh-cw"></i></span>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -273,7 +286,7 @@
                              <tfoot>
                                 <tr>
                                     <td colspan="10">
-                                        <div id="stras-calculator-results" class="alert alert-primary mb-0" style="display:none; font-weight: bold; font-size: 1.1em;">
+                                        <div id="tarter-calculator-results" class="alert alert-primary mb-0" style="display:none; font-weight: bold; font-size: 1.1em;">
                                             <!-- Totals will appear here -->
                                         </div>
                                     </td>
@@ -290,7 +303,7 @@
     <!-- END: Content-->
 
     <script>
-        window.strasPrices = @json($prices);
+        window.tarterPrices = @json($prices);
     </script>
 
 @endsection
@@ -307,6 +320,6 @@
     <script src="{{ asset('core/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('core/js/scripts/modal/components-modal.js') }}"></script>
 
-    @vite('resources/js/pages/stras.js')
+    @vite('resources/js/pages/tarter.js')
 
 @endsection

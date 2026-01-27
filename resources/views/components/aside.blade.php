@@ -65,6 +65,18 @@
                     </ul>
                 </li>
 
+                {{-- Tarter Menu Item --}}
+                <li class=" nav-item"><a href="#"><i class="feather icon-disc"></i><span class="menu-title" data-i18n="Ecommerce">الترتر</span></a>
+                    <ul class="menu-content">
+                        <li class="{{ request()->routeIs('tarter.index') ? 'active' : '' }}"><a href="{{route('tarter.index')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اوردات الترتر</span></a>
+                        </li>
+                        <li class="{{ request()->routeIs('tarter.pricing') ? 'active' : '' }}"><a href="{{ route('tarter.pricing') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اسعار الخامات</span></a>
+                        </li>
+                        <li class="{{ request()->routeIs('tarter.trash') ? 'active' : '' }}"><a href="{{ route('tarter.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class=" nav-item"><a href="app-email.html"><i class="feather icon-mail"></i><span class="menu-title" data-i18n="Email">Email</span></a>
                 </li>
                 <li class=" nav-item"><a href="app-chat.html"><i class="feather icon-message-square"></i><span class="menu-title" data-i18n="Chat">Chat</span></a>

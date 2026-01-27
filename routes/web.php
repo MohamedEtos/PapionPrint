@@ -103,4 +103,25 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/pricing', [App\Http\Controllers\StrasController::class, 'pricing'])->name('stras.pricing');
         Route::post('/pricing/update', [App\Http\Controllers\StrasController::class, 'updatePrice'])->name('stras.update_price');
     });
+
+
+    // Tarter Routes
+    Route::prefix('tarter')->group(function () {
+        Route::get('/', [App\Http\Controllers\TarterController::class, 'index'])->name('tarter.index');
+        Route::get('/show/{id}', [App\Http\Controllers\TarterController::class, 'show'])->name('tarter.show');
+        Route::post('/store', [App\Http\Controllers\TarterController::class, 'store'])->name('tarter.store');
+        Route::put('/update/{id}', [App\Http\Controllers\TarterController::class, 'update'])->name('tarter.update');
+        Route::post('/restart/{id}', [App\Http\Controllers\TarterController::class, 'restart'])->name('tarter.restart');
+        Route::delete('/delete/{id}', [App\Http\Controllers\TarterController::class, 'destroy'])->name('tarter.delete');
+        Route::post('/bulk-delete', [App\Http\Controllers\TarterController::class, 'bulkDelete'])->name('tarter.bulk_delete');
+        
+        // Trash
+        Route::get('/trash', [App\Http\Controllers\TarterController::class, 'trash'])->name('tarter.trash');
+        Route::post('/restore/{id}', [App\Http\Controllers\TarterController::class, 'restore'])->name('tarter.restore');
+        Route::delete('/force-delete/{id}', [App\Http\Controllers\TarterController::class, 'forceDelete'])->name('tarter.force_delete');
+        
+        // Pricing
+        Route::get('/pricing', [App\Http\Controllers\TarterController::class, 'pricing'])->name('tarter.pricing');
+        Route::post('/pricing/update', [App\Http\Controllers\TarterController::class, 'updatePrice'])->name('tarter.update_price');
+    });
 });

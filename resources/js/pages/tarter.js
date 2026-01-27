@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     // --- Wizard Initialization ---
     var form = $(".steps-validation").show();
@@ -153,7 +154,6 @@ $(document).ready(function () {
     });
 
     // --- Image Paste Logic ---
-    // Listed to paste on the document (or focus area)
     $(document).on('paste', function (e) {
         var items = (e.clipboardData || e.originalEvent.clipboardData).items;
         for (var index in items) {
@@ -192,17 +192,6 @@ $(document).ready(function () {
         }
     });
 
-    function resetForm() {
-        $('#data-customer, #data-customer-view, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes, #data-height, #data-cards-count, #data-pieces-per-card, #data-required-pieces').val('');
-        $('#data-status').val('بانتظار اجراء');
-        $('#data-payment-status').val('0');
-        $('#data-image-upload').val('');
-        editingOrderId = null;
-        linkedOrderId = null;
-        $('.new-data-title h4').text('اضافه اذن تشغيل');
-        $('#saveDataBtn').text('Add Data');
-    }
-
     function submitWizardData() {
         var formData = new FormData();
 
@@ -215,12 +204,11 @@ $(document).ready(function () {
         }
 
         formData.append('customerId', customerId || '');
-        // formData.append('customerName', customerName); // Backend might not need name if ID is validated
-
         formData.append('height', $('#data-height').val());
         formData.append('width', $('#data-width').val());
         formData.append('cards_count', $('#data-cards-count').val());
         formData.append('pieces_per_card', $('#data-pieces-per-card').val());
+        formData.append('machine_time', $('#data-machine-time').val()); // Added Machine Time
         formData.append('notes', $('#data-notes').val());
 
         // Layers
@@ -243,11 +231,11 @@ $(document).ready(function () {
             formData.append('image', imageFile);
         }
 
-        var url = "/stras/store";
+        var url = "/tarter/store";
         var type = "POST";
 
         if (editingOrderId) {
-            url = "/stras/update/" + editingOrderId;
+            url = "/tarter/update/" + editingOrderId;
             formData.append('_method', 'PUT');
         }
 
@@ -268,7 +256,7 @@ $(document).ready(function () {
                     confirmButtonClass: 'btn btn-primary',
                 });
                 $('#validation').slideUp();
-                setTimeout(function () { location.reload(); }, 1000); // Reload to simplistic refetch
+                setTimeout(function () { location.reload(); }, 1000);
             },
             error: function (xhr) {
                 console.error("Error processing order:", xhr);
@@ -284,56 +272,28 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on("click", ".status-toggle", function (e) {
-        e.stopPropagation();
-        var $this = $(this);
-        var $row = $this.closest('tr');
-        // For Stras, we use 'data-id' attribute or similar if row structure changes.
-        // But assuming row structure similar to presslist.
-        // We need to fetch 'data-id' from the row.
-        // In presslist, it was .order_id input val.
-        var strasId = $row.find('.stras_id').val(); // New class for Stras IDs
-        var printerOrderId = $row.find('.order_id').val();
-
-        // If we clicked an existing Stras order
-        if (strasId) {
-            // Fetch and Edit
-            // ... (Similar edit fetch logic if needed, but for now just toggle status?)
-            // Wait, User wants to EDIT or Toggle?
-            // The original code has logic to fetch for Edit if "Waiting".
-            // Let's implement full Edit fetch.
-
-            // Fetch existing Stras
-            // TODO: Add route for showing/fetching single Stras
-        }
-
-        // For now, let's assume if it exists, we edit.
-        // Since I didn't add the 'show' route in controller yet, maybe skipping complex edit for now.
-        // But I can implement it in the controller easily.
-    });
-
     // --- Actions ---
 
-    window.editStras = function (id) {
+    window.editTarter = function (id) {
         editingOrderId = id;
 
         // Fetch data
-        $.get('/stras/show/' + id, function (data) {
+        $.get('/tarter/show/' + id, function (data) {
             $('.new-data-title h4').text('تعديل طلب');
             $('#saveDataBtn').text('Update');
 
             // Populate Fields
-            // Use customer ID. If name input, set name and hidden ID.
-            $('#data-customer').val(data.customerId);
+            $('#data-customer').val(data.customer_id); // Changed to customer_id to match model
             if (data.customer) $('#data-customer-view').val(data.customer.name);
 
             $('#data-height').val(data.height);
             $('#data-width').val(data.width);
             $('#data-cards-count').val(data.cards_count);
             $('#data-pieces-per-card').val(data.pieces_per_card);
+            $('#data-machine-time').val(data.machine_time); // Populate Machine Time
             $('#data-notes').val(data.notes);
 
-            // Required Pieces Helper - Estimate? 
+            // Required Pieces Helper
             if (data.cards_count && data.pieces_per_card) {
                 $('#data-required-pieces').val(data.cards_count * data.pieces_per_card);
             }
@@ -345,22 +305,9 @@ $(document).ready(function () {
                     var rowHtml = `<div class="layer-row row mb-1">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <label>المقاس</label>
+                                                <label>مقاس الإبرة</label>
                                                 <select class="form-control layer-size" name="layers[${index}][size]">
-                                                     // Need to have options. Cloning hidden template or similar is better, 
-                                                     // but here we might loose options if we just string build.
-                                                     // Better: Clone a template if possible, or fetch options earlier?
-                                                     // Actually, let's use the first row logic if exists?
-                                                     // Or just build options manually (Standard sizes).
-                                                     <option value="6">6</option>
-                                                     <option value="8">8</option>
-                                                     <option value="10">10</option>
-                                                     <option value="12">12</option>
-                                                     // We should ideally use the sizes from blade...
-                                                     // Let's rely on the fact that existing options are standard.
-                                                     // Or better, grab options from a hidden select or just hardcode standard ones for now 
-                                                     // as we don't have easy access to blade variable here in JS without passing it.
-                                                     // Let's iterate options from existing select in DOM if available.
+                                                     // Options will be set below
                                                 </select>
                                             </div>
                                         </div>
@@ -376,21 +323,15 @@ $(document).ready(function () {
                                     </div>`;
 
                     var $row = $(rowHtml);
-                    // Set selected size
-                    // To populate options correctly, let's grab them from the hidden/first select in the DOM (assuming one exists or we kept a template)
-                    // But wait, the form is cleared or hidden. The wizard steps exist.
 
-                    // Helper: Clone options from a "master" select if possible.
-                    // Let's try to assume sizes 6, 8, 10, 12, 16, 20 are common. 
-                    // Or better:
+                    // Clone options from existing select logic check
                     var options = '';
-                    // Try to find an existing select
                     var $existingSelect = $('.layer-size').first();
                     if ($existingSelect.length > 0) {
                         options = $existingSelect.html();
                     } else {
-                        // Fallback
-                        options = '<option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option>';
+                        // Basic fallback if no select found (rare)
+                        options = '<option value="9">9</option><option value="11">11</option><option value="14">14</option>';
                     }
 
                     $row.find('.layer-size').html(options).val(layer.size);
@@ -398,20 +339,18 @@ $(document).ready(function () {
                 });
                 layerIndex = data.layers.length;
             } else {
-                // Add one empty
                 $('#add-layer-btn').trigger('click');
             }
 
             // Show Form
             $('#validation').slideDown();
-            // Scroll to form
             $('html, body').animate({
                 scrollTop: $("#validation").offset().top
             }, 500);
         });
     }
 
-    window.deleteStras = function (id) {
+    window.deleteTarter = function (id) {
         Swal.fire({
             title: 'هل انت متأكد؟',
             text: "لن تتمكن من استرجاع هذا الطلب!",
@@ -424,7 +363,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: '/stras/delete/' + id,
+                    url: '/tarter/delete/' + id,
                     type: 'DELETE',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content')
@@ -450,7 +389,7 @@ $(document).ready(function () {
         });
     }
 
-    window.restartStras = function (id) {
+    window.restartTarter = function (id) {
         Swal.fire({
             title: 'إعادة تشغيل؟',
             text: "سيتم إنشاء نسخة جديدة من هذا الطلب.",
@@ -461,7 +400,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: '/stras/restart/' + id,
+                    url: '/tarter/restart/' + id,
                     type: 'POST',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content')
@@ -487,18 +426,15 @@ $(document).ready(function () {
         });
     }
 
-    $('#saveDataBtn').on('click', function (e) {
-        e.preventDefault();
-        submitWizardData();
-    });
-
     // --- Bulk Action Visibility ---
     table.on('select deselect', function () {
         var selectedRows = table.rows({ selected: true }).count();
         if (selectedRows > 0) {
             $('.action-btns').show();
         } else {
+            // $('.action-btns').hide(); // Kept commented as in stras.js to avoid hiding if desired logic differs or handled by CSS
         }
+        calculateTotals();
     });
 
     // --- Bulk Delete Action ---
@@ -507,8 +443,7 @@ $(document).ready(function () {
         var ids = [];
 
         $.each(selectedRows, function (index, row) {
-            var id = $(row).find('.stras_id').val(); // Assuming we have .stras_id input in row, or use data attribute?
-            // View shows: <input type="hidden" class="stras_id" value="{{ $Record->id }}"> in the second column (image)
+            var id = $(row).find('.tarter_id').val();
             if (id) ids.push(id);
         });
 
@@ -526,7 +461,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: '/stras/bulk-delete',
+                    url: '/tarter/bulk-delete',
                     type: 'POST',
                     data: {
                         ids: ids,
@@ -553,43 +488,34 @@ $(document).ready(function () {
         });
     });
 
-    // --- Stras Calculator Logic ---
-
-    // Using DataTables select events since 'checkboxes' plugin is active
-    table.on('select deselect', function (e, dt, type, indexes) {
-        if (type === 'row') {
-            calculateTotals();
-        }
-    });
-
-    // Also listen for draw event to re-calculate if needed (e.g. page change with preserved selection)
-    table.on('draw', function () {
-        // calculateTotals(); // Optional if selection persists
-    });
-
+    // --- Tarter Calculator Logic ---
     function calculateTotals() {
         var totals = {};
         var totalHeight = 0;
         var totalPiecesCalc = 0;
+        var totalMachineTime = 0;
         var totalCardsCount = 0;
         var grandTotalCost = 0;
 
         // Prepare Prices Map
         var pricesMap = {
-            stras: {}, // Equivalent to needle
+            needle: {},
             paper: {},
             global: {},
+            machine: 0
         };
 
-        if (window.strasPrices) {
-            window.strasPrices.forEach(function (p) {
-                if (p.type === 'stras') {
-                    pricesMap.stras[p.size] = parseFloat(p.price) || 0;
+        if (window.tarterPrices) {
+            window.tarterPrices.forEach(function (p) {
+                if (p.type === 'needle') {
+                    pricesMap.needle[p.size] = parseFloat(p.price) || 0;
                 } else if (p.type === 'paper') {
                     var num = p.size.replace(/\D/g, '');
                     if (num) pricesMap.paper[num] = parseFloat(p.price) || 0;
                 } else if (p.type === 'global' && p.size === 'operating_cost') {
                     pricesMap.global.op_cost = parseFloat(p.price) || 0;
+                } else if (p.type === 'machine_time_cost') {
+                    pricesMap.machine = parseFloat(p.price) || 0;
                 }
             });
         }
@@ -609,6 +535,7 @@ $(document).ready(function () {
             var width = parseFloat($row.data('width')) || 0;
             var cardsCount = parseFloat($row.data('cards-count')) || 0;
             var piecesPerCard = parseFloat($row.data('pieces-per-card')) || 0;
+            var machineTime = parseFloat($row.data('machine-time')) || 0;
 
             if (cardsCount > 0) {
                 totalHeight += height * cardsCount / 100;
@@ -617,6 +544,8 @@ $(document).ready(function () {
             if (cardsCount > 0 && piecesPerCard > 0) {
                 totalPiecesCalc += cardsCount * piecesPerCard;
             }
+
+            totalMachineTime += machineTime;
 
             // --- Cost Calculation per Row ---
             var rowCardCost = 0;
@@ -630,6 +559,9 @@ $(document).ready(function () {
             var opCost = pricesMap.global.op_cost || 0;
             rowCardCost += opCost;
 
+            // 3. Machine Time Cost (Total for Item)
+            var machineCostTotalForItem = machineTime * pricesMap.machine;
+
             var layersData = $row.data('layers');
             if (layersData) {
                 if (typeof layersData === 'string') {
@@ -638,7 +570,7 @@ $(document).ready(function () {
                     } catch (e) { }
                 }
 
-                // 3. Stras Cost
+                // 4. Sequins Cost
                 $.each(layersData, function (index, layer) {
                     var size = layer.size;
                     var count = parseFloat(layer.count) || 0;
@@ -646,19 +578,19 @@ $(document).ready(function () {
                     if (!totals[size]) {
                         totals[size] = 0;
                     }
-                    totals[size] += count; // Accumulate global count for badge
+                    totals[size] += count;
 
-                    var unitPrice = pricesMap.stras[size] || 0;
+                    var unitPrice = pricesMap.needle[size] || 0;
                     rowCardCost += (count * unitPrice);
                 });
             }
 
-            var rowTotal = (rowCardCost * cardsCount);
+            var rowTotal = (rowCardCost * cardsCount) + machineCostTotalForItem;
             grandTotalCost += rowTotal;
             totalCardsCount += cardsCount;
         });
 
-        var resultsContainer = $('#stras-calculator-results');
+        var resultsContainer = $('#tarter-calculator-results');
 
         if (anyChecked) {
             var html = '';
@@ -671,6 +603,11 @@ $(document).ready(function () {
             // Total Calculated Pieces
             if (totalPiecesCalc > 0) {
                 html += '<span class="badge badge-warning mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-package"></i> اجمالي القطع : ' + totalPiecesCalc + ' </span>';
+            }
+
+            // Total Machine Time
+            if (totalMachineTime > 0) {
+                html += '<span class="badge badge-danger mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-clock"></i> وقت الماكينة : ' + totalMachineTime + ' دقيقة</span>';
             }
 
             // Grand Total Cost
@@ -688,11 +625,10 @@ $(document).ready(function () {
                 if (totalHeight > 0 || totalPiecesCalc > 0) html += '<br>';
             }
 
-
-            html += '<i class="feather icon-bar-chart-2"></i> اجمالي الاستراس: &nbsp;&nbsp;';
+            html += '<i class="feather icon-bar-chart-2"></i> اجمالي الترتر: &nbsp;&nbsp;';
             var parts = [];
 
-            Object.keys(totals).sort((a, b) => a - b).forEach(function (size) { // Sorting might be weird for strings like 'ss10', 'ss6'.
+            Object.keys(totals).sort((a, b) => a - b).forEach(function (size) {
                 parts.push('<span class="badge badge-success" style="font-size: 1em; margin-left:5px;"> مقاس ' + size + ': ' + totals[size] + ' </span>');
             });
 
