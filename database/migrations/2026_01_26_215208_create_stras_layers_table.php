@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('size');
             $table->integer('count');
             $table->decimal('price', 10, 2)->nullable(); // Snapshot of price per piece
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

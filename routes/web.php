@@ -87,8 +87,16 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     // Stras Routes
     Route::prefix('stras')->group(function () {
         Route::get('/', [App\Http\Controllers\StrasController::class, 'index'])->name('stras.index');
+        Route::get('/show/{id}', [App\Http\Controllers\StrasController::class, 'show'])->name('stras.show');
         Route::post('/store', [App\Http\Controllers\StrasController::class, 'store'])->name('stras.store');
         Route::put('/update/{id}', [App\Http\Controllers\StrasController::class, 'update'])->name('stras.update');
+        Route::post('/restart/{id}', [App\Http\Controllers\StrasController::class, 'restart'])->name('stras.restart');
         Route::delete('/delete/{id}', [App\Http\Controllers\StrasController::class, 'destroy'])->name('stras.delete');
+        Route::post('/bulk-delete', [App\Http\Controllers\StrasController::class, 'bulkDelete'])->name('stras.bulk_delete');
+        
+        // Trash
+        Route::get('/trash', [App\Http\Controllers\StrasController::class, 'trash'])->name('stras.trash');
+        Route::post('/restore/{id}', [App\Http\Controllers\StrasController::class, 'restore'])->name('stras.restore');
+        Route::delete('/force-delete/{id}', [App\Http\Controllers\StrasController::class, 'forceDelete'])->name('stras.force_delete');
     });
 });

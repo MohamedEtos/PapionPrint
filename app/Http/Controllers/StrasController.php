@@ -24,6 +24,12 @@ class StrasController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        $stras = Stras::with(['layers', 'customer'])->findOrFail($id);
+        return response()->json($stras);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -103,12 +109,80 @@ class StrasController extends Controller
 
     public function destroy($id)
     {
-        // Implement soft delete if needed
         $stras = Stras::find($id);
         if ($stras) {
-            $stras->delete();
-            return response()->json(['success' => 'Deleted successfully']);
+            $stras->layers()->delete(); // Soft delete due to trait
+            $stras->delete(); // Soft delete due to trait
+            return response()->json(['success' => 'Deleted successfully test']);
         }
         return response()->json(['error' => 'Not found'], 404);
+    }
+
+    public function restart($id)
+    {
+        $original = Stras::with('layers')->findOrFail($id);
+        
+        $new = $original->replicate();
+        $new->created_at = now();
+        $new->updated_at = now();
+        $new->save();
+
+        foreach ($original->layers as $layer) {
+            $newLayer = $layer->replicate();
+            $newLayer->stras_id = $new->id;
+            $newLayer->save();
+        }
+
+        return response()->json(['success' => 'Order restarted (duplicated) successfully']);
+    }
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['error' => 'No items selected'], 400);
+        }
+
+        $orders = Stras::whereIn('id', $ids)->get();
+        
+        foreach ($orders as $order) {
+            $order->layers()->delete();
+            $order->delete();
+        }
+
+
+        return response()->json(['success' => 'Selected orders deleted successfully']);
+    }
+
+    public function trash()
+    {
+        $orders = Stras::onlyTrashed()->with(['layers' => function($query) {
+             $query->withTrashed();
+        }, 'customer'])->orderBy('deleted_at', 'desc')->get();
+        
+        return view('stras.trash', [
+            'Records' => $orders
+        ]);
+    }
+
+    public function restore($id)
+    {
+        $stras = Stras::onlyTrashed()->find($id);
+        if ($stras) {
+            $stras->restore();
+            $stras->layers()->restore(); // Restore related layers
+            return response()->json(['success' => 'Restored successfully']);
+        }
+        return response()->json(['error' => 'Not found'], 404);
+    }
+
+    public function forceDelete($id)
+    {
+         $stras = Stras::onlyTrashed()->find($id);
+         if ($stras) {
+             $stras->layers()->forceDelete(); // Permanently delete layers
+             $stras->forceDelete();
+             return response()->json(['success' => 'Permanently deleted successfully']);
+         }
+         return response()->json(['error' => 'Not found'], 404);
     }
 }

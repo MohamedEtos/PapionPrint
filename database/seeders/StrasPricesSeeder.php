@@ -15,10 +15,10 @@ class StrasPricesSeeder extends Seeder
         $sizes = ['6', '8', '10', '12'];
         
         foreach ($sizes as $size) {
-            \App\Models\StrasPrice::create([
-                'size' => $size,
-                'price' => 0.020,
-            ]);
+            \App\Models\StrasPrice::firstOrCreate(
+                ['size' => $size],
+                ['price' => 0.020]
+            );
         }
     }
 }

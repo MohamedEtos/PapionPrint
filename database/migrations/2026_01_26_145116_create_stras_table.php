@@ -17,6 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('customerId')->nullable();
             $table->double('height')->nullable(); // 
             $table->double('width')->nullable();
+            $table->integer('cards_count')->nullable();
+            $table->integer('pieces_per_card')->nullable();
+            $table->string('image_path')->nullable();
             $table->text('notes')->nullable();
             $table->softDeletes();
             $table->timestamps();

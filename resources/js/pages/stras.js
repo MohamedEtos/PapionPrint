@@ -3,13 +3,26 @@ $(document).ready(function () {
     var form = $(".steps-validation").show();
 
     // --- Calculation Helper ---
-    $('#data-required-pieces, #data-pieces-per-card').on('input', function () {
+    $(document).on('input', '#data-required-pieces, #data-pieces-per-card', function () {
         var required = parseFloat($('#data-required-pieces').val());
         var perCard = parseFloat($('#data-pieces-per-card').val());
 
         if (required > 0 && perCard > 0) {
             var cards = Math.ceil(required / perCard);
-            $('#data-cards-count').val(cards);
+            var $input = $('#data-cards-count');
+
+            // Only animate if value changed
+            if ($input.val() != cards) {
+                $input.val(cards);
+                $input.removeClass('flash-input'); // Reset to allow re-triggering
+                void $input.closest('.form-control').get(0).offsetWidth; // Trigger reflow
+                $input.addClass('flash-input');
+
+                // Remove class after animation to clean up
+                setTimeout(function () {
+                    $input.removeClass('flash-input');
+                }, 1000);
+            }
         }
     });
 
@@ -299,18 +312,245 @@ $(document).ready(function () {
         // But I can implement it in the controller easily.
     });
 
-    // Edit function helper
+    // --- Actions ---
+
     window.editStras = function (id) {
-        // Implement edit logic similar to presslist
-        // For now, let's rely on backend 'update' handling
+        editingOrderId = id;
+
+        // Fetch data
+        $.get('/stras/show/' + id, function (data) {
+            $('.new-data-title h4').text('تعديل طلب');
+            $('#saveDataBtn').text('Update');
+
+            // Populate Fields
+            // Use customer ID. If name input, set name and hidden ID.
+            $('#data-customer').val(data.customerId);
+            if (data.customer) $('#data-customer-view').val(data.customer.name);
+
+            $('#data-height').val(data.height);
+            $('#data-width').val(data.width);
+            $('#data-cards-count').val(data.cards_count);
+            $('#data-pieces-per-card').val(data.pieces_per_card);
+            $('#data-notes').val(data.notes);
+
+            // Required Pieces Helper - Estimate? 
+            if (data.cards_count && data.pieces_per_card) {
+                $('#data-required-pieces').val(data.cards_count * data.pieces_per_card);
+            }
+
+            // Populate Layers
+            $('#layers-container').empty();
+            if (data.layers && data.layers.length > 0) {
+                data.layers.forEach(function (layer, index) {
+                    var rowHtml = `<div class="layer-row row mb-1">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>المقاس</label>
+                                                <select class="form-control layer-size" name="layers[${index}][size]">
+                                                     // Need to have options. Cloning hidden template or similar is better, 
+                                                     // but here we might loose options if we just string build.
+                                                     // Better: Clone a template if possible, or fetch options earlier?
+                                                     // Actually, let's use the first row logic if exists?
+                                                     // Or just build options manually (Standard sizes).
+                                                     <option value="6">6</option>
+                                                     <option value="8">8</option>
+                                                     <option value="10">10</option>
+                                                     <option value="12">12</option>
+                                                     // We should ideally use the sizes from blade...
+                                                     // Let's rely on the fact that existing options are standard.
+                                                     // Or better, grab options from a hidden select or just hardcode standard ones for now 
+                                                     // as we don't have easy access to blade variable here in JS without passing it.
+                                                     // Let's iterate options from existing select in DOM if available.
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>العدد</label>
+                                                <input type="number" class="form-control layer-count" name="layers[${index}][count]" placeholder="عدد الحبات" value="${layer.count}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <button type="button" class="btn btn-danger btn-icon remove-layer-btn"><i class="feather icon-trash"></i></button>
+                                        </div>
+                                    </div>`;
+
+                    var $row = $(rowHtml);
+                    // Set selected size
+                    // To populate options correctly, let's grab them from the hidden/first select in the DOM (assuming one exists or we kept a template)
+                    // But wait, the form is cleared or hidden. The wizard steps exist.
+
+                    // Helper: Clone options from a "master" select if possible.
+                    // Let's try to assume sizes 6, 8, 10, 12, 16, 20 are common. 
+                    // Or better:
+                    var options = '';
+                    // Try to find an existing select
+                    var $existingSelect = $('.layer-size').first();
+                    if ($existingSelect.length > 0) {
+                        options = $existingSelect.html();
+                    } else {
+                        // Fallback
+                        options = '<option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option>';
+                    }
+
+                    $row.find('.layer-size').html(options).val(layer.size);
+                    $('#layers-container').append($row);
+                });
+                layerIndex = data.layers.length;
+            } else {
+                // Add one empty
+                $('#add-layer-btn').trigger('click');
+            }
+
+            // Show Form
+            $('#validation').slideDown();
+            // Scroll to form
+            $('html, body').animate({
+                scrollTop: $("#validation").offset().top
+            }, 500);
+        });
     }
 
-    // Bind status toggle if needed or make rows editable by click
+    window.deleteStras = function (id) {
+        Swal.fire({
+            title: 'هل انت متأكد؟',
+            text: "لن تتمكن من استرجاع هذا الطلب!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'نعم، احذفه!',
+            cancelButtonText: 'الغاء'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '/stras/delete/' + id,
+                    type: 'DELETE',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        Swal.fire(
+                            'تم الحذف!',
+                            'تم حذف الطلب بنجاح.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function (xhr) {
+                        Swal.fire(
+                            'خطأ!',
+                            'حدث خطأ اثناء الحذف.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
 
-    // Bind the old button to the new function
+    window.restartStras = function (id) {
+        Swal.fire({
+            title: 'إعادة تشغيل؟',
+            text: "سيتم إنشاء نسخة جديدة من هذا الطلب.",
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'نعم، أعد التشغيل',
+            cancelButtonText: 'الغاء'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '/stras/restart/' + id,
+                    type: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        Swal.fire(
+                            'تم!',
+                            'تم إعادة تشغيل الطلب بنجاح.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function (xhr) {
+                        Swal.fire(
+                            'خطأ!',
+                            'حدث خطأ اثناء العملية.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+
     $('#saveDataBtn').on('click', function (e) {
         e.preventDefault();
         submitWizardData();
+    });
+
+    // --- Bulk Action Visibility ---
+    table.on('select deselect', function () {
+        var selectedRows = table.rows({ selected: true }).count();
+        if (selectedRows > 0) {
+            $('.action-btns').show();
+        } else {
+        }
+    });
+
+    // --- Bulk Delete Action ---
+    $('#bulk-delete-btn').on('click', function () {
+        var selectedRows = table.rows({ selected: true }).nodes();
+        var ids = [];
+
+        $.each(selectedRows, function (index, row) {
+            var id = $(row).find('.stras_id').val(); // Assuming we have .stras_id input in row, or use data attribute?
+            // View shows: <input type="hidden" class="stras_id" value="{{ $Record->id }}"> in the second column (image)
+            if (id) ids.push(id);
+        });
+
+        if (ids.length === 0) return;
+
+        Swal.fire({
+            title: 'هل انت متأكد؟',
+            text: "سيتم حذف " + ids.length + " طلب/طلبات ولن تستطيع استرجاعهم!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'نعم، احذف',
+            cancelButtonText: 'الغاء'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '/stras/bulk-delete',
+                    type: 'POST',
+                    data: {
+                        ids: ids,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        Swal.fire(
+                            'تم الحذف!',
+                            'تم حذف الطلبات المحددة بنجاح.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function (xhr) {
+                        Swal.fire(
+                            'خطأ!',
+                            'حدث خطأ اثناء الحذف.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
     });
 
     // --- Stras Calculator Logic ---

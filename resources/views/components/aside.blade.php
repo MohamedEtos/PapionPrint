@@ -58,6 +58,8 @@
                     <ul class="menu-content">
                         <li class="{{ request()->routeIs('stras.index') ? 'active' : '' }}"><a href="{{route('stras.index')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اوردات الاستراس</span></a>
                         </li>
+                        <li class="{{ request()->routeIs('stras.trash') ? 'active' : '' }}"><a href="{{ route('stras.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
+                        </li>
                     </ul>
                 </li>
 

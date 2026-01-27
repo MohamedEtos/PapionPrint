@@ -12,6 +12,16 @@
         'resources/core/vendors/css/file-uploaders/dropzone.min.css',
         'resources/core/css-rtl/plugins/forms/wizard.css',
     ]) 
+    <style>
+        @keyframes flash-green {
+            0% { background-color: #28c76f; color: white; }
+            50% { background-color: rgba(40, 199, 111, 0.5); color: white; }
+            100% { background-color: white; color: inherit; }
+        }
+        .flash-input {
+            animation: flash-green 1s ease-out;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -170,6 +180,18 @@
 
                 <!-- Data list view starts -->
                 <section id="data-thumb-view" class="data-thumb-view-header">
+                     <div class="action-btns" style="display:none; margin-bottom: 10px;">
+                        <div class="btn-dropdown mr-1 mb-1">
+                            <div class="btn-group dropdown actions-dropodown">
+                                <button type="button" class="btn btn-white px-1 py-1 dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    الإجراءات
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="javascript:void(0)" id="bulk-delete-btn"><i class="feather icon-trash"></i> حذف المحدد</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- dataTable starts -->
                     <div class="table-responsive">
                         <table class="table data-thumb-view">
@@ -193,6 +215,7 @@
                                     <th>المراحل</th>
                                     <th>ملاحظات</th>
                                     <th>التاريخ</th>
+                                    <th>الإجراءات</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -234,13 +257,18 @@
                                     </td>
                                     <td class="product-category">{{ $Record->notes ?? '-' }}</td>
                                     <td class="product-price" title="{{ $Record->created_at }}">{{ $Record->created_at ? $Record->created_at->locale('ar')->diffForHumans() : '-' }}</td>
+                                    <td class="product-action">
+                                        <span class="action-edit" onclick="editStras({{ $Record->id }})"><i class="feather icon-edit"></i></span>
+                                        <span class="action-delete" onclick="deleteStras({{ $Record->id }})"><i class="feather icon-trash"></i></span>
+                                        <span class="action-restart" onclick="restartStras({{ $Record->id }})" title="إعادة تشغيل"><i class="feather icon-refresh-cw"></i></span>
+                                    </td>
                                 </tr>
                                 @endforeach
 
                             </tbody>
                              <tfoot>
                                 <tr>
-                                    <td colspan="8">
+                                    <td colspan="10">
                                         <div id="stras-calculator-results" class="alert alert-primary mb-0" style="display:none; font-weight: bold; font-size: 1.1em;">
                                             <!-- Totals will appear here -->
                                         </div>
