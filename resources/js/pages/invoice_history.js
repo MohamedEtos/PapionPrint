@@ -102,6 +102,26 @@ $(document).ready(function () {
         lengthMenu: [10, 25, 50, 100]
     });
 
+    // Row Click Handler for Details
+    $('.data-list-view tbody').on('click', 'tr', function () {
+        var data = table.row(this).data();
+        if (data && data.id) {
+            $('#invoice-details-modal').modal('show');
+            $('#invoice-details-body').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>');
+
+            $.ajax({
+                url: '/invoices/archive-details/' + data.id,
+                method: 'GET',
+                success: function (response) {
+                    $('#invoice-details-body').html(response.html);
+                },
+                error: function () {
+                    $('#invoice-details-body').html('<div class="alert alert-danger">حدث خطأ أثناء تحميل التفاصيل</div>');
+                }
+            });
+        }
+    });
+
     console.log('DataTable initialized');
 
     // Add custom styling

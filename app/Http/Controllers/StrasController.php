@@ -47,7 +47,7 @@ class StrasController extends Controller
         $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
 
         if($request->has('customerId')){
-            $data['customer_id'] = $request->customerId;
+            $data['customerId'] = $request->customerId;
         }
 
         if ($request->hasFile('image')) {
@@ -90,7 +90,7 @@ class StrasController extends Controller
         $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
         
         if($request->has('customerId')){
-             $data['customer_id'] = $request->customerId;
+             $data['customerId'] = $request->customerId;
         }
         
         if ($request->hasFile('image')) {

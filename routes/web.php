@@ -140,5 +140,6 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/update-item', [App\Http\Controllers\InvoiceController::class, 'updateInvoiceItem'])->name('invoice.update_item');
         Route::get('/history', [App\Http\Controllers\InvoiceController::class, 'invoiceHistory'])->name('invoice.history');
         Route::get('/history-data', [App\Http\Controllers\InvoiceController::class, 'invoiceHistoryData'])->name('invoice.history_data');
+        Route::get('/archive-details/{id}', [App\Http\Controllers\InvoiceController::class, 'getArchiveDetails'])->name('invoice.archive_details');
     });
 });

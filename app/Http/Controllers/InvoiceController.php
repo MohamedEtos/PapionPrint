@@ -373,20 +373,12 @@ class InvoiceController extends Controller
             if ($item->itemable) {
                 if ($item->order_type === 'App\Models\Stras') {
                     $stras = $item->itemable;
-                    $details = 'عميل: ' . ($stras->customer_name ?? '-');
-                    if ($stras->design_name) $details .= ' | تصميم: ' . $stras->design_name;
+                    $details = 'عميل: ' . ($stras->customer->name ?? '-');
                 } elseif ($item->order_type === 'App\Models\Tarter') {
                     $tarter = $item->itemable;
-                    $details = 'عميل: ' . ($tarter->customer_name ?? '-');
-                    if ($tarter->design_name) $details .= ' | تصميم: ' . $tarter->design_name;
+                    $details = 'عميل: ' . ($tarter->customer->name ?? '-');
                 } elseif ($item->order_type === 'App\Models\Printers') {
-                    $printer = $item->itemable;
-                    $machine = $printer->machines;
-                    $details = ($machine ? $machine->name : '-') . ' (' . ($printer->pass ?? '-') . ' pass)';
-                } elseif ($item->order_type === 'App\Models\Rollpress') {
-                    $rollpress = $item->itemable;
-                    $details = 'عميل: ' . ($rollpress->customer ?? '-');
-                    if ($rollpress->design) $details .= ' | تصميم: ' . $rollpress->design;
+                     // ... 
                 }
             }
             
@@ -408,7 +400,8 @@ class InvoiceController extends Controller
                 'total' => number_format($item->total_price, 2) . ' ج.م',
                 'sent_date' => $item->sent_date ?? '-',
                 'sent_status' => $sent_status,
-                'created_at' => $item->created_at->format('Y-m-d H:i')
+                'created_at' => $item->created_at->format('Y-m-d H:i'),
+                'id' => $item->id, // Expose ID for click handler
             ];
         });
         
@@ -418,6 +411,28 @@ class InvoiceController extends Controller
             'recordsFiltered' => $filteredRecords,
             'data' => $data
         ]);
+    }
+
+    public function getArchiveDetails($id)
+    {
+        $archive = \App\Models\InvoiceArchive::with(['itemable'])->find($id);
+        
+        if (!$archive) {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+        
+        $item = $archive->itemable;
+        $typeMap = [
+            'App\Models\Stras' => 'stras',
+            'App\Models\Tarter' => 'tarter',
+            'App\Models\Printers' => 'printer',
+            'App\Models\Rollpress' => 'rollpress'
+        ];
+        $type = $typeMap[$archive->order_type] ?? 'unknown';
+        
+        $html = view('invoices.partials.modal_body', compact('archive', 'item', 'type'))->render();
+        
+        return response()->json(['html' => $html]);
     }
 
     private function getModelClass($type)
