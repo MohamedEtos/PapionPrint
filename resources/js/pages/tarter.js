@@ -617,7 +617,13 @@ $(document).ready(function () {
                 // Unit Price (Per Card)
                 if (totalCardsCount > 0) {
                     var unitCost = grandTotalCost / totalCardsCount;
-                    html += '<span class="badge badge-purple mb-1" style="font-size: 1em; margin-left:15px; background-color: #6f42c1; color:white;"><i class="feather icon-tag"></i> تكلفة الكارت : ' + unitCost.toFixed(3) + ' جنيه</span><br>';
+                    html += '<span class="badge badge-purple mb-1" style="font-size: 1em; margin-left:15px; background-color: #6f42c1; color:white;"><i class="feather icon-tag"></i> تكلفة الكارت : ' + unitCost.toFixed(3) + ' جنيه</span>';
+
+                    if (totalPiecesCalc > 0) {
+                        var pieceCost = grandTotalCost / totalPiecesCalc;
+                        html += '<span class="badge badge-warning mb-1" style="font-size: 1em; margin-left:15px; background-color: #ff9f43; color:white;"><i class="feather icon-disc"></i> تكلفة القطعة : ' + pieceCost.toFixed(4) + ' جنيه</span>';
+                    }
+                    html += '<br>';
                 } else {
                     html += '<br>';
                 }
