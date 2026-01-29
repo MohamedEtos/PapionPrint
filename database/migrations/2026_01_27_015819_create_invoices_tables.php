@@ -24,7 +24,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
             // Polymorphic relation to order items (Stras, Tarter, Printers, etc.)
-            $table->unsignedBigInteger('itemable_id');
+            $table->foreignId('printersLog_id')->nullable()->constrained('printers_logs')->onDelete('cascade');
+            $table->foreignId('tarterLog_id')->nullable()->constrained('tarter_logs')->onDelete('cascade');
+            $table->foreignId('strassLog_id')->nullable()->constrained('strass_logs')->onDelete('cascade');
+            $table->foreignId('rollpressLog_id')->nullable()->constrained('rollpress_logs')->onDelete('cascade');
+            
             $table->string('itemable_type');
             $table->decimal('custom_price', 10, 2)->nullable(); // Override calculated price if needed
             $table->integer('quantity')->default(1); 
