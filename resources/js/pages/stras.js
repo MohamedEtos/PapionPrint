@@ -380,16 +380,22 @@ $(document).ready(function () {
                     // To populate options correctly, let's grab them from the hidden/first select in the DOM (assuming one exists or we kept a template)
                     // But wait, the form is cleared or hidden. The wizard steps exist.
 
-                    // Helper: Clone options from a "master" select if possible.
-                    // Let's try to assume sizes 6, 8, 10, 12, 16, 20 are common. 
-                    // Or better:
+                    // Helper: Generate options from window.strasPrices
                     var options = '';
-                    // Try to find an existing select
-                    var $existingSelect = $('.layer-size').first();
-                    if ($existingSelect.length > 0) {
-                        options = $existingSelect.html();
-                    } else {
-                        // Fallback
+                    if (window.strasPrices) {
+                        window.strasPrices.forEach(function (p) {
+                            // Assuming we only want 'stras' type sizes?
+                            // Based on calculateTotals, we have 'stras' and 'paper'. 
+                            // If blade is sending all, we might want to filter or just use all if that is intended.
+                            // However, usually 'stras' sizes are what we want here.
+                            if (p.type === 'stras') {
+                                options += `<option value="${p.size}">${p.size}</option>`;
+                            }
+                        });
+                    }
+
+                    if (options === '') {
+                        // Fallback in case filtered list is empty but we have something
                         options = '<option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option>';
                     }
 

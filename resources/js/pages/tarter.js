@@ -324,13 +324,18 @@ $(document).ready(function () {
 
                     var $row = $(rowHtml);
 
-                    // Clone options from existing select logic check
+                    // Generate options from window.tarterPrices
                     var options = '';
-                    var $existingSelect = $('.layer-size').first();
-                    if ($existingSelect.length > 0) {
-                        options = $existingSelect.html();
-                    } else {
-                        // Basic fallback if no select found (rare)
+                    if (window.tarterPrices) {
+                        window.tarterPrices.forEach(function (p) {
+                            if (p.type === 'needle') {
+                                options += `<option value="${p.size}">${p.size}</option>`;
+                            }
+                        });
+                    }
+
+                    if (options === '') {
+                        // Fallback
                         options = '<option value="9">9</option><option value="11">11</option><option value="14">14</option>';
                     }
 
