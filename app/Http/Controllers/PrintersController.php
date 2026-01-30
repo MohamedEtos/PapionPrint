@@ -144,6 +144,31 @@ class PrintersController extends Controller
             }
         }
 
+        // Deduct Paper Stock
+        $machine = Machines::find($request->machineId);
+        if ($machine && $request->meters > 0) {
+            // Simple heuristics to determine type, or use a default if your system has specific machine names
+            // You might want to add a 'type' column to 'machines' table in the future.
+            // For now, let's assume if machine name contains 'DTF' it's dtf.
+            $type = stripos($machine->name, 'DTF') !== false ? 'dtf' : 'sublimation';
+            
+            $stock = \App\Models\Stock::where('type', 'paper')
+                        ->where('machine_type', $type)
+                        ->first();
+            
+            if ($stock) {
+                $stock->decrement('quantity', $request->meters);
+            } else {
+                 // Create tracking record if none exists
+                 \App\Models\Stock::create([
+                     'type' => 'paper',
+                     'machine_type' => $type,
+                     'quantity' => -($request->meters), // Negative to show usage
+                     'unit' => 'meter'
+                 ]);
+            }
+        }
+
         // Eager load relationships for the frontend response
         $printer->load(['customers', 'machines', 'printingprices', 'ordersImgs']);
 

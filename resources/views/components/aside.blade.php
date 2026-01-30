@@ -128,6 +128,13 @@
                         <span class="menu-title" data-i18n="Error Logs">تقارير الأخطاء</span>
                     </a>
                 </li>
+                
+                <li class=" nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}">
+                    <a href="{{ route('inventory.index') }}">
+                        <i class="feather icon-box"></i>
+                        <span class="menu-title" data-i18n="Inventory">المخازن</span>
+                    </a>
+                </li>
 
                 <!-- <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">User</span></a>
                     <ul class="menu-content">

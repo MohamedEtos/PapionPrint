@@ -234,6 +234,103 @@
  
 
 
+    <!-- Ink Consumption Modal -->
+    <div class="modal fade" id="inkConsumptionModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">استهلاك حبر</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <h6>اختر نوع الماكينة واللون لخصم 1 لتر</h6>
+                    <hr>
+                    
+                    <h6 class="text-primary font-weight-bold mb-2">Sublimation</h6>
+                    <div class="d-flex justify-content-center flex-wrap mb-3">
+                        <button class="btn btn-info m-1 consume-ink-btn" data-type="sublimation" data-color="Cyan" style="background-color: cyan; border-color: cyan; color: black;">Cyan</button>
+                        <button class="btn btn-danger m-1 consume-ink-btn" data-type="sublimation" data-color="Magenta" style="background-color: magenta; border-color: magenta; color: white;">Magenta</button>
+                        <button class="btn btn-warning m-1 consume-ink-btn" data-type="sublimation" data-color="Yellow" style="background-color: yellow; border-color: yellow; color: black;">Yellow</button>
+                        <button class="btn btn-dark m-1 consume-ink-btn" data-type="sublimation" data-color="Black" style="background-color: black; border-color: black; color: white;">Black</button>
+                    </div>
+
+                    <hr>
+
+                    <h6 class="text-primary font-weight-bold mb-2">DTF</h6>
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <button class="btn btn-info m-1 consume-ink-btn" data-type="dtf" data-color="Cyan" style="background-color: cyan; border-color: cyan; color: black;">Cyan</button>
+                        <button class="btn btn-danger m-1 consume-ink-btn" data-type="dtf" data-color="Magenta" style="background-color: magenta; border-color: magenta; color: white;">Magenta</button>
+                        <button class="btn btn-warning m-1 consume-ink-btn" data-type="dtf" data-color="Yellow" style="background-color: yellow; border-color: yellow; color: black;">Yellow</button>
+                        <button class="btn btn-dark m-1 consume-ink-btn" data-type="dtf" data-color="Black" style="background-color: black; border-color: black; color: white;">Black</button>
+                        <button class="btn btn-light m-1 consume-ink-btn" data-type="dtf" data-color="White" style="background-color: white; border-color: #ddd; color: black;">White</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Ink Consumption -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inject Ink Consumption Button
+            // We wait for DataTable to initialize or just try to find the container
+            setTimeout(function() {
+                let addNewBtn = $('.add-new-data'); // The button that triggers sidebar
+                // If the sidebar trigger is actually a button with class .add-new-data or inside .actions
+                // In Vuexy data-list-view, the button is often appended by JS to div.actions
+                
+                let inkBtnCheck = $('#ink-consumption-trigger-btn');
+                if(inkBtnCheck.length === 0){
+                    let btnHtml = '<button class="btn btn-outline-info mr-1" data-toggle="modal" data-target="#inkConsumptionModal" id="ink-consumption-trigger-btn">استهلاك حبر</button>';
+                    
+                    // Try to finding the "Add New" button container usually '.dt-buttons' or '.actions'
+                    let actionContainer = $('.dt-buttons'); 
+                    if(actionContainer.length > 0){
+                         actionContainer.prepend(btnHtml);
+                    } else {
+                         // Fallback: append to .content-header-right
+                         $('.content-header-right .form-group').prepend(btnHtml);
+                    }
+                }
+            }, 1000); // Small delay to ensuring DT loads
+
+            
+            // Handle Click
+            $(document).on('click', '.consume-ink-btn', function() {
+                let type = $(this).data('type');
+                let color = $(this).data('color');
+                
+                Swal.fire({
+                    title: 'تأكيد الاستهلاك',
+                    text: `هل أنت متأكد من خصم 1 لتر من ${color} (${type})؟`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم، اخصم',
+                    cancelButtonText: 'إلغاء'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('inventory.consumeInk') }}",
+                            method: 'POST',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                machine_type: type,
+                                color: color
+                            },
+                            success: function(response) {
+                                Swal.fire('تم!', response.success, 'success');
+                            },
+                            error: function() {
+                                Swal.fire('خطأ!', 'حدث خطأ أثناء الخصم', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
 
 @section('js')

@@ -70,6 +70,11 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('/users/update/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('users.update');
     Route::post('/users/delete/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');
 
+    // Inventory Routes
+    Route::post('/inventory/consume-ink', [App\Http\Controllers\InventoryController::class, 'consumeInk'])->name('inventory.consumeInk');
+    Route::get('/inventory', [App\Http\Controllers\InventoryController::class, 'index'])->name('inventory.index');
+    Route::post('/inventory/store', [App\Http\Controllers\InventoryController::class, 'store'])->name('inventory.store');
+
     // Accounts
     Route::get('/accounts', [App\Http\Controllers\AccountsController::class, 'index'])->name('accounts.index');
     Route::post('/accounts/update-price', [App\Http\Controllers\AccountsController::class, 'updatePrice'])->name('accounts.update_price');
