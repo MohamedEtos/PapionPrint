@@ -141,4 +141,24 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/history', [App\Http\Controllers\InvoiceController::class, 'invoiceHistory'])->name('invoice.history');
         Route::get('/history-data', [App\Http\Controllers\InvoiceController::class, 'invoiceHistoryData'])->name('invoice.history_data');
     });
+
+    // Laser Routes
+    Route::prefix('laser')->group(function () {
+        Route::get('/', [App\Http\Controllers\LaserController::class, 'index'])->name('laser.index');
+        Route::get('/show/{id}', [App\Http\Controllers\LaserController::class, 'show'])->name('laser.show');
+        Route::post('/store', [App\Http\Controllers\LaserController::class, 'store'])->name('laser.store');
+        Route::put('/update/{id}', [App\Http\Controllers\LaserController::class, 'update'])->name('laser.update');
+        Route::post('/restart/{id}', [App\Http\Controllers\LaserController::class, 'restart'])->name('laser.restart');
+        Route::delete('/delete/{id}', [App\Http\Controllers\LaserController::class, 'destroy'])->name('laser.delete');
+        Route::post('/bulk-delete', [App\Http\Controllers\LaserController::class, 'bulkDelete'])->name('laser.bulk_delete');
+        
+        // Trash
+        Route::get('/trash', [App\Http\Controllers\LaserController::class, 'trash'])->name('laser.trash');
+        Route::post('/restore/{id}', [App\Http\Controllers\LaserController::class, 'restore'])->name('laser.restore');
+        Route::delete('/force-delete/{id}', [App\Http\Controllers\LaserController::class, 'forceDelete'])->name('laser.force_delete');
+        
+        // Pricing
+        Route::get('/pricing', [App\Http\Controllers\LaserController::class, 'pricing'])->name('laser.pricing');
+        Route::post('/pricing/update', [App\Http\Controllers\LaserController::class, 'updatePrice'])->name('laser.update_price');
+    });
 });
