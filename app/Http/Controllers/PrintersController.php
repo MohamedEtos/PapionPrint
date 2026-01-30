@@ -20,11 +20,16 @@ class PrintersController extends Controller
         $customers = Customers::all();
         $machines = Machines::all();
 
+        $inkStocks = \App\Models\Stock::where('type', 'ink')->get();
+        $paperStocks = \App\Models\Stock::where('type', 'paper')->get();
+
         return view('printers.AddPrintOrders',
         [
             'Orders'=>$Orders,
             'customers' => $customers,
             'machines' => $machines,
+            'inkStocks' => $inkStocks,
+            'paperStocks' => $paperStocks,
         ]);
     }
 
@@ -145,12 +150,12 @@ class PrintersController extends Controller
         }
 
         // Deduct Paper Stock
+        // Deduct Paper Stock
         $machine = Machines::find($request->machineId);
         if ($machine && $request->meters > 0) {
-            // Simple heuristics to determine type, or use a default if your system has specific machine names
-            // You might want to add a 'type' column to 'machines' table in the future.
-            // For now, let's assume if machine name contains 'DTF' it's dtf.
-            $type = stripos($machine->name, 'DTF') !== false ? 'dtf' : 'sublimation';
+            // Determine type by checking name case-insensitive
+            $machineName = strtolower($machine->name);
+            $type = str_contains($machineName, 'dtf') ? 'dtf' : 'sublimation';
             
             $stock = \App\Models\Stock::where('type', 'paper')
                         ->where('machine_type', $type)
@@ -163,7 +168,7 @@ class PrintersController extends Controller
                  \App\Models\Stock::create([
                      'type' => 'paper',
                      'machine_type' => $type,
-                     'quantity' => -($request->meters), // Negative to show usage
+                     'quantity' => -($request->meters),
                      'unit' => 'meter'
                  ]);
             }

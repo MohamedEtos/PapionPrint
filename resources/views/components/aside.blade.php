@@ -110,6 +110,20 @@
                 <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
                 </li>
 
+                <li class=" nav-item {{ request()->routeIs('attendance.*') ? 'active' : '' }}">
+                    <a href="{{ route('attendance.index') }}">
+                        <i class="feather icon-clock"></i>
+                        <span class="menu-title" data-i18n="Attendance">الحضور والانصراف</span>
+                    </a>
+                </li>
+
+                <li class=" nav-item {{ request()->routeIs('payroll.*') ? 'active' : '' }}">
+                    <a href="{{ route('payroll.index') }}">
+                        <i class="feather icon-dollar-sign"></i>
+                        <span class="menu-title" data-i18n="Payroll">الرواتب</span>
+                    </a>
+                </li>
+
                 <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }} nav-item"><a href="{{ route('roles.index') }}"><i class="feather icon-lock"></i><span class="menu-title" data-i18n="Roles">الصلاحيات & الأدوار</span></a>
                 </li>
  

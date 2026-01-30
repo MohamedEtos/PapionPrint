@@ -19,23 +19,21 @@ class InventoryController extends Controller
             ->where('color', $request->color)
             ->first();
 
-        if ($stock) {
+        if ($stock && $stock->quantity >= 1) {
             $stock->decrement('quantity', 1);
+            
+            // Log the consumption
+            \App\Models\InventoryLog::create([
+                'type' => 'ink',
+                'machine_type' => $request->machine_type,
+                'color' => $request->color,
+                'quantity' => 1,
+            ]);
+
             return response()->json(['success' => 'تم خصم 1 لتر بنجاح', 'new_quantity' => $stock->quantity]);
         }
         
-        // Optional: Auto-create if not exists (or return error)
-        // For now, let's create it with -1 to track deficit or 0 if we assume stock exists.
-        // Let's create with initial 0 then decrement to -1
-        $stock = \App\Models\Stock::create([
-            'type' => 'ink',
-            'machine_type' => $request->machine_type,
-            'color' => $request->color,
-            'quantity' => -1,
-            'unit' => 'liter'
-        ]);
-
-        return response()->json(['success' => 'تم خصم 1 لتر (تم إنشاء سجل جديد)', 'new_quantity' => -1]);
+        return response()->json(['error' => 'عفوا، الرصيد غير كافي!'], 400);
     }
 
     public function index()
@@ -53,31 +51,62 @@ class InventoryController extends Controller
         $request->validate([
             'type' => 'required|in:paper,ink',
             'machine_type' => 'required',
-            'color' => 'nullable|string',
-            'quantity' => 'required|numeric',
+            'operation' => 'required|in:add,set',
+            // Quantity is required only if we are not submitting colors array
+            'quantity' => 'required_without:colors|numeric',
+            'colors' => 'nullable|array',
             'unit' => 'required|string',
-            'operation' => 'required|in:add,set' // Add to existing or Set absolute value
         ]);
 
+        if ($request->has('colors') && is_array($request->colors)) {
+            // Mass update for ink colors
+            foreach ($request->colors as $color => $qty) {
+                if ($qty === null || $qty === '') continue; // Skip empty inputs
+
+                $this->updateStock(
+                    $request->type,
+                    $request->machine_type,
+                    $color,
+                    (float)$qty,
+                    $request->unit,
+                    $request->operation
+                );
+            }
+        } else {
+            // Single update (Paper or single ink if flow was different)
+            $this->updateStock(
+                $request->type,
+                $request->machine_type,
+                $request->color,
+                (float)$request->quantity,
+                $request->unit,
+                $request->operation
+            );
+        }
+
+        return response()->json(['success' => 'تم تحديث المخزون بنجاح']);
+    }
+
+    private function updateStock($type, $machineType, $color, $quantity, $unit, $operation)
+    {
         $stock = \App\Models\Stock::firstOrNew([
-            'type' => $request->type,
-            'machine_type' => $request->machine_type,
-            'color' => $request->color,
+            'type' => $type,
+            'machine_type' => $machineType,
+            'color' => $color,
         ]);
 
         if (!$stock->exists) {
-             $stock->unit = $request->unit;
+             $stock->unit = $unit;
              $stock->quantity = 0;
         }
 
-        if ($request->operation == 'add') {
-            $stock->quantity += $request->quantity;
+        if ($operation == 'add') {
+            $stock->quantity += $quantity;
         } else {
-            $stock->quantity = $request->quantity;
+            $stock->quantity = $quantity;
         }
         
         $stock->save();
-
-        return response()->json(['success' => 'تم تحديث المخزون بنجاح', 'stock' => $stock]);
+        return $stock;
     }
 }

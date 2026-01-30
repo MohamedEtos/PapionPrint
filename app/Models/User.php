@@ -23,6 +23,13 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'base_salary',
+        'working_hours',
+        'shift_start',
+        'shift_end',
+        'overtime_rate',
+        'joining_date',
+        'resignation_date',
     ];
 
     /**
@@ -45,6 +52,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'joining_date' => 'date',
+            'resignation_date' => 'date',
         ];
     }
 }

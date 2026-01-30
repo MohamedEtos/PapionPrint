@@ -7,4 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Stock extends Model
 {
+    use HasFactory;
+
+    protected $fillable = [
+        'type',
+        'machine_type',
+        'color',
+        'quantity',
+        'unit',
+    ];
 }

@@ -648,4 +648,123 @@ $(document).ready(function () {
     });
   });
 
+
+
+
+  // Check if global data exists
+  if (!window.papionInvData) {
+    console.warn('PapionInvData not found');
+  } else {
+
+    // Initialize Ink Chart
+    const inkChartEl = document.getElementById('inkChart');
+    if (inkChartEl && typeof Chart !== 'undefined') {
+      const ctxInk = inkChartEl.getContext('2d');
+      const inkStocks = window.papionInvData.inkStocks || [];
+
+      // Initialize Paper Chart
+      const ctxPaper = document.getElementById('paperChart').getContext('2d');
+      const paperStocks = window.papionInvData.paperStocks || [];
+
+      function getQty(stocks, type, color = null) {
+        const stock = stocks.find(s => s.machine_type === type && (color ? s.color === color : true));
+        return stock ? stock.quantity : 0;
+      }
+
+      // --- Ink Chart ---
+      // --- Ink Chart ---
+      const inkData = {
+        labels: ['Sub-C', 'Sub-M', 'Sub-Y', 'Sub-K', 'DTF-C', 'DTF-M', 'DTF-Y', 'DTF-K', 'DTF-W'],
+        datasets: [{
+          label: 'Ink (L)',
+            data: [
+            getQty(inkStocks, 'sublimation', 'Cyan'), getQty(inkStocks, 'sublimation', 'Magenta'), getQty(inkStocks, 'sublimation', 'Yellow'), getQty(inkStocks, 'sublimation', 'Black'),
+            getQty(inkStocks, 'dtf', 'Cyan'), getQty(inkStocks, 'dtf', 'Magenta'), getQty(inkStocks, 'dtf', 'Yellow'), getQty(inkStocks, 'dtf', 'Black'), getQty(inkStocks, 'dtf', 'White')
+            ],
+          backgroundColor: ['cyan', 'red', 'yellow', 'black', 'cyan', 'red', 'yellow', 'black', '#ddd'],
+            borderWidth: 1
+        }]
+      };
+
+      const inkChart = new Chart(ctxInk, {
+        type: 'bar',
+        data: inkData,
+        options: { responsive: true, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+      });
+
+      // --- Paper Chart ---
+      const paperData = {
+        labels: ['Sublimation', 'DTF'],
+        datasets: [{
+          label: 'Paper (Meters)',
+          data: [
+            getQty(paperStocks, 'sublimation'),
+            getQty(paperStocks, 'dtf')
+          ],
+          
+          backgroundColor: ['#28C76F', '#FF9F43'], // Green, Orange
+          borderWidth: 1
+        }]
+      };
+
+      const paperChart = new Chart(ctxPaper, {
+        type: 'bar', // or 'doughnut'
+        data: paperData,
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+      });
+
+      // Handle Click for Consumption
+      // Note: This needs to be available even if charts fail, but we put it here assuming Charts is key feature
+      // Better to move event listener out or keep it here if related.
+      // We bind it effectively here.
+
+      $(document).on('click', '.consume-ink-btn', function () {
+        let type = $(this).data('type');
+        let color = $(this).data('color');
+
+        Swal.fire({
+          title: 'تأكيد الاستهلاك',
+          text: `هل أنت متأكد من خصم 1 لتر من ${color} (${type})؟`,
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'نعم، اخصم',
+          cancelButtonText: 'إلغاء'
+        }).then((result) => {
+          if (result.value) {
+            $.ajax({
+              url: window.papionInvData.consumeInkRoute,
+              method: 'POST',
+              data: {
+                _token: window.papionInvData.csrfToken,
+                machine_type: type,
+                color: color
+              },
+              success: function (response) {
+                Swal.fire('تم!', response.success, 'success');
+
+                // Update Chart Locally
+                // Map Color to Index: Cyan=0, Magenta=1, Yellow=2, Black=3, White=4
+                const colorMap = { 'Cyan': 0, 'Magenta': 1, 'Yellow': 2, 'Black': 3, 'White': 4 };
+                const colorIndex = colorMap[color];
+
+                // Map Type to Dataset Index: Sublimation=0, DTF=1
+                const datasetIndex = (type === 'sublimation') ? 0 : 1;
+
+                if (colorIndex !== undefined && inkChart.data.datasets[datasetIndex]) {
+                  inkChart.data.datasets[datasetIndex].data[colorIndex] = response.new_quantity;
+                  inkChart.update();
+                }
+              },
+              error: function (xhr) {
+                let msg = xhr.responseJSON ? xhr.responseJSON.error : 'حدث خطأ أثناء الخصم';
+                Swal.fire('خطأ!', msg, 'error');
+              }
+            });
+          }
+        });
+      });
+    } else {
+      console.log("Chart elements not found or Chart.js not loaded");
+    }
+  }
 });

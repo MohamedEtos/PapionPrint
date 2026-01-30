@@ -91,14 +91,23 @@
                                             <tr>
                                                 <td>{{ strtoupper($stock->machine_type) }}</td>
                                                 <td>
-                                                    <div class="chip chip-secondary mr-1">
+                                                    @php
+                                                        $colorMap = [
+                                                            'cyan' => 'info', 'سماوي' => 'info',
+                                                            'magenta' => 'danger', 'فوشيا' => 'danger',
+                                                            'yellow' => 'warning', 'أصفر' => 'warning',
+                                                            'black' => 'dark', 'أسود' => 'dark'
+                                                        ];
+                                                        $chipColor = $colorMap[strtolower($stock->color)] ?? 'secondary';
+                                                    @endphp
+                                                    <div class="chip chip-{{ $chipColor }} mr-1">
                                                         <div class="chip-body">
                                                             <div class="chip-text">{{ $stock->color }}</div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                     <span class="badge badge-pill badge-light-{{ $stock->quantity < 2 ? 'danger' : 'success' }} mr-1">
+                                                     <span class="badge badge-pill badge-light-{{ $stock->quantity < 2 ? 'danger' : ($stock->quantity < 5 ? 'warning' : 'success') }} mr-1">
                                                         {{ $stock->quantity }}
                                                     </span>
                                                 </td>
@@ -156,18 +165,11 @@
                         </select>
                     </div>
 
-                    <div class="form-group" id="colorGroup" style="display:none;">
-                        <label>اللون</label>
-                        <select class="form-control" name="color" id="stockColor">
-                            <option value="Cyan">Cyan</option>
-                            <option value="Magenta">Magenta</option>
-                            <option value="Yellow">Yellow</option>
-                            <option value="Black">Black</option>
-                            <option value="White">White</option>
-                        </select>
+                    <div id="inputContainer">
+                        <!-- Dynamic Inputs -->
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label>العملية</label>
                         <div class="d-flex">
                             <div class="custom-control custom-radio mr-2">
@@ -179,11 +181,6 @@
                                 <label class="custom-control-label" for="opSet">تعديل (تعيين القيمة الحالية)</label>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>الكمية</label>
-                        <input type="number" step="0.01" class="form-control" name="quantity" required placeholder="مثال: 50">
                     </div>
 
                     <input type="hidden" name="unit" id="stockUnit" value="meter">
@@ -200,21 +197,51 @@
 
 @section('js')
 <script>
+    const dtColors = ['Cyan', 'Magenta', 'Yellow', 'Black', 'White'];
+    const subColors = ['Cyan', 'Magenta', 'Yellow', 'Black'];
+
     function openStockModal(type) {
         $('#stockType').val(type).trigger('change');
         $('#addStockModal').modal('show');
     }
 
     // Toggle Color field based on type
-    $('#stockType').change(function() {
-        if($(this).val() == 'ink') {
-            $('#colorGroup').show();
-            $('#stockUnit').val('liter');
-        } else {
-            $('#colorGroup').hide();
-            $('#stockUnit').val('meter');
-        }
+    $('#stockType, #machineType').change(function() {
+        renderInputs();
     });
+
+    function renderInputs() {
+        const type = $('#stockType').val();
+        const machine = $('#machineType').val();
+        const container = $('#inputContainer');
+        
+        container.empty();
+
+        if (type === 'paper') {
+             $('#stockUnit').val('meter');
+             container.append(`
+                <div class="form-group">
+                    <label>الكمية (متر)</label>
+                    <input type="number" step="0.01" class="form-control" name="quantity" required placeholder="مثال: 50">
+                </div>
+             `);
+        } else {
+            $('#stockUnit').val('liter');
+            const colors = machine === 'dtf' ? dtColors : subColors;
+            
+            let html = '<label>الكميات (لتر)</label><div class="row">';
+            colors.forEach(color => {
+                html += `
+                    <div class="col-6 mb-2">
+                        <label>${color}</label>
+                        <input type="number" step="0.01" class="form-control" name="colors[${color}]" placeholder="0">
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.append(html);
+        }
+    }
 
     function submitStockForm() {
         $.ajax({

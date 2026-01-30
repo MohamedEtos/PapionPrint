@@ -23,6 +23,13 @@ class UsersController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            'base_salary' => 'nullable|numeric',
+            'working_hours' => 'nullable|integer',
+            'shift_start' => 'nullable',
+            'shift_end' => 'nullable',
+            'overtime_rate' => 'nullable|numeric|min:0',
+            'joining_date' => 'nullable|date',
+            'resignation_date' => 'nullable|date',
             'roles' => 'array'
         ]);
 
@@ -31,39 +38,58 @@ class UsersController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'base_salary' => $request->base_salary,
+            'working_hours' => $request->working_hours ?? 8,
+            'shift_start' => $request->shift_start,
+            'shift_end' => $request->shift_end,
+            'overtime_rate' => $request->overtime_rate,
+            'joining_date' => $request->joining_date,
+            'resignation_date' => $request->resignation_date,
         ]);
 
-        if($request->has('roles')){
-            $user->syncRoles($request->roles);
+        if ($request->has('roles')) {
+            $user->assignRole($request->roles);
         }
 
-        return response()->json(['success' => 'User created successfully', 'user' => $user->load('roles')]);
+        return response()->json(['success' => 'تم اضافة المستخدم بنجاح!']);
     }
 
     public function update(Request $request, $id)
     {
+        $user = User::findOrFail($id);
+        
         $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,'.$id,
-            'email' => 'required|string|email|max:255|unique:users,email,'.$id,
+            'name' => 'required',
+            'username' => 'required|unique:users,username,'.$user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'base_salary' => 'nullable|numeric',
+            'working_hours' => 'nullable|numeric',
+            'shift_start' => 'nullable',
+            'shift_end' => 'nullable',
+            'overtime_rate' => 'nullable|numeric|min:0',
+            'joining_date' => 'nullable|date',
+            'resignation_date' => 'nullable|date',
             'roles' => 'nullable|array'
         ]);
 
-        $user = User::findOrFail($id);
-        $user->update([
+        $data = [
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
-        ]);
-        
-        if ($request->filled('password')) {
-            $user->update(['password' => Hash::make($request->password)]);
+            'base_salary' => $request->base_salary,
+            'working_hours' => $request->working_hours,
+            'shift_start' => $request->shift_start,
+            'shift_end' => $request->shift_end,
+            'overtime_rate' => $request->overtime_rate,
+            'joining_date' => $request->joining_date,
+            'resignation_date' => $request->resignation_date,
+        ];
+
+        if ($request->password) {
+            $data['password'] = Hash::make($request->password);
         }
 
-        // Always sync roles if the request contains 'update_roles' flag, 
-        // or if 'roles' is present. If 'roles' is missing but we are updating, 
-        // it might mean unchecking all roles (if we send an empty array from frontend).
-        // Best practice: Frontend should send 'roles' as empty array if none selected.
+        $user->update($data);
         
         if ($request->has('roles') || $request->has('update_roles')) {
             $user->syncRoles($request->roles ?? []);

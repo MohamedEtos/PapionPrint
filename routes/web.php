@@ -19,6 +19,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/orders', [App\Http\Controllers\ChartController::class, 'getOrdersData'])->name('charts.orders');
         Route::get('/customers', [App\Http\Controllers\ChartController::class, 'getCustomersData'])->name('charts.customers');
         Route::get('/client-retention', [App\Http\Controllers\ChartController::class, 'getClientRetentionData'])->name('charts.client_retention');
+        Route::get('/inventory', [App\Http\Controllers\ChartController::class, 'getInventoryData'])->name('charts.inventory');
     });
 
     Route::prefix('Rollpress')->group(function () {
@@ -166,4 +167,10 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/pricing', [App\Http\Controllers\LaserController::class, 'pricing'])->name('laser.pricing');
         Route::post('/pricing/update', [App\Http\Controllers\LaserController::class, 'updatePrice'])->name('laser.update_price');
     });
+
+    // Attendance & Payroll
+    Route::get('/attendance', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance/check-in', [App\Http\Controllers\AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
+    Route::post('/attendance/check-out', [App\Http\Controllers\AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
+    Route::get('/payroll', [App\Http\Controllers\AttendanceController::class, 'payroll'])->name('payroll.index');
 });

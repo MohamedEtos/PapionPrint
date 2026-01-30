@@ -34,7 +34,7 @@ $(document).ready(function () {
     pageLength: 4,
     buttons: [
       {
-        text: "<i class='feather icon-plus'></i> Add New",
+        text: "<i class='feather icon-plus'></i> إضافة طلب طباعة ",
         action: function () {
           $(this).removeClass("btn-secondary")
           $(".add-new-data").addClass("show")
@@ -90,6 +90,13 @@ $(document).ready(function () {
           $(".overlay-bg").addClass("show")
         },
         className: "btn-outline-primary"
+      },
+      {
+        text: "<i class='feather icon-droplet'></i> استهلاك  الحبر والورق ",
+        action: function () {
+          $('#inkConsumptionModal').modal('show');
+        },
+        className: "btn-outline-primary ml-1"
       }
     ],
     initComplete: function (settings, json) {
