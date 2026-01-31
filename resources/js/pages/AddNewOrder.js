@@ -754,6 +754,7 @@ $(document).ready(function () {
                   inkChart.data.datasets[datasetIndex].data[colorIndex] = response.new_quantity;
                   inkChart.update();
                 }
+                
               },
               error: function (xhr) {
                 let msg = xhr.responseJSON ? xhr.responseJSON.error : 'حدث خطأ أثناء الخصم';
