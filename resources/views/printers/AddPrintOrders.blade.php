@@ -234,6 +234,58 @@
  
 
 
+    <!-- Ink Consumption Modal -->
+    <div class="modal fade" id="inkConsumptionModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content ">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title">استهلاك حبر / ورق</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>مخزون الورق (متر)</h6>
+                            <canvas id="paperChart" height="200"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                             <h6>مخزون الحبر (لتر)</h6>
+                             <canvas id="inkChart" height="200"></canvas>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    <h6>اختر نوع الماكينة واللون لخصم 1 لتر</h6>
+                    <hr>
+                    
+                    <h6 class="text-primary font-weight-bold mb-2">Sublimation</h6>
+                    <div class="d-flex justify-content-center flex-wrap mb-3">
+                        <button class="btn btn-info m-1 consume-ink-btn" data-type="sublimation" data-color="Cyan" style="background-color: cyan; border-color: cyan; color: black;">Cyan</button>
+                        <button class="btn btn-danger m-1 consume-ink-btn" data-type="sublimation" data-color="Magenta" style="background-color: magenta; border-color: magenta; color: white;">Magenta</button>
+                        <button class="btn  m-1 consume-ink-btn" data-type="sublimation" data-color="Yellow" style="background-color: yellow; border-color: yellow; color: black;">Yellow</button>
+                        <button class="btn btn-dark m-1 consume-ink-btn" data-type="sublimation" data-color="Black" style="background-color: black; border-color: black; color: white;">Black</button>
+                    </div>
+
+                    <hr>
+
+                    <h6 class="text-primary font-weight-bold mb-2">DTF</h6>
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <button class="btn btn-info m-1 consume-ink-btn" data-type="dtf" data-color="Cyan" style="background-color: cyan; border-color: cyan; color: black;">Cyan</button>
+                        <button class="btn btn-danger m-1 consume-ink-btn" data-type="dtf" data-color="Magenta" style="background-color: magenta; border-color: magenta; color: white;">Magenta</button>
+                        <button class="btn btn- m-1 consume-ink-btn" data-type="dtf" data-color="Yellow" style="background-color: yellow; border-color: yellow; color: black;">Yellow</button>
+                        <button class="btn btn-dark m-1 consume-ink-btn" data-type="dtf" data-color="Black" style="background-color: black; border-color: black; color: white;">Black</button>
+                        <button class="btn btn-light m-1 consume-ink-btn" data-type="dtf" data-color="White" style="background-color: white; border-color: #ddd; color: black;">White</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 @endsection
 
 @section('js')
@@ -247,6 +299,14 @@
     <script src="{{ asset('core/js/scripts/ui/data-list-view.js') }}"></script>
     <script src="{{ asset('core/js/scripts/modal/components-modal.js') }}"></script>
 
+    <script>
+        window.papionInvData = {
+            inkStocks: @json($inkStocks ?? []),
+            paperStocks: @json($paperStocks ?? []),
+            consumeInkRoute: "{{ route('inventory.consumeInk') }}",
+            csrfToken: "{{ csrf_token() }}"
+        };
+    </script>
     @vite('resources/js/pages/AddNewOrder.js')
 
 @endsection

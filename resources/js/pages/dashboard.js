@@ -7,6 +7,8 @@ $(document).ready(function () {
     var $primary_light = '#A9A2F6';
     var $danger_light = '#f29292';
     var $danger = '#EA5455';
+    var $warning = '#FF9F43';
+    var $warning_light = '#FFC085';
 
     var revenueChartoptions = {
         chart: {
@@ -155,7 +157,7 @@ $(document).ready(function () {
     });
 
     // Orders Chart Logic
-    var $warning = '#FF9F43';
+    // Orders Chart Logic
     var orderChartoptions = {
         chart: {
             height: 100,
@@ -492,5 +494,125 @@ $(document).ready(function () {
             updateClientRetentionChart(currentClientRetentionPeriod);
         }
     }, 30000); // 5 seconds
+
+
+    // Product Order Chart
+    // -----------------------------
+
+    var productOrderChartoptions = {
+        chart: {
+            height: 325,
+            type: 'radialBar',
+        },
+        colors: [$primary, $warning, $danger, '#28C76F'],
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                type: 'vertical',
+                shadeIntensity: 0.5,
+                gradientToColors: [$primary_light, $warning_light, $danger_light, '#55D88D'],
+                inverseColors: false,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100]
+            },
+        },
+        stroke: {
+            lineCap: 'round'
+        },
+        plotOptions: {
+            radialBar: {
+                size: 150,
+                hollow: {
+                    size: '20%'
+                },
+                track: {
+                    strokeWidth: '100%',
+                    margin: 15,
+                },
+                dataLabels: {
+                    name: {
+                        fontSize: '18px',
+                    },
+                    value: {
+                        fontSize: '16px',
+                        formatter: function (val) {
+                            return val;
+                        }
+                    },
+                    total: {
+                        show: true,
+                        label: 'Total',
+                        formatter: function (w) {
+                            return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                        }
+                    }
+                }
+            }
+        },
+        series: [],
+        labels: [],
+        noData: {
+            text: 'Loading...'
+        }
+    }
+
+    var productOrderChart = new ApexCharts(
+        document.querySelector("#product-order-chart"),
+        productOrderChartoptions
+    );
+
+    productOrderChart.render();
+
+    function updateInventoryChart(period = '7_days') {
+        $.ajax({
+            url: '/charts/inventory',
+            type: 'GET',
+            data: { period: period },
+            cache: false,
+            success: function (response) {
+                const seriesData = response.series.map(Number);
+                productOrderChart.updateOptions({
+                    labels: response.labels
+                });
+                productOrderChart.updateSeries(seriesData);
+
+                // Update Stats
+                if (response.stats) {
+                    $('#stat-paper-sub').text(response.stats.paper_sub + ' متر');
+                    $('#stat-paper-dtf').text(response.stats.paper_dtf + ' متر');
+                    $('#stat-ink-sub').text(response.stats.ink_sub + ' لتر');
+                    $('#stat-ink-dtf').text(response.stats.ink_dtf + ' لتر');
+                }
+            },
+            error: function (xhr) {
+                console.error("Error fetching inventory data", xhr);
+            }
+        });
+    }
+
+    updateInventoryChart();
+
+    // Inventory Period Dropdown
+    var currentInventoryPeriod = '7_days';
+    $('.inventory-period').on('click', function (e) {
+        e.preventDefault();
+        var period = $(this).data('period');
+        var label = $(this).text();
+        // Updated selector to find the button within the same dropdown container
+        $(this).closest('.dropdown').find('#dropdownItem2').text(label);
+
+        currentInventoryPeriod = period;
+        updateInventoryChart(period);
+    });
+
+    // Auto-refresh hook
+    setInterval(function () {
+        if (productOrderChart) updateInventoryChart(currentInventoryPeriod);
+    }, 30000);
+
+
+
 
 });

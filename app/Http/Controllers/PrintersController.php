@@ -20,11 +20,16 @@ class PrintersController extends Controller
         $customers = Customers::all();
         $machines = Machines::all();
 
+        $inkStocks = \App\Models\Stock::where('type', 'ink')->get();
+        $paperStocks = \App\Models\Stock::where('type', 'paper')->get();
+
         return view('printers.AddPrintOrders',
         [
             'Orders'=>$Orders,
             'customers' => $customers,
             'machines' => $machines,
+            'inkStocks' => $inkStocks,
+            'paperStocks' => $paperStocks,
         ]);
     }
 
@@ -141,6 +146,31 @@ class PrintersController extends Controller
                     'path' => $path,
                     'type' => 'image',
                 ]);
+            }
+        }
+
+        // Deduct Paper Stock
+        // Deduct Paper Stock
+        $machine = Machines::find($request->machineId);
+        if ($machine && $request->meters > 0) {
+            // Determine type by checking name case-insensitive
+            $machineName = strtolower($machine->name);
+            $type = str_contains($machineName, 'dtf') ? 'dtf' : 'sublimation';
+            
+            $stock = \App\Models\Stock::where('type', 'paper')
+                        ->where('machine_type', $type)
+                        ->first();
+            
+            if ($stock) {
+                $stock->decrement('quantity', $request->meters);
+            } else {
+                 // Create tracking record if none exists
+                 \App\Models\Stock::create([
+                     'type' => 'paper',
+                     'machine_type' => $type,
+                     'quantity' => -($request->meters),
+                     'unit' => 'meter'
+                 ]);
             }
         }
 

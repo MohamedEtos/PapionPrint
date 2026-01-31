@@ -7,6 +7,13 @@ $(document).ready(function () {
         $('#data-username').val('');
         $('#data-email').val('');
         $('#data-password').val('');
+        $('#data-base-salary').val('');
+        $('#data-working-hours').val('8');
+        $('#data-shift-start').val('');
+        $('#data-shift-end').val('');
+        $('#data-overtime-rate').val('1.5');
+        $('#data-joining-date').val('');
+        $('#data-resignation-date').val('');
         $('.role-checkbox').prop('checked', false);
         $(".add-new-data").addClass("show");
         $(".overlay-bg").addClass("show");
@@ -36,11 +43,26 @@ $(document).ready(function () {
             roles.push($(this).text().trim());
         });
 
+        var userBaseSalary = $btn.data('base_salary') || '';
+        var userWorkingHours = $btn.data('working_hours') || '8';
+        var userShiftStart = $btn.data('shift_start') || '';
+        var userShiftEnd = $btn.data('shift_end') || '';
+        var userOvertimeRate = $btn.data('overtime_rate') || '1.5';
+        var userJoiningDate = $btn.data('joining_date') || '';
+        var userResignationDate = $btn.data('resignation_date') || '';
+
         $('#data-id').val(userId);
         $('#data-name').val(userName);
         $('#data-username').val(userUsername);
         $('#data-email').val(userEmail);
         $('#data-password').val('');
+        $('#data-base-salary').val(userBaseSalary);
+        $('#data-working-hours').val(userWorkingHours);
+        $('#data-shift-start').val(userShiftStart);
+        $('#data-shift-end').val(userShiftEnd);
+        $('#data-overtime-rate').val(userOvertimeRate);
+        $('#data-joining-date').val(userJoiningDate);
+        $('#data-resignation-date').val(userResignationDate);
 
         // Reset checkboxes
         $('.role-checkbox').prop('checked', false);
@@ -119,6 +141,13 @@ $(document).ready(function () {
         var username = $('#data-username').val();
         var email = $('#data-email').val();
         var password = $('#data-password').val();
+        var base_salary = $('#data-base-salary').val();
+        var working_hours = $('#data-working-hours').val();
+        var shift_start = $('#data-shift-start').val();
+        var shift_end = $('#data-shift-end').val();
+        var overtime_rate = $('#data-overtime-rate').val();
+        var joining_date = $('#data-joining-date').val();
+        var resignation_date = $('#data-resignation-date').val();
         var selectedRoles = [];
 
         $('.role-checkbox:checked').each(function () {
@@ -157,6 +186,13 @@ $(document).ready(function () {
                 username: username,
                 email: email,
                 password: password,
+                base_salary: base_salary,
+                working_hours: working_hours,
+                shift_start: shift_start,
+                shift_end: shift_end,
+                overtime_rate: overtime_rate,
+                joining_date: joining_date,
+                resignation_date: resignation_date,
                 roles: selectedRoles,
                 update_roles: true,
                 _token: $('meta[name="csrf-token"]').attr('content')

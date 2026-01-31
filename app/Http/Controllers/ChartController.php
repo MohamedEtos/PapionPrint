@@ -42,4 +42,54 @@ class ChartController extends Controller
         $data = $service->getChartData($period);
         return response()->json($data);
     }
+
+    public function getInventoryData(Request $request)
+    {
+        $period = $request->input('period', '7_days');
+        
+        $date = \Carbon\Carbon::now();
+        switch($period) {
+            case '7_days': $date->subDays(7); break;
+            case '28_days': $date->subDays(28); break;
+            case 'month': $date->subMonth(); break;
+            case 'year': $date->subYear(); break;
+            default: $date->subDays(7);
+        }
+
+        // Paper Consumption (From Printers/Orders)
+        // Sublimation
+        $paperSub = \App\Models\Printers::where('created_at', '>=', $date)
+            ->whereHas('machines', function($q) {
+                $q->where('name', 'not like', '%dtf%')->where('name', 'not like', '%DTF%');
+            })->sum('meters');
+
+        // DTF
+        $paperDtf = \App\Models\Printers::where('created_at', '>=', $date)
+            ->whereHas('machines', function($q) {
+                $q->where('name', 'like', '%dtf%')->orWhere('name', 'like', '%DTF%');
+            })->sum('meters');
+
+
+        // Ink Consumption (From InventoryLogs)
+        $inkSub = \App\Models\InventoryLog::where('type', 'ink')
+            ->where('machine_type', 'sublimation')
+            ->where('created_at', '>=', $date)
+            ->sum('quantity');
+
+        $inkDtf = \App\Models\InventoryLog::where('type', 'ink')
+            ->where('machine_type', 'dtf')
+            ->where('created_at', '>=', $date)
+            ->sum('quantity');
+
+        return response()->json([
+            'series' => [$paperSub, $paperDtf, $inkSub, $inkDtf],
+            'labels' => ['Paper Sub (m)', 'Paper DTF (m)', 'Ink Sub (L)', 'Ink DTF (L)'],
+            'stats' => [
+                'paper_sub' => number_format($paperSub, 2),
+                'paper_dtf' => number_format($paperDtf, 2),
+                'ink_sub' => number_format($inkSub, 2),
+                'ink_dtf' => number_format($inkDtf, 2),
+            ]
+        ]);
+    }
 }

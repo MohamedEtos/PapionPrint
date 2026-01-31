@@ -93,7 +93,15 @@
                                               data-id="{{ $user->id }}"
                                               data-name="{{ $user->name }}"
                                               data-username="{{ $user->username }}"
-                                              data-email="{{ $user->email }}">
+                                              data-email="{{ $user->email }}"
+                                              data-base_salary="{{ $user->base_salary }}"
+                                              data-working_hours="{{ $user->working_hours }}"
+                                              data-shift_start="{{ $user->shift_start }}"
+                                              data-shift_end="{{ $user->shift_end }}"
+                                              data-overtime_rate="{{ $user->overtime_rate }}"
+                                              data-joining_date="{{ $user->joining_date }}"
+                                              data-resignation_date="{{ $user->resignation_date }}"
+                                              >
                                             <i class="feather icon-edit"></i>
                                         </span>
                                         <span class="hover_action action-delete text-danger"><i class="feather icon-trash"></i></span>
@@ -136,6 +144,34 @@
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-password">كلمة المرور</label>
                                             <input type="password" class="form-control" id="data-password" placeholder="اتركه فارغا اذا كنت لا تريد تغييره">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-base-salary">الراتب الأساسي</label>
+                                            <input type="number" class="form-control" id="data-base-salary" step="0.01">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-overtime-rate">معدل الوقت الإضافي (x)</label>
+                                            <input type="number" class="form-control" id="data-overtime-rate" step="0.1" value="1.5">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-working-hours">ساعات العمل</label>
+                                            <input type="number" class="form-control" id="data-working-hours" value="8">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-shift-start">بداية الشفت</label>
+                                            <input type="time" class="form-control" id="data-shift-start">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-shift-end">نهاية الشفت</label>
+                                            <input type="time" class="form-control" id="data-shift-end">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-joining-date">تاريخ الانضمام</label>
+                                            <input type="date" class="form-control" id="data-joining-date">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-resignation-date">تاريخ الاستقالة</label>
+                                            <input type="date" class="form-control" id="data-resignation-date">
                                         </div>
                                         <div class="col-sm-12 data-field-col">
                                             <label class="mb-1">الأدوار</label>

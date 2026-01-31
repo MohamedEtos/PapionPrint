@@ -19,6 +19,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/orders', [App\Http\Controllers\ChartController::class, 'getOrdersData'])->name('charts.orders');
         Route::get('/customers', [App\Http\Controllers\ChartController::class, 'getCustomersData'])->name('charts.customers');
         Route::get('/client-retention', [App\Http\Controllers\ChartController::class, 'getClientRetentionData'])->name('charts.client_retention');
+        Route::get('/inventory', [App\Http\Controllers\ChartController::class, 'getInventoryData'])->name('charts.inventory');
     });
 
     Route::prefix('Rollpress')->group(function () {
@@ -69,6 +70,11 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('/users/store', [App\Http\Controllers\UsersController::class, 'store'])->name('users.store');
     Route::post('/users/update/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('users.update');
     Route::post('/users/delete/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');
+
+    // Inventory Routes
+    Route::post('/inventory/consume-ink', [App\Http\Controllers\InventoryController::class, 'consumeInk'])->name('inventory.consumeInk');
+    Route::get('/inventory', [App\Http\Controllers\InventoryController::class, 'index'])->name('inventory.index');
+    Route::post('/inventory/store', [App\Http\Controllers\InventoryController::class, 'store'])->name('inventory.store');
 
     // Accounts
     Route::get('/accounts', [App\Http\Controllers\AccountsController::class, 'index'])->name('accounts.index');
@@ -142,4 +148,30 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/history-data', [App\Http\Controllers\InvoiceController::class, 'invoiceHistoryData'])->name('invoice.history_data');
         Route::get('/archive-details/{id}', [App\Http\Controllers\InvoiceController::class, 'getArchiveDetails'])->name('invoice.archive_details');
     });
+
+    // Laser Routes
+    Route::prefix('laser')->group(function () {
+        Route::get('/', [App\Http\Controllers\LaserController::class, 'index'])->name('laser.index');
+        Route::get('/show/{id}', [App\Http\Controllers\LaserController::class, 'show'])->name('laser.show');
+        Route::post('/store', [App\Http\Controllers\LaserController::class, 'store'])->name('laser.store');
+        Route::put('/update/{id}', [App\Http\Controllers\LaserController::class, 'update'])->name('laser.update');
+        Route::post('/restart/{id}', [App\Http\Controllers\LaserController::class, 'restart'])->name('laser.restart');
+        Route::delete('/delete/{id}', [App\Http\Controllers\LaserController::class, 'destroy'])->name('laser.delete');
+        Route::post('/bulk-delete', [App\Http\Controllers\LaserController::class, 'bulkDelete'])->name('laser.bulk_delete');
+        
+        // Trash
+        Route::get('/trash', [App\Http\Controllers\LaserController::class, 'trash'])->name('laser.trash');
+        Route::post('/restore/{id}', [App\Http\Controllers\LaserController::class, 'restore'])->name('laser.restore');
+        Route::delete('/force-delete/{id}', [App\Http\Controllers\LaserController::class, 'forceDelete'])->name('laser.force_delete');
+        
+        // Pricing
+        Route::get('/pricing', [App\Http\Controllers\LaserController::class, 'pricing'])->name('laser.pricing');
+        Route::post('/pricing/update', [App\Http\Controllers\LaserController::class, 'updatePrice'])->name('laser.update_price');
+    });
+
+    // Attendance & Payroll
+    Route::get('/attendance', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance/check-in', [App\Http\Controllers\AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
+    Route::post('/attendance/check-out', [App\Http\Controllers\AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
+    Route::get('/payroll', [App\Http\Controllers\AttendanceController::class, 'payroll'])->name('payroll.index');
 });
