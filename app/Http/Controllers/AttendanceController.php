@@ -236,10 +236,35 @@ class AttendanceController extends Controller
             $dailySalary = $user->base_salary / 30;
             $hourlySalary = $dailySalary / ($user->working_hours ?? 8);
             
-            $delayDeduction = ($totalDelayMinutes / 60) * $hourlySalary;
+            // Convert delay minutes to hours for easier calculation
+            $totalDelayHours = $totalDelayMinutes / 60;
 
+            // NEW LOGIC: Overtime first offsets lateness (no pay for offset), then excess at 1.5x
+            // If overtime > delay: (overtime - delay) * 1.5x is paid, NO delay deduction
+            // If overtime <= delay: NO overtime pay, (delay - overtime) is deducted
+            
             $overtimeRate = $user->overtime_rate ?? 1.5;
-            $overtimePay = $totalOvertimeHours * $hourlySalary * $overtimeRate;
+            $overtimePay = 0;
+            $delayDeduction = 0;
+            
+            if ($totalOvertimeHours > $totalDelayHours) {
+                // Overtime exceeds delay
+                // First part offsets delay completely (no payment for this)
+                // Only the EXCESS overtime is paid at 1.5x rate
+                $excessOvertimeHours = $totalOvertimeHours - $totalDelayHours;
+                $overtimePay = $excessOvertimeHours * $hourlySalary * $overtimeRate;
+                
+                // No delay deduction since overtime covered it all
+                $delayDeduction = 0;
+            } else {
+                // Overtime does not exceed delay
+                // All overtime goes to offset delay (no overtime pay)
+                $overtimePay = 0;
+                
+                // Remaining delay after offset
+                $remainingDelayHours = $totalDelayHours - $totalOvertimeHours;
+                $delayDeduction = $remainingDelayHours * $hourlySalary;
+            }
 
             $workingDays = $presentDays + $fridays; // Fridays are paid holidays
             
