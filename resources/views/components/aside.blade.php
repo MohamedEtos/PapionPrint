@@ -91,41 +91,76 @@
                     </ul>
                 </li>
 
-                {{-- Unified Invoice --}}
-                <li class="{{ request()->routeIs('invoice.create') ? 'active' : '' }} nav-item">
-                    <a href="{{ route('invoice.create') }}">
-                        <i class="feather icon-file-text"></i>
-                        <span class="menu-title" data-i18n="Invoice">الفاتورة المجمعة</span>
+                <li class=" nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}">
+                    <a href="{{ route('inventory.index') }}">
+                        <i class="feather icon-box"></i>
+                        <span class="menu-title" data-i18n="Inventory">المخازن</span>
                     </a>
                 </li>
 
-                {{-- Invoice History --}}
-                <li class="{{ request()->routeIs('invoice.history') ? 'active' : '' }} nav-item">
-                    <a href="{{ route('invoice.history') }}">
-                        <i class="feather icon-archive"></i>
-                        <span class="menu-title" data-i18n="Invoice History">سجل الفواتير</span>
-                    </a>
+
+
+                <li class=" nav-item"><a href="#"><i class="feather icon-file-text"></i><span class="menu-title" data-i18n="Ecommerce">الفواتير</span></a>
+                    <ul class="menu-content">
+
+                        <li class="{{ request()->routeIs('invoice.create') ? 'active' : '' }} nav-item">
+                            <a href="{{ route('invoice.create') }}">
+                                <i class="feather icon-file-text"></i>
+                                <span class="menu-title" data-i18n="Invoice">الفاتورة المجمعة</span>
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->routeIs('invoice.history') ? 'active' : '' }} nav-item">
+                            <a href="{{ route('invoice.history') }}">
+                                <i class="feather icon-archive"></i>
+                                <span class="menu-title" data-i18n="Invoice History">سجل الفواتير</span>
+                            </a>
+                        </li>
+
+                    </ul>
                 </li>
 
-                <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
-                </li>
 
-                <li class=" nav-item {{ request()->routeIs('attendance.*') ? 'active' : '' }}">
-                    <a href="{{ route('attendance.index') }}">
-                        <i class="feather icon-clock"></i>
-                        <span class="menu-title" data-i18n="Attendance">الحضور والانصراف</span>
-                    </a>
-                </li>
-
-                <li class=" nav-item {{ request()->routeIs('payroll.*') ? 'active' : '' }}">
-                    <a href="{{ route('payroll.index') }}">
-                        <i class="feather icon-dollar-sign"></i>
-                        <span class="menu-title" data-i18n="Payroll">الرواتب</span>
-                    </a>
-                </li>
+                
+                <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="Ecommerce">المستخدمين والصلاحيات</span></a>
+                    <ul class="menu-content">
+                        <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
+                        </li>
 
                 <li class="{{ request()->routeIs('roles.index') ? 'active' : '' }} nav-item"><a href="{{ route('roles.index') }}"><i class="feather icon-lock"></i><span class="menu-title" data-i18n="Roles">الصلاحيات & الأدوار</span></a>
                 </li>
+
+                    </ul>
+                </li>
+
+
+
+                <li class="ac nav-item"><a href="#"><i class="feather icon-dollar-sign"></i><span class="menu-title" data-i18n="Ecommerce">الرواتب</span></a>
+                    <ul class="menu-content">
+                        <li class=" nav-item {{ request()->routeIs('payroll.*') ? 'active' : '' }}">
+                            <a href="{{ route('payroll.index') }}">
+                                <i class="feather icon-dollar-sign"></i>
+                                <span class="menu-title" data-i18n="Payroll">الرواتب</span>
+                            </a>
+                        </li>
+
+                        <li class=" nav-item {{ request()->routeIs('attendance.*') ? 'active' : '' }}">
+                            <a href="{{ route('attendance.index') }}">
+                                <i class="feather icon-clock"></i>
+                                <span class="menu-title" data-i18n="Attendance">الحضور والانصراف</span>
+                            </a>
+                        </li>
+       
+                    </ul>
+                </li>
+
+
+     
+
+
+
+
+
  
 
 
@@ -143,12 +178,7 @@
                     </a>
                 </li>
                 
-                <li class=" nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}">
-                    <a href="{{ route('inventory.index') }}">
-                        <i class="feather icon-box"></i>
-                        <span class="menu-title" data-i18n="Inventory">المخازن</span>
-                    </a>
-                </li>
+
 
                 <!-- <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="User">User</span></a>
                     <ul class="menu-content">

@@ -677,12 +677,12 @@ $(document).ready(function () {
         labels: ['Sub-C', 'Sub-M', 'Sub-Y', 'Sub-K', 'DTF-C', 'DTF-M', 'DTF-Y', 'DTF-K', 'DTF-W'],
         datasets: [{
           label: 'Ink (L)',
-            data: [
+          data: [
             getQty(inkStocks, 'sublimation', 'Cyan'), getQty(inkStocks, 'sublimation', 'Magenta'), getQty(inkStocks, 'sublimation', 'Yellow'), getQty(inkStocks, 'sublimation', 'Black'),
             getQty(inkStocks, 'dtf', 'Cyan'), getQty(inkStocks, 'dtf', 'Magenta'), getQty(inkStocks, 'dtf', 'Yellow'), getQty(inkStocks, 'dtf', 'Black'), getQty(inkStocks, 'dtf', 'White')
-            ],
+          ],
           backgroundColor: ['cyan', 'red', 'yellow', 'black', 'cyan', 'red', 'yellow', 'black', '#ddd'],
-            borderWidth: 1
+          borderWidth: 1
         }]
       };
 
@@ -701,7 +701,7 @@ $(document).ready(function () {
             getQty(paperStocks, 'sublimation'),
             getQty(paperStocks, 'dtf')
           ],
-          
+
           backgroundColor: ['#28C76F', '#FF9F43'], // Green, Orange
           borderWidth: 1
         }]
@@ -750,28 +750,28 @@ $(document).ready(function () {
                 // Since we only have ONE dataset (index 0) with all data:
                 // Sublimation indices: 0, 1, 2, 3
                 // DTF indices: 4, 5, 6, 7, 8
-                
+
                 let dataIndex;
                 if (type === 'sublimation') {
-                     dataIndex = colorIndex; // 0..3
+                  dataIndex = colorIndex; // 0..3
                 } else {
-                     // DTF starts after Sublimation (4 colors)
-                     // careful: DTF colors map matches Sublimation order for CMYK, but we need to verify order in chart labels
-                     // Chart Labels: 'Sub-C', 'Sub-M', 'Sub-Y', 'Sub-K', 'DTF-C', 'DTF-M', 'DTF-Y', 'DTF-K', 'DTF-W'
-                     // Color Map above: C=0, M=1, Y=2, K=3
-                     
-                     if(color === 'White') {
-                         dataIndex = 8;
-                     } else {
-                         dataIndex = 4 + colorIndex;
-                     }
+                  // DTF starts after Sublimation (4 colors)
+                  // careful: DTF colors map matches Sublimation order for CMYK, but we need to verify order in chart labels
+                  // Chart Labels: 'Sub-C', 'Sub-M', 'Sub-Y', 'Sub-K', 'DTF-C', 'DTF-M', 'DTF-Y', 'DTF-K', 'DTF-W'
+                  // Color Map above: C=0, M=1, Y=2, K=3
+
+                  if (color === 'White') {
+                    dataIndex = 8;
+                  } else {
+                    dataIndex = 4 + colorIndex;
+                  }
                 }
 
                 if (dataIndex !== undefined && inkChart.data.datasets[0]) {
                   inkChart.data.datasets[0].data[dataIndex] = response.new_quantity;
                   inkChart.update();
                 }
-                
+
               },
               error: function (xhr) {
                 let msg = xhr.responseJSON ? xhr.responseJSON.error : 'حدث خطأ أثناء الخصم';

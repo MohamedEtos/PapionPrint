@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     // Clear sidebar when opening for new item
     $(".dt-buttons .btn-outline-primary").on("click", function () {
         $('#data-id').val('');
@@ -234,4 +233,6 @@ $(document).ready(function () {
             }
         });
     });
+    $('.hidee').css('display', 'none');
+
 });

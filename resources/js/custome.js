@@ -97,7 +97,11 @@
         if ($.app && $.app.menu && $.app.menu.manualScroller) {
           $.app.menu.manualScroller.updateHeight();
         }
+        handleMobileScroll();
       });
+
+      // Initial check
+      handleMobileScroll();
 
       console.log('Menu handlers attached');
     } else {
@@ -105,5 +109,27 @@
     }
 
   });
+
+  // Helper function to handle mobile scrolling
+  function handleMobileScroll() {
+    var isMobile = window.innerWidth < 1200;
+    var mainMenu = document.querySelector('.main-menu');
+    var menuContent = document.querySelector('.main-menu-content');
+
+    if (isMobile && mainMenu && menuContent) {
+      // Destroy Perfect Scrollbar if it exists
+      if (menuContent.classList.contains('ps')) {
+        if ($.app && $.app.menu && $.app.menu.manualScroller && $.app.menu.manualScroller.obj) {
+          $.app.menu.manualScroller.obj.destroy();
+          $.app.menu.manualScroller.obj = null;
+        }
+        menuContent.classList.remove('ps');
+      }
+
+      // Force native scroll class
+      mainMenu.classList.add('menu-native-scroll');
+      console.log('Mobile scroll enabled: Native scroll forced');
+    }
+  }
 
 })(window);

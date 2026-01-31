@@ -66,7 +66,14 @@ body {
 /* Main menu content scrollbar */
 .main-menu-content {
     position: relative;
-    overflow: hidden;
+    /* overflow removed to allow mobile scrolling */
+}
+
+/* For desktop (>=1200px), restore overflow: hidden for PerfectScrollbar */
+@media (min-width: 1200px) {
+    .main-menu-content {
+        overflow: hidden;
+    }
 }
 
 /* Perfect Scrollbar styling */
@@ -133,8 +140,10 @@ body {
         /* Higher than overlay (998) and drag target (1000) */
         opacity: 1 !important;
         /* Keep opacity 1 so we don't fight with fade effects */
-        display: block !important;
-        /* Force display block */
+        /* Flexbox layout for sidebar */
+        display: flex !important;
+        flex-direction: column !important;
+
         visibility: visible !important;
         transform: translate3d(0, 0, 0) !important;
         /* Reset any native transforms */
@@ -189,5 +198,31 @@ body {
         float: right !important;
         margin-right: 0 !important;
         margin-left: 1rem !important;
+    }
+
+    /* Enable scrolling on mobile menu with flexbox */
+    .vertical-layout.vertical-menu-modern .main-menu .main-menu-content,
+    .vertical-layout.vertical-menu-modern .main-menu.menu-native-scroll .main-menu-content,
+    .vertical-layout.vertical-menu-modern .main-menu .main-menu-content.ps {
+        flex: 1 1 auto !important;
+        height: auto !important;
+        /* Let flex control height */
+        min-height: 0 !important;
+        /* Important for flex scrolling */
+        overflow-y: auto !important;
+        /* Force scrollbar */
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 100px !important;
+        /* Extra padding for bottom */
+        touch-action: pan-y !important;
+        pointer-events: auto !important;
+    }
+
+    /* Ensure header doesn't shrink */
+    .vertical-layout.vertical-menu-modern .main-menu .navbar-header {
+        flex: 0 0 auto !important;
+        min-height: 4.4rem;
+        display: block !important;
     }
 }

@@ -92,7 +92,7 @@ $(document).ready(function () {
         className: "btn-outline-primary"
       },
       {
-        text: "<i class='feather icon-droplet'></i> استهلاك  الحبر والورق ",
+        text: "<i class='feather icon-droplet '></i> استهلاك  الحبر والورق ",
         action: function () {
           $('#inkConsumptionModal').modal('show');
         },
