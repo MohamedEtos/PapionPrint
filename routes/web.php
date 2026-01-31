@@ -158,6 +158,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/restart/{id}', [App\Http\Controllers\LaserController::class, 'restart'])->name('laser.restart');
         Route::delete('/delete/{id}', [App\Http\Controllers\LaserController::class, 'destroy'])->name('laser.delete');
         Route::post('/bulk-delete', [App\Http\Controllers\LaserController::class, 'bulkDelete'])->name('laser.bulk_delete');
+        Route::post('/bulk-recalculate', [App\Http\Controllers\LaserController::class, 'bulkRecalculate'])->name('laser.bulk_recalculate');
         
         // Trash
         Route::get('/trash', [App\Http\Controllers\LaserController::class, 'trash'])->name('laser.trash');

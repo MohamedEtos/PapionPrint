@@ -745,13 +745,30 @@ $(document).ready(function () {
                 // Update Chart Locally
                 // Map Color to Index: Cyan=0, Magenta=1, Yellow=2, Black=3, White=4
                 const colorMap = { 'Cyan': 0, 'Magenta': 1, 'Yellow': 2, 'Black': 3, 'White': 4 };
-                const colorIndex = colorMap[color];
+                let colorIndex = colorMap[color];
 
-                // Map Type to Dataset Index: Sublimation=0, DTF=1
-                const datasetIndex = (type === 'sublimation') ? 0 : 1;
+                // Since we only have ONE dataset (index 0) with all data:
+                // Sublimation indices: 0, 1, 2, 3
+                // DTF indices: 4, 5, 6, 7, 8
+                
+                let dataIndex;
+                if (type === 'sublimation') {
+                     dataIndex = colorIndex; // 0..3
+                } else {
+                     // DTF starts after Sublimation (4 colors)
+                     // careful: DTF colors map matches Sublimation order for CMYK, but we need to verify order in chart labels
+                     // Chart Labels: 'Sub-C', 'Sub-M', 'Sub-Y', 'Sub-K', 'DTF-C', 'DTF-M', 'DTF-Y', 'DTF-K', 'DTF-W'
+                     // Color Map above: C=0, M=1, Y=2, K=3
+                     
+                     if(color === 'White') {
+                         dataIndex = 8;
+                     } else {
+                         dataIndex = 4 + colorIndex;
+                     }
+                }
 
-                if (colorIndex !== undefined && inkChart.data.datasets[datasetIndex]) {
-                  inkChart.data.datasets[datasetIndex].data[colorIndex] = response.new_quantity;
+                if (dataIndex !== undefined && inkChart.data.datasets[0]) {
+                  inkChart.data.datasets[0].data[dataIndex] = response.new_quantity;
                   inkChart.update();
                 }
                 

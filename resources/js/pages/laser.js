@@ -49,10 +49,10 @@ $(document).ready(function () {
         var totalPieces = 0;
 
         selectedRows.each(function (row) {
-            var cost = parseFloat($(row).data('cost')) || 0;
-            var height = parseFloat($(row).data('height')) || 0;
-            var sectionCount = parseFloat($(row).data('section-count')) || 0;
-            var requiredPieces = parseFloat($(row).data('required-pieces')) || 0;
+            let cost = parseFloat($(row).data('cost')) || 0;
+            let height = parseFloat($(row).data('height')) || 0;
+            let sectionCount = parseFloat($(row).data('section-count')) || 0;
+            let requiredPieces = parseFloat($(row).data('required-pieces')) || 0;
 
             totalCost += cost;
             totalMeters += (height * sectionCount);
@@ -61,17 +61,17 @@ $(document).ready(function () {
         });
 
         if (totalCost > 0) {
-            var html = '<span class="badge badge-primary" style="font-size: 1em; margin-left:10px;"><i class="feather icon-dollar-sign"></i> الإجمالي: ' + totalCost.toFixed(2) + ' جنيه</span>';
+            let html = '<span class="badge badge-primary" style="font-size: 1em; margin-left:10px;"><i class="feather icon-dollar-sign"></i> الإجمالي: ' + totalCost.toFixed(2) + ' جنيه</span>';
 
             // Average piece price
             if (totalPieces > 0) {
-                var avgPiecePrice = totalCost / totalPieces;
+                let avgPiecePrice = totalCost / totalPieces;
                 html += '<span class="badge badge-warning" style="font-size: 1em; margin-left:10px;"><i class="feather icon-tag"></i> سعر القطعة: ' + avgPiecePrice.toFixed(2) + ' جنيه</span>';
             }
 
             // Average section price
             if (totalSections > 0) {
-                var avgSectionCost = totalCost / totalSections;
+                let avgSectionCost = totalCost / totalSections;
                 html += '<span class="badge badge-info" style="font-size: 1em; margin-left:10px;"><i class="feather icon-layers"></i> سعر المقطع: ' + avgSectionCost.toFixed(2) + ' جنيه</span>';
             }
 
@@ -124,6 +124,51 @@ $(document).ready(function () {
                     },
                     error: function () {
                         Swal.fire('خطأ!', 'حدث خطأ أثناء الحذف', 'error');
+                    }
+                });
+            }
+        });
+    });
+
+    // Bulk Recalculate
+    $('#bulk-recalc-btn').on('click', function () {
+        var selectedIds = [];
+        var selectedRows = table.rows({ selected: true }).nodes();
+
+        $(selectedRows).each(function () {
+            var id = $(this).data('id');
+            if (id) selectedIds.push(id);
+        });
+
+        if (selectedIds.length === 0) {
+            Swal.fire('تنبيه', 'يرجى تحديد طلبات للتحديث', 'warning');
+            return;
+        }
+
+        Swal.fire({
+            title: 'تحديث أسعار ' + selectedIds.length + ' طلب؟',
+            text: 'سيتم إعادة حساب التكلفة بناءً على أسعار الخامات الحالية',
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#7367F0',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'نعم، تحديث',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '/laser/bulk-recalculate',
+                    type: 'POST',
+                    data: {
+                        _token: window.laserConfig.csrfToken,
+                        ids: selectedIds
+                    },
+                    success: function (response) {
+                        Swal.fire('تم!', response.success, 'success');
+                        setTimeout(function () { location.reload(); }, 1500);
+                    },
+                    error: function () {
+                        Swal.fire('خطأ!', 'حدث خطأ أثناء التحديث', 'error');
                     }
                 });
             }
@@ -272,6 +317,10 @@ $(document).ready(function () {
         var piecesPerSection = parseInt($('#pps-input').val()) || 1;
         var requiredPieces = parseInt($('#required-pieces-input').val()) || 0;
 
+        // Custom Operating Cost logic
+        var customOpCost = $('#custom-operating-cost-input').val();
+        var opCost = (customOpCost !== '' && customOpCost !== undefined) ? parseFloat(customOpCost) : operatingCostPerPiece;
+
         if (piecesPerSection < 1) piecesPerSection = 1;
         var sectionCount = Math.ceil(requiredPieces / piecesPerSection);
 
@@ -289,10 +338,10 @@ $(document).ready(function () {
         }
 
         // Operating cost is flat per piece
-        var pieceCost = materialCostPerPiece + operatingCostPerPiece;
+        var pieceCost = materialCostPerPiece + opCost;
 
         // Section cost = Material + (Operating × pieces)
-        var sectionTotalCost = sectionMaterialCost + (operatingCostPerPiece * piecesPerSection);
+        var sectionTotalCost = sectionMaterialCost + (opCost * piecesPerSection);
         var totalCost = sectionTotalCost * sectionCount;
 
         $('#piece-cost').text(pieceCost.toFixed(2));
@@ -367,6 +416,7 @@ $(document).ready(function () {
             $('#required-pieces-input').val(data.required_pieces);
             $('#pps-input').val(data.pieces_per_section);
             $('#sc-input').val(data.section_count);
+            $('#custom-operating-cost-input').val(data.custom_operating_cost); // Populate new field
             $('#laserOrderForm textarea[name="notes"]').val(data.notes);
 
             // Change form to update mode
@@ -436,6 +486,7 @@ $(document).ready(function () {
     $('#addOrderModal').on('hidden.bs.modal', function () {
         $('#laserOrderForm')[0].reset();
         $('#customer-id-input').val('');
+        $('#custom-operating-cost-input').val(''); // Reset
         $('#addOrderModal .modal-title').text('طلب ليزر جديد');
         // Reset save button state
         $('#saveOrderBtn').text('حفظ');

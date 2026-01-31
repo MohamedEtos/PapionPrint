@@ -47,20 +47,20 @@ class LaserController extends Controller
             'width' => 'nullable|numeric',
             'required_pieces' => 'nullable|integer',
             'pieces_per_section' => 'nullable|integer',
+            'custom_operating_cost' => 'nullable|numeric|min:0', // New validation
             'image' => 'nullable|image',
             'source' => 'required|in:client,ap_group',
         ]);
 
-        $data = $request->only(['height', 'width', 'pieces_per_section', 'required_pieces', 'notes', 'source']);
+        $data = $request->only(['height', 'width', 'pieces_per_section', 'required_pieces', 'notes', 'source', 'custom_operating_cost']);
         $data['add_ceylon'] = $request->has('add_ceylon') ? true : false;
 
-        // Handle customer - find by ID or name, or create new
+        // Handle customer
         if($request->has('customerId') && $request->customerId){
             $data['customer_id'] = $request->customerId;
         } elseif($request->has('customerName') && $request->customerName) {
             $customer = Customers::where('name', $request->customerName)->first();
             if(!$customer) {
-                // Create new customer
                 $customer = Customers::create(['name' => $request->customerName]);
             }
             $data['customer_id'] = $customer->id;
@@ -74,49 +74,11 @@ class LaserController extends Controller
             $data['image_path'] = $request->file('image')->store('laser_images', 'public');
         }
 
-        // --- CALCULATION LOGIC ---
-        $operatingCostPerPiece = LaserPrice::where('name', 'operating_cost')->value('price') ?? 0;
-        $ceylonPrice = LaserPrice::where('name', 'ceylon_price')->value('price') ?? 0;
-        
-        $materialPrice = 0;
-        if ($data['source'] === 'ap_group' && isset($data['material_id'])) {
-             $material = LaserMaterial::find($data['material_id']);
-             if($material) {
-                 $materialPrice = $material->price;
-             }
-        }
+        // Create initial order without costs
+        $order = LaserOrder::create($data);
 
-        $lengthMeters = ($data['height'] ?? 0) / 100;
-        $piecesPerSection = $data['pieces_per_section'] ?? 1;
-        if($piecesPerSection < 1) $piecesPerSection = 1;
-
-        $requiredPieces = $data['required_pieces'] ?? 0;
-        
-        // Calculate Section Count
-        $sectionCount = ceil($requiredPieces / $piecesPerSection);
-        $data['section_count'] = $sectionCount;
-
-        // Calculate Piece Cost
-        // Material cost per piece = (Length × Material Price) / Pieces in Section
-        $materialCostPerPiece = 0;
-        if ($data['source'] === 'ap_group') {
-             $sectionMaterialCost = $lengthMeters * $materialPrice;
-             if ($data['add_ceylon']) {
-                 $sectionMaterialCost += ($lengthMeters * $ceylonPrice);
-             }
-             $materialCostPerPiece = $sectionMaterialCost / $piecesPerSection;
-        }
-
-        // Operating cost is flat per piece
-        $pieceCost = $materialCostPerPiece + $operatingCostPerPiece;
-        
-        // Section cost = Material cost + (Operating cost × pieces in section)
-        $sectionTotalCost = ($data['source'] === 'ap_group' ? ($lengthMeters * $materialPrice + ($data['add_ceylon'] ? $lengthMeters * $ceylonPrice : 0)) : 0) + ($operatingCostPerPiece * $piecesPerSection);
-
-        $data['manufacturing_cost'] = $pieceCost;
-        $data['total_cost'] = $sectionTotalCost * $sectionCount;
-
-        LaserOrder::create($data);
+        // Calculate costs using the helper
+        $this->recalculateOrderCost($order);
 
         return response()->json(['success' => 'Created successfully']);
     }
@@ -133,14 +95,15 @@ class LaserController extends Controller
              'width' => 'nullable|numeric',
              'required_pieces' => 'nullable|integer',
              'pieces_per_section' => 'nullable|integer',
+             'custom_operating_cost' => 'nullable|numeric|min:0', // New validation
              'image' => 'nullable|image',
              'source' => 'required|in:client,ap_group',
          ]);
 
-        $data = $request->only(['height', 'width', 'pieces_per_section', 'required_pieces', 'notes', 'source']);
+        $data = $request->only(['height', 'width', 'pieces_per_section', 'required_pieces', 'notes', 'source', 'custom_operating_cost']);
         $data['add_ceylon'] = $request->has('add_ceylon') ? true : false;
         
-        // Handle customer - find by ID or name, or create new
+        // Handle customer
         if($request->has('customerId') && $request->customerId){
              $data['customer_id'] = $request->customerId;
         } elseif($request->has('customerName') && $request->customerName) {
@@ -158,49 +121,12 @@ class LaserController extends Controller
         if ($request->hasFile('image')) {
              $data['image_path'] = $request->file('image')->store('laser_images', 'public');
         }
-
-        // --- CALCULATION LOGIC (Same as store) ---
-        $operatingCostPerPiece = LaserPrice::where('name', 'operating_cost')->value('price') ?? 0;
-        $ceylonPrice = LaserPrice::where('name', 'ceylon_price')->value('price') ?? 0;
         
-        $materialPrice = 0;
-        if ($data['source'] === 'ap_group' && isset($data['material_id'])) {
-             $material = LaserMaterial::find($data['material_id']);
-             if($material) {
-                 $materialPrice = $material->price;
-             }
-        }
-
-        $lengthMeters = ($data['height'] ?? 0) / 100;
-        $piecesPerSection = $data['pieces_per_section'] ?? 1;
-        if($piecesPerSection < 1) $piecesPerSection = 1;
-
-        $requiredPieces = $data['required_pieces'] ?? 0;
-        
-        $sectionCount = ceil($requiredPieces / $piecesPerSection);
-        $data['section_count'] = $sectionCount;
-
-        // Calculate Piece Cost
-        $materialCostPerPiece = 0;
-        if ($data['source'] === 'ap_group') {
-             $sectionMaterialCost = $lengthMeters * $materialPrice;
-             if ($data['add_ceylon']) {
-                 $sectionMaterialCost += ($lengthMeters * $ceylonPrice);
-             }
-             $materialCostPerPiece = $sectionMaterialCost / $piecesPerSection;
-        }
-
-        // Operating cost is flat per piece
-        $pieceCost = $materialCostPerPiece + $operatingCostPerPiece;
-        
-        // Section cost = Material cost + (Operating cost × pieces in section)
-        $sectionTotalCost = ($data['source'] === 'ap_group' ? ($lengthMeters * $materialPrice + ($data['add_ceylon'] ? $lengthMeters * $ceylonPrice : 0)) : 0) + ($operatingCostPerPiece * $piecesPerSection);
-
-        $data['manufacturing_cost'] = $pieceCost;
-        $data['total_cost'] = $sectionTotalCost * $sectionCount;
-
-
+        // Update basic data
         $order->update($data);
+
+        // Recalculate costs
+        $this->recalculateOrderCost($order);
         
         return response()->json(['success' => 'Updated successfully']);
     }
@@ -237,6 +163,71 @@ class LaserController extends Controller
         LaserOrder::whereIn('id', $ids)->delete();
 
         return response()->json(['success' => 'Selected orders deleted successfully']);
+    }
+
+    public function bulkRecalculate(Request $request)
+    {
+        $ids = $request->ids;
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['error' => 'No items selected'], 400);
+        }
+
+        $orders = LaserOrder::whereIn('id', $ids)->get();
+        foreach ($orders as $order) {
+            $this->recalculateOrderCost($order);
+        }
+
+        return response()->json(['success' => "Recalculated costs for " . count($orders) . " orders."]);
+    }
+
+    private function recalculateOrderCost(LaserOrder $order)
+    {
+        // Fetch global settings
+        $globalOperatingCost = LaserPrice::where('name', 'operating_cost')->value('price') ?? 0;
+        $ceylonPrice = LaserPrice::where('name', 'ceylon_price')->value('price') ?? 0;
+
+        // Use custom operating cost if set, otherwise global
+        $operatingCostPerPiece = $order->custom_operating_cost !== null 
+            ? $order->custom_operating_cost 
+            : $globalOperatingCost;
+
+        $materialPrice = 0;
+        if ($order->source === 'ap_group') {
+            // Load material if not loaded or force refresh to get latest price
+             $order->load('material');
+             if ($order->material) {
+                 $materialPrice = $order->material->price;
+             }
+        }
+
+        $lengthMeters = ($order->height ?? 0) / 100;
+        $piecesPerSection = $order->pieces_per_section ?? 1;
+        if ($piecesPerSection < 1) $piecesPerSection = 1;
+
+        $requiredPieces = $order->required_pieces ?? 0;
+        $sectionCount = ceil($requiredPieces / $piecesPerSection);
+        
+        // Recalculate Piece Cost
+        $materialCostPerPiece = 0;
+        if ($order->source === 'ap_group') {
+            $sectionMaterialCost = $lengthMeters * $materialPrice;
+            if ($order->add_ceylon) {
+                $sectionMaterialCost += ($lengthMeters * $ceylonPrice);
+            }
+            $materialCostPerPiece = $sectionMaterialCost / $piecesPerSection;
+        }
+
+        $pieceCost = $materialCostPerPiece + $operatingCostPerPiece;
+        
+        // Recalculate Section Cost
+        $sectionTotalCost = ($order->source === 'ap_group' ? 
+            ($lengthMeters * $materialPrice + ($order->add_ceylon ? ($lengthMeters * $ceylonPrice) : 0)) : 0) 
+            + ($operatingCostPerPiece * $piecesPerSection);
+
+        $order->section_count = $sectionCount;
+        $order->manufacturing_cost = $pieceCost;
+        $order->total_cost = $sectionTotalCost * $sectionCount;
+        $order->save();
     }
 
     public function trash()
@@ -290,7 +281,14 @@ class LaserController extends Controller
                 $material->price = $price;
                 if($request->name) $material->name = $request->name;
                 $material->save();
-                return response()->json(['success' => 'Material price updated']);
+                
+                // Trigger Recalculation for related orders
+                $orders = LaserOrder::where('material_id', $id)->where('source', 'ap_group')->get();
+                foreach($orders as $order) {
+                    $this->recalculateOrderCost($order);
+                }
+
+                return response()->json(['success' => 'Material price updated and related orders recalculated']);
             }
              
              if(!$id && $request->name) {
@@ -302,7 +300,20 @@ class LaserController extends Controller
              if ($global) {
                  $global->price = $price;
                  $global->save();
-                 return response()->json(['success' => 'Global price updated']);
+
+                 // Trigger Recalculation for ALL orders (since global cost affects all)
+                 // Note: Ideally queue this for later if many orders.
+                 // For now, doing it inline.
+                 
+                // Only ap_group orders might use ceylon/material. 
+                // However, operating_cost affects ALL orders.
+                // Re-calculating all orders.
+                $orders = LaserOrder::all();
+                foreach($orders as $order) {
+                    $this->recalculateOrderCost($order);
+                }
+
+                 return response()->json(['success' => 'Global price updated and all orders recalculated']);
              }
              
              // Create if not exists (e.g. operating_cost being set for first time)

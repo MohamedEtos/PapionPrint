@@ -24,6 +24,7 @@ class LaserOrder extends Model
         'manufacturing_cost',
         'total_cost',
         'image_path',
+        'custom_operating_cost',
     ];
 
     public function customer()

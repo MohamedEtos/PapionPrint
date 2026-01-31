@@ -11,6 +11,7 @@ window.ApexCharts = ApexCharts;
 
 
 
+
 // Import core files
 import '../core/js/core/app-menu.js';
 import '../core/js/core/app.js';

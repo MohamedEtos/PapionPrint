@@ -66,6 +66,7 @@
                                     الإجراءات
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="javascript:void(0)" id="bulk-recalc-btn"><i class="feather icon-refresh-cw"></i> تحديث الاسعار</a>
                                     <a class="dropdown-item" href="javascript:void(0)" id="bulk-delete-btn"><i class="feather icon-trash"></i> حذف المحدد</a>
                                 </div>
                             </div>
@@ -96,6 +97,7 @@
                                     <th>عدد المقاطع</th>
                                     <th>سيلون</th>
                                     <th>التكلفة للقطعة</th>
+                                    <th>تكلفة التشغيل</th>
                                     <th>الاجمالي</th>
                                     <th>ملاحظات</th>
                                     <th>التاريخ</th>
@@ -131,6 +133,13 @@
                                     <td>{{ $Record->section_count }}</td>
                                     <td>{{ $Record->add_ceylon ? 'نعم' : 'لا' }}</td>
                                     <td>{{ number_format($Record->manufacturing_cost,2) }}</td>
+                                    <td>
+                                        @if($Record->custom_operating_cost !== null)
+                                            <span class="badge badge-warning">{{ $Record->custom_operating_cost }}</span>
+                                        @else
+                                            <span class="text-muted">{{ $operatingCost ?? 0 }} (Def)</span>
+                                        @endif
+                                    </td>
                                     <td>{{ number_format($Record->total_cost, 2) }}</td>
                                     <td>{{ $Record->notes }}</td>
                                     <td>{{ $Record->created_at->format('Y-m-d') }}</td>
@@ -144,7 +153,7 @@
                             </tbody>
                              <tfoot>
                                 <tr>
-                                    <td colspan="15">
+                                    <td colspan="16">
                                         <div id="laser-calculator-results" class="alert alert-primary mb-0" style="display:none; font-weight: bold; font-size: 1.1em;">
                                             الإجمالي المحدد: <span id="selected-total">0.00</span> جنيه
                                         </div>
@@ -226,6 +235,10 @@
                                 <label>عدد المدات</label>
                                 <input type="number" class="form-control" name="section_count" id="sc-input"  >
                                 <small class="text-muted">يحسب تلقائياً</small>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label>تكلفة التشغيل (اختياري)</label>
+                                <input type="number" step="0.01" class="form-control calc-input" name="custom_operating_cost" id="custom-operating-cost-input" placeholder="الافتراضي: {{ $operatingCost ?? 0 }}">
                             </div>
 
                              <div class="col-md-12 form-group">
