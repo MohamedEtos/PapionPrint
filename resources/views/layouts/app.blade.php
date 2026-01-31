@@ -94,6 +94,8 @@
 
     @include('components.navbar')
     @include('components.aside')
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
 
         <main class="">
             @yield('content')

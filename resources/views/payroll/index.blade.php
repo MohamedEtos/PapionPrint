@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
+@vite([
         'resources/core/vendors/css/tables/datatable/datatables.min.css',
         'resources/core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css',
         'resources/core/css-rtl/core/menu/menu-types/vertical-menu.css',
@@ -8,6 +9,7 @@
         'resources/core/css-rtl/plugins/file-uploaders/dropzone.css',
         'resources/core/css-rtl/pages/data-list-view.css',
         'resources/core/css-rtl/custom-rtl.css',
+        ])
 @endsection
 
 @section('content')

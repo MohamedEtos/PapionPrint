@@ -11,7 +11,8 @@
 
 
 /* Sticky Footer CSS */
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
 }
@@ -29,4 +30,164 @@ body {
 .footer {
     flex-shrink: 0;
     margin-top: auto;
+}
+
+/* Sidebar overlay for mobile */
+.sidenav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    cursor: pointer;
+}
+
+.sidenav-overlay.d-block {
+    display: block !important;
+}
+
+.sidenav-overlay.d-none {
+    display: none !important;
+}
+
+/* Drag target for mobile swipe */
+.drag-target {
+    width: 20px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Main menu content scrollbar */
+.main-menu-content {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Perfect Scrollbar styling */
+.ps {
+    overflow: hidden !important;
+    overflow-anchor: none;
+    -ms-overflow-style: none;
+    touch-action: auto;
+    -ms-touch-action: auto;
+}
+
+.ps__rail-y {
+    display: none;
+    opacity: 0;
+    transition: background-color .2s linear, opacity .2s linear;
+    -webkit-transition: background-color .2s linear, opacity .2s linear;
+    position: absolute;
+    right: 0;
+    width: 15px;
+}
+
+.ps--active-y>.ps__rail-y {
+    display: block;
+    background-color: transparent;
+}
+
+.ps:hover>.ps__rail-y,
+.ps--focus>.ps__rail-y,
+.ps--scrolling-y>.ps__rail-y {
+    opacity: 0.6;
+}
+
+.ps__thumb-y {
+    background-color: #aaa;
+    border-radius: 6px;
+    transition: background-color .2s linear, height .2s ease-in-out;
+    -webkit-transition: background-color .2s linear, height .2s ease-in-out;
+    width: 6px;
+    right: 2px;
+    position: absolute;
+}
+
+.ps__rail-y:hover>.ps__thumb-y,
+.ps__rail-y:focus>.ps__thumb-y,
+.ps__rail-y.ps--clicking .ps__thumb-y {
+    background-color: #999;
+    width: 11px;
+}
+
+/* Fix for menu in mobile - make it work even if body class doesn't change */
+@media (max-width: 1199.98px) {
+
+    /* Ensure main-menu is initially hidden but ready to transition */
+    body.vertical-layout.vertical-menu-modern .main-menu {
+        position: fixed !important;
+        top: 0 !important;
+        right: -260px !important;
+        /* Start off-screen right */
+        left: auto !important;
+        /* Override any left positioning */
+        width: 260px !important;
+        height: 100vh !important;
+        z-index: 1035 !important;
+        /* Higher than overlay (998) and drag target (1000) */
+        opacity: 1 !important;
+        /* Keep opacity 1 so we don't fight with fade effects */
+        display: block !important;
+        /* Force display block */
+        visibility: visible !important;
+        transform: translate3d(0, 0, 0) !important;
+        /* Reset any native transforms */
+        transition: right 0.3s ease-in-out !important;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    /* When menu-open is added, slide it in */
+    body.vertical-layout.vertical-menu-modern.menu-open .main-menu {
+        right: 0 !important;
+        left: auto !important;
+        transform: translate3d(0, 0, 0) !important;
+    }
+
+    /* Ensure overlay is visible and z-indexed correctly */
+    body.vertical-layout.vertical-menu-modern.menu-open .sidenav-overlay {
+        display: block !important;
+        z-index: 1030 !important;
+        /* Just below the menu */
+        opacity: 0.5 !important;
+    }
+
+    /* Make sure content doesn't move */
+    body.vertical-layout.vertical-menu-modern .content,
+    body.vertical-layout.vertical-menu-modern .app-content,
+    body.vertical-layout.vertical-menu-modern .footer {
+        margin-left: 0 !important;
+    }
+
+    /* Force navbar header to show in menu */
+    .main-menu .navbar-header {
+        display: block !important;
+        width: 260px !important;
+    }
+
+    /* Force menu items text to be visible */
+    body.vertical-layout.vertical-menu-modern .main-menu .navigation li a span.menu-title {
+        display: inline-block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+
+    body.vertical-layout.vertical-menu-modern .main-menu .navigation>li>a>span {
+        display: inline-block !important;
+        transition: none !important;
+        animation: none !important;
+    }
+
+    /* Ensure icon and text relationship is correct for RTL */
+    body.vertical-layout.vertical-menu-modern .main-menu .navigation li a i {
+        float: right !important;
+        margin-right: 0 !important;
+        margin-left: 1rem !important;
+    }
 }

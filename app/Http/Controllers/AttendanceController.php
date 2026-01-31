@@ -13,9 +13,9 @@ class AttendanceController extends Controller
     public function index()
     {
         if (Auth::user()->hasRole('admin')) {
-            $attendances = Attendance::with('user')->orderBy('date', 'desc')->paginate(20);
+            $attendances = Attendance::with('user')->orderBy('date', 'desc')->get();
         } else {
-            $attendances = Attendance::where('user_id', Auth::id())->orderBy('date', 'desc')->paginate(20);
+            $attendances = Attendance::where('user_id', Auth::id())->orderBy('date', 'desc')->get();
         }
         
         $todayAttendance = Attendance::where('user_id', Auth::id())

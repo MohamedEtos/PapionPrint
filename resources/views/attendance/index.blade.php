@@ -1,29 +1,36 @@
 @extends('layouts.app')
 
+@section('css')
+    @vite([
+        'resources/core/vendors/css/tables/datatable/datatables.min.css',
+        'resources/core/css-rtl/core/menu/menu-types/vertical-menu.css',
+        'resources/core/css-rtl/core/colors/palette-gradient.css',
+        'resources/core/css-rtl/pages/data-list-view.css',
+        'resources/core/css-rtl/custom-rtl.css',
+    ])
+@endsection
+
 @section('content')
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
             <div class="content-header row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">سجل الحضور والانصراف</h4>
-                <div class="heading-elements">
-                    @if(!$todayAttendance)
-                        <button id="checkInBtn" class="btn btn-success">تسجيل الحضور <i class="feather icon-log-in"></i></button>
-                    @elseif(!$todayAttendance->check_out)
-                        <button id="checkOutBtn" class="btn btn-danger">تسجيل الانصراف <i class="feather icon-log-out"></i></button>
-                    @else
-                        <button class="btn btn-secondary" disabled>تم الانتهاء اليوم</button>
-                    @endif
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-left mb-0">سجل الحضور والانصراف</h2>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-            <div class="card-content">
-                <div class="card-body card-dashboard">
+            <div class="content-body">
+                <!-- Data list view starts -->
+                <section id="data-thumb-view" class="data-thumb-view-header">
+                    <!-- dataTable starts -->
                     <div class="table-responsive">
-                        <table class="table table-striped dataex-html5-selectors">
+                        <table class="table data-thumb-view">
                             <thead>
                                 <tr>
                                     <th>التاريخ</th>
@@ -64,73 +71,91 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $attendances->links() }}
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     </div>
-</div>
-        </div>
-    </div>  
-</div>  
-
 @endsection
 
-@section('script')
-<script>
-    $(document).ready(function() {
-        // Check In
-        $('#checkInBtn').click(function() {
-            $(this).prop('disabled', true);
-            $.ajax({
-                url: "{{ route('attendance.checkIn') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    Swal.fire({
-                        title: 'تم!',
-                        text: response.success + ' الساعة: ' + response.time,
-                        type: 'success',
-                        confirmButtonText: 'حسناً'
-                    }).then(() => {
-                        location.reload();
-                    });
-                },
-                error: function(xhr) {
-                    Swal.fire('خطأ!', xhr.responseJSON.error, 'error');
-                    $('#checkInBtn').prop('disabled', false);
-                }
-            });
-        });
+@section('js')
+    <script src="{{ asset('core/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <script src="{{ asset('core/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
+    <script src="{{ asset('core/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('core/vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
 
-        // Check Out
-        $('#checkOutBtn').click(function() {
-            $(this).prop('disabled', true);
-            $.ajax({
-                url: "{{ route('attendance.checkOut') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}"
+    <script>
+        $(document).ready(function() {
+            var table = $('.data-thumb-view').DataTable({
+                responsive: false,
+                dom: '<"top"<"actions action-btns"B><"action-filters"lf>><"clear">rt<"bottom"<"actions">p>',
+                oLanguage: {
+                    sLengthMenu: "_MENU_",
+                    sSearch: ""
                 },
-                success: function(response) {
-                    Swal.fire({
-                        title: 'تم!',
-                        text: response.success + ' الساعة: ' + response.time,
-                        type: 'success',
-                        confirmButtonText: 'حسناً'
-                    }).then(() => {
-                        location.reload();
-                    });
-                },
-                error: function(xhr) {
-                    Swal.fire('خطأ!', xhr.responseJSON.error, 'error');
-                    $('#checkOutBtn').prop('disabled', false);
+                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
+                order: [[0, "desc"]],
+                bInfo: false,
+                pageLength: 20,
+                buttons: [],
+                initComplete: function (settings, json) {
+                    $(".dt-buttons .btn").removeClass("btn-secondary")
                 }
             });
+
+            // Check In
+            $('#checkInBtn').click(function() {
+                var btn = $(this);
+                btn.prop('disabled', true);
+                $.ajax({
+                    url: "{{ route('attendance.checkIn') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            title: 'تم!',
+                            text: response.success + ' الساعة: ' + response.time,
+                            type: 'success',
+                            confirmButtonText: 'حسناً'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire('خطأ!', xhr.responseJSON.error, 'error');
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
+
+            // Check Out
+            $('#checkOutBtn').click(function() {
+                var btn = $(this);
+                btn.prop('disabled', true);
+                $.ajax({
+                    url: "{{ route('attendance.checkOut') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            title: 'تم!',
+                            text: response.success + ' الساعة: ' + response.time,
+                            type: 'success',
+                            confirmButtonText: 'حسناً'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire('خطأ!', xhr.responseJSON.error, 'error');
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
         });
-    });
-</script>
+    </script>
 @endsection
