@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('stras_prices', function (Blueprint $table) {
             $table->id();
             $table->string('size')->unique();
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 10,4);
             $table->string('type')->default('stras'); // stras, paper, global
 
             $table->timestamps();

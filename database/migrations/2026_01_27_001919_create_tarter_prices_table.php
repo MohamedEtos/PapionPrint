@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tarter_prices', function (Blueprint $table) {
             $table->id();
             $table->string('size');
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 10, 4);
             $table->string('type')->default('needle'); // needle, paper, global, machine_time_cost
             $table->timestamps();
         });

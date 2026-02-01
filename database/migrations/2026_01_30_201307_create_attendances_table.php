@@ -18,9 +18,14 @@ return new class extends Migration
             $table->timestamp('check_in')->nullable();
             $table->timestamp('check_out')->nullable();
             $table->string('status')->default('absent'); // present, absent, leave, holiday
+            $table->decimal('overtime_hours', 5, 2)->default(0);
+            $table->integer('delay_minutes')->default(0);
+            $table->decimal('total_hours', 5, 2)->default(0);
             $table->string('ip_address')->nullable();
             $table->string('device_info')->nullable();
             $table->timestamps();
+
+
         });
     }
 

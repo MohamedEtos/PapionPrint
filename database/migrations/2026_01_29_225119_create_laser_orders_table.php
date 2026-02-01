@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('add_ceylon')->default(false);
             $table->double('height')->nullable(); // cm
             $table->double('width')->nullable(); // cm
+            $table->integer('required_pieces')->default(0);
             $table->integer('pieces_per_section')->default(1);
             $table->integer('section_count')->default(1);
             $table->text('notes')->nullable();

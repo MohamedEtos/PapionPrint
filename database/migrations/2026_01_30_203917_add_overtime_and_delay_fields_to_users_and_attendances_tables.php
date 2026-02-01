@@ -11,15 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->decimal('overtime_rate', 4, 2)->default(1.5)->after('base_salary');
-        });
 
-        Schema::table('attendances', function (Blueprint $table) {
-            $table->decimal('overtime_hours', 5, 2)->default(0)->after('status');
-            $table->integer('delay_minutes')->default(0)->after('overtime_hours');
-            $table->decimal('total_hours', 5, 2)->default(0)->after('delay_minutes');
-        });
     }
 
     /**

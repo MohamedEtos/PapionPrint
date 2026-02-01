@@ -16,6 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->string('email')->unique();
+            $table->decimal('base_salary', 10, 2)->nullable();
+            $table->decimal('overtime_rate', 4, 2)->default(1.5);
+            $table->integer('working_hours')->default(8);
+            $table->time('shift_start')->nullable();
+            $table->time('shift_end')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
