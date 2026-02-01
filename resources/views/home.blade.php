@@ -249,21 +249,47 @@
                         </div>
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="card">
-                                <div class="card-header d-flex justify-content-between align-items-end">
-                                    <h4 class="mb-0">Goal Overview</h4>
-                                    <p class="font-medium-5 mb-0"><i class="feather icon-help-circle text-muted cursor-pointer"></i></p>
-                                </div>
                                 <div class="card-content">
-                                    <div class="card-body px-0 pb-0">
-                                        <div id="goal-overview-chart" class="mt-75"></div>
-                                        <div class="row text-center mx-0">
-                                            <div class="col-6 border-top border-right d-flex align-items-between flex-column py-1">
-                                                <p class="mb-50">Completed</p>
-                                                <p class="font-large-1 text-bold-700">786,617</p>
+                                    <div class="card-body">
+                                        <div class="row pb-50">
+                                            <div class="col-lg-6 col-12 d-flex justify-content-between flex-column order-lg-1 order-2 mt-lg-0 mt-2">
+                                                <div>
+                                                    <h2 class="text-bold-700 mb-25"></h2>
+                                                    <p class="text-bold-500 mb-75">الاحبار في المخزن</p>
+                                                    <h5 class="font-medium-2">
+                                                        <!-- <span class="text-success">+5.2% </span>
+                                                        <span>vs last 7 days</span> -->
+                                                    </h5>
+                                                </div>
+                                                <!-- <a href="#" class="btn btn-primary shadow">View Details <i class="feather icon-chevrons-right"></i></a> -->
                                             </div>
-                                            <div class="col-6 border-top d-flex align-items-between flex-column py-1">
-                                                <p class="mb-50">In Progress</p>
-                                                <p class="font-large-1 text-bold-700">13,561</p>
+                                            <div class=" col-12 d-flex justify-content-between flex-column text-right order-lg-2 order-1">
+                                                <div class="dropdown chart-dropdown">
+                                                    <!-- <button class="btn btn-sm border-0 dropdown-toggle p-0" type="button" id="dropdownItem5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Last 7 Days
+                                                    </button> -->
+                                                    <!-- <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownItem5">
+                                                        <a class="dropdown-item" href="#">Last 28 Days</a>
+                                                        <a class="dropdown-item" href="#">Last Month</a>
+                                                        <a class="dropdown-item" href="#">Last Year</a>
+                                                    </div> -->
+                                                </div>
+                                                <div id="avg-session-chart"></div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row avg-sessions pt-50">
+                                            <div class="col-6">
+                                                <p class="mb-0">ورق Sublimation: <span id="paper-stock-sub">0</span> متر</p>
+                                                <div class="progress sub_bar  mt-25">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width:100%"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <p class="mb-0">ورق DTF: <span id="paper-stock-dtf">0</span> متر</p>
+                                                <div class="progress dtf_bar  mt-25">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width:100%"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -275,7 +301,7 @@
                         <div class="col-md-4 col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Browser Statistics</h4>
+                                    <h4 class="card-title"> Statistics</h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">

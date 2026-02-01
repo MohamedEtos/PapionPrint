@@ -92,4 +92,54 @@ class ChartController extends Controller
             ]
         ]);
     }
+
+    public function getInventoryStockData()
+    {
+        // Fetch Stocks similar to AddPrintOrders logic
+        $inkStocks = \App\Models\Stock::where('type', 'ink')->get();
+        $paperStocks = \App\Models\Stock::where('type', 'paper')->get();
+
+        // Helper to get quantity safely
+        $getQty = function($stocks, $machineType, $color = null) {
+            $query = $stocks->where('machine_type', $machineType);
+            if ($color) {
+                $query = $query->where('color', $color);
+            }
+            return $query->first()->quantity ?? 0;
+        };
+
+        // Ink Data Structure (Sublimation C, M, Y, K then DTF C, M, Y, K, W)
+        // Order: Sub-C, Sub-M, Sub-Y, Sub-K, DTF-C, DTF-M, DTF-Y, DTF-K, DTF-W
+        $inkData = [
+            $getQty($inkStocks, 'sublimation', 'Cyan'),
+            $getQty($inkStocks, 'sublimation', 'Magenta'),
+            $getQty($inkStocks, 'sublimation', 'Yellow'),
+            $getQty($inkStocks, 'sublimation', 'Black'),
+            $getQty($inkStocks, 'dtf', 'Cyan'),
+            $getQty($inkStocks, 'dtf', 'Magenta'),
+            $getQty($inkStocks, 'dtf', 'Yellow'),
+            $getQty($inkStocks, 'dtf', 'Black'),
+            $getQty($inkStocks, 'dtf', 'White')
+        ];
+
+        // Paper Data (Sublimation, DTF)
+        $paperData = [
+            'sublimation' => $getQty($paperStocks, 'sublimation'),
+            'dtf' => $getQty($paperStocks, 'dtf')
+        ];
+
+        return response()->json([
+            'ink_series' => [
+                [
+                    'name' => 'Stock',
+                    'data' => $inkData
+                ]
+            ],
+            // Colors matching the order: Cyan, Magenta, Yellow, Black, Cyan, Magenta, Yellow, Black, White(ish)
+            // Softer Colors: Info, Danger, Warning, Dark Grey, Info, Danger, Warning, Dark Grey, Light Grey
+            'colors' => ['#00CFE8', '#EA5455', '#FF9F43', '#4B4B4B', '#00CFE8', '#EA5455', '#FF9F43', '#4B4B4B', '#E5E7EB'],
+            'labels' => ['Sub-C', 'Sub-M', 'Sub-Y', 'Sub-K', 'DTF-C', 'DTF-M', 'DTF-Y', 'DTF-K', 'DTF-W'],
+            'paper' => $paperData
+        ]);
+    }
 }

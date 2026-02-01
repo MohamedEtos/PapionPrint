@@ -10,6 +10,7 @@ $(document).ready(function () {
     var $warning = '#FF9F43';
     var $warning_light = '#FFC085';
 
+    
     var revenueChartoptions = {
         chart: {
             height: 270,
@@ -94,7 +95,7 @@ $(document).ready(function () {
     );
     revenueChart.render();
 
-    var currentPeriod = 'month';
+    var currentPeriod = 'week';
     var currentMachine = 'sublimation';
 
     // Fetch and update data
@@ -134,6 +135,51 @@ $(document).ready(function () {
 
     // Initial load
     updateChart(currentPeriod, currentMachine);
+
+
+        function updateInventoryStock() {
+        $.ajax({
+            url: '/charts/inventory-stock',
+            type: 'GET',
+            cache: false,
+            success: function (response) {
+                // Update Chart and Series in one go for smoother animation
+                inkChart.updateOptions({
+                    colors: response.colors,
+                    xaxis: {
+                        categories: response.labels
+                    },
+                    series: response.ink_series
+                });
+
+                // Update Paper Stock
+                $('#paper-stock-sub').text(response.paper.sublimation);
+                $('#paper-stock-dtf').text(response.paper.dtf);
+
+                if(response.paper.dtf > 100){
+                    $('.dtf_bar').addClass('progress-bar-primary');
+                }else{
+                    $('.dtf_bar').addClass('progress-bar-danger');
+                }
+                if(response.paper.sublimation > 100){
+                    $('.sub_bar').addClass('progress-bar-primary');
+                }else{
+                    $('.sub_bar').addClass('progress-bar-danger');
+                }
+
+            },
+            error: function (xhr) {
+                console.error("Error fetching inventory stock data", xhr);
+            }
+        });
+    }
+
+    // Initial Load
+    updateInventoryStock();
+
+    // Refresh every 30 seconds (sharing interval with others if possible, or independent)
+    setInterval(updateInventoryStock, 30000);
+
 
     // Event listener for Period dropdown
     $('.chart-dropdown .dropdown-item:not(.machine-item)').on('click', function (e) {
@@ -417,7 +463,7 @@ $(document).ready(function () {
             clientChartoptions
         );
         clientChart.render();
-        updateClientRetentionChart('month');
+        updateClientRetentionChart('week');
     }
 
     function updateClientRetentionChart(period) {
@@ -447,6 +493,83 @@ $(document).ready(function () {
             }
         });
     }
+
+
+    // Ink Stock Chart (Replacing Avg Session Chart)
+    // ----------------------------------
+
+    var inkChartOptions = {
+        chart: {
+            type: 'bar',
+            height: 250,
+            sparkline: { enabled: true },
+            toolbar: { show: false },
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'light',
+                type: "horizontal",
+                shadeIntensity: 0.5,
+                inverseColors: true,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 50, 100]
+            },
+        },
+        states: {
+            hover: {
+                filter: 'none'
+            }
+        },
+        colors: [],
+        series: [],
+        grid: {
+            show: false,
+            padding: {
+                left: 0,
+                right: 0
+            }
+        },
+        plotOptions: {
+            bar: {
+                columnWidth: '45%',
+                distributed: true,
+                endingShape: 'rounded'
+            }
+        },
+        tooltip: {
+            x: { show: true },
+            y: {
+                formatter: function (val) {
+                    return val + " لتر";
+                }
+            }
+        },
+        xaxis: {
+            type: 'category',
+            categories: [],
+            labels: { show: false }
+        },
+        noData: {
+            text: 'جاري التحميل...',
+            style: {
+                color: '#b9c3cd',
+                fontSize: '14px'
+            }
+        }
+    }
+
+    var inkChart = new ApexCharts(
+        document.querySelector("#avg-session-chart"),
+        inkChartOptions
+    );
+
+    inkChart.render();
+
+
+    // Ink Stock Chart ends //
+
 
     // Event listener for Client Retention Period dropdown
     var currentClientRetentionPeriod = 'month';
@@ -611,6 +734,9 @@ $(document).ready(function () {
     setInterval(function () {
         if (productOrderChart) updateInventoryChart(currentInventoryPeriod);
     }, 30000);
+
+
+
 
 
 

@@ -20,6 +20,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/customers', [App\Http\Controllers\ChartController::class, 'getCustomersData'])->name('charts.customers');
         Route::get('/client-retention', [App\Http\Controllers\ChartController::class, 'getClientRetentionData'])->name('charts.client_retention');
         Route::get('/inventory', [App\Http\Controllers\ChartController::class, 'getInventoryData'])->name('charts.inventory');
+        Route::get('/inventory-stock', [App\Http\Controllers\ChartController::class, 'getInventoryStockData'])->name('charts.inventory_stock');
     });
 
     Route::prefix('Rollpress')->group(function () {

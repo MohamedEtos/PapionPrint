@@ -254,6 +254,75 @@ class PrintersController extends Controller
              $printer->customerId = $customer->id;
         }
 
+
+        // Inventory Adjustment Logic
+        // ---------------------------------------------------
+        // Calculate difference in meters and machine change
+        $oldMachineId = $printer->machineId;
+        $oldMeters = $printer->meters;
+        $newMachineId = $request->filled('machineId') ? $request->machineId : $oldMachineId;
+        $newMeters = $request->filled('meters') ? $request->meters : $oldMeters;
+
+        // Only proceed if meters or machine changed
+        if ($oldMachineId != $newMachineId || $oldMeters != $newMeters) {
+            
+            // Helper to get Stock model
+            $getStock = function($machineId) {
+                $machine = Machines::find($machineId);
+                if (!$machine) return null;
+                $name = strtolower($machine->name);
+                $type = (str_contains($name, 'dtf') || str_contains($name, 'DTF')) ? 'dtf' : 'sublimation';
+                return \App\Models\Stock::where('type', 'paper')->where('machine_type', $type)->first();
+            };
+
+            if ($oldMachineId == $newMachineId) {
+                // Same Machine: Adjust difference
+                $diff = $newMeters - $oldMeters;
+                // If diff is positive (e.g. 100 -> 150, diff=50), we CONSUME (decrement) 50 more.
+                // If diff is negative (e.g. 100 -> 50, diff=-50), we RETURN (increment) 50 back.
+                
+                if ($diff != 0) {
+                    $stock = $getStock($newMachineId);
+                    if ($stock) {
+                        if ($diff > 0) {
+                            $stock->decrement('quantity', $diff);
+                        } else {
+                            $stock->increment('quantity', abs($diff));
+                        }
+                    }
+                }
+            } else {
+                // Machine Changed: Return old usage to old stock, Deduct new usage from new stock
+                
+                // 1. Return Old
+                if ($oldMeters > 0) {
+                    $oldStock = $getStock($oldMachineId);
+                    if ($oldStock) {
+                        $oldStock->increment('quantity', $oldMeters);
+                    }
+                }
+
+                // 2. Deduct New
+                if ($newMeters > 0) {
+                    $newStock = $getStock($newMachineId);
+                    if ($newStock) {
+                        $newStock->decrement('quantity', $newMeters);
+                    } else {
+                        // Create if missing (rare update case but consistent with store)
+                        $machine = Machines::find($newMachineId);
+                        $type = (str_contains(strtolower($machine->name), 'dtf')) ? 'dtf' : 'sublimation';
+                        \App\Models\Stock::create([
+                            'type' => 'paper',
+                            'machine_type' => $type,
+                            'quantity' => -($newMeters),
+                            'unit' => 'meter'
+                        ]);
+                    }
+                }
+            }
+        }
+        // ---------------------------------------------------
+
         if ($request->filled('machineId')) $printer->machineId = $request->machineId;
         if ($request->filled('fileHeight')) $printer->fileHeight = $request->fileHeight;
         if ($request->filled('fileWidth')) $printer->fileWidth = $request->fileWidth;
