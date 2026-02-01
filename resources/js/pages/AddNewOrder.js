@@ -671,7 +671,24 @@ $(document).ready(function () {
         return stock ? stock.quantity : 0;
       }
 
-      // --- Ink Chart ---
+      function createGradient(ctx, color) {
+        const gradient = ctx.createLinearGradient(100, 75, 100, 300);
+        gradient.addColorStop(0, color); // Solid color at top
+        gradient.addColorStop(1, color + '80'); // Fade to transparent/lighter at bottom (approx 40% opacity)
+        return gradient;
+      }
+
+      // Softer Colors
+      const colors = {
+        cyan: '#00CFE8',
+        magenta: '#EA5455',
+        yellow: '#FF9F43',
+        black: '#4B4B4B',
+        white: '#E5E7EB',
+        green: '#28C76F',
+        orange: '#FF9F43'
+      };
+
       // --- Ink Chart ---
       const inkData = {
         labels: ['Sub-C', 'Sub-M', 'Sub-Y', 'Sub-K', 'DTF-C', 'DTF-M', 'DTF-Y', 'DTF-K', 'DTF-W'],
@@ -681,15 +698,56 @@ $(document).ready(function () {
             getQty(inkStocks, 'sublimation', 'Cyan'), getQty(inkStocks, 'sublimation', 'Magenta'), getQty(inkStocks, 'sublimation', 'Yellow'), getQty(inkStocks, 'sublimation', 'Black'),
             getQty(inkStocks, 'dtf', 'Cyan'), getQty(inkStocks, 'dtf', 'Magenta'), getQty(inkStocks, 'dtf', 'Yellow'), getQty(inkStocks, 'dtf', 'Black'), getQty(inkStocks, 'dtf', 'White')
           ],
-          backgroundColor: ['cyan', 'red', 'yellow', 'black', 'cyan', 'red', 'yellow', 'black', '#ddd'],
-          borderWidth: 1
+          backgroundColor: [
+            createGradient(ctxInk, colors.cyan),
+            createGradient(ctxInk, colors.magenta),
+            createGradient(ctxInk, colors.yellow),
+            createGradient(ctxInk, colors.black),
+            createGradient(ctxInk, colors.cyan),
+            createGradient(ctxInk, colors.magenta),
+            createGradient(ctxInk, colors.yellow),
+            createGradient(ctxInk, colors.black),
+            colors.white // White usually doesn't need much gradient if it's bg color
+          ],
+          borderColor: 'transparent',
+          borderWidth: 0,
+          borderRadius: 4,
+          elements: {
+            bar: {
+              borderRadius: 4
+            }
+          }
         }]
       };
 
       const inkChart = new Chart(ctxInk, {
         type: 'bar',
         data: inkData,
-        options: { responsive: true, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: '#e7e7e7',
+                drawBorder: false
+              },
+              ticks: { stepSize: 1, color: '#b9c3cd' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#b9c3cd' }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeInOutQuart'
+          }
+        }
       });
 
       // --- Paper Chart ---
@@ -702,15 +760,45 @@ $(document).ready(function () {
             getQty(paperStocks, 'dtf')
           ],
 
-          backgroundColor: ['#28C76F', '#FF9F43'], // Green, Orange
-          borderWidth: 1
+          backgroundColor: [
+            createGradient(ctxPaper, colors.green),
+            createGradient(ctxPaper, colors.orange)
+          ],
+          borderColor: 'transparent',
+          borderWidth: 0,
+          borderRadius: 4,
+          barThickness: 50,
         }]
       };
 
       const paperChart = new Chart(ctxPaper, {
         type: 'bar', // or 'doughnut'
         data: paperData,
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: '#e7e7e7',
+                drawBorder: false
+              },
+              ticks: { color: '#b9c3cd' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#b9c3cd' }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeInOutQuart'
+          }
+        }
       });
 
       // Handle Click for Consumption

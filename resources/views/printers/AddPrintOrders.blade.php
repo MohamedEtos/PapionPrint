@@ -248,11 +248,15 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h6>مخزون الورق (متر)</h6>
-                            <canvas id="paperChart" height="200"></canvas>
+                            <div style="height: 300px; position: relative;">
+                                <canvas id="paperChart"></canvas>
+                            </div>
                         </div>
                         <div class="col-md-6">
                              <h6>مخزون الحبر (لتر)</h6>
-                             <canvas id="inkChart" height="200"></canvas>
+                             <div style="height: 300px; position: relative;">
+                                <canvas id="inkChart"></canvas>
+                             </div>
                         </div>
                     </div>
                     
@@ -264,7 +268,7 @@
                     <div class="d-flex justify-content-center flex-wrap mb-3">
                         <button class="btn btn-info m-1 consume-ink-btn" data-type="sublimation" data-color="Cyan" style="background-color: cyan; border-color: cyan; color: black;">Cyan</button>
                         <button class="btn btn-danger m-1 consume-ink-btn" data-type="sublimation" data-color="Magenta" style="background-color: magenta; border-color: magenta; color: white;">Magenta</button>
-                        <button class="btn  m-1 consume-ink-btn" data-type="sublimation" data-color="Yellow" style="background-color: yellow; border-color: yellow; color: black;">Yellow</button>
+                        <button class="btn  m-1 consume-ink-btn" data-type="sublimation" data-color="Yellow" style="background-color: #FF9F43; border-color: #FF9F43; color: black;">Yellow</button>
                         <button class="btn btn-dark m-1 consume-ink-btn" data-type="sublimation" data-color="Black" style="background-color: black; border-color: black; color: white;">Black</button>
                     </div>
 
@@ -274,7 +278,7 @@
                     <div class="d-flex justify-content-center flex-wrap">
                         <button class="btn btn-info m-1 consume-ink-btn" data-type="dtf" data-color="Cyan" style="background-color: cyan; border-color: cyan; color: black;">Cyan</button>
                         <button class="btn btn-danger m-1 consume-ink-btn" data-type="dtf" data-color="Magenta" style="background-color: magenta; border-color: magenta; color: white;">Magenta</button>
-                        <button class="btn btn- m-1 consume-ink-btn" data-type="dtf" data-color="Yellow" style="background-color: yellow; border-color: yellow; color: black;">Yellow</button>
+                        <button class="btn btn- m-1 consume-ink-btn" data-type="dtf" data-color="Yellow" style="background-color: #FF9F43; border-color: #FF9F43; color: black;">Yellow</button>
                         <button class="btn btn-dark m-1 consume-ink-btn" data-type="dtf" data-color="Black" style="background-color: black; border-color: black; color: white;">Black</button>
                         <button class="btn btn-light m-1 consume-ink-btn" data-type="dtf" data-color="White" style="background-color: white; border-color: #ddd; color: black;">White</button>
                     </div>
