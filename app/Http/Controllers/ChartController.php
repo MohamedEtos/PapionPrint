@@ -7,9 +7,32 @@ use App\Services\Charts\MeterChartService;
 use App\Services\Charts\OrdersChartService;
 use App\Services\Charts\CustomerChartService;
 use App\Services\Charts\ClientRetentionChartService;
+use App\Services\Charts\ConsumptionChartService;
+use Carbon\Carbon;
 
 class ChartController extends Controller
 {
+    protected $meterChartService;
+    protected $ordersChartService;
+    protected $customerChartService;
+    protected $clientRetentionChartService;
+    protected $consumptionChartService;
+
+    public function __construct(
+        MeterChartService $meterChartService, 
+        OrdersChartService $ordersChartService, 
+        CustomerChartService $customerChartService,
+        ClientRetentionChartService $clientRetentionChartService,
+        ConsumptionChartService $consumptionChartService
+    )
+    {
+        $this->meterChartService = $meterChartService;
+        $this->ordersChartService = $ordersChartService;
+        $this->customerChartService = $customerChartService;
+        $this->clientRetentionChartService = $clientRetentionChartService;
+        $this->consumptionChartService = $consumptionChartService;
+    }
+
     public function getCustomersData(CustomerChartService $service)
     {
         $data = $service->getCustomersData();
@@ -141,5 +164,120 @@ class ChartController extends Controller
             'labels' => ['Sub-C', 'Sub-M', 'Sub-Y', 'Sub-K', 'DTF-C', 'DTF-M', 'DTF-Y', 'DTF-K', 'DTF-W'],
             'paper' => $paperData
         ]);
+    }
+
+    // public function getInkConsumptionData(Request $request)
+    // {
+    //     $period = $request->input('period', 'week');
+    //     $machine = $request->input('machine', 'sublimation');
+
+    //     $query = \App\Models\InventoryLog::where('type', 'ink')
+    //         ->where('machine_type', $machine);
+
+    //     // Date Logic (Current vs Last Period)
+    //     $now = \Carbon\Carbon::now();
+    //     $startDate = $now->copy();
+    //     $previousStartDate = $now->copy();
+    //     $format = 'Y-m-d';
+        
+    //     if ($period == 'week') {
+    //         $startDate->subDays(7);
+    //         $previousStartDate->subDays(14);
+    //     } elseif ($period == 'month') {
+    //         $startDate->subMonth();
+    //         $previousStartDate->subMonths(2);
+    //     } elseif ($period == 'year') {
+    //         $startDate->subYear();
+    //         $previousStartDate->subYears(2);
+    //         $format = 'Y-m'; // Group by month for year view
+    //     }
+
+    //     // Fetch Data
+    //     $currentData = (clone $query)->whereBetween('created_at', [$startDate, $now])
+    //         ->selectRaw("DATE_FORMAT(created_at, '$format') as date, SUM(quantity) as total")
+    //         ->groupBy('date')
+    //         ->orderBy('date')
+    //         ->get();
+
+    //     $lastData = (clone $query)->whereBetween('created_at', [$previousStartDate, $startDate])
+    //         ->selectRaw("DATE_FORMAT(created_at, '$format') as date, SUM(quantity) as total")
+    //         ->groupBy('date')
+    //         ->orderBy('date')
+    //         ->get();
+
+    //     // Process Labels and Series
+    //     // We need to match dates or just show sequence? 
+    //     // Existing chart usually maps days. For simplicity we'll just return the values mapped to days count.
+    //     // Better: Generate labels based on period.
+        
+    //     $labels = [];
+    //     $currentSeries = [];
+    //     $lastSeries = [];
+        
+    //     // Simple mapping for demonstration (robust solution would fill missing dates)
+    //     // If 'week', we expect 7 days.
+    //     // Let's iterate backwards from today for Labels
+        
+    //     $periodMap = [
+    //         'week' => 7,
+    //         'month' => 30, // Approx
+    //         'year' => 12
+    //     ];
+        
+    //     $count = $periodMap[$period] ?? 7;
+        
+    //     for ($i = $count - 1; $i >= 0; $i--) {
+    //          if ($period == 'year') {
+    //              $d = \Carbon\Carbon::now()->subMonths($i)->format('Y-m');
+    //              $prevD = \Carbon\Carbon::now()->subMonths($i + 12)->format('Y-m'); // Approx previous year match
+    //          } else {
+    //              $d = \Carbon\Carbon::now()->subDays($i)->format('Y-m-d');
+    //              // For previous period day matching, we can just take the value from the previous dataset relative to index?
+    //              // Or match strictly by date - period?
+    //              // Let's just push values if they exist for that specific date key
+    //          }
+             
+    //          $labels[] = $d;
+             
+    //          // Find in Current
+    //          $currVal = $currentData->firstWhere('date', $d);
+    //          $currentSeries[] = $currVal ? abs($currVal->total) : 0; // logs might be negative? consumption usually is negative in logs if deducted? 
+    //          // Wait, InventoryLog: is it negative for consumption?
+    //          // Usually logs track changes. If we consume, it's negative. So we abs() it.
+             
+    //          // Find in Last
+    //          // For last data, the date will be $d minus period.
+    //          // We can just use the index if we fetched strictly?
+    //          // Or we map strictly.
+    //          $prevDateObj = ($period == 'year') ? \Carbon\Carbon::createFromFormat('Y-m', $d)->subYear() : \Carbon\Carbon::createFromFormat('Y-m-d', $d)->subDays($count);
+    //          $prevDKey = $prevDateObj->format($period == 'year' ? 'Y-m' : 'Y-m-d');
+             
+    //          $lastVal = $lastData->firstWhere('date', $prevDKey);
+    //          $lastSeries[] = $lastVal ? abs($lastVal->total) : 0;
+    //     }
+
+    //     return response()->json([
+    //         'labels' => $labels,
+    //         'currentData' => $currentSeries,
+    //         'lastData' => $lastSeries,
+    //         'currentTotal' => number_format(array_sum($currentSeries), 2),
+    //         'lastTotal' => number_format(array_sum($lastSeries), 2)
+    //     ]);
+    // }
+
+    public function getInkConsumptionData(Request $request)
+    {
+        $period = $request->input('period', 'week');
+        $machine = $request->input('machine', 'sublimation');
+
+        return response()->json($this->consumptionChartService->getInkConsumption($period, $machine));
+    }
+
+    public function getStrasTarterConsumptionData(Request $request)
+    {
+        $period = $request->input('period', 'week');
+        $type = $request->input('machine', 'stras');
+
+        return response()->json($this->consumptionChartService->getStrasTarterConsumption($period, $type));
     }
 }

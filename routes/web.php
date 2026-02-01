@@ -21,6 +21,8 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/client-retention', [App\Http\Controllers\ChartController::class, 'getClientRetentionData'])->name('charts.client_retention');
         Route::get('/inventory', [App\Http\Controllers\ChartController::class, 'getInventoryData'])->name('charts.inventory');
         Route::get('/inventory-stock', [App\Http\Controllers\ChartController::class, 'getInventoryStockData'])->name('charts.inventory_stock');
+        Route::get('/ink-consumption', [App\Http\Controllers\ChartController::class, 'getInkConsumptionData'])->name('charts.ink_consumption');
+        Route::get('/stras-tarter-consumption', [App\Http\Controllers\ChartController::class, 'getStrasTarterConsumptionData'])->name('charts.stras_tarter_consumption');
     });
 
     Route::prefix('Rollpress')->group(function () {

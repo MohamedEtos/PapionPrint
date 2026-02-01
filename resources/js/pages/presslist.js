@@ -494,4 +494,60 @@ $(document).ready(function () {
     });
   }
 
+
+
+
+
+  $(document).ready(function () {
+    // Dashboard Check In
+    $('#dashboardCheckInBtn').click(function () {
+      var btn = $(this);
+      btn.prop('disabled', true);
+      $.ajax({
+        url: "/attendance/check-in",
+        type: "POST",
+        data: {
+          _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+          Swal.fire({
+            title: 'تم!',
+            text: response.success + ' الساعة: ' + response.time,
+            type: 'success',
+            confirmButtonText: 'حسناً'
+          }).then(() => { location.reload(); });
+        },
+        error: function (xhr) {
+          Swal.fire('خطأ!', xhr.responseJSON.error, 'error');
+          btn.prop('disabled', false);
+        }
+      });
+    });
+
+    // Dashboard Check Out
+    $('#dashboardCheckOutBtn').click(function () {
+      var btn = $(this);
+      btn.prop('disabled', true);
+      $.ajax({
+        url: "/attendance/check-out",
+        type: "POST",
+        data: {
+          _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+          Swal.fire({
+            title: 'تم!',
+            text: response.success + ' الساعة: ' + response.time,
+            type: 'success',
+            confirmButtonText: 'حسناً'
+          }).then(() => { location.reload(); });
+        },
+        error: function (xhr) {
+          Swal.fire('خطأ!', xhr.responseJSON.error, 'error');
+          btn.prop('disabled', false);
+        }
+      });
+    });
+  });
+
 });

@@ -17,11 +17,45 @@
 
 @section('content')
 
+
+
+
     <!-- BEGIN: Content-->
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
+
+                        <!-- Attendance Card -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card bg-gradient-primary">
+                            <div class="card-content text-white">
+                                <div class="card-body">
+                                    <h4 class="card-title text-white">نظام الحضور والانصراف</h4>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-0">سجل حضورك اليومي بسهولة</p>
+                                        </div>
+                                        <div>
+                                            @if(isset($todayAttendance) && $todayAttendance)
+                                                @if(!$todayAttendance->check_out)
+                                                    <button id="dashboardCheckOutBtn" class="btn btn-danger shadow waves-effect waves-light">تسجيل الانصراف <i class="feather icon-log-out"></i></button>
+                                                    <span class="d-block mt-1 text-right small">وقت الحضور: {{ \Carbon\Carbon::parse($todayAttendance->check_in)->format('h:i A') }}</span>
+                                                @else
+                                                    <button class="btn btn-secondary shadow" disabled>تم الانتهاء اليوم</button>
+                                                @endif
+                                            @else
+                                                <button id="dashboardCheckInBtn" class="btn btn-success shadow waves-effect waves-light">تسجيل الحضور <i class="feather icon-log-in"></i></button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Attendance Card Ends -->
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">

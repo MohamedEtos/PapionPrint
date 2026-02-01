@@ -10,7 +10,7 @@ $(document).ready(function () {
     var $warning = '#FF9F43';
     var $warning_light = '#FFC085';
 
-    
+
     var revenueChartoptions = {
         chart: {
             height: 270,
@@ -137,7 +137,7 @@ $(document).ready(function () {
     updateChart(currentPeriod, currentMachine);
 
 
-        function updateInventoryStock() {
+    function updateInventoryStock() {
         $.ajax({
             url: '/charts/inventory-stock',
             type: 'GET',
@@ -156,14 +156,14 @@ $(document).ready(function () {
                 $('#paper-stock-sub').text(response.paper.sublimation);
                 $('#paper-stock-dtf').text(response.paper.dtf);
 
-                if(response.paper.dtf > 100){
+                if (response.paper.dtf > 100) {
                     $('.dtf_bar').addClass('progress-bar-primary');
-                }else{
+                } else {
                     $('.dtf_bar').addClass('progress-bar-danger');
                 }
-                if(response.paper.sublimation > 100){
+                if (response.paper.sublimation > 100) {
                     $('.sub_bar').addClass('progress-bar-primary');
-                }else{
+                } else {
                     $('.sub_bar').addClass('progress-bar-danger');
                 }
 
@@ -182,7 +182,7 @@ $(document).ready(function () {
 
 
     // Event listener for Period dropdown
-    $('.chart-dropdown .dropdown-item:not(.machine-item)').on('click', function (e) {
+    $('.revenue-period-item').on('click', function (e) {
         e.preventDefault();
         var period = $(this).data('period');
         var label = $(this).text();
@@ -192,7 +192,7 @@ $(document).ready(function () {
     });
 
     // Event listener for Machine dropdown
-    $('.machine-item').on('click', function (e) {
+    $('.revenue-machine-item').on('click', function (e) {
         e.preventDefault();
         var machine = $(this).data('machine');
         var label = $(this).text();
@@ -740,5 +740,159 @@ $(document).ready(function () {
 
 
 
+
+    // --------------------------------------------------------------------------------
+    // Stras/Tarter Consumption Chart Logic
+    // --------------------------------------------------------------------------------
+
+    var strasConsumptionChartOptions = {
+        chart: {
+            height: 270,
+            toolbar: { show: false },
+            type: 'line',
+        },
+        stroke: {
+            curve: 'smooth',
+            dashArray: [0, 8],
+            width: [4, 2],
+        },
+        grid: {
+            borderColor: $label_color,
+        },
+        legend: {
+            show: false,
+        },
+        colors: [$danger_light, $strok_color],
+
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                inverseColors: false,
+                gradientToColors: [$primary, $strok_color],
+                shadeIntensity: 1,
+                type: 'horizontal',
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100, 100, 100]
+            },
+        },
+        markers: {
+            size: 0,
+            hover: {
+                size: 5
+            }
+        },
+        xaxis: {
+            labels: {
+                style: {
+                    colors: $strok_color,
+                }
+            },
+            axisTicks: {
+                show: false,
+            },
+            categories: [], // Dynamic
+            axisBorder: {
+                show: false,
+            },
+            tickPlacement: 'on',
+        },
+        yaxis: {
+            tickAmount: 5,
+            labels: {
+                style: {
+                    color: $strok_color,
+                },
+                formatter: function (val) {
+                    return val + ' M';
+                }
+            }
+        },
+        tooltip: {
+            x: { show: false }
+        },
+        series: [{
+            name: "Current Consumption",
+            data: []
+        },
+        {
+            name: "Last Consumption",
+            data: []
+        }
+        ],
+    };
+
+    var strasConsumptionChart = new ApexCharts(
+        document.querySelector("#stras-consumption-chart"),
+        strasConsumptionChartOptions
+    );
+    strasConsumptionChart.render();
+
+    var currentStrasPeriod = 'week';
+    var currentStrasMachine = 'stras';
+
+    function updateStrasConsumptionChart(period, machine) {
+        $.ajax({
+            url: '/charts/stras-tarter-consumption',
+            type: 'GET',
+            cache: false,
+            data: {
+                period: period,
+                machine: machine
+            },
+            success: function (response) {
+                // Update specific elements
+                $('#current-stras-consumption').text(response.currentTotal);
+                $('#last-stras-consumption').text(response.lastTotal);
+
+                strasConsumptionChart.updateOptions({
+                    xaxis: {
+                        categories: response.labels
+                    }
+                });
+
+                strasConsumptionChart.updateSeries([{
+                    name: "الحالي",
+                    data: response.currentData
+                }, {
+                    name: "السابق",
+                    data: response.lastData
+                }]);
+            },
+            error: function (xhr) {
+                console.error("Error fetching stras consumption data", xhr);
+            }
+        });
+    }
+
+
+
+    // Initial Load
+    updateStrasConsumptionChart(currentStrasPeriod, currentStrasMachine);
+
+    // Event Listeners for Stras Chart
+    $('.stras-period-item').on('click', function (e) {
+        e.preventDefault();
+        var period = $(this).data('period');
+        var label = $(this).text();
+        $('#dropdownStrasPeriod').text(label);
+        currentStrasPeriod = period;
+        updateStrasConsumptionChart(currentStrasPeriod, currentStrasMachine);
+    });
+
+    $('.stras-machine-item').on('click', function (e) {
+        e.preventDefault();
+        var machine = $(this).data('machine');
+        var label = $(this).text();
+        $('#dropdownStrasMachine').text(label);
+        $('#stras-chart-title').text(' ورق' + ' ' + label);
+        currentStrasMachine = machine;
+        updateStrasConsumptionChart(currentStrasPeriod, currentStrasMachine);
+    });
+
+    setInterval(function () {
+        if (strasConsumptionChart) updateStrasConsumptionChart(currentStrasPeriod, currentStrasMachine);
+    }, 30000);
 
 });

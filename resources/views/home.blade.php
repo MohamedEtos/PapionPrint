@@ -99,36 +99,7 @@
             <div class="content-header row">
             </div>
             <div class="content-body">
-                <!-- Attendance Card -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card bg-gradient-primary">
-                            <div class="card-content text-white">
-                                <div class="card-body">
-                                    <h4 class="card-title text-white">نظام الحضور والانصراف</h4>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p class="mb-0">سجل حضورك اليومي بسهولة</p>
-                                        </div>
-                                        <div>
-                                            @if(isset($todayAttendance) && $todayAttendance)
-                                                @if(!$todayAttendance->check_out)
-                                                    <button id="dashboardCheckOutBtn" class="btn btn-danger shadow waves-effect waves-light">تسجيل الانصراف <i class="feather icon-log-out"></i></button>
-                                                    <span class="d-block mt-1 text-right small">وقت الحضور: {{ \Carbon\Carbon::parse($todayAttendance->check_in)->format('h:i A') }}</span>
-                                                @else
-                                                    <button class="btn btn-secondary shadow" disabled>تم الانتهاء اليوم</button>
-                                                @endif
-                                            @else
-                                                <button id="dashboardCheckInBtn" class="btn btn-success shadow waves-effect waves-light">تسجيل الحضور <i class="feather icon-log-in"></i></button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Attendance Card Ends -->
+
 
                 <!-- Dashboard Ecommerce Starts -->
                 <section id="dashboard-ecommerce">
@@ -209,18 +180,18 @@
                                                 Sublimation
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMachine">
-                                                <a class="dropdown-item machine-item" href="#" data-machine="sublimation">Sublimation</a>
-                                                <a class="dropdown-item machine-item" href="#" data-machine="dtf">DTF</a>
+                                                <a class="dropdown-item revenue-machine-item" href="#" data-machine="sublimation">Sublimation</a>
+                                                <a class="dropdown-item revenue-machine-item" href="#" data-machine="dtf">DTF</a>
                                             </div>
                                         </div>
                                         <div class="dropdown chart-dropdown">
                                         <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="dropdownItem2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            ايام الشهر 
+                                            ايام الاسبوع 
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownItem2">
-                                            <a class="dropdown-item" href="#" data-period="week">ايام الاسبوع</a>
-                                            <a class="dropdown-item" href="#" data-period="month">ايام الشهر</a>
-                                            <a class="dropdown-item" href="#" data-period="year">شهور السنة</a>
+                                            <a class="dropdown-item revenue-period-item" href="#" data-period="week">ايام الاسبوع</a>
+                                            <a class="dropdown-item revenue-period-item" href="#" data-period="month">ايام الشهر</a>
+                                            <a class="dropdown-item revenue-period-item" href="#" data-period="year">شهور السنة</a>
                                         </div>
                                     </div>
                                 </div>
@@ -295,100 +266,10 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title"> Statistics</h4>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between mb-25">
-                                            <div class="browser-info">
-                                                <p class="mb-25">Google Chrome</p>
-                                                <h4>73%</h4>
-                                            </div>
-                                            <div class="stastics-info text-right">
-                                                <span>800 <i class="feather icon-arrow-up text-success"></i></span>
-                                                <span class="text-muted d-block">13:16</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress progress-bar-primary mb-2">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="73" aria-valuemin="73" aria-valuemax="100" style="width:73%"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-25">
-                                            <div class="browser-info">
-                                                <p class="mb-25">Opera</p>
-                                                <h4>8%</h4>
-                                            </div>
-                                            <div class="stastics-info text-right">
-                                                <span>-200 <i class="feather icon-arrow-down text-danger"></i></span>
-                                                <span class="text-muted d-block">13:16</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress progress-bar-primary mb-2">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="8" aria-valuemin="8" aria-valuemax="100" style="width:8%"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-25">
-                                            <div class="browser-info">
-                                                <p class="mb-25">Firefox</p>
-                                                <h4>19%</h4>
-                                            </div>
-                                            <div class="stastics-info text-right">
-                                                <span>100 <i class="feather icon-arrow-up text-success"></i></span>
-                                                <span class="text-muted d-block">13:16</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress progress-bar-primary mb-2">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="19" aria-valuemin="19" aria-valuemax="100" style="width:19%"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-25">
-                                            <div class="browser-info">
-                                                <p class="mb-25">Internet Explorer</p>
-                                                <h4>27%</h4>
-                                            </div>
-                                            <div class="stastics-info text-right">
-                                                <span>-450 <i class="feather icon-arrow-down text-danger"></i></span>
-                                                <span class="text-muted d-block">13:16</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress progress-bar-primary mb-50">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="27" aria-valuemin="27" aria-valuemax="100" style="width:27%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8 col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">العملاء الجدد والمتمرين</h4>
-                                    <div class="dropdown chart-dropdown">
-                                        <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="clientRetentionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            ايام الشهر
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="clientRetentionDropdown">
-                                            <a class="dropdown-item client-retention-period" href="#" data-period="week">ايام الاسبوع</a>
-                                            <a class="dropdown-item client-retention-period" href="#" data-period="month">ايام الشهر</a>
-                                            <a class="dropdown-item client-retention-period" href="#" data-period="year">شهور السنة</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div id="client-retention-chart">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class='row'>
                         <div class="col-lg-4 col-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between pb-0">
@@ -450,6 +331,149 @@
                                             <div class="product-result">
                                                 <span id="stat-ink-dtf">Loading...</span>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-lg-8 col-md-6 col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-end">
+                                    <h4 class="card-title" id="stras-chart-title">ورق استراس </h4>
+                                    <div class="d-flex">
+                                        <div class="dropdown chart-dropdown mr-1">
+                                            <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="dropdownStrasMachine" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                ستراس
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownStrasMachine">
+                                                <a class="dropdown-item stras-machine-item" href="#" data-machine="stras">ستراس</a>
+                                                <a class="dropdown-item stras-machine-item" href="#" data-machine="ترتر">ترتر</a>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown chart-dropdown">
+                                        <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="dropdownStrasPeriod" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            ايام الاسبوع 
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownStrasPeriod">
+                                            <a class="dropdown-item stras-period-item" href="#" data-period="week">ايام الاسبوع</a>
+                                            <a class="dropdown-item stras-period-item" href="#" data-period="month">ايام الشهر</a>
+                                            <a class="dropdown-item stras-period-item" href="#" data-period="year">شهور السنة</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="card-content">
+                                    <div class="card-body pb-0">
+                                        <div class="d-flex justify-content-start">
+                                            <div class="mr-2">
+                                                <p class="mb-50 text-bold-600"> الحالي</p>
+                                                <h2 class="text-bold-400">
+                                                    <span class="text-success" id="current-stras-consumption">0</span>
+                                                </h2>
+                                            </div>
+                                            <div>
+                                                <p class="mb-50 text-bold-600"> السابق</p>
+                                                <h2 class="text-bold-400">
+                                                    <span id="last-stras-consumption">0</span>
+                                                </h2>
+                                            </div>
+
+                                        </div>
+                                        <div id="stras-consumption-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class='row'>
+                        
+                        <div class="col-md-8 col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">العملاء الجدد والمتمرين</h4>
+                                    <div class="dropdown chart-dropdown">
+                                        <button class="btn btn-sm border-0 dropdown-toggle px-0" type="button" id="clientRetentionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            ايام الشهر
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="clientRetentionDropdown">
+                                            <a class="dropdown-item client-retention-period" href="#" data-period="week">ايام الاسبوع</a>
+                                            <a class="dropdown-item client-retention-period" href="#" data-period="month">ايام الشهر</a>
+                                            <a class="dropdown-item client-retention-period" href="#" data-period="year">شهور السنة</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div id="client-retention-chart">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title"> Statistics</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-25">
+                                            <div class="browser-info">
+                                                <p class="mb-25">Google Chrome</p>
+                                                <h4>73%</h4>
+                                            </div>
+                                            <div class="stastics-info text-right">
+                                                <span>800 <i class="feather icon-arrow-up text-success"></i></span>
+                                                <span class="text-muted d-block">13:16</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress progress-bar-primary mb-2">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="73" aria-valuemin="73" aria-valuemax="100" style="width:73%"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-25">
+                                            <div class="browser-info">
+                                                <p class="mb-25">Opera</p>
+                                                <h4>8%</h4>
+                                            </div>
+                                            <div class="stastics-info text-right">
+                                                <span>-200 <i class="feather icon-arrow-down text-danger"></i></span>
+                                                <span class="text-muted d-block">13:16</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress progress-bar-primary mb-2">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="8" aria-valuemin="8" aria-valuemax="100" style="width:8%"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-25">
+                                            <div class="browser-info">
+                                                <p class="mb-25">Firefox</p>
+                                                <h4>19%</h4>
+                                            </div>
+                                            <div class="stastics-info text-right">
+                                                <span>100 <i class="feather icon-arrow-up text-success"></i></span>
+                                                <span class="text-muted d-block">13:16</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress progress-bar-primary mb-2">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="19" aria-valuemin="19" aria-valuemax="100" style="width:19%"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-25">
+                                            <div class="browser-info">
+                                                <p class="mb-25">Internet Explorer</p>
+                                                <h4>27%</h4>
+                                            </div>
+                                            <div class="stastics-info text-right">
+                                                <span>-450 <i class="feather icon-arrow-down text-danger"></i></span>
+                                                <span class="text-muted d-block">13:16</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress progress-bar-primary mb-50">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="27" aria-valuemin="27" aria-valuemax="100" style="width:27%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -689,77 +713,11 @@
     <!-- END: Content-->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @endsection
 
 
 @section('js')
-<script>
-    $(document).ready(function() {
-        // Dashboard Check In
-        $('#dashboardCheckInBtn').click(function() {
-            var btn = $(this);
-            btn.prop('disabled', true);
-            $.ajax({
-                url: "{{ route('attendance.checkIn') }}",
-                type: "POST",
-                data: { _token: "{{ csrf_token() }}" },
-                success: function(response) {
-                    Swal.fire({
-                        title: 'تم!',
-                        text: response.success + ' الساعة: ' + response.time,
-                        type: 'success',
-                        confirmButtonText: 'حسناً'
-                    }).then(() => { location.reload(); });
-                },
-                error: function(xhr) {
-                    Swal.fire('خطأ!', xhr.responseJSON.error, 'error');
-                    btn.prop('disabled', false);
-                }
-            });
-        });
 
-        // Dashboard Check Out
-        $('#dashboardCheckOutBtn').click(function() {
-            var btn = $(this);
-            btn.prop('disabled', true);
-            $.ajax({
-                url: "{{ route('attendance.checkOut') }}",
-                type: "POST",
-                data: { _token: "{{ csrf_token() }}" },
-                success: function(response) {
-                    Swal.fire({
-                        title: 'تم!',
-                        text: response.success + ' الساعة: ' + response.time,
-                        type: 'success',
-                        confirmButtonText: 'حسناً'
-                    }).then(() => { location.reload(); });
-                },
-                error: function(xhr) {
-                    Swal.fire('خطأ!', xhr.responseJSON.error, 'error');
-                    btn.prop('disabled', false);
-                }
-            });
-        });
-    });
-</script>
 
 <!-- <script src="{{ asset('core/vendors/js/charts/apexcharts.min.js') }}"></script> -->
 @vite('resources/js/pages/dashboard.js')

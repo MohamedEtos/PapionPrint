@@ -9,6 +9,9 @@ use App\Models\Customers;
 use App\Models\Machines;
 use App\Models\User;
 use App\Models\Rollpress;
+use App\Models\Attendance;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class RollpressController extends Controller
 {
@@ -40,8 +43,15 @@ class RollpressController extends Controller
         $customers = Customers::all();
         $machines = Machines::all();
 
+   
+        $todayAttendance = Attendance::where('user_id', Auth::id())
+        ->where('date', Carbon::today())
+        ->first();
+
+
         return view('rollpress.presslist',
-        [
+        [   
+            'todayAttendance' => $todayAttendance,
             'Orders'=>$Orders,
             'Rolls' => $Rolls,
             'customers' => $customers,

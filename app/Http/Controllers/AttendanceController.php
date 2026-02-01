@@ -104,7 +104,11 @@ class AttendanceController extends Controller
             'overtime_hours' => $overtimeHours,
         ]);
 
-        return response()->json(['success' => 'تم تسجيل الانصراف بنجاح!', 'status' => 'checked_out']);
+        return response()->json([
+            'success' => 'تم تسجيل الانصراف بنجاح!', 
+            'status' => 'checked_out',
+            'time' => $checkOutTime->format('h:i A')
+        ]);
     }
 
     public function payroll(Request $request)
