@@ -37,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
             // Failsafe for initial migrations
         }
 
+        Carbon::setLocale('ar');
+        Schema::defaultStringLength(191);
+
         // Register Cart Composer
         \Illuminate\Support\Facades\View::composer('components.navbar', \App\Http\ViewComposers\CartComposer::class);
     }
