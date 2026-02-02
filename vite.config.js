@@ -37,6 +37,7 @@ export default defineConfig({
                 'resources/js/pages/users.js',
                 'resources/js/pages/stras.js',
                 'resources/js/pages/laser.js',
+                'resources/js/pages/tarter.js',
             ],
             refresh: true,
         }),
