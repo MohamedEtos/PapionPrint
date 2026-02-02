@@ -109,22 +109,25 @@ $(document).ready(function () {
                 machine: machine
             },
             success: function (response) {
+                if (!response) return;
                 // Update specific elements
-                $('#current-revenue').text(response.currentTotal.toLocaleString());
-                $('#last-revenue').text(response.lastTotal.toLocaleString());
+                $('#current-revenue').text((response.currentTotal || 0).toLocaleString());
+                $('#last-revenue').text((response.lastTotal || 0).toLocaleString());
 
-                revenueChart.updateOptions({
-                    xaxis: {
-                        categories: response.labels
-                    }
-                });
+                if (response.labels) {
+                    revenueChart.updateOptions({
+                        xaxis: {
+                            categories: response.labels
+                        }
+                    });
+                }
 
                 revenueChart.updateSeries([{
                     name: "الحالي",
-                    data: response.currentData
+                    data: response.currentData || []
                 }, {
                     name: "السابق",
-                    data: response.lastData
+                    data: response.lastData || []
                 }]);
             },
             error: function (xhr) {
@@ -278,15 +281,21 @@ $(document).ready(function () {
             type: 'GET',
             cache: false,
             success: function (response) {
-                $('#orders-received-total').text(response.totalOrders);
-                orderChart.updateOptions({
-                    xaxis: {
-                        categories: response.labels
-                    }
-                });
+                if (!response) return;
+                $('#orders-received-total').text(response.totalOrders || 0);
+
+                if (response.labels) {
+                    orderChart.updateOptions({
+                        xaxis: {
+                            categories: response.labels
+                        }
+                    });
+                }
+
+                var seriesData = (response.series && response.series[0]) ? response.series[0].data : [];
                 orderChart.updateSeries([{
                     name: 'الطلبات',
-                    data: response.series[0].data
+                    data: seriesData
                 }]);
             },
             error: function (xhr) {
@@ -370,15 +379,21 @@ $(document).ready(function () {
             type: 'GET',
             cache: false,
             success: function (response) {
-                $('#customers-gained-total').text(response.totalCustomers);
-                customersChart.updateOptions({
-                    xaxis: {
-                        categories: response.labels
-                    }
-                });
+                if (!response) return;
+                $('#customers-gained-total').text(response.totalCustomers || 0);
+
+                if (response.labels) {
+                    customersChart.updateOptions({
+                        xaxis: {
+                            categories: response.labels
+                        }
+                    });
+                }
+
+                var seriesData = (response.series && response.series[0]) ? response.series[0].data : [];
                 customersChart.updateSeries([{
                     name: 'العملاء',
-                    data: response.series[0].data
+                    data: seriesData
                 }]);
             },
             error: function (xhr) {
@@ -475,17 +490,24 @@ $(document).ready(function () {
                 period: period
             },
             success: function (response) {
-                clientChart.updateOptions({
-                    xaxis: {
-                        categories: response.labels
-                    }
-                });
+                if (!response) return;
+                if (response.labels) {
+                    clientChart.updateOptions({
+                        xaxis: {
+                            categories: response.labels
+                        }
+                    });
+                }
+
+                var series1 = (response.series && response.series[0]) ? response.series[0].data : [];
+                var series2 = (response.series && response.series[1]) ? response.series[1].data : [];
+
                 clientChart.updateSeries([{
                     name: 'العملاء الجدد',
-                    data: response.series[0].data
+                    data: series1
                 }, {
                     name: 'العملاء المستمرون',
-                    data: response.series[1].data
+                    data: series2
                 }]);
             },
             error: function (xhr) {

@@ -70,7 +70,7 @@
       // Update scrollbar
       if ($.app.menu.manualScroller) {
         $.app.menu.manualScroller.updateHeight();
-        console.log('Scrollbar updated');
+        // console.log('Scrollbar updated');
       }
 
       // Handle click on sidenav overlay
