@@ -1,0 +1,2249 @@
+{
+  "_apexcharts.esm-1dz0OY9g.js": {
+    "file": "assets/apexcharts.esm-1dz0OY9g.js",
+    "name": "apexcharts.esm"
+  },
+  "resources/core/css-rtl/core/colors/palette-gradient.css": {
+    "file": "assets/palette-gradient-Bv-0L0DQ.css",
+    "src": "resources/core/css-rtl/core/colors/palette-gradient.css",
+    "isEntry": true,
+    "name": "palette-gradient",
+    "names": [
+      "palette-gradient.css"
+    ]
+  },
+  "resources/core/css-rtl/core/menu/menu-types/vertical-menu.css": {
+    "file": "assets/vertical-menu-W2TFhlmG.css",
+    "src": "resources/core/css-rtl/core/menu/menu-types/vertical-menu.css",
+    "isEntry": true,
+    "name": "vertical-menu",
+    "names": [
+      "vertical-menu.css"
+    ]
+  },
+  "resources/core/css-rtl/custom-rtl.css": {
+    "file": "assets/custom-rtl-F_we2sSI.css",
+    "src": "resources/core/css-rtl/custom-rtl.css",
+    "isEntry": true,
+    "name": "custom-rtl",
+    "names": [
+      "custom-rtl.css"
+    ]
+  },
+  "resources/core/css-rtl/pages/data-list-view.css": {
+    "file": "assets/data-list-view-pQzQlXOz.css",
+    "src": "resources/core/css-rtl/pages/data-list-view.css",
+    "isEntry": true,
+    "name": "data-list-view",
+    "names": [
+      "data-list-view.css"
+    ]
+  },
+  "resources/core/css-rtl/plugins/file-uploaders/dropzone.css": {
+    "file": "assets/dropzone-935tgBN-.css",
+    "src": "resources/core/css-rtl/plugins/file-uploaders/dropzone.css",
+    "isEntry": true,
+    "name": "dropzone",
+    "names": [
+      "dropzone.css"
+    ]
+  },
+  "resources/core/css-rtl/plugins/forms/validation/form-validation.css": {
+    "file": "assets/form-validation-CzgQOYLp.css",
+    "src": "resources/core/css-rtl/plugins/forms/validation/form-validation.css",
+    "isEntry": true,
+    "name": "form-validation",
+    "names": [
+      "form-validation.css"
+    ]
+  },
+  "resources/core/css-rtl/plugins/forms/wizard.css": {
+    "file": "assets/wizard-CWfdl4ll.css",
+    "src": "resources/core/css-rtl/plugins/forms/wizard.css",
+    "isEntry": true,
+    "name": "wizard",
+    "names": [
+      "wizard.css"
+    ]
+  },
+  "resources/core/fonts/feather/fonts/feather.eot": {
+    "file": "assets/feather-B6uk7rDz.eot",
+    "src": "resources/core/fonts/feather/fonts/feather.eot"
+  },
+  "resources/core/fonts/feather/fonts/feather.svg": {
+    "file": "assets/feather-CJHuDf5s.svg",
+    "src": "resources/core/fonts/feather/fonts/feather.svg"
+  },
+  "resources/core/fonts/feather/fonts/feather.ttf": {
+    "file": "assets/feather-DJLJ3y0Y.ttf",
+    "src": "resources/core/fonts/feather/fonts/feather.ttf"
+  },
+  "resources/core/fonts/feather/fonts/feather.woff": {
+    "file": "assets/feather-BBViPOsB.woff",
+    "src": "resources/core/fonts/feather/fonts/feather.woff"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ad.svg": {
+    "file": "assets/ad-qsnnsd3P.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ad.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ae.svg": {
+    "file": "assets/ae-DjJ5isqj.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ae.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/af.svg": {
+    "file": "assets/af-xXnqRp4O.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/af.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ag.svg": {
+    "file": "assets/ag-PKLW0fme.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ag.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ai.svg": {
+    "file": "assets/ai-DZ_JJzjL.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ai.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/al.svg": {
+    "file": "assets/al-CpbyhK0M.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/al.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/am.svg": {
+    "file": "assets/am-CfiRoWhM.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/am.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ao.svg": {
+    "file": "assets/ao-BLZ7B884.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ao.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/aq.svg": {
+    "file": "assets/aq-CWeUqMkn.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/aq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ar.svg": {
+    "file": "assets/ar-Ch1Vothw.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ar.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/as.svg": {
+    "file": "assets/as-CzfJWTYh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/as.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/at.svg": {
+    "file": "assets/at-C1UGb4HM.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/at.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/au.svg": {
+    "file": "assets/au-B0dAMAhU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/au.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/aw.svg": {
+    "file": "assets/aw-CSBT7CgL.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/aw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ax.svg": {
+    "file": "assets/ax-l0f49Vj0.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ax.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/az.svg": {
+    "file": "assets/az-BjirjHKE.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/az.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ba.svg": {
+    "file": "assets/ba-BYsOFHBx.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ba.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bb.svg": {
+    "file": "assets/bb-D3f8QmmH.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bb.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bd.svg": {
+    "file": "assets/bd-Dklv1QGV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bd.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/be.svg": {
+    "file": "assets/be-DBCyPGss.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/be.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bf.svg": {
+    "file": "assets/bf-CDAdWsD8.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bg.svg": {
+    "file": "assets/bg-H6EABXyP.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bh.svg": {
+    "file": "assets/bh-6EcPbuMr.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bi.svg": {
+    "file": "assets/bi-tk8V09Sm.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bi.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bj.svg": {
+    "file": "assets/bj-CfsW4xru.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bl.svg": {
+    "file": "assets/bl-B40vD68C.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bm.svg": {
+    "file": "assets/bm-CU5LnjzO.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bn.svg": {
+    "file": "assets/bn-B6PjEmvi.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bo.svg": {
+    "file": "assets/bo-BR3NwA_1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bo.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bq.svg": {
+    "file": "assets/bq-CJCRS_rI.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/br.svg": {
+    "file": "assets/br-BPURBA6o.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/br.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bs.svg": {
+    "file": "assets/bs-DVS80Mqc.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bs.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bt.svg": {
+    "file": "assets/bt-ClNT7cyv.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bv.svg": {
+    "file": "assets/bv-D43gKCE2.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bw.svg": {
+    "file": "assets/bw-Blygn9W3.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/by.svg": {
+    "file": "assets/by-BzgYVwDt.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/by.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/bz.svg": {
+    "file": "assets/bz-CM7N8bnQ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ca.svg": {
+    "file": "assets/ca--glNi91z.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ca.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cc.svg": {
+    "file": "assets/cc-CU53D7zl.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cd.svg": {
+    "file": "assets/cd-oNyQkc0-.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cd.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cf.svg": {
+    "file": "assets/cf-DiqHZuPp.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cg.svg": {
+    "file": "assets/cg-B7zEs0jg.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ch.svg": {
+    "file": "assets/ch-BLCiAMdN.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ch.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ci.svg": {
+    "file": "assets/ci-Bgpun5JE.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ci.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ck.svg": {
+    "file": "assets/ck-B6d9eJU7.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ck.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cl.svg": {
+    "file": "assets/cl-CZDWr9Pp.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cm.svg": {
+    "file": "assets/cm-c4YSddXO.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cn.svg": {
+    "file": "assets/cn-Bv7kUFAe.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/co.svg": {
+    "file": "assets/co-B-YKDnka.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/co.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cr.svg": {
+    "file": "assets/cr-jTDXO_Nc.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cu.svg": {
+    "file": "assets/cu-BXkd-VJy.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cv.svg": {
+    "file": "assets/cv-CcAwZvnV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cw.svg": {
+    "file": "assets/cw-Vc3OfHF6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cx.svg": {
+    "file": "assets/cx-C_6_4e3_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cx.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cy.svg": {
+    "file": "assets/cy-Ddo7RlPU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cy.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/cz.svg": {
+    "file": "assets/cz-CZFU-Kxs.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/cz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/de.svg": {
+    "file": "assets/de-CpuVuubp.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/de.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/dj.svg": {
+    "file": "assets/dj-DyqAgAd4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/dj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/dk.svg": {
+    "file": "assets/dk-xGz7qroJ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/dk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/dm.svg": {
+    "file": "assets/dm-BD3g5HUi.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/dm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/do.svg": {
+    "file": "assets/do-BPPvcDfT.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/do.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/dz.svg": {
+    "file": "assets/dz-BM0p5oF4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/dz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ec.svg": {
+    "file": "assets/ec-J6cV8Aqr.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ec.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ee.svg": {
+    "file": "assets/ee-CRQ_Dqxe.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ee.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/eg.svg": {
+    "file": "assets/eg-BavAz8p4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/eg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/eh.svg": {
+    "file": "assets/eh-GGkrm9YG.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/eh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/er.svg": {
+    "file": "assets/er-CIp_E8vM.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/er.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/es.svg": {
+    "file": "assets/es-BgPL24Q-.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/es.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/et.svg": {
+    "file": "assets/et-CPPVxmhj.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/et.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/eu.svg": {
+    "file": "assets/eu-CULLyC2t.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/eu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/fi.svg": {
+    "file": "assets/fi-CG7jCcXf.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/fi.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/fj.svg": {
+    "file": "assets/fj-Dus91B3z.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/fj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/fk.svg": {
+    "file": "assets/fk-Dlb-9PtX.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/fk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/fm.svg": {
+    "file": "assets/fm-ZkilpZPi.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/fm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/fo.svg": {
+    "file": "assets/fo-DHPwe3Xs.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/fo.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/fr.svg": {
+    "file": "assets/bl-B40vD68C.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ga.svg": {
+    "file": "assets/ga-C9vshb87.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ga.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gb-eng.svg": {
+    "file": "assets/gb-eng-BRBbI-n5.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gb-eng.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gb-sct.svg": {
+    "file": "assets/gb-sct-BvBWIYTq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gb-sct.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gb-wls.svg": {
+    "file": "assets/gb-wls-BGGRU5cu.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gb-wls.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gb.svg": {
+    "file": "assets/gb-CtO5KwEq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gb.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gd.svg": {
+    "file": "assets/gd-BretAm_G.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gd.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ge.svg": {
+    "file": "assets/ge-Y9Bl2rSj.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ge.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gf.svg": {
+    "file": "assets/gf-BpJRVwVj.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gg.svg": {
+    "file": "assets/gg-DhDSne4o.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gh.svg": {
+    "file": "assets/gh-DjYE0UcR.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gi.svg": {
+    "file": "assets/gi-CiILTrP6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gi.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gl.svg": {
+    "file": "assets/gl-NGRclmmY.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gm.svg": {
+    "file": "assets/gm-B06zxQIi.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gn.svg": {
+    "file": "assets/gn-DILPdLq3.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gp.svg": {
+    "file": "assets/bl-B40vD68C.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/bl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gq.svg": {
+    "file": "assets/gq-CaolktIG.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gr.svg": {
+    "file": "assets/gr-CmPX6-DI.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gs.svg": {
+    "file": "assets/gs-Bn5ulwpf.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gs.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gt.svg": {
+    "file": "assets/gt-DJdk0bmT.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gu.svg": {
+    "file": "assets/gu-6DzoViD4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gw.svg": {
+    "file": "assets/gw-DS7ZmbnR.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/gy.svg": {
+    "file": "assets/gy-DhZ3--hu.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/gy.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/hk.svg": {
+    "file": "assets/hk-Xv46ODHP.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/hk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/hm.svg": {
+    "file": "assets/hm-CQAzdts8.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/hm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/hn.svg": {
+    "file": "assets/hn-RyT9ZSNz.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/hn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/hr.svg": {
+    "file": "assets/hr-Bs9DG77Z.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/hr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ht.svg": {
+    "file": "assets/ht-BWrNBec5.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ht.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/hu.svg": {
+    "file": "assets/hu-DiChBWX9.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/hu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/id.svg": {
+    "file": "assets/id-Cco-DTyQ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/id.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ie.svg": {
+    "file": "assets/ie-DXxYVm1J.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ie.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/il.svg": {
+    "file": "assets/il-CYx-nfmq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/il.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/im.svg": {
+    "file": "assets/im-Fol7wTKH.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/im.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/in.svg": {
+    "file": "assets/in-cV1lBxve.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/in.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/io.svg": {
+    "file": "assets/io-BQ3uLR21.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/io.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/iq.svg": {
+    "file": "assets/iq-Tlvyllvx.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/iq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ir.svg": {
+    "file": "assets/ir-CYnkALZ4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ir.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/is.svg": {
+    "file": "assets/is-C1M7FBIj.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/is.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/it.svg": {
+    "file": "assets/it-C8skfaV_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/it.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/je.svg": {
+    "file": "assets/je-BZdnCNnk.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/je.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/jm.svg": {
+    "file": "assets/jm-CBZIS6H7.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/jm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/jo.svg": {
+    "file": "assets/jo-CGldekGU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/jo.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/jp.svg": {
+    "file": "assets/jp-DIumYRNB.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/jp.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ke.svg": {
+    "file": "assets/ke-s9Y0h36M.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ke.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/kg.svg": {
+    "file": "assets/kg-DPK-uScI.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/kg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/kh.svg": {
+    "file": "assets/kh-DL1b7a_J.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/kh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ki.svg": {
+    "file": "assets/ki-BXs60z8M.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ki.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/km.svg": {
+    "file": "assets/km-BeysBdbY.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/km.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/kn.svg": {
+    "file": "assets/kn-D9amAGO8.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/kn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/kp.svg": {
+    "file": "assets/kp-B9fMEOwB.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/kp.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/kr.svg": {
+    "file": "assets/kr-CXPlxNZ_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/kr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/kw.svg": {
+    "file": "assets/kw-Cmj59wgU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/kw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ky.svg": {
+    "file": "assets/ky-CxTR7O_C.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ky.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/kz.svg": {
+    "file": "assets/kz-BSzSucBu.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/kz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/la.svg": {
+    "file": "assets/la-CLN1yqX6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/la.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/lb.svg": {
+    "file": "assets/lb-Bd76_ltZ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/lb.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/lc.svg": {
+    "file": "assets/lc-Ft5Lyram.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/lc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/li.svg": {
+    "file": "assets/li-nDYzr8y_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/li.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/lk.svg": {
+    "file": "assets/lk-BSjhygwb.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/lk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/lr.svg": {
+    "file": "assets/lr-BJrzP4UD.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/lr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ls.svg": {
+    "file": "assets/ls-BOZNyzUq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ls.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/lt.svg": {
+    "file": "assets/lt-CceofP3m.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/lt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/lu.svg": {
+    "file": "assets/lu-CG04Zzir.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/lu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/lv.svg": {
+    "file": "assets/lv-BqwjJITL.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/lv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ly.svg": {
+    "file": "assets/ly-UrS0TfAn.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ly.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ma.svg": {
+    "file": "assets/ma-D2LmKiRE.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ma.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mc.svg": {
+    "file": "assets/mc-BMOq0hV7.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/md.svg": {
+    "file": "assets/md-O4Q8N-OK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/md.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/me.svg": {
+    "file": "assets/me-D4jKbJMq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/me.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mf.svg": {
+    "file": "assets/mf-CVk8hYns.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mg.svg": {
+    "file": "assets/mg-DTz8SYeo.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mh.svg": {
+    "file": "assets/mh-DxxyclHv.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mk.svg": {
+    "file": "assets/mk-DrPfvDbf.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ml.svg": {
+    "file": "assets/ml-C3I1wv9X.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ml.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mm.svg": {
+    "file": "assets/mm-CeMMywsZ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mn.svg": {
+    "file": "assets/mn-BFTVbf9M.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mo.svg": {
+    "file": "assets/mo-DbxjmgbK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mo.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mp.svg": {
+    "file": "assets/mp-D6-w1Eo6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mp.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mq.svg": {
+    "file": "assets/mq-Dfnhn-Ex.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mr.svg": {
+    "file": "assets/mr-DMa1W4oG.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ms.svg": {
+    "file": "assets/ms--zCZCHTi.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ms.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mt.svg": {
+    "file": "assets/mt-BNlTvnKP.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mu.svg": {
+    "file": "assets/mu-PviQvXq4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mv.svg": {
+    "file": "assets/mv-BEKALQ_E.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mw.svg": {
+    "file": "assets/mw-Ck8Jk4jV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mx.svg": {
+    "file": "assets/mx-DL7ks9av.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mx.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/my.svg": {
+    "file": "assets/my-B9N_QKyA.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/my.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/mz.svg": {
+    "file": "assets/mz-Bf4XU18C.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/mz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/na.svg": {
+    "file": "assets/na-BE4TlreS.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/na.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/nc.svg": {
+    "file": "assets/nc-DASm1KUD.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/nc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ne.svg": {
+    "file": "assets/ne-DQD3ZY7o.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ne.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/nf.svg": {
+    "file": "assets/nf-ldEobXFs.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/nf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ng.svg": {
+    "file": "assets/ng-B0Sa-hRK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ng.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ni.svg": {
+    "file": "assets/ni-XH9-Rps9.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ni.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/nl.svg": {
+    "file": "assets/nl-DnrTqNzJ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/nl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/no.svg": {
+    "file": "assets/no-4lmLhSBH.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/no.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/np.svg": {
+    "file": "assets/np-BqMsd-kr.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/np.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/nr.svg": {
+    "file": "assets/nr-RHcefOVV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/nr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/nu.svg": {
+    "file": "assets/nu-BaAISQOb.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/nu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/nz.svg": {
+    "file": "assets/nz-CqnsGQ80.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/nz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/om.svg": {
+    "file": "assets/om-FtYhUsMl.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/om.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pa.svg": {
+    "file": "assets/pa-C0-m4_g-.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pa.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pe.svg": {
+    "file": "assets/pe-DKXwMn5e.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pe.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pf.svg": {
+    "file": "assets/pf-DZ4f_63D.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pg.svg": {
+    "file": "assets/pg-Dgh-hE9D.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ph.svg": {
+    "file": "assets/ph-3U5qvyI-.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ph.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pk.svg": {
+    "file": "assets/pk-D2iyNzEM.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pl.svg": {
+    "file": "assets/pl-BPCAOefk.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pm.svg": {
+    "file": "assets/pm-Brg9YEAo.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pn.svg": {
+    "file": "assets/pn-BLRtJxC3.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pr.svg": {
+    "file": "assets/pr-62jodrvr.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ps.svg": {
+    "file": "assets/ps-DDHS0S8X.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ps.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pt.svg": {
+    "file": "assets/pt-D5bh-ZTQ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/pw.svg": {
+    "file": "assets/pw-BgWn4uzG.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/pw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/py.svg": {
+    "file": "assets/py-sPJ2f1KJ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/py.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/qa.svg": {
+    "file": "assets/qa-BLFXz83D.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/qa.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/re.svg": {
+    "file": "assets/re-D59OIuXi.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/re.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ro.svg": {
+    "file": "assets/ro-sG1CEoWs.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ro.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/rs.svg": {
+    "file": "assets/rs-SLMDCr_S.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/rs.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ru.svg": {
+    "file": "assets/ru-BXtWaCte.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ru.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/rw.svg": {
+    "file": "assets/rw-HA5qG1lf.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/rw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sa.svg": {
+    "file": "assets/sa-DLhHn4iF.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sa.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sb.svg": {
+    "file": "assets/sb-C8AlJnpX.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sb.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sc.svg": {
+    "file": "assets/sc-BLhf9MhD.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sd.svg": {
+    "file": "assets/sd-IotsUXBf.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sd.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/se.svg": {
+    "file": "assets/se-LegkuRFE.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/se.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sg.svg": {
+    "file": "assets/sg-CeKEuS4s.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sh.svg": {
+    "file": "assets/sh-4KG8fcqo.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/si.svg": {
+    "file": "assets/si-AyS9X4n7.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/si.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sj.svg": {
+    "file": "assets/sj-CKf0iA76.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sk.svg": {
+    "file": "assets/sk-DVZwYf6E.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sl.svg": {
+    "file": "assets/sl-Cw_j_uMC.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sm.svg": {
+    "file": "assets/sm-Cq2nIrjy.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sn.svg": {
+    "file": "assets/sn-CE6zmTGh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/so.svg": {
+    "file": "assets/so-DT2ShjZS.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/so.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sr.svg": {
+    "file": "assets/sr-BpaxRJPh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ss.svg": {
+    "file": "assets/ss-CzbMm2od.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ss.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/st.svg": {
+    "file": "assets/st-BojoDdk2.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/st.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sv.svg": {
+    "file": "assets/sv-B2gMkUTV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sx.svg": {
+    "file": "assets/sx-Ccxkeybi.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sx.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sy.svg": {
+    "file": "assets/sy-BHpztSfY.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sy.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/sz.svg": {
+    "file": "assets/sz-B4kQ465S.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/sz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tc.svg": {
+    "file": "assets/tc-D3kf_8KT.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/td.svg": {
+    "file": "assets/td-Dn1UeTP9.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/td.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tf.svg": {
+    "file": "assets/tf-Cs574VOc.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tg.svg": {
+    "file": "assets/tg-b1e1p9sb.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/th.svg": {
+    "file": "assets/th-CeKPPnD4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/th.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tj.svg": {
+    "file": "assets/tj-CBeQC0RK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tk.svg": {
+    "file": "assets/tk-CZwKM1zV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tl.svg": {
+    "file": "assets/tl-DsslAAwj.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tm.svg": {
+    "file": "assets/tm-5xE28i-p.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tn.svg": {
+    "file": "assets/tn-D_WBckLX.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/to.svg": {
+    "file": "assets/to-B4MTEjsu.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/to.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tr.svg": {
+    "file": "assets/tr-CLg-_YUu.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tt.svg": {
+    "file": "assets/tt-Bm2VzHZ5.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tv.svg": {
+    "file": "assets/tv-B_9kp7Ah.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tw.svg": {
+    "file": "assets/tw-C7qdWO3N.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/tz.svg": {
+    "file": "assets/tz-Fzzu904U.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/tz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ua.svg": {
+    "file": "assets/ua-BJGOOQIf.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ua.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ug.svg": {
+    "file": "assets/ug-CTUcdL3-.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ug.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/um.svg": {
+    "file": "assets/um-CTaQZIsu.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/um.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/us.svg": {
+    "file": "assets/us-D2xYKO_f.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/us.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/uy.svg": {
+    "file": "assets/uy-ckjgVoET.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/uy.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/uz.svg": {
+    "file": "assets/uz-B5g0DyUm.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/uz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/va.svg": {
+    "file": "assets/va-DKeo48h1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/va.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/vc.svg": {
+    "file": "assets/vc-CV3PtvKV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/vc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ve.svg": {
+    "file": "assets/ve-DCFHDCjM.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ve.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/vg.svg": {
+    "file": "assets/vg-WZ3z2wVK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/vg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/vi.svg": {
+    "file": "assets/vi-BNk01Lun.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/vi.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/vn.svg": {
+    "file": "assets/vn-BQEh4iKh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/vn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/vu.svg": {
+    "file": "assets/vu-c7Kjjeif.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/vu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/wf.svg": {
+    "file": "assets/wf-B3zFnrDF.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/wf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ws.svg": {
+    "file": "assets/ws-Cq1yRLPs.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ws.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/ye.svg": {
+    "file": "assets/ye-DU2PuLR_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/ye.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/yt.svg": {
+    "file": "assets/yt-DGDJeRoC.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/yt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/za.svg": {
+    "file": "assets/za-DQ5zIJd_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/za.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/zm.svg": {
+    "file": "assets/zm-D5_Q2Vuq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/zm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/1x1/zw.svg": {
+    "file": "assets/zw-DtaSXM03.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/1x1/zw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ad.svg": {
+    "file": "assets/ad-DhlZyzb1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ad.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ae.svg": {
+    "file": "assets/ae-Bv4t64ei.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ae.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/af.svg": {
+    "file": "assets/af-D7hPiJN2.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/af.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ag.svg": {
+    "file": "assets/ag-BvEr17Zv.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ag.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ai.svg": {
+    "file": "assets/ai-GhKCdmiy.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ai.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/al.svg": {
+    "file": "assets/al-B_VCrXXW.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/al.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/am.svg": {
+    "file": "assets/am-BUJlreX6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/am.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ao.svg": {
+    "file": "assets/ao-Bspjr5fA.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ao.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/aq.svg": {
+    "file": "assets/aq-DwcYcRg_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/aq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ar.svg": {
+    "file": "assets/ar-DhYW_-Ln.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ar.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/as.svg": {
+    "file": "assets/as-k3lynAVH.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/as.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/at.svg": {
+    "file": "assets/at-Buw0F1JR.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/at.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/au.svg": {
+    "file": "assets/au-BMZSoK7Q.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/au.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/aw.svg": {
+    "file": "assets/aw-B5koIFiq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/aw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ax.svg": {
+    "file": "assets/ax-CKIXs5IW.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ax.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/az.svg": {
+    "file": "assets/az-DpESAKgO.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/az.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ba.svg": {
+    "file": "assets/ba-DiEQN3Sb.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ba.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bb.svg": {
+    "file": "assets/bb-dLpBAR3h.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bb.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bd.svg": {
+    "file": "assets/bd-DvvYVGcd.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bd.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/be.svg": {
+    "file": "assets/be-CP2RNd7M.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/be.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bf.svg": {
+    "file": "assets/bf-Bw8QyhSO.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bg.svg": {
+    "file": "assets/bg-CvaPBAkZ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bh.svg": {
+    "file": "assets/bh-BgCUweeO.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bi.svg": {
+    "file": "assets/bi-B9ddjM2v.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bi.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bj.svg": {
+    "file": "assets/bj-C3qvFlh2.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bl.svg": {
+    "file": "assets/bl-B9Mjwrat.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bm.svg": {
+    "file": "assets/bm-Db07dXRk.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bn.svg": {
+    "file": "assets/bn-DAxEbXMD.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bo.svg": {
+    "file": "assets/bo-HoRIj-89.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bo.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bq.svg": {
+    "file": "assets/bq-BywVteEG.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/br.svg": {
+    "file": "assets/br-BOIm_UaU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/br.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bs.svg": {
+    "file": "assets/bs-CdQBzcCk.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bs.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bt.svg": {
+    "file": "assets/bt-orHINClY.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bv.svg": {
+    "file": "assets/bv-BKwLCle_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bw.svg": {
+    "file": "assets/bw-CQKD1P11.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/by.svg": {
+    "file": "assets/by-CUwxAKd7.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/by.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/bz.svg": {
+    "file": "assets/bz-CBGAVKZn.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/bz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ca.svg": {
+    "file": "assets/ca-D4lXY8GJ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ca.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cc.svg": {
+    "file": "assets/cc-DKIebomK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cd.svg": {
+    "file": "assets/cd-rAui2v5Y.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cd.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cf.svg": {
+    "file": "assets/cf-DZ68cfon.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cg.svg": {
+    "file": "assets/cg-x77CO2pn.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ch.svg": {
+    "file": "assets/ch-TxDpNXaD.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ch.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ci.svg": {
+    "file": "assets/ci-D_NRerkg.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ci.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ck.svg": {
+    "file": "assets/ck-C7JqqgO6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ck.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cl.svg": {
+    "file": "assets/cl-5_ZQ07Ch.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cm.svg": {
+    "file": "assets/cm-B8usmwax.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cn.svg": {
+    "file": "assets/cn-DOHLE-3y.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/co.svg": {
+    "file": "assets/co-Cbnsw2dn.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/co.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cr.svg": {
+    "file": "assets/cr-CwP8YQvU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cu.svg": {
+    "file": "assets/cu-D5d1q9Ar.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cv.svg": {
+    "file": "assets/cv-DMsw_Xob.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cw.svg": {
+    "file": "assets/cw-3uk91K-6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cx.svg": {
+    "file": "assets/cx-mCfgBJot.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cx.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cy.svg": {
+    "file": "assets/cy-Bwfw_Vdv.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cy.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/cz.svg": {
+    "file": "assets/cz-Dc4zKxsk.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/cz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/de.svg": {
+    "file": "assets/de-BvCxAl6G.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/de.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/dj.svg": {
+    "file": "assets/dj-Begc6LVe.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/dj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/dk.svg": {
+    "file": "assets/dk-C06nXsux.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/dk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/dm.svg": {
+    "file": "assets/dm--vLsriL8.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/dm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/do.svg": {
+    "file": "assets/do-BIvdsA4H.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/do.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/dz.svg": {
+    "file": "assets/dz-DdujDBEc.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/dz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ec.svg": {
+    "file": "assets/ec-BAUGcqkZ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ec.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ee.svg": {
+    "file": "assets/ee--SvR0BES.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ee.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/eg.svg": {
+    "file": "assets/eg-icmIUqr4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/eg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/eh.svg": {
+    "file": "assets/eh-CFcIbK5I.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/eh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/er.svg": {
+    "file": "assets/er-Bnqh8vCL.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/er.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/es.svg": {
+    "file": "assets/es-B6Kft0Au.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/es.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/et.svg": {
+    "file": "assets/et-S6q9Xb4O.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/et.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/eu.svg": {
+    "file": "assets/eu-DkfFNf-v.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/eu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/fi.svg": {
+    "file": "assets/fi-CudPZRBJ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/fi.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/fj.svg": {
+    "file": "assets/fj-Dzd5Wa9_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/fj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/fk.svg": {
+    "file": "assets/fk-9rLXJKwZ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/fk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/fm.svg": {
+    "file": "assets/fm-CCcstKlL.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/fm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/fo.svg": {
+    "file": "assets/fo-CnPdpou-.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/fo.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/fr.svg": {
+    "file": "assets/fr-ndjw1Nzr.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/fr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ga.svg": {
+    "file": "assets/ga-BwIBaKJc.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ga.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gb-eng.svg": {
+    "file": "assets/gb-eng-B6GP4Vgt.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gb-eng.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gb-sct.svg": {
+    "file": "assets/gb-sct-Drp1Dxp1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gb-sct.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gb-wls.svg": {
+    "file": "assets/gb-wls-DwE6k3V1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gb-wls.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gb.svg": {
+    "file": "assets/gb-ySs0OwUl.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gb.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gd.svg": {
+    "file": "assets/gd-ibUOTdj5.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gd.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ge.svg": {
+    "file": "assets/ge-B0k9-hZD.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ge.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gf.svg": {
+    "file": "assets/gf-CM__j5id.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gg.svg": {
+    "file": "assets/gg-BjlXbRCx.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gh.svg": {
+    "file": "assets/gh-DJZBJmwh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gi.svg": {
+    "file": "assets/gi-DNoNQk8f.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gi.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gl.svg": {
+    "file": "assets/gl-ClAeS9oh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gm.svg": {
+    "file": "assets/gm-BBKJ5O1Y.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gn.svg": {
+    "file": "assets/gn-CS7imMOh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gp.svg": {
+    "file": "assets/fr-ndjw1Nzr.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/fr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gq.svg": {
+    "file": "assets/gq-Bbqe-lDm.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gr.svg": {
+    "file": "assets/gr-oSclnhyv.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gs.svg": {
+    "file": "assets/gs-Dopx31e9.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gs.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gt.svg": {
+    "file": "assets/gt-V6C-DDw3.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gu.svg": {
+    "file": "assets/gu-BriOrXeV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gw.svg": {
+    "file": "assets/gw-CNlfJrJK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/gy.svg": {
+    "file": "assets/gy-CDvSJAJS.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/gy.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/hk.svg": {
+    "file": "assets/hk-LsYpnCTM.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/hk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/hm.svg": {
+    "file": "assets/hm-SPR3tqDR.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/hm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/hn.svg": {
+    "file": "assets/hn-DVrZrEoO.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/hn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/hr.svg": {
+    "file": "assets/hr-COdHwFfu.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/hr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ht.svg": {
+    "file": "assets/ht-CZ9HsdYy.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ht.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/hu.svg": {
+    "file": "assets/hu-D0Civ5Gd.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/hu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/id.svg": {
+    "file": "assets/id-DiLg5G6M.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/id.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ie.svg": {
+    "file": "assets/ie-DFcv6X6J.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ie.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/il.svg": {
+    "file": "assets/il-BPdunKQ1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/il.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/im.svg": {
+    "file": "assets/im-DdFoCkHH.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/im.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/in.svg": {
+    "file": "assets/in-B56AyHhX.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/in.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/io.svg": {
+    "file": "assets/io-Dvrgrv8O.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/io.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/iq.svg": {
+    "file": "assets/iq-CKp1varl.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/iq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ir.svg": {
+    "file": "assets/ir-Ct3aXZkp.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ir.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/is.svg": {
+    "file": "assets/is-CQcRiAeQ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/is.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/it.svg": {
+    "file": "assets/it-IHf_6lgJ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/it.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/je.svg": {
+    "file": "assets/je-J2zRCwV6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/je.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/jm.svg": {
+    "file": "assets/jm-Y8RoCVXq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/jm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/jo.svg": {
+    "file": "assets/jo-DJ243MU9.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/jo.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/jp.svg": {
+    "file": "assets/jp-DNzTJM-6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/jp.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ke.svg": {
+    "file": "assets/ke-BNxxin3N.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ke.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/kg.svg": {
+    "file": "assets/kg-BaargGDl.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/kg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/kh.svg": {
+    "file": "assets/kh-eCnX9zrS.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/kh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ki.svg": {
+    "file": "assets/ki-D365Xje2.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ki.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/km.svg": {
+    "file": "assets/km-DKRdL1Yv.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/km.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/kn.svg": {
+    "file": "assets/kn-BU9qJn16.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/kn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/kp.svg": {
+    "file": "assets/kp-Fi1GXW42.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/kp.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/kr.svg": {
+    "file": "assets/kr-Dz-Hz-k8.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/kr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/kw.svg": {
+    "file": "assets/kw-B4XwNbvL.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/kw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ky.svg": {
+    "file": "assets/ky-BJ8PlKpk.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ky.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/kz.svg": {
+    "file": "assets/kz-nuvgwLtE.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/kz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/la.svg": {
+    "file": "assets/la-ds3hz4VK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/la.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/lb.svg": {
+    "file": "assets/lb-Dy7dc5u7.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/lb.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/lc.svg": {
+    "file": "assets/lc-NCj9KljI.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/lc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/li.svg": {
+    "file": "assets/li-CytqodlW.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/li.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/lk.svg": {
+    "file": "assets/lk-BGWvjoX6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/lk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/lr.svg": {
+    "file": "assets/lr--EopqaUy.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/lr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ls.svg": {
+    "file": "assets/ls-dnYi1FPG.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ls.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/lt.svg": {
+    "file": "assets/lt-B_2bl0rA.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/lt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/lu.svg": {
+    "file": "assets/lu-C_x1DbHp.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/lu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/lv.svg": {
+    "file": "assets/lv-CvMIA1gP.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/lv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ly.svg": {
+    "file": "assets/ly-Br5A9c3U.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ly.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ma.svg": {
+    "file": "assets/ma-6Zo62XzZ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ma.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mc.svg": {
+    "file": "assets/mc-DWCnbwv1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/md.svg": {
+    "file": "assets/md-6Bhsr4CW.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/md.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/me.svg": {
+    "file": "assets/me-C5K79iAY.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/me.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mf.svg": {
+    "file": "assets/mf-Bw9eoWqR.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mg.svg": {
+    "file": "assets/mg-C_-Raj6X.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mh.svg": {
+    "file": "assets/mh-KihHmxeV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mk.svg": {
+    "file": "assets/mk-Bbl1xxTN.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ml.svg": {
+    "file": "assets/ml-BU5Ng-BU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ml.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mm.svg": {
+    "file": "assets/mm-DK6gussj.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mn.svg": {
+    "file": "assets/mn-DnXQMkMb.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mo.svg": {
+    "file": "assets/mo-CtmVM_DM.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mo.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mp.svg": {
+    "file": "assets/mp-BZE2zMos.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mp.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mq.svg": {
+    "file": "assets/mq-DomU89F3.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mq.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mr.svg": {
+    "file": "assets/mr-D35wUz4e.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ms.svg": {
+    "file": "assets/ms-CI2ZY2Io.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ms.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mt.svg": {
+    "file": "assets/mt-CVy00Pn6.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mu.svg": {
+    "file": "assets/mu-D8dpnuSy.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mv.svg": {
+    "file": "assets/mv-B_VGwzzz.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mw.svg": {
+    "file": "assets/mw-DnXKm95m.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mx.svg": {
+    "file": "assets/mx-Cda3d3hR.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mx.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/my.svg": {
+    "file": "assets/my-C49Jtm5_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/my.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/mz.svg": {
+    "file": "assets/mz-B531rXs4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/mz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/na.svg": {
+    "file": "assets/na-DvqvcH5H.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/na.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/nc.svg": {
+    "file": "assets/nc-CrN9OxjT.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/nc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ne.svg": {
+    "file": "assets/ne-D9fXQPbs.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ne.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/nf.svg": {
+    "file": "assets/nf-BxBJS4dT.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/nf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ng.svg": {
+    "file": "assets/ng-BFLb_yx5.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ng.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ni.svg": {
+    "file": "assets/ni-S4XYoBxs.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ni.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/nl.svg": {
+    "file": "assets/nl-OgjjQKuq.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/nl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/no.svg": {
+    "file": "assets/no-Dw4Mviuk.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/no.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/np.svg": {
+    "file": "assets/np-rD6w4WNL.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/np.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/nr.svg": {
+    "file": "assets/nr-CxbH5wMG.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/nr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/nu.svg": {
+    "file": "assets/nu-DyIVpDDS.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/nu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/nz.svg": {
+    "file": "assets/nz-C3_IVyrr.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/nz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/om.svg": {
+    "file": "assets/om-lJlJENzc.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/om.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pa.svg": {
+    "file": "assets/pa-CtBmPcsm.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pa.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pe.svg": {
+    "file": "assets/pe-Dx2wWRf1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pe.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pf.svg": {
+    "file": "assets/pf-DK7lWLUU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pg.svg": {
+    "file": "assets/pg-BuJbB_-Z.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ph.svg": {
+    "file": "assets/ph-CsMbgPtt.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ph.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pk.svg": {
+    "file": "assets/pk-1VnOshpB.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pl.svg": {
+    "file": "assets/pl-BX7SVtKZ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pm.svg": {
+    "file": "assets/pm-BHxYkGvh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pn.svg": {
+    "file": "assets/pn-Cox4qfSX.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pr.svg": {
+    "file": "assets/pr-Br3-Y3N0.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ps.svg": {
+    "file": "assets/ps-BZicZA4f.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ps.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pt.svg": {
+    "file": "assets/pt-DlED74i2.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/pw.svg": {
+    "file": "assets/pw-D1KrnE5G.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/pw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/py.svg": {
+    "file": "assets/py-kjZ1bp94.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/py.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/qa.svg": {
+    "file": "assets/qa-xGjvU8Th.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/qa.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/re.svg": {
+    "file": "assets/re-CmF-BRee.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/re.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ro.svg": {
+    "file": "assets/ro-T0V1mvuo.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ro.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/rs.svg": {
+    "file": "assets/rs-CnBeMANw.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/rs.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ru.svg": {
+    "file": "assets/ru-CcTPckwe.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ru.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/rw.svg": {
+    "file": "assets/rw-HXEVjhkG.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/rw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sa.svg": {
+    "file": "assets/sa-DckaRph3.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sa.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sb.svg": {
+    "file": "assets/sb-BEJo5UWr.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sb.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sc.svg": {
+    "file": "assets/sc-DPdMJ4yV.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sd.svg": {
+    "file": "assets/sd-Cu4dHik9.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sd.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/se.svg": {
+    "file": "assets/se-BI2RnwtU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/se.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sg.svg": {
+    "file": "assets/sg-DEVM8aCg.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sh.svg": {
+    "file": "assets/sh-DViLLrPZ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sh.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/si.svg": {
+    "file": "assets/si-OqpBlR-3.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/si.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sj.svg": {
+    "file": "assets/sj-BvDjZ_ZN.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sk.svg": {
+    "file": "assets/sk-Befsggt_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sl.svg": {
+    "file": "assets/sl-BOsv7tzd.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sm.svg": {
+    "file": "assets/sm-Xjx5qMFT.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sn.svg": {
+    "file": "assets/sn-BkAN0UMh.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/so.svg": {
+    "file": "assets/so-CQbeu-SF.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/so.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sr.svg": {
+    "file": "assets/sr-DvWm-Bld.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ss.svg": {
+    "file": "assets/ss-B9Ss3ClU.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ss.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/st.svg": {
+    "file": "assets/st-BkTV0eep.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/st.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sv.svg": {
+    "file": "assets/sv-Be5cFhCY.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sx.svg": {
+    "file": "assets/sx-ColfXGAN.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sx.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sy.svg": {
+    "file": "assets/sy-HfKZiQCk.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sy.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/sz.svg": {
+    "file": "assets/sz-K0Lwm9JL.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/sz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tc.svg": {
+    "file": "assets/tc-BoykBx1r.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/td.svg": {
+    "file": "assets/td-PrxtQWt3.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/td.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tf.svg": {
+    "file": "assets/tf-DhQnce3Q.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tg.svg": {
+    "file": "assets/tg-CbLFvgvn.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/th.svg": {
+    "file": "assets/th-CvLkYrO_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/th.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tj.svg": {
+    "file": "assets/tj-BVkbVmkH.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tj.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tk.svg": {
+    "file": "assets/tk-BDAwX8Dx.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tk.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tl.svg": {
+    "file": "assets/tl-CUPuk9Re.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tl.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tm.svg": {
+    "file": "assets/tm-BT8BlY7c.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tn.svg": {
+    "file": "assets/tn-ji3O6w32.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/to.svg": {
+    "file": "assets/to-CyWZTOu1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/to.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tr.svg": {
+    "file": "assets/tr-CiKoVfDB.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tr.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tt.svg": {
+    "file": "assets/tt-BlAE-pR-.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tv.svg": {
+    "file": "assets/tv-yvzIf4S4.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tv.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tw.svg": {
+    "file": "assets/tw-BlZ5H9D5.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tw.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/tz.svg": {
+    "file": "assets/tz-BChTuv2B.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/tz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ua.svg": {
+    "file": "assets/ua-99F0OE4f.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ua.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ug.svg": {
+    "file": "assets/ug-BAPxkV8Z.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ug.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/um.svg": {
+    "file": "assets/um-C6j65ayK.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/um.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/us.svg": {
+    "file": "assets/us-DHFB5W9C.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/us.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/uy.svg": {
+    "file": "assets/uy-Mh20ASeC.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/uy.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/uz.svg": {
+    "file": "assets/uz-CHAzHPf1.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/uz.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/va.svg": {
+    "file": "assets/va-B-g181OD.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/va.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/vc.svg": {
+    "file": "assets/vc-BzAozPCe.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/vc.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ve.svg": {
+    "file": "assets/ve-CsOOrJIM.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ve.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/vg.svg": {
+    "file": "assets/vg-DM4qf6j7.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/vg.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/vi.svg": {
+    "file": "assets/vi-B8cUW4tp.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/vi.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/vn.svg": {
+    "file": "assets/vn-DYHdcCSd.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/vn.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/vu.svg": {
+    "file": "assets/vu-D5zniDRl.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/vu.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/wf.svg": {
+    "file": "assets/wf-CZc8KbzR.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/wf.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ws.svg": {
+    "file": "assets/ws-Dl97z0y_.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ws.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/ye.svg": {
+    "file": "assets/ye-DqEemFXi.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/ye.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/yt.svg": {
+    "file": "assets/yt-RvASCCE7.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/yt.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/za.svg": {
+    "file": "assets/za-BHxj7DWJ.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/za.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/zm.svg": {
+    "file": "assets/zm-_-AGxdGe.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/zm.svg"
+  },
+  "resources/core/fonts/flag-icon-css/flags/4x3/zw.svg": {
+    "file": "assets/zw-4B2d-9w-.svg",
+    "src": "resources/core/fonts/flag-icon-css/flags/4x3/zw.svg"
+  },
+  "resources/core/images/dropzone/spritemap.png": {
+    "file": "assets/spritemap-CP-4snSC.png",
+    "src": "resources/core/images/dropzone/spritemap.png"
+  },
+  "resources/core/js/scripts/forms/wizard-steps.js": {
+    "file": "assets/wizard-steps-BKyQUEhR.js",
+    "name": "wizard-steps",
+    "src": "resources/core/js/scripts/forms/wizard-steps.js",
+    "isEntry": true
+  },
+  "resources/core/vendors/css/file-uploaders/dropzone.min.css": {
+    "file": "assets/dropzone-BOuLygzR.css",
+    "src": "resources/core/vendors/css/file-uploaders/dropzone.min.css",
+    "isEntry": true,
+    "name": "dropzone.min",
+    "names": [
+      "dropzone.css"
+    ]
+  },
+  "resources/core/vendors/css/forms/select/select2.min.css": {
+    "file": "assets/select2-C8rGH_U8.css",
+    "src": "resources/core/vendors/css/forms/select/select2.min.css",
+    "isEntry": true,
+    "name": "select2.min",
+    "names": [
+      "select2.css"
+    ]
+  },
+  "resources/core/vendors/css/pickers/pickadate/pickadate.css": {
+    "file": "assets/pickadate-D2D7wv_N.css",
+    "src": "resources/core/vendors/css/pickers/pickadate/pickadate.css",
+    "isEntry": true,
+    "name": "pickadate",
+    "names": [
+      "pickadate.css"
+    ]
+  },
+  "resources/core/vendors/css/tables/datatable/datatables.min.css": {
+    "file": "assets/datatables-BSmyWdzU.css",
+    "src": "resources/core/vendors/css/tables/datatable/datatables.min.css",
+    "isEntry": true,
+    "name": "datatables.min",
+    "names": [
+      "datatables.css"
+    ]
+  },
+  "resources/core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css": {
+    "file": "assets/dataTables-Bc6v76wg.css",
+    "src": "resources/core/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css",
+    "isEntry": true,
+    "name": "dataTables.checkboxes",
+    "names": [
+      "dataTables.css"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-BTbMc8D1.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-w5bklItS.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_apexcharts.esm-1dz0OY9g.js"
+    ]
+  },
+  "resources/js/images.js": {
+    "file": "assets/images-l0sNRNKZ.js",
+    "name": "images",
+    "src": "resources/js/images.js",
+    "isEntry": true
+  },
+  "resources/js/pages/AddNewOrder.js": {
+    "file": "assets/AddNewOrder-BXHt_Jk8.js",
+    "name": "AddNewOrder",
+    "src": "resources/js/pages/AddNewOrder.js",
+    "isEntry": true
+  },
+  "resources/js/pages/PrinterLog.js": {
+    "file": "assets/PrinterLog-BGrGddUm.js",
+    "name": "PrinterLog",
+    "src": "resources/js/pages/PrinterLog.js",
+    "isEntry": true
+  },
+  "resources/js/pages/dashboard.js": {
+    "file": "assets/dashboard-C1AAkJKD.js",
+    "name": "dashboard",
+    "src": "resources/js/pages/dashboard.js",
+    "isEntry": true,
+    "imports": [
+      "_apexcharts.esm-1dz0OY9g.js"
+    ]
+  },
+  "resources/js/pages/invoice_history.js": {
+    "file": "assets/invoice_history-CAJCCY_T.js",
+    "name": "invoice_history",
+    "src": "resources/js/pages/invoice_history.js",
+    "isEntry": true
+  },
+  "resources/js/pages/laser.js": {
+    "file": "assets/laser-C2dyKeOZ.js",
+    "name": "laser",
+    "src": "resources/js/pages/laser.js",
+    "isEntry": true
+  },
+  "resources/js/pages/presslist.js": {
+    "file": "assets/presslist-4dnmqInN.js",
+    "name": "presslist",
+    "src": "resources/js/pages/presslist.js",
+    "isEntry": true
+  },
+  "resources/js/pages/rollpress_archive.js": {
+    "file": "assets/rollpress_archive-aiD3qgds.js",
+    "name": "rollpress_archive",
+    "src": "resources/js/pages/rollpress_archive.js",
+    "isEntry": true
+  },
+  "resources/js/pages/stras.js": {
+    "file": "assets/stras-CBeaVmXE.js",
+    "name": "stras",
+    "src": "resources/js/pages/stras.js",
+    "isEntry": true
+  },
+  "resources/js/pages/trash.js": {
+    "file": "assets/trash-D8yWFHja.js",
+    "name": "trash",
+    "src": "resources/js/pages/trash.js",
+    "isEntry": true
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-CpEEPCb_.css",
+    "src": "resources/sass/app.scss"
+  }
+}
