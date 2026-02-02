@@ -593,7 +593,7 @@ $(document).ready(function () {
         updateClientRetentionChart(period);
     });
 
-    console.log("Dashboard Auto-Refresh Initialized");
+    // console.log("Dashboard Auto-Refresh Initialized");
 
     // Auto-refresh all charts every 5 seconds
     setInterval(function () {

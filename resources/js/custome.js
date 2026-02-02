@@ -4,8 +4,8 @@
   // Wait for DOM to be ready
   $(document).ready(function () {
 
-    console.log('Custom menu script loaded');
-    console.log('$.app exists:', typeof $.app !== 'undefined');
+    // console.log('Custom menu script loaded');
+    // console.log('$.app exists:', typeof $.app !== 'undefined');
 
     // Use native addEventListener with capture phase to ensure our handler runs first
     var menuToggles = document.querySelectorAll('.menu-toggle, .modern-nav-toggle');
@@ -49,11 +49,11 @@
     // Also check after page load
     setTimeout(function () {
       var newToggles = document.querySelectorAll('.menu-toggle, .modern-nav-toggle');
-      console.log('Found ' + newToggles.length + ' menu toggles');
+      // console.log('Found ' + newToggles.length + ' menu toggles');
 
-      newToggles.forEach(function (toggle, index) {
-        console.log('Toggle ' + index + ':', toggle);
-      });
+      // newToggles.forEach(function (toggle, index) {
+      //   // console.log('Toggle ' + index + ':', toggle);
+      // });
     }, 1000);
 
   });
@@ -61,12 +61,11 @@
   // Also run on window load as backup
   $(window).on('load', function () {
 
-    console.log('Window loaded');
 
     // Initialize or reinitialize the menu
     if (typeof $.app !== 'undefined' && $.app.menu) {
 
-      console.log('Initializing menu on window load...');
+      // console.log('Initializing menu on window load...');
 
       // Update scrollbar
       if ($.app.menu.manualScroller) {
@@ -103,7 +102,7 @@
       // Initial check
       handleMobileScroll();
 
-      console.log('Menu handlers attached');
+      // console.log('Menu handlers attached');
     } else {
       console.error('$.app.menu not available on window load!');
     }
