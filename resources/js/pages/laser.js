@@ -353,25 +353,7 @@ $(document).ready(function () {
     $('.calc-input, #source-select, #material-select, #ceylonSwitch').on('change keyup', calculateCost);
 
     // Save Order
-    $('#saveOrderBtn').on('click', function () {
-        var formData = new FormData($('#laserOrderForm')[0]);
 
-        $.ajax({
-            url: window.laserConfig.routes.store,
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                $('#addOrderModal').modal('hide');
-                toastr.success('تمت الإضافة بنجاح');
-                location.reload();
-            },
-            error: function (errors) {
-                toastr.error('يرجى التأكد من البيانات');
-            }
-        });
-    });
 
     // Delete
     window.deleteLaserOrder = function (id) {
