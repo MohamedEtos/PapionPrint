@@ -2,7 +2,7 @@
 
 namespace App\Services\Charts;
 
-use App\Models\customers;
+use App\Models\Customers;
 use Carbon\Carbon;
 
 class CustomerChartService
@@ -22,11 +22,11 @@ class CustomerChartService
             $labels[] = $dayName;
 
             // Count customers created on this day
-            $count = customers::whereDate('created_at', $date->toDateString())->count();
+            $count = Customers::whereDate('created_at', $date->toDateString())->count();
             $data[] = $count;
         }
 
-        $totalCustomers = customers::count();
+        $totalCustomers = Customers::count();
 
         return [
             'labels' => $labels,

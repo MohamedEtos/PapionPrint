@@ -2,7 +2,7 @@
 
 namespace App\Services\Charts;
 
-use App\Models\customers;
+use App\Models\Customers;
 use App\Models\Printers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +24,7 @@ class ClientRetentionChartService
                 $labels[] = $date->locale('ar')->translatedFormat('l'); // Day Name
 
                 // New Clients: Created on this day
-                $newClientsData[] = customers::whereDate('created_at', $date->toDateString())->count();
+                $newClientsData[] = Customers::whereDate('created_at', $date->toDateString())->count();
 
                 // Retained Clients: Placed order on this day, but created BEFORE this day
                 // We count unique customers who have orders on this day AND were created < this day
@@ -44,7 +44,7 @@ class ClientRetentionChartService
                  $labels[] = str_pad($i, 2, '0', STR_PAD_LEFT);
                  
                  // New Clients
-                 $newClientsData[] = customers::whereYear('created_at', $now->year)
+                 $newClientsData[] = Customers::whereYear('created_at', $now->year)
                                         ->whereMonth('created_at', $now->month)
                                         ->whereDay('created_at', $i)
                                         ->count();
@@ -69,7 +69,7 @@ class ClientRetentionChartService
                 $labels[] = Carbon::create()->month($i)->locale('ar')->translatedFormat('M');
 
                 // New Clients
-                $newClientsData[] = customers::whereYear('created_at', $now->year)
+                $newClientsData[] = Customers::whereYear('created_at', $now->year)
                                     ->whereMonth('created_at', $i)
                                     ->count();
                 
