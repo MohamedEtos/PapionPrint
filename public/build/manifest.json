@@ -2166,7 +2166,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-BTbMc8D1.css",
+    "file": "assets/app-BHtXIXYk.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -2203,7 +2203,7 @@
     "isEntry": true
   },
   "resources/js/pages/dashboard.js": {
-    "file": "assets/dashboard-zZXXZmLc.js",
+    "file": "assets/dashboard-CjX1beOR.js",
     "name": "dashboard",
     "src": "resources/js/pages/dashboard.js",
     "isEntry": true,
@@ -2212,13 +2212,13 @@
     ]
   },
   "resources/js/pages/invoice_history.js": {
-    "file": "assets/invoice_history-CAJCCY_T.js",
+    "file": "assets/invoice_history-n1t2Sive.js",
     "name": "invoice_history",
     "src": "resources/js/pages/invoice_history.js",
     "isEntry": true
   },
   "resources/js/pages/laser.js": {
-    "file": "assets/laser-C2dyKeOZ.js",
+    "file": "assets/laser-CBIuJHst.js",
     "name": "laser",
     "src": "resources/js/pages/laser.js",
     "isEntry": true
