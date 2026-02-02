@@ -94,6 +94,14 @@ $(document).ready(function () {
                 extend: 'csv',
                 text: 'CSV',
                 titleAttr: 'CSV',
+                className: 'btn btn-outline-primary',
+                charset: 'utf-8',
+                bom: true
+            },
+            {
+                extend: 'excel',
+                text: 'Excel',
+                titleAttr: 'Excel',
                 className: 'btn btn-outline-primary'
             }
         ],

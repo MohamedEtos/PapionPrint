@@ -96,6 +96,8 @@
 
 @section('js')
         <script src="{{ asset('core/vendors/js/extensions/dropzone.min.js') }}"></script>
+        {{-- JSZip for Excel Export --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>

@@ -594,7 +594,7 @@ $(document).ready(function () {
 
 
     // Event listener for Client Retention Period dropdown
-    var currentClientRetentionPeriod = 'month';
+    var currentClientRetentionPeriod = 'week';
     $('.client-retention-period').on('click', function (e) {
         e.preventDefault();
         var period = $(this).data('period');
