@@ -2,12 +2,15 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 
+import viteCompression from 'vite-plugin-compression';
+
 export default defineConfig({
     define: {
         global: 'globalThis',
     },
     plugins: [
         tailwindcss(),
+        viteCompression(),
         laravel({
             input: [
                 'resources/sass/app.scss',
@@ -48,4 +51,25 @@ export default defineConfig({
             'jQuery': 'jquery',
         },
     },
+    build: {
+        chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        if (id.includes('jquery')) {
+                            return 'jquery';
+                        }
+                        if (id.includes('apexcharts')) {
+                            return 'apexcharts';
+                        }
+                        if (id.includes('lodash')) {
+                            return 'lodash';
+                        }
+                        return 'vendor';
+                    }
+                }
+            }
+        }
+    }
 });

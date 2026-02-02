@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\customers;
+use App\Models\Customers;
 use Illuminate\Http\Request;
 
 class CustomersController extends Controller
@@ -34,7 +34,7 @@ class CustomersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(customers $customers)
+    public function show(Customers $customers)
     {
         //
     }
@@ -42,7 +42,7 @@ class CustomersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(customers $customers)
+    public function edit(Customers $customers)
     {
         //
     }
@@ -50,7 +50,7 @@ class CustomersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, customers $customers)
+    public function update(Request $request, Customers $customers)
     {
         //
     }
@@ -58,7 +58,7 @@ class CustomersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(customers $customers)
+    public function destroy(Customers $customers)
     {
         //
     }
