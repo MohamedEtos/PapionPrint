@@ -31,7 +31,7 @@ class Printers extends Model
     ];
     public function customers()
     {
-        return $this->belongsTo(customers::class, 'customerId');
+        return $this->belongsTo(Customers::class, 'customerId');
     }
     public function machines()
     {
