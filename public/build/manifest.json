@@ -2242,6 +2242,12 @@
     "src": "resources/js/pages/trash.js",
     "isEntry": true
   },
+  "resources/js/pages/users.js": {
+    "file": "assets/users-DKsxHNhR.js",
+    "name": "users",
+    "src": "resources/js/pages/users.js",
+    "isEntry": true
+  },
   "resources/sass/app.scss": {
     "file": "assets/app-CpEEPCb_.css",
     "src": "resources/sass/app.scss"
