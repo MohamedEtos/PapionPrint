@@ -34,7 +34,7 @@ class LaserController extends Controller
     public function show($id)
     {
         $order = LaserOrder::with(['material', 'customer'])->findOrFail($id);
-        return response()->json($order);
+        return view('laser.show', compact('order'));
     }
 
     public function store(Request $request)

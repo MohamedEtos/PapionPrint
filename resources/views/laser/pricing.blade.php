@@ -94,7 +94,7 @@
                                         <tr>
                                             <td>
                                                 @if($price->name == 'operating_cost') تكلفة التشغيل (للقطعة)
-                                                @elseif($price->name == 'ceylon_price') سعر السيلون (للمتر)
+                                                @elseif($price->name == 'ceylon_price') سعر السيليكون (للمتر)
                                                 @else {{ $price->name }} @endif
                                             </td>
                                             <td>
@@ -111,7 +111,7 @@
                                         @endif
                                         @if($globalPrices->doesntContain('name', 'ceylon_price'))
                                              <tr>
-                                                <td>سعر السيلون (للمتر)</td>
+                                                <td>سعر السيليكون (للمتر)</td>
                                                 <td><input type="number" class="form-control price-input" data-type="global" data-id="" data-name="ceylon_price" value="0"></td>
                                             </tr>
                                         @endif

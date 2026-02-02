@@ -27,7 +27,7 @@ class StrasController extends Controller
     public function show($id)
     {
         $stras = Stras::with(['layers', 'customer'])->findOrFail($id);
-        return response()->json($stras);
+        return view('stras.show', compact('stras'));
     }
 
     public function store(Request $request)

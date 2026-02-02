@@ -15,50 +15,34 @@ $(document).ready(function () {
         },
         columns: [
             {
-                data: 'image',
-                name: 'image',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'type',
-                name: 'type'
-            },
-            {
-                data: 'details',
-                name: 'details'
+                data: 'id',
+                name: 'invoice_id'
             },
             {
                 data: 'customer_name',
                 name: 'customer_name'
             },
             {
-                data: 'quantity',
-                name: 'quantity'
+                data: 'items_count',
+                name: 'items_count',
+                searchable: false
             },
             {
-                data: 'unit_price',
-                name: 'custom_price'
-            },
-            {
-                data: 'total',
-                name: 'total',
-                orderable: false
-            },
-            {
-                data: 'sent_date',
-                name: 'sent_date'
-            },
-            {
-                data: 'sent_status',
-                name: 'sent_status'
+                data: 'grand_total',
+                name: 'grand_total'
             },
             {
                 data: 'created_at',
                 name: 'created_at'
+            },
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
             }
         ],
-        order: [[9, 'desc']], // Order by created_at descending
+        order: [[4, 'desc']], // Order by created_at descending
         language: {
             "sProcessing": "جارٍ التحميل...",
             "sLengthMenu": "أظهر _MENU_ مدخلات",
@@ -118,10 +102,17 @@ $(document).ready(function () {
             $('#invoice-details-body').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>');
 
             $.ajax({
-                url: '/invoices/archive-details/' + data.id,
+                url: '/invoices/invoice-details/' + data.id,
                 method: 'GET',
                 success: function (response) {
                     $('#invoice-details-body').html(response.html);
+
+                    var custName = $('#details-customer-name').val();
+                    if (custName) {
+                        $('#invoiceDetailsModalLabel').text('تفاصيل الفاتورة والطلب الي السيد /  ' + custName);
+                    } else {
+                        $('#invoiceDetailsModalLabel').text('تفاصيل الفاتورة والطلب');
+                    }
                 },
                 error: function () {
                     $('#invoice-details-body').html('<div class="alert alert-danger">حدث خطأ أثناء تحميل التفاصيل</div>');

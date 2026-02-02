@@ -59,7 +59,7 @@
                                         <div class="form-group">
                                             <label>العميل</label>
                                             <select class="form-control" id="customer-select">
-                                                <option value="">اختر عميل...</option>
+                                                <option selected value="اختر عميل...">اختر عميل...</option>
                                                 @foreach($customers as $customer)
                                                     <option value="{{ $customer->id }}" data-phone="{{ $customer->phone }}" {{ $invoice->customer_id == $customer->id ? 'selected' : '' }}>{{ $customer->name }}</option>
                                                 @endforeach
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                              <div class="col-md-6 text-right">
-                                <button class="btn btn-success mt-2" onclick="sendWhatsApp()"> <i class="fa fa-whatsapp"></i> ارسال واتس اب</button>
+                                <button class="btn btn-success mt-2" id="send-whatsapp-btn" onclick="sendWhatsApp()"> <i class="fa fa-whatsapp"></i> ارسال واتس اب</button>
                                 <button class="btn btn-warning mt-2" id="save-invoice-changes"><i class="feather icon-save"></i> حفظ</button>
                                 <button class="btn btn-danger mt-2" onclick="clearCart()"> <i class="fa fa-trash"></i> تفريغ السلة</button>
                             </div>
@@ -104,46 +104,63 @@
                                             $qty = 0; // Defines quantity or meters depending on type
                                             $total = 0;
                                             $typeLabel = '';
+                                            $unitLabel = 'قطعة'; // Default unit
+                                            $linkUrl = null;
 
                                             // Polymorphic Handling
                                             if ($item->itemable_type == 'App\Models\Stras') {
                                                 $typeLabel = 'استراس';
                                                 $stras = $item->itemable;
-                                                // Calculate Price based on Stras Logic (replicated from stras module)
-                                                // Assuming Stras has a calculated 'total_price' accessor or we compute it.
-                                                // For now, let's look for known price columns.
-                                                // If no stored price, we might need a Helper to calculate it live.
-                                                // Let's assume for MVP we fetch a 'price' attribute or default.
-                                                // User said "Take calculation method from each page".
-                                                // Stras price logic is complex (layers * beads + paper + ops).
-                                                // Ideally, the Stras model should have a method `getCalculatedPriceAttribute()`.
-                                                // I will assume for now we use a placeholder or existing price field if available.
                                                 $qty = $stras->cards_count * $stras->pieces_per_card; // Total pieces
+                                                $linkUrl = route('stras.show', $stras->id);
                                                 $price = 0; // Need calculation logic
                                                 
                                                 // Detailed Description
-                                                $detailText = ($stras->customer->name ?? 'عميل غير معروف') . ' - ' . ($stras->notes ?? '');
+                                                $layersInfo = $stras->layers->map(function($l) {
+                                                    return $l->size . ':' . $l->count;
+                                                })->implode(' | ');
+                                                $detailText = 'مراحل: ' . $stras->layers->count() . ' - ' . $layersInfo;
                                             } 
                                             elseif ($item->itemable_type == 'App\Models\Tarter') {
                                                 $typeLabel = 'ترتر';
                                                 $tarter = $item->itemable;
                                                 $qty = $tarter->cards_count * $tarter->pieces_per_card;
-                                                $detailText = $tarter->customer->name ?? 'عميل غير معروف';
+                                                $linkUrl = route('tarter.show', $tarter->id);
+                                                
+                                                // Detailed Description
+                                                $layersInfo = $tarter->layers->map(function($l) {
+                                                    return $l->size . ':' . $l->count;
+                                                })->implode(' | ');
+                                                $detailText = 'ابر: ' . $tarter->layers->count() . ' - ' . $layersInfo;
                                             }
                                             elseif ($item->itemable_type == 'App\Models\Printers') {
                                                 $typeLabel = 'طباعة';
+                                                $unitLabel = 'متر';
                                                 $printer = $item->itemable;
                                                 $qty = $printer->meters;
+                                                $linkUrl = route('printers.show', $printer->id);
                                                 // Price logic: check stored price or machine price
                                                 $detailText = $printer->machines->name . ' (' . $printer->pass . ' pass)';
                                                 $price = $printer->printingprices->totalPrice ?? 0;
                                             }
                                             elseif ($item->itemable_type == 'App\Models\Rollpress') {
                                                 $typeLabel = 'مكبس';
+                                                $unitLabel = 'متر';
                                                 $roll = $item->itemable;
                                                 $qty = $roll->meters;
                                                 $price = $roll->price;
                                                 $detailText = $roll->fabrictype;
+                                            }
+                                            elseif ($item->itemable_type == 'App\Models\LaserOrder') {
+                                                $typeLabel = 'ليزر';
+                                                $laser = $item->itemable;
+                                                $qty = $laser->required_pieces;
+                                                $linkUrl = route('laser.show', $laser->id);
+                                                $price = $laser->total_cost;
+                                                $detailText = $laser->material->name ?? '-';
+                                                if ($laser->add_ceylon) {
+                                                    $detailText .= ' - سيليكون';
+                                                }
                                             }
 
                                             // Image Handling
@@ -151,6 +168,8 @@
                                             if ($item->itemable_type == 'App\Models\Stras') {
                                                 $imgPath = $item->itemable->image_path ?? null;
                                             } elseif ($item->itemable_type == 'App\Models\Tarter') {
+                                                $imgPath = $item->itemable->image_path ?? null;
+                                            } elseif ($item->itemable_type == 'App\Models\LaserOrder') {
                                                 $imgPath = $item->itemable->image_path ?? null;
                                             } elseif ($item->itemable_type == 'App\Models\Printers') {
                                                 $imgObj = $item->itemable->ordersImgs->first();
@@ -173,19 +192,30 @@
                                             $grandTotal += $total;
                                         @endphp
                                         <tr data-img-url="{{ $imgUrl }}">
-                                            <td style="width: 60px;">
+                                            <td style="width: 60px;" class="view-details-btn cursor-pointer" data-id="{{ $item->id }}" title="عرض التفاصيل">
                                                 @if($imgUrl)
                                                     <img src="{{ $imgUrl }}" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                                                 @else
                                                     <i class="feather icon-image font-medium-3 text-muted"></i>
                                                 @endif
                                             </td>
-                                            <td>{{ $typeLabel }}</td>
+                                            <td>
+                                                @if($linkUrl)
+                                                    <a href="{{ $linkUrl }}" target="_blank" class="text-primary font-weight-bold">
+                                                        {{ $typeLabel }} <i class="feather icon-external-link small"></i>
+                                                    </a>
+                                                @else
+                                                    {{ $typeLabel }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 <input type="text" class="borderless-input item-details" data-id="{{ $item->id }}" value="{{ $item->custom_details ?? $detailText }}">
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01" class="borderless-input editable-qty item-qty" data-id="{{ $item->id }}" value="{{ $qty }}">
+                                                <div class="d-flex align-items-center">
+                                                    <input type="number" step="0.01" class="borderless-input editable-qty item-qty" data-id="{{ $item->id }}" value="{{ $qty }}" style="width: 80px;">
+                                                    <span class="small text-muted mr-1">{{ $unitLabel }}</span>
+                                                </div>
                                             </td>
                                             <td>
                                                 <input type="number" step="0.01" class="borderless-input item-price" data-id="{{ $item->id }}" value="{{ round($unitPrice, 2) }}">
@@ -212,6 +242,50 @@
         </div>
     </div>
 </div>
+
+<!-- Item Details Modal -->
+<div class="modal fade" id="itemDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تفاصيل الطلب</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="item-details-content">
+                <div class="text-center"><i class="feather icon-loader fa-spin fa-2x"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- WhatsApp Review Modal -->
+<div class="modal fade" id="whatsappPreviewModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">مراجعة رسالة الواتساب</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="whatsapp-message-preview">يمكنك تعديل الرسالة قبل الإرسال:</label>
+                    <textarea class="form-control" id="whatsapp-message-preview" rows="15" style="direction: rtl;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-success" id="confirm-send-whatsapp">
+                    <i class="fa fa-whatsapp"></i> إرسال وتحديث الحالة
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('js')
@@ -229,10 +303,16 @@
 
         <script>
             var assetPath = "{{ asset('') }}";
+
+
+
+
+
+
     // Dynamic Calculation
     $(document).on('input', '.item-price', function() {
         var row = $(this).closest('tr');
-        var qty = parseFloat(row.find('.item-qty').data('qty')) || 0;
+        var qty = parseFloat(row.find('.item-qty').val()) || 0;
         var unitPrice = parseFloat($(this).val()) || 0;
         
         // If qty is 0 (e.g. edge case), treat Unit Price as Total
@@ -251,18 +331,22 @@
         $('#grand-total').text(grand.toFixed(2));
     }
 
-    // Handle Phone Display & Update
+    // Handle Phone Display & Update & Button Validation
     function updatePhoneField() {
         var selected = $('#customer-select option:selected');
+        var val = selected.val();
         var phone = selected.data('phone');
         var input = $('#customer-phone');
         var group = $('#phone-group');
         
-        if (selected.val()) {
-            input.val(phone || '');
-            group.show();
+        // Validation: Disable WhatsApp button if no customer selected
+        if (!val || val === 'اختر عميل...') {
+             $('#send-whatsapp-btn').prop('disabled', true);
+             group.hide();
         } else {
-            group.hide();
+             $('#send-whatsapp-btn').prop('disabled', false);
+             input.val(phone || '');
+             group.show();
         }
     }
 
@@ -280,6 +364,9 @@
         });
     });
 
+
+
+
     // Update Phone via AJAX
     $('#customer-phone').on('blur keypress', function(e) {
         if (e.type === 'keypress' && e.which !== 13) return; 
@@ -291,6 +378,10 @@
             input.blur(); 
             return;
         }
+
+
+
+        
         
         // Blur logic (main save logic)
         if (e.type === 'blur') {
@@ -326,46 +417,68 @@
         }
     }
 
-    // Send WhatsApp
+    // Send WhatsApp (Step 1: Preview)
     function sendWhatsApp() {
         var customerName = $('#customer-select option:selected').text();
         var total = $('#grand-total').text();
-        var items = [];
+        var groupedItems = {};
         
         $('.table tbody tr').each(function() {
-             // Updated to account for image column
-             var type = $(this).find('td:eq(1)').text(); // Type is now column 1 (after image)
-             var details = $(this).find('td:eq(2)').text(); // Details is column 2
-             var qty = $(this).find('td:eq(3)').text(); // Quantity
+             var type = $(this).find('td:eq(1)').text().trim();
+             var details = $(this).find('.item-details').val(); // Get value from input
+             var qty = $(this).find('.editable-qty').val(); // Get value from input
              var itemTotal = $(this).find('.item-total').text();
-             var imgUrl = $(this).attr('data-img-url');
+             var imgUrl = $(this).find('td:eq(0) img').attr('src');
              
-             var itemText = "• " + type + "\n";
-             itemText += "  التفاصيل: " + details + "\n";
-             itemText += "  الكمية: " + qty + "\n";
-             itemText += "  السعر: " + itemTotal + " ج.م";
-             
-             if(imgUrl) {
-                 itemText += "\n  🖼️ صورة: " + imgUrl;
+             if (!groupedItems[type]) {
+                 groupedItems[type] = [];
              }
              
-             items.push(itemText);
+             var itemText = "• " + details + "\n  الكمية: " + qty + " | الاجمالي: " + itemTotal + " ج.م";
+             if(imgUrl) {
+                 itemText += "\n  رابط الصورة: " + imgUrl;
+             }
+             
+             groupedItems[type].push(itemText);
         });
 
-        var text = " *فاتورة للسيد/ة* " + customerName + "\n";
-        text += "━━━━━━━━━━━━━━━━━━\n\n";
-        text += items.join("\n\n");
-        text += "\n\n━━━━━━━━━━━━━━━━━━\n";
-        text += " *الإجمالي:* " + total + " ج.م";
+        var text = "*فاتورة للسيد/ة* " + customerName + "\n";
+        text += "━━━━━━━━━━━━━━━━━━\n";
+        
+        for (var type in groupedItems) {
+            text += "\n--- *" + type + "* ---\n";
+            groupedItems[type].forEach(function(item) {
+                text += item + "\n";
+            });
+        }
+        
+        text += "\n━━━━━━━━━━━━━━━━━━\n";
+        text += "*الإجمالي:* " + total + " ج.م";
 
+        $('#whatsapp-message-preview').val(text);
+        $('#whatsappPreviewModal').modal('show');
+    }
+
+    // Confirm Send WhatsApp
+    $('#confirm-send-whatsapp').click(function() {
+        var text = $('#whatsapp-message-preview').val();
         var phone = $('#customer-phone').val();
-         // Check if phone exists and add mandatory '2' if not present
+        
         if (phone && !phone.toString().startsWith('2')) {
             phone = '2' + phone;
         }
+        
         var url = "https://wa.me/" + (phone ? phone : "") + "?text=" + encodeURIComponent(text);
         window.open(url, '_blank');
-    }
+        
+        // Mark as Sent
+        $.post("{{ route('invoice.mark_sent') }}", {
+            _token: "{{ csrf_token() }}"
+        }, function(response) {
+            toastr.success('تم تحديث حالة الفاتورة الى "تم الارسال"');
+            $('#whatsappPreviewModal').modal('hide');
+        });
+    });
 
     // Enter key to blur (save)
     $(document).on('keypress', '.editable-qty, .item-price, .item-details', function(e) {
@@ -466,6 +579,18 @@
                     $button.prop('disabled', false).html('<i class="feather icon-save"></i> حفظ');
                 });
             }
+        });
+    });
+    // Item Details Modal
+    $(document).on('click', '.view-details-btn', function() {
+        var id = $(this).data('id');
+        $('#itemDetailsModal').modal('show');
+        $('#item-details-content').html('<div class="text-center p-3"><i class="feather icon-loader fa-spin fa-2x"></i> جار التحميل...</div>');
+        
+        $.get('/invoices/item-details/' + id, function(response) {
+            $('#item-details-content').html(response.html);
+        }).fail(function() {
+            $('#item-details-content').html('<div class="text-danger text-center p-3">حدث خطأ أثناء تحميل التفاصيل</div>');
         });
     });
 </script>

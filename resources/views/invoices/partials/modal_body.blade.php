@@ -59,6 +59,15 @@
                             <th>الخامة</th>
                             <th>المقاسات</th>
                             {{-- Add Printer columns --}}
+                        @elseif($type === 'laser')
+                            <th>صورة</th>
+                            <th>اسم العميل</th>
+                            <th>الطول</th>
+                            <th>العرض</th>
+                            <th>اجمالي القطع</th>
+                            <th>التفاصيل</th>
+                            <th>ملاحظات</th>
+                            <th>التاريخ</th>
                         @endif
                     </tr>
                 </thead>
@@ -67,6 +76,8 @@
                         @include('stras.partials.details', ['Record' => $item])
                     @elseif($type === 'tarter')
                         @include('tarter.partials.details', ['Record' => $item])
+                    @elseif($type === 'laser')
+                        @include('laser.partials.details', ['Record' => $item])
                     @endif
                 </tbody>
             </table>

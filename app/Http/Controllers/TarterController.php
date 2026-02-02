@@ -29,7 +29,7 @@ class TarterController extends Controller
     public function show($id)
     {
         $tarter = Tarter::with(['layers', 'customer'])->findOrFail($id);
-        return response()->json($tarter);
+        return view('tarter.show', compact('tarter'));
     }
 
     public function store(Request $request)

@@ -68,6 +68,7 @@
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" href="javascript:void(0)" id="bulk-recalc-btn"><i class="feather icon-refresh-cw"></i> تحديث الاسعار</a>
                                     <a class="dropdown-item" href="javascript:void(0)" id="bulk-delete-btn"><i class="feather icon-trash"></i> حذف المحدد</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="window.addToInvoice()"><i class="feather icon-file-plus"></i> اضافة للفاتورة</a>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +96,7 @@
                                     <th>العرض</th>
                                     <th>قطع/مقطع</th>
                                     <th>عدد المقاطع</th>
-                                    <th>سيلون</th>
+                                    <th>سيليكون</th>
                                     <th>التكلفة للقطعة</th>
                                     <th>تكلفة التشغيل</th>
                                     <th>الاجمالي</th>
@@ -208,7 +209,7 @@
                                 </select>
                             </div>
                              <div class="col-md-6 form-group">
-                                <label>إضافة سيلون؟</label>
+                                <label>إضافة سيليكون؟</label>
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="ceylonSwitch" name="add_ceylon">
                                     <label class="custom-control-label" for="ceylonSwitch">نعم</label>

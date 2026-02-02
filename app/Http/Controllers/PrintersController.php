@@ -191,7 +191,7 @@ class PrintersController extends Controller
             return response()->json(['error' => 'Order not found'], 404);
         }
 
-        return response()->json($printer);
+        return view('printers.show', compact('printer'));
     }
 
 

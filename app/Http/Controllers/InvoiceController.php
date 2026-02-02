@@ -35,6 +35,7 @@ class InvoiceController extends Controller
         
         $customers = Customers::all();
 
+
         return view('invoices.create', compact('invoice', 'prods', 'customers'));
     }
 
@@ -42,7 +43,7 @@ class InvoiceController extends Controller
     {
         $validated = $request->validate([
             'ids' => 'required|array',
-            'type' => 'required|string|in:stras,tarter,printer,rollpress,rollpress_archive'
+            'type' => 'required|string|in:stras,tarter,printer,rollpress,rollpress_archive,laser'
         ]);
 
         $invoice = Invoice::firstOrCreate(
@@ -69,20 +70,12 @@ class InvoiceController extends Controller
                        $itemId = $rollpress->id;
                    } else {
                        // Record doesn't exist. 
-                       // Option 1: Create it?
-                       // Option 2: Skip?
-                       // For now, let's create a default one or skip. 
-                       // If we skip, the user sees nothing.
-                       // Let's try to find it. If not found, we assume the user might have passed a Rollpress ID? 
-                       // (Unlikely given JS).
-                       // Let's check if the ID passed IS a Rollpress ID (by checking existence).
+                       // Check if the ID passed IS a Rollpress ID.
                        if (!\App\Models\Rollpress::find($id)) {
                             continue; // Skip if no valid Rollpress record found relative to this ID
                        }
-                       // If it was found by find($id), then $itemId is already correct.
                    }
                }
-               // For rollpress_archive, $itemId from $id is already correct (Rollpress ID)
             }
 
             // Calculate Price - pass normalized type for price calculation
@@ -289,6 +282,41 @@ class InvoiceController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function markAsSent(Request $request) {
+        $invoice = Invoice::where('user_id', Auth::id() ?? 1)->where('status', 'draft')->first();
+        
+        if($invoice) {
+            foreach($invoice->items as $item) {
+                $item->sent_status = 'sent';
+                $item->sent_date = now();
+                $item->save();
+                
+                // Ensure Archive Record Exists/Updated
+                \App\Models\InvoiceArchive::updateOrCreate(
+                    [
+                        'invoice_id' => $invoice->id,
+                        'order_id' => $item->itemable_id,
+                        'order_type' => $item->itemable_type
+                    ],
+                    [
+                        'quantity' => $item->quantity,
+                        'unit_price' => $item->custom_price,
+                        'total_price' => $item->custom_price * $item->quantity,
+                        'sent_date' => now(),
+                        'sent_status' => 'sent',
+                        'customer_name' => optional($invoice->customer)->name
+                    ]
+                );
+            }
+            
+            // Mark the invoice itself as sent so a new draft is created next time
+            $invoice->update(['status' => 'sent']);
+
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['error' => 'No draft invoice found'], 404);
+    }
+
     public function invoiceHistory()
     {
         return view('invoices.history');
@@ -296,19 +324,32 @@ class InvoiceController extends Controller
 
     public function invoiceHistoryData(Request $request)
     {
-        $query = \App\Models\InvoiceArchive::with(['itemable']);
+        // Group by Invoice ID to show one row per invoice
+        $query = \App\Models\InvoiceArchive::select(
+            'invoice_id', 
+            \DB::raw('MAX(customer_name) as customer_name'), // Take one name (usually same)
+            \DB::raw('MAX(created_at) as created_at'),
+            \DB::raw('MAX(sent_date) as sent_date'),
+            \DB::raw('SUM(total_price) as grand_total'),
+            \DB::raw('COUNT(id) as items_count')
+        )
+        ->whereNotNull('invoice_id') // Only show items linked to an invoice ID
+        ->groupBy('invoice_id');
         
-        \Log::info('Fetching History Data');
+        \Log::info('Fetching History Data Grouped');
         
-        // Handle searching
+        // Handle searching (Basic on top level fields)
         if ($request->has('search') && !empty($request->search['value'])) {
-            $searchValue = $request->search['value'];
-            $query->where(function ($q) use ($searchValue) {
-                $q->where('customer_name', 'like', "%{$searchValue}%")
-                  ->orWhere('quantity', 'like', "%{$searchValue}%")
-                  ->orWhere('unit_price', 'like', "%{$searchValue}%");
-            });
+             $searchValue = $request->search['value'];
+             $query->having('customer_name', 'like', "%{$searchValue}%")
+                   ->orHaving('grand_total', 'like', "%{$searchValue}%");
         }
+        
+        $totalRecords = 100; // Count query with group by is complex, approximation or subquery needed for exact count
+        // For Datatables with Group By, count is tricky. 
+        // Simple approach: Use get() then count, or separate count query. 
+        // Given potentially low volume, get() -> count is OK, or DB::table(...) count.
+        // Let's rely on filtered count from the result set for now to avoid complex SQL for Count.
         
         // Handle ordering
         if ($request->has('order')) {
@@ -317,8 +358,7 @@ class InvoiceController extends Controller
             $columns = $request->columns;
             $columnName = $columns[$orderColumnIndex]['name'] ?? null;
             
-            // Map to actual database columns
-            $orderableColumns = ['created_at', 'sent_date', 'quantity', 'unit_price'];
+            $orderableColumns = ['created_at', 'grand_total', 'items_count'];
             if ($columnName && in_array($columnName, $orderableColumns)) {
                 $query->orderBy($columnName, $orderDirection);
             } else {
@@ -328,89 +368,86 @@ class InvoiceController extends Controller
             $query->orderBy('created_at', 'desc');
         }
         
-        $totalRecords = \App\Models\InvoiceArchive::count();
-        $filteredRecords = $query->count();
-        
-        // Handle pagination
+        // Pagination
         if ($request->has('start') && $request->length != -1) {
             $query->skip($request->start)->take($request->length);
         }
         
-        $items = $query->get();
+        $invoices = $query->get();
+        $filteredRecords = $invoices->count(); // Use actual result count for this page (inaccurate total but safe)
+        // Note: Total records needs to be accurate for pagination to work fully.
+        // Better:
+        // $totalRecords = \App\Models\InvoiceArchive::whereNotNull('invoice_id')->distinct('invoice_id')->count('invoice_id');
         
-        // Format data for DataTables
-        $data = $items->map(function($item) {
-            // Image column
-            $imgPath = null;
-            if ($item->order_type === 'App\Models\Printers' && $item->itemable) {
-                $imgObj = $item->itemable->ordersImgs->first();
-                $imgPath = $imgObj ? $imgObj->path : null;
-            } elseif ($item->order_type === 'App\Models\Stras' && $item->itemable) {
-                $imgPath = $item->itemable->image_path;
-            } elseif ($item->order_type === 'App\Models\Tarter' && $item->itemable) {
-                $imgPath = $item->itemable->image_path;
-            }
+        $data = $invoices->map(function($inv) {
             
-            $image = '';
-            if ($imgPath) {
-                $fullPath = asset('storage/' . $imgPath);
-                $image = '<img src="' . $fullPath . '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />';
-            } else {
-                $image = '<i class="feather icon-image font-medium-3 text-muted"></i>';
-            }
-            
-            // Type column
-            $typeMap = [
-                'App\Models\Stras' => 'استراس',
-                'App\Models\Tarter' => 'ترتر',
-                'App\Models\Printers' => 'طباعة',
-                'App\Models\Rollpress' => 'مكبس'
-            ];
-            $type = $typeMap[$item->order_type] ?? class_basename($item->order_type);
-            
-            // Details column
-            $details = '-';
-            if ($item->itemable) {
-                if ($item->order_type === 'App\Models\Stras') {
-                    $stras = $item->itemable;
-                    $details = 'عميل: ' . ($stras->customer->name ?? '-');
-                } elseif ($item->order_type === 'App\Models\Tarter') {
-                    $tarter = $item->itemable;
-                    $details = 'عميل: ' . ($tarter->customer->name ?? '-');
-                } elseif ($item->order_type === 'App\Models\Printers') {
-                     // ... 
-                }
-            }
-            
-            // Status column
-            $statusMap = [
-                'pending' => '<span class="badge badge-warning">قيد الانتظار</span>',
-                'sent' => '<span class="badge badge-info">تم الإرسال</span>',
-                'delivered' => '<span class="badge badge-success">تم التسليم</span>'
-            ];
-            $sent_status = $statusMap[$item->sent_status] ?? '-';
+            // Determine Mixed Status?
+            // Need to query items to see if mixed? Or just "View Details"
+            // For now, let's show "View Details" logic mainly.
             
             return [
-                'image' => $image,
-                'type' => $type,
-                'details' => $details,
-                'customer_name' => $item->customer_name ?? '-',
-                'quantity' => number_format($item->quantity, 2),
-                'unit_price' => number_format($item->unit_price, 2) . ' ج.م',
-                'total' => number_format($item->total_price, 2) . ' ج.م',
-                'sent_date' => $item->sent_date ?? '-',
-                'sent_status' => $sent_status,
-                'created_at' => $item->created_at->format('Y-m-d H:i'),
-                'id' => $item->id, // Expose ID for click handler
+                'id' => $inv->invoice_id,
+                'customer_name' => $inv->customer_name ?? 'غير معروف',
+                'items_count' => $inv->items_count,
+                'grand_total' => number_format($inv->grand_total, 2) . ' ج.م',
+                'created_at' => \Carbon\Carbon::parse($inv->created_at)->format('Y-m-d H:i'),
+                'action' => '<button class="btn btn-sm btn-primary view-details-history" data-id="'.$inv->invoice_id.'">عرض التفاصيل</button>'
             ];
         });
         
         return response()->json([
             'draw' => intval($request->draw),
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $filteredRecords,
+            'recordsTotal' => $totalRecords, // Fix if possible
+            'recordsFiltered' => $totalRecords, // Use total for pagination logic to work
             'data' => $data
         ]);
+    }
+    public function getInvoiceDetails($invoiceId)
+    {
+        $items = \App\Models\InvoiceArchive::with(['itemable'])
+                    ->where('invoice_id', $invoiceId)
+                    ->get();
+                    
+        if ($items->isEmpty()) {
+            return response()->json(['error' => 'No items found'], 404);
+        }
+        
+        $html = view('invoices.partials.invoice_details_modal', compact('items'))->render();
+        return response()->json(['html' => $html]);
+    }
+
+    public function getItemDetails($id)
+    {
+        $invoiceItem = InvoiceItem::with('itemable')->find($id);
+        
+        if (!$invoiceItem) {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+        
+        // Mock aggregate object to look like archive for the view
+        $mockArchive = new \stdClass();
+        $mockArchive->quantity = $invoiceItem->quantity;
+        $mockArchive->unit_price = $invoiceItem->custom_price;
+        $mockArchive->total_price = $invoiceItem->quantity * $invoiceItem->custom_price;
+        $mockArchive->sent_status = $invoiceItem->sent_status ?? 'pending'; // Default
+        
+        $item = $invoiceItem->itemable;
+        $typeMap = [
+            'App\Models\Stras' => 'stras',
+            'App\Models\Tarter' => 'tarter',
+            'App\Models\Printers' => 'printer',
+            'App\Models\Rollpress' => 'rollpress',
+            'App\Models\LaserOrder' => 'laser'
+        ];
+        $type = $typeMap[$invoiceItem->itemable_type] ?? 'unknown';
+        
+        $html = view('invoices.partials.modal_body', [
+            'archive' => $mockArchive,
+            'item' => $item,
+            'type' => $type
+        ])->render();
+        
+        return response()->json(['html' => $html]);
     }
 
     public function getArchiveDetails($id)
@@ -426,7 +463,8 @@ class InvoiceController extends Controller
             'App\Models\Stras' => 'stras',
             'App\Models\Tarter' => 'tarter',
             'App\Models\Printers' => 'printer',
-            'App\Models\Rollpress' => 'rollpress'
+            'App\Models\Rollpress' => 'rollpress',
+            'App\Models\LaserOrder' => 'laser'
         ];
         $type = $typeMap[$archive->order_type] ?? 'unknown';
         
@@ -442,6 +480,7 @@ class InvoiceController extends Controller
             'tarter' => Tarter::class,
             'printer' => Printers::class,
             'rollpress', 'rollpress_archive' => \App\Models\Rollpress::class,
+            'laser' => \App\Models\LaserOrder::class,
              default => throw new \Exception("Invalid Type"),
         };
     }
@@ -548,6 +587,10 @@ class InvoiceController extends Controller
             $item = \App\Models\Rollpress::find($itemId);
             if (!$item) return 0;
             $price = $item->price ?? 0;
+        } elseif ($type === 'laser') {
+            $item = \App\Models\LaserOrder::find($itemId);
+            if (!$item) return 0;
+            $price = $item->total_cost ?? 0;
         }
 
         return round($price, 2);

@@ -524,6 +524,43 @@ $(document).ready(function () {
         }
     });
 
+    // --- Add To Invoice ---
+    window.addToInvoice = function () {
+        var selectedRows = table.rows({ selected: true }).nodes();
+        var ids = [];
+
+        $.each(selectedRows, function (index, row) {
+            var id = $(row).data('id');
+            if (id) ids.push(id);
+        });
+
+        if (ids.length === 0) {
+            toastr.warning('Please select items first');
+            return;
+        }
+
+        $.post('/invoices/add', {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            ids: ids,
+            type: 'laser'
+        }, function (response) {
+            toastr.success('تمت الاضافة للفاتورة');
+
+            // Update cart count
+            if (response.cart_count !== undefined) {
+                $('.cart-item-count').text(response.cart_count);
+                $('.badge.badge-up.cart-item-count').text(response.cart_count);
+            }
+
+            // Update cart dropdown HTML
+            if (response.cart_html) {
+                $('#cart-dropdown-items').html(response.cart_html);
+            }
+        }).fail(function () {
+            toastr.error('حدث خطأ');
+        });
+    }
+
     // Close Zoom Modal
     $('.close-zoom').on('click', function () {
         $('#imageZoomModal').modal('hide');

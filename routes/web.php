@@ -142,6 +142,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::prefix('invoices')->group(function () {
         Route::get('/create', [App\Http\Controllers\InvoiceController::class, 'showCart'])->name('invoice.create');
         Route::post('/add', [App\Http\Controllers\InvoiceController::class, 'addToCart'])->name('invoice.add');
+        Route::post('/mark-sent', [App\Http\Controllers\InvoiceController::class, 'markAsSent'])->name('invoice.mark_sent');
         Route::get('/remove/{id}', [App\Http\Controllers\InvoiceController::class, 'removeItem'])->name('invoice.remove');
         Route::get('/clear', [App\Http\Controllers\InvoiceController::class, 'clearCart'])->name('invoice.clear');
         Route::post('/update-customer', [App\Http\Controllers\InvoiceController::class, 'updateCustomer'])->name('invoice.update_customer');
@@ -150,6 +151,8 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/history', [App\Http\Controllers\InvoiceController::class, 'invoiceHistory'])->name('invoice.history');
         Route::get('/history-data', [App\Http\Controllers\InvoiceController::class, 'invoiceHistoryData'])->name('invoice.history_data');
         Route::get('/archive-details/{id}', [App\Http\Controllers\InvoiceController::class, 'getArchiveDetails'])->name('invoice.archive_details');
+        Route::get('/invoice-details/{id}', [App\Http\Controllers\InvoiceController::class, 'getInvoiceDetails'])->name('invoice.invoice_details');
+        Route::get('/item-details/{id}', [App\Http\Controllers\InvoiceController::class, 'getItemDetails'])->name('invoice.item_details');
     });
 
     // Laser Routes
