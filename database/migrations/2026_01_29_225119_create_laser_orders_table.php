@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('section_count')->default(1);
             $table->text('notes')->nullable();
             $table->decimal('manufacturing_cost', 10, 2)->default(0); // Cost per piece
+            $table->decimal('custom_operating_cost', 8, 2)->nullable();
             $table->decimal('total_cost', 10, 2)->default(0); // Total cost for order
             $table->string('image_path')->nullable();
             $table->softDeletes();

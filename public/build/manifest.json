@@ -2162,7 +2162,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-Cr6w2dh8.css",
+    "file": "assets/app-BTbMc8D1.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -2171,7 +2171,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-Wy7isLGc.js",
+    "file": "assets/app-w5bklItS.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -2186,7 +2186,7 @@
     "isEntry": true
   },
   "resources/js/pages/AddNewOrder.js": {
-    "file": "assets/AddNewOrder-B0Xdtsnu.js",
+    "file": "assets/AddNewOrder-BXHt_Jk8.js",
     "name": "AddNewOrder",
     "src": "resources/js/pages/AddNewOrder.js",
     "isEntry": true
@@ -2198,7 +2198,7 @@
     "isEntry": true
   },
   "resources/js/pages/dashboard.js": {
-    "file": "assets/dashboard-BSUR9qM-.js",
+    "file": "assets/dashboard-C1AAkJKD.js",
     "name": "dashboard",
     "src": "resources/js/pages/dashboard.js",
     "isEntry": true,
@@ -2212,8 +2212,14 @@
     "src": "resources/js/pages/invoice_history.js",
     "isEntry": true
   },
+  "resources/js/pages/laser.js": {
+    "file": "assets/laser-C2dyKeOZ.js",
+    "name": "laser",
+    "src": "resources/js/pages/laser.js",
+    "isEntry": true
+  },
   "resources/js/pages/presslist.js": {
-    "file": "assets/presslist-BmqocfMb.js",
+    "file": "assets/presslist-4dnmqInN.js",
     "name": "presslist",
     "src": "resources/js/pages/presslist.js",
     "isEntry": true

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('working_hours')->default(8);
             $table->time('shift_start')->nullable();
             $table->time('shift_end')->nullable();
+            $table->date('joining_date')->nullable();
+            $table->date('resignation_date')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

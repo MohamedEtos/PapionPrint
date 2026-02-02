@@ -23,13 +23,12 @@ return new class extends Migration
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
-            // Polymorphic relation to order items (Stras, Tarter, Printers, etc.)
-            $table->foreignId('printersLog_id')->nullable()->constrained('printers_logs')->onDelete('cascade');
-            $table->foreignId('tarterLog_id')->nullable()->constrained('tarter_logs')->onDelete('cascade');
-            $table->foreignId('strassLog_id')->nullable()->constrained('strass_logs')->onDelete('cascade');
-            $table->foreignId('rollpressLog_id')->nullable()->constrained('rollpress_logs')->onDelete('cascade');
             
+            // Polymorphic relation to order items
+            $table->unsignedBigInteger('itemable_id');
             $table->string('itemable_type');
+            $table->index(['itemable_id', 'itemable_type']);
+
             $table->decimal('custom_price', 10, 2)->nullable(); // Override calculated price if needed
             $table->integer('quantity')->default(1); 
             $table->text('custom_details')->nullable();
