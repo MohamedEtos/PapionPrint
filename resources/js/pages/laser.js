@@ -422,6 +422,8 @@ $(document).ready(function () {
             // Change form to update mode
             $('#addOrderModal .modal-title').text('تعديل الطلب');
             $('#saveOrderBtn').text('تحديث').off('click').on('click', function () {
+                var $btn = $(this);
+                $btn.prop('disabled', true).text('جاري التحديث...');
                 var formData = new FormData($('#laserOrderForm')[0]);
 
                 $.ajax({
@@ -441,6 +443,7 @@ $(document).ready(function () {
                     },
                     error: function (errors) {
                         toastr.error('يرجى التأكد من البيانات');
+                        $btn.prop('disabled', false).text('تحديث');
                     }
                 });
             });
@@ -500,6 +503,9 @@ $(document).ready(function () {
 
     // Define Save Order Handler separately to avoid stacking
     function saveOrderHandler() {
+        var $btn = $('#saveOrderBtn');
+        $btn.prop('disabled', true).text('جاري الحفظ...');
+
         var formData = new FormData($('#laserOrderForm')[0]);
 
         $.ajax({
@@ -511,10 +517,15 @@ $(document).ready(function () {
             success: function (response) {
                 $('#addOrderModal').modal('hide');
                 toastr.success('تمت الإضافة بنجاح');
+                // Button will be reset by the modal hidden event, but good practice to reset here too if we didn't reload immediately
+                // However, we reload immediately, so it matters less. 
+                // But for safety in case reload is removed later:
+                $btn.prop('disabled', false).text('حفظ');
                 setTimeout(function () { location.reload(); }, 1000);
             },
             error: function (errors) {
                 toastr.error('يرجى التأكد من البيانات');
+                $btn.prop('disabled', false).text('حفظ');
             }
         });
     }
