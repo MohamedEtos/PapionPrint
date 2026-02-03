@@ -150,6 +150,12 @@
                                 <span class="menu-title" data-i18n="Attendance">الحضور والانصراف</span>
                             </a>
                         </li>
+                        <li class=" nav-item {{ request()->routeIs('biometric.*') ? 'active' : '' }}">
+                            <a href="{{ route('biometric.index') }}">
+                                <i class="feather icon-fingerprint"></i>
+                                <span class="menu-title" data-i18n="Biometric">نظام البصمة</span>
+                            </a>
+                        </li>
        
                     </ul>
                 </li>

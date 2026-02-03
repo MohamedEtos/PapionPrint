@@ -181,4 +181,13 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('/attendance/check-in', [App\Http\Controllers\AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
     Route::post('/attendance/check-out', [App\Http\Controllers\AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
     Route::get('/payroll', [App\Http\Controllers\AttendanceController::class, 'payroll'])->name('payroll.index');
+
+    // Biometric Attendance Routes
+    Route::prefix('biometric')->name('biometric.')->group(function () {
+        Route::get('/', [App\Http\Controllers\BiometricAttendanceController::class, 'index'])->name('index');
+        Route::post('/upload', [App\Http\Controllers\BiometricAttendanceController::class, 'upload'])->name('upload');
+        Route::post('/users/update/{id}', [App\Http\Controllers\BiometricAttendanceController::class, 'updateUser'])->name('users.update');
+        Route::post('/generate-absences', [App\Http\Controllers\BiometricAttendanceController::class, 'generateAbsences'])->name('generate_absences');
+    });
+
 });
