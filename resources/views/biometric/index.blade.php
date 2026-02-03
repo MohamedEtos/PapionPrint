@@ -151,6 +151,12 @@
                                                         @else
                                                             <span class="badge badge-secondary">{{ $row->status }}</span>
                                                         @endif
+                                                        
+                                                        @if($row->missing_punch == 'check_in')
+                                                            <div class="badge badge-warning mt-1">نسيان حضور</div>
+                                                        @elseif($row->missing_punch == 'check_out')
+                                                            <div class="badge badge-warning mt-1">نسيان انصراف</div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach

@@ -30,28 +30,86 @@ class BiometricAttendanceController extends Controller
         $attendances = $query->orderBy('date', 'desc')->get();
         $biometricUsers = BiometricUser::all();
 
-        // Calculate Payroll Summary
+        // Calculate Payroll Summary using Aggregation for robustness
+        // 1. Build Query for Stats
+        $statsQuery = BiometricAttendance::query();
+        if ($request->has('month') && $request->has('year')) {
+            $statsQuery->whereMonth('date', $request->month)
+                       ->whereYear('date', $request->year);
+        } else {
+             $statsQuery->whereMonth('date', Carbon::now()->month)
+                        ->whereYear('date', Carbon::now()->year);
+        }
+        
+        // If specific user filtered, we can restrict stats or show all?
+        // User asked "Calculate for everyone automatically". 
+        // So we REMOVE the filter here to ensure stats are aggregated for ALL users, 
+        // allowing the Payroll Table to show everyone's data even if the Attendance List is filtered.
+        /* 
+        if ($request->has('biometric_user_id') && $request->biometric_user_id) {
+            $statsQuery->where('biometric_user_id', $request->biometric_user_id);
+        }
+        */
+
+        $aggregates = $statsQuery->selectRaw('
+            biometric_user_id, 
+            SUM(delay_minutes) as total_delay, 
+            SUM(overtime_minutes) as total_overtime,
+            SUM(absence_deduction) as total_absence,
+            SUM(delay_deduction) as total_delay_deduction, 
+            SUM(overtime_pay) as total_overtime_pay_db
+        ')
+        ->groupBy('biometric_user_id')
+        ->get()
+        ->keyBy('biometric_user_id');
+
         $payrollData = [];
         foreach ($biometricUsers as $u) {
-            $userAttendances = $attendances->where('biometric_user_id', $u->id);
+            // Get stats from Aggregate or 0
+            $stats = $aggregates->get($u->id);
             
-            $totalDelayMinutes = $userAttendances->sum('delay_minutes');
-            $totalOvertimeMinutes = $userAttendances->sum('overtime_minutes');
+            $sumDelayMinutes = $stats ? $stats->total_delay : 0;
+            $sumOvertimeMinutes = $stats ? $stats->total_overtime : 0;
+            $totalAbsenceDeduction = $stats ? $stats->total_absence : 0;
+
+            // --- Month Level Netting ---
+            $balance = $sumOvertimeMinutes - $sumDelayMinutes;
             
-            $totalDelayDeduction = $userAttendances->sum('delay_deduction');
-            $totalAbsenceDeduction = $userAttendances->sum('absence_deduction');
+            $finalDelayMinutes = 0;
+            $finalOvertimeMinutes = 0;
             
-            $totalOvertimePay = $userAttendances->sum('overtime_pay');
+            if ($balance > 0) {
+                // Net Surplus (Overtime)
+                $finalOvertimeMinutes = $balance;
+                $finalDelayMinutes = 0;
+            } else {
+                // Net Deficit (Delay)
+                $finalOvertimeMinutes = 0;
+                $finalDelayMinutes = abs($balance);
+            }
+            
+            // Calculate Financials based on FINAL NET values
+            $workingHours = 9; // Default
+            if ($u->shift_start && $u->shift_end) {
+                 $start = Carbon::parse($u->shift_start);
+                 $end = Carbon::parse($u->shift_end);
+                 $workingHours = $start->diffInMinutes($end) / 60;
+            }
+            
+            $minuteRate = 0;
+            if ($u->base_salary > 0 && $workingHours > 0) {
+                 $minuteRate = ($u->base_salary / 30 / $workingHours / 60);
+            }
+
+            $totalDelayDeduction = $finalDelayMinutes * $minuteRate; // 1.0x
+            $totalOvertimePay = $finalOvertimeMinutes * $minuteRate * ($u->overtime_rate ?? 1.5); // 1.5x
             
             $netSalary = $u->base_salary - $totalDelayDeduction - $totalAbsenceDeduction + $totalOvertimePay;
             
-            // Safety check for negative salary (though theoretically possible with huge deductions)
-            // $netSalary = max(0, $netSalary); 
-
             $payrollData[$u->id] = [
                 'user' => $u,
-                'total_delay_minutes' => $totalDelayMinutes,
-                'total_overtime_minutes' => $totalOvertimeMinutes,
+                'total_delay_minutes' => $sumDelayMinutes . ' -> ' . $finalDelayMinutes, 
+                'total_overtime_minutes' => $sumOvertimeMinutes . ' -> ' . $finalOvertimeMinutes,
                 'total_deductions' => $totalDelayDeduction + $totalAbsenceDeduction,
                 'total_overtime_pay' => $totalOvertimePay,
                 'net_salary' => $netSalary
@@ -114,7 +172,34 @@ class BiometricAttendanceController extends Controller
                 );
 
                 foreach ($dates as $date => $punches) {
-                    sort($punches);
+                    // Use usort to sort by timestamp ASC safely
+                    usort($punches, function ($a, $b) {
+                        return $a->timestamp <=> $b->timestamp;
+                    });
+                    
+                    // DEBUG: Log punches before dedupe
+                    $debugMsg = "User {$biometricUser->id} Date {$date} Raw: " . implode(', ', array_map(fn($p)=>$p->format('H:i'), $punches));
+                    
+                    // Deduplicate Punches
+                    $uniquePunches = [];
+                    if (count($punches) > 0) {
+                        $uniquePunches[] = $punches[0];
+                        for ($i = 1; $i < count($punches); $i++) {
+                            $lastUnique = $uniquePunches[count($uniquePunches) - 1];
+                            $diff = abs($punches[$i]->diffInMinutes($lastUnique));
+                            
+                            $debugMsg .= " | Diff({$punches[$i]->format('H:i')} - {$lastUnique->format('H:i')}) = {$diff}";
+                            
+                            if ($diff > 30) {
+                                $uniquePunches[] = $punches[$i];
+                            }
+                        }
+                    }
+                    $punches = $uniquePunches;
+                    
+                    $debugMsg .= " | Final: " . implode(', ', array_map(fn($p)=>$p->format('H:i'), $punches));
+                    \Illuminate\Support\Facades\Log::info($debugMsg);
+
                     $firstPunch = $punches[0];
                     $lastPunch = end($punches);
 
@@ -128,6 +213,7 @@ class BiometricAttendanceController extends Controller
                     $status = 'present';
                     $delayMinutes = 0;
                     $overtimeMinutes = 0;
+                    $missingPunchType = null;
                     $delayDeduction = 0;
                     $overtimePay = 0;
 
@@ -138,42 +224,33 @@ class BiometricAttendanceController extends Controller
                     if ($isFriday) {
                         $status = 'weekend'; // Or holiday
                     } elseif ($shiftStart && $shiftEnd) {
-                         // Auto-fill logic
                          $punchesCount = count($punches);
+                         // Case: Single Punch (Forgot In or Out)
                          if ($punchesCount == 1) {
-                             $diffStart = $firstPunch->diffInMinutes($shiftStart);
-                             $diffEnd = $firstPunch->diffInMinutes($shiftEnd);
+                             $diffStart = abs($firstPunch->diffInMinutes($shiftStart, false));
+                             $diffEnd = abs($firstPunch->diffInMinutes($shiftEnd, false));
                              
                              if ($diffStart < $diffEnd) {
-                                 // Assumed Check-In, missing Check-Out -> fill end
+                                 // Closer to Start -> This is Check-In. Missing Check-Out.
+                                 // Fill Check-Out with Shift End
                                  $checkOut = $shiftEnd; 
+                                 $missingPunchType = 'check_out';
                              } else {
-                                 // Assumed Check-Out, missing Check-In -> fill start
+                                 // Closer to End -> This is Check-Out. Missing Check-In.
+                                 // Fill Check-In with Shift Start
                                  $checkIn = $shiftStart; 
+                                 $missingPunchType = 'check_in';
                              }
                          }
 
-                        // Delay
-                        if ($checkIn->gt($shiftStart)) {
-                             // Consider grace period? e.g. 15 mins
-                            $delayMinutes = $checkIn->diffInMinutes($shiftStart);
-                            // Simple calculation logic: (Salary / 30 days / 8 hours / 60 mins) * delay * deduction_rate?
-                            // User didn't specify formula, keeping generic for now.
-                        }
-
-                        // Overtime
-                        if ($checkOut->gt($shiftEnd)) {
-                            $overtimeMinutes = $checkOut->diffInMinutes($shiftEnd);
-                            $hourlyRate = 0;
-                            // Calculate pay if salary exists
-                            if ($biometricUser->base_salary > 0) {
-                                // Assume 30 days, 8 hours? Or user defined working hours?
-                                // Standard: Salary / 30 / 8
-                                $hourlyRate = ($biometricUser->base_salary / 30) / 8;
-                            }
-                            // Overtime pay = minutes/60 * rate * factor
-                            $overtimePay = ($overtimeMinutes / 60) * $hourlyRate * $biometricUser->overtime_rate;
-                        }
+                        // Calculate Attributes using shared logic
+                        $attrs = $this->calculateAttendanceAttributes($checkIn, $checkOut, $shiftStart, $shiftEnd, $biometricUser, $isFriday);
+                        
+                        $status = $attrs['status'];
+                        $delayMinutes = $attrs['delay_minutes'];
+                        $delayDeduction = $attrs['delay_deduction'];
+                        $overtimeMinutes = $attrs['overtime_minutes'];
+                        $overtimePay = $attrs['overtime_pay'];
                     }
 
                     // Update or Create Record
@@ -192,6 +269,7 @@ class BiometricAttendanceController extends Controller
                             'overtime_minutes' => $overtimeMinutes,
                             'overtime_pay' => round($overtimePay, 2),
                             'is_friday' => $isFriday,
+                            'missing_punch' => $missingPunchType,
                         ]
                     );
                 }
@@ -269,35 +347,13 @@ class BiometricAttendanceController extends Controller
             // If the user manually set status to 'absent' or 'leave', we might verify that logic later.
             // For now, if shift is defined, we calculate.
             
-            if (!$attendance->is_friday && $shiftStart && $shiftEnd) {
-                
-                // --- Delay Calculation ---
-                // If CheckIn is AFTER ShiftStart
-                if ($checkIn && $checkIn->gt($shiftStart)) {
-                    $delayMinutes = $checkIn->diffInMinutes($shiftStart);
-                    
-                    // Deduction Logic
-                    if ($user->base_salary > 0) {
-                         // Rate per minute = Salary / 30 days / 8 hours / 60 minutes
-                         $minuteRate = ($user->base_salary / 30 / 8 / 60);
-                         $delayDeduction = $delayMinutes * $minuteRate;
-                    }
-                }
+            // Calculate Attributes using shared logic
+            $attrs = $this->calculateAttendanceAttributes($checkIn, $checkOut, $shiftStart, $shiftEnd, $user, $attendance->is_friday);
 
-                // --- Overtime Calculation ---
-                // If CheckOut is AFTER ShiftEnd
-                if ($checkOut && $checkOut->gt($shiftEnd)) {
-                    $overtimeMinutes = $checkOut->diffInMinutes($shiftEnd);
-                    
-                    // Overtime Pay Logic
-                    if ($user->base_salary > 0) {
-                         $minuteRate = ($user->base_salary / 30 / 8 / 60);
-                         // Default overtime rate is 1.0 if null
-                         $rateMultiplier = $user->overtime_rate ?? 1.0;
-                         $overtimePay = $overtimeMinutes * $minuteRate * $rateMultiplier;
-                    }
-                }
-            }
+            $delayMinutes = $attrs['delay_minutes'];
+            $delayDeduction = $attrs['delay_deduction'];
+            $overtimeMinutes = $attrs['overtime_minutes'];
+            $overtimePay = $attrs['overtime_pay'];
 
             // Update the record
             $attendance->update([
@@ -358,6 +414,90 @@ class BiometricAttendanceController extends Controller
         }
         
         return back()->with('success', 'Missing days generated successfully.');
+    }
+
+    private function calculateAttendanceAttributes($checkIn, $checkOut, $shiftStart, $shiftEnd, $user, $isFriday)
+    {
+        $delayMinutes = 0;
+        $overtimeMinutes = 0;
+        $delayDeduction = 0;
+        $overtimePay = 0;
+        
+        $status = 'present'; 
+        if ($isFriday) {
+            $status = 'weekend';
+        }
+
+        if (!$isFriday && $shiftStart && $shiftEnd) {
+            // Dynamic Working Hours (in Minutes)
+            $shiftDurationMinutes = $shiftStart->diffInMinutes($shiftEnd);
+            $workingHours = $shiftDurationMinutes / 60; // e.g. 9 hours
+
+            // Rate per minute
+            $minuteRate = 0;
+            if ($user->base_salary > 0 && $workingHours > 0) {
+                // Rate = Salary / 30 days / Working Hours / 60 minutes
+                $minuteRate = ($user->base_salary / 30 / $workingHours / 60);
+            }
+
+            // --- 1. Calculate Delays (Negative Impact) ---
+            $totalDelay = 0;
+            
+            // Late Arrival
+            if ($checkIn && $checkIn->gt($shiftStart)) {
+                $totalDelay += abs($checkIn->diffInMinutes($shiftStart));
+            }
+            
+            // Early Departure
+            if ($checkOut && $checkOut->lt($shiftEnd)) {
+                $totalDelay += abs($checkOut->diffInMinutes($shiftEnd));
+            }
+
+            // --- 2. Calculate Overtime (Positive Impact) ---
+            $totalOvertime = 0;
+
+            // Early Arrival (Came before shift start)
+            if ($checkIn && $checkIn->lt($shiftStart)) {
+                $totalOvertime += abs($checkIn->diffInMinutes($shiftStart));
+            }
+
+            // Late Departure (Stayed after shift end)
+            if ($checkOut && $checkOut->gt($shiftEnd)) {
+                $totalOvertime += abs($checkOut->diffInMinutes($shiftEnd));
+            }
+
+            // --- 3. Daily Net Calculation ---
+            // 1:1 Offsetting
+            $balance = $totalOvertime - $totalDelay;
+
+            if ($balance > 0) {
+                // Net Overtime
+                $overtimeMinutes = $balance;
+                $delayMinutes = 0;
+                
+                // Pay Calculation (Daily calculation for storage, though used mostly for display now)
+                $rateMultiplier = $user->overtime_rate ?? 1.5;
+                $overtimePay = $overtimeMinutes * $minuteRate * $rateMultiplier;
+                $delayDeduction = 0;
+
+            } else {
+                // Net Delay
+                $overtimeMinutes = 0;
+                $delayMinutes = abs($balance);
+                
+                // Deduction Calculation
+                $delayDeduction = $delayMinutes * $minuteRate; // 1.0x Rate
+                $overtimePay = 0;
+            }
+        }
+
+        return [
+            'status' => $status,
+            'delay_minutes' => $delayMinutes,
+            'delay_deduction' => round($delayDeduction, 2),
+            'overtime_minutes' => $overtimeMinutes, // Store Integer
+            'overtime_pay' => round($overtimePay, 2),
+        ];
     }
 }
 

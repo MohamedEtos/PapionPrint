@@ -25,6 +25,7 @@ class BiometricAttendance extends Model
         'is_friday',
         'is_holiday',
         'notes',
+        'missing_punch',
     ];
 
     protected $casts = [
