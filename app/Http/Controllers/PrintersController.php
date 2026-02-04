@@ -108,7 +108,7 @@ class PrintersController extends Controller
             'price' => 'السعر',
         ]);
 
-        DB::transaction(function () use ($request) {
+        return DB::transaction(function () use ($request) {
 
         
         $customers = Customers::firstOrCreate([
@@ -258,7 +258,7 @@ class PrintersController extends Controller
             'price' => 'السعر',
         ]);
 
-        DB::transaction(function () use ($request, $id) {
+        return DB::transaction(function () use ($request, $id) {
 
         $printer = Printers::find($id);
         if (!$printer) {

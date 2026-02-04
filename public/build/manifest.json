@@ -2190,6 +2190,12 @@
     "src": "resources/js/images.js",
     "isEntry": true
   },
+  "resources/js/notifications.js": {
+    "file": "assets/notifications-BEVAZKp1.js",
+    "name": "notifications",
+    "src": "resources/js/notifications.js",
+    "isEntry": true
+  },
   "resources/js/pages/AddNewOrder.js": {
     "file": "assets/AddNewOrder-BXHt_Jk8.js",
     "name": "AddNewOrder",
