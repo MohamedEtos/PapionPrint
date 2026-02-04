@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -33,29 +34,34 @@ class UsersController extends Controller
             'roles' => 'array'
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'base_salary' => $request->base_salary,
-            'working_hours' => $request->working_hours ?? 8,
-            'shift_start' => $request->shift_start,
-            'shift_end' => $request->shift_end,
-            'overtime_rate' => $request->overtime_rate,
-            'joining_date' => $request->joining_date,
-            'resignation_date' => $request->resignation_date,
-        ]);
+        DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name' => $request->name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'base_salary' => $request->base_salary,
+                'working_hours' => $request->working_hours ?? 8,
+                'shift_start' => $request->shift_start,
+                'shift_end' => $request->shift_end,
+                'overtime_rate' => $request->overtime_rate,
+                'joining_date' => $request->joining_date,
+                'resignation_date' => $request->resignation_date,
+            ]);
 
-        if ($request->has('roles')) {
-            $user->assignRole($request->roles);
-        }
+            if ($request->has('roles')) {
+                $user->assignRole($request->roles);
+            }
+        });
 
         return response()->json(['success' => 'تم اضافة المستخدم بنجاح!']);
     }
 
     public function update(Request $request, $id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:users,id',
+        ])->validate();
         $user = User::findOrFail($id);
         
         $request->validate([
@@ -89,17 +95,22 @@ class UsersController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
-        $user->update($data);
-        
-        if ($request->has('roles') || $request->has('update_roles')) {
-            $user->syncRoles($request->roles ?? []);
-        }
+        DB::transaction(function () use ($user, $data, $request) {
+            $user->update($data);
+            
+            if ($request->has('roles') || $request->has('update_roles')) {
+                $user->syncRoles($request->roles ?? []);
+            }
+        });
 
         return response()->json(['success' => 'User updated successfully', 'user' => $user->load('roles')]);
     }
 
     public function destroy($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:users,id',
+        ])->validate();
         $user = User::findOrFail($id);
         $user->delete();
 
