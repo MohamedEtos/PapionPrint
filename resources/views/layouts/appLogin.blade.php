@@ -13,6 +13,7 @@
     <meta name="description" content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
     <meta name="keywords" content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="PIXINVENT">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
