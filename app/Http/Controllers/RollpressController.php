@@ -119,6 +119,8 @@ class RollpressController extends Controller
 
     public function archive(Request $request)
     {
+
+
         if ($request->ajax()) {
             $query = Rollpress::with('customer', 'order.customers', 'order.ordersImgs');
             // Filter by Status (Archive usually means history, so maybe show all? Or just status=1?)
@@ -185,6 +187,10 @@ class RollpressController extends Controller
 
     public function bulkDelete(Request $request)
     {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:Rollpress,id',
+        ]);
         $ids = $request->ids;
         if (!empty($ids)) {
             Rollpress::whereIn('id', $ids)->delete();
@@ -195,6 +201,10 @@ class RollpressController extends Controller
 
     public function update(Request $request, $id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Rollpress,id',
+        ])->validate();
+                
         $rollpress = Rollpress::find($id);
         if (!$rollpress) {
             return response()->json(['error' => 'Order not found'], 404);

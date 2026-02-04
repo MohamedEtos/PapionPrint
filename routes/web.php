@@ -138,7 +138,10 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::get('/machines/pricing', [App\Http\Controllers\MachinesController::class, 'pricing'])->name('machines.pricing');
     Route::post('/machines/pricing/update', [App\Http\Controllers\MachinesController::class, 'updatePrice'])->name('machines.update_price');
 
-    // Invoice System Routes
+    // Notifications
+    Route::get('/notifications/latest', [App\Http\Controllers\NotificationsController::class, 'getLatest'])->name('notifications.latest');
+    Route::get('/notifications', [App\Http\Controllers\NotificationsController::class, 'index'])->name('notifications.index');
+
     Route::prefix('invoices')->group(function () {
         Route::get('/create', [App\Http\Controllers\InvoiceController::class, 'showCart'])->name('invoice.create');
         Route::post('/add', [App\Http\Controllers\InvoiceController::class, 'addToCart'])->name('invoice.add');

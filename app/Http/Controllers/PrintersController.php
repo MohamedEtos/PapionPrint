@@ -180,7 +180,7 @@ class PrintersController extends Controller
         $notification = Notifications::create([
             'user_id' => auth()->id(),
             'title' => ' اوردر طباعه' . $printer->orderNumber,
-            'img_path' => $request->image_paths[0],
+            'img_path' => $request->image_paths[0] ?? null,
             'body' => $customers->name .'تم اضافه اوردر طباعه '.$printer->meters .'متر',
             'type' => 'order',
             'status' => 'unread',
@@ -222,11 +222,12 @@ class PrintersController extends Controller
     public function update(Request $request, $id)
     {
 
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Printers,id',
+        ])->validate();
 
-        $printer = Printers::find($id);
-        if (!$printer) {
-            return response()->json(['error' => 'Order not found'], 404);
-        }
+
+
 
         $request->validate([
             'customerId' => 'nullable|string|max:255',
@@ -257,15 +258,13 @@ class PrintersController extends Controller
             'price' => 'السعر',
         ]);
 
-        // Update Customer if name changed (Optional: usually we pick existing, but here we might just verify)
-        // For simplicity/safety, we might skip updating customer relation *link* based on name unless strict logic exists.
-        // Assuming customerId passed is name string from datalist.
-        // If it's a new name, we create new customer? Or just update existing?
-        // logic in store() was: $customers = Customers::create(['name' => $request->customerId]);
-        // This implies we create a new customer every time? That seems like a potential duplicate issue but I will stick to existing patterns or minimal changes.
-        // Let's assume for update we simply update fields on the Printer.
+        DB::transaction(function () use ($request, $id) {
 
-        // If 'customerId' input is actually a name string:
+        $printer = Printers::find($id);
+        if (!$printer) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+        
         if ($request->filled('customerId')) {
             // Check if customer exists or create new?
             // Better to find existing by name first implementation in store() was naive.
@@ -413,7 +412,9 @@ class PrintersController extends Controller
         // Return updated object with relations
         $printer->load(['customers', 'machines', 'printingprices', 'ordersImgs']);
 
+        
         return response()->json(['success' => 'Order updated successfully', 'order' => $printer]);
+    });
     }
 
 
@@ -424,6 +425,12 @@ class PrintersController extends Controller
      */
     public function destroy($id)
     {
+
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Printers,id',
+        ])->validate();
+
+
         $printer = Printers::find($id);
         if ($printer) {
             $printer->delete();
@@ -436,6 +443,13 @@ class PrintersController extends Controller
 
     public function bulkDelete(Request $request)
     {
+
+        \Illuminate\Support\Facades\Validator::make(['ids' => $request->ids], [
+            'ids' => 'required|array',
+            'ids.*' => 'exists:Printers,id',
+        ])->validate();
+
+
         $ids = $request->ids;
         if (!empty($ids)) {
             Printers::whereIn('id', $ids)->delete();
@@ -448,6 +462,12 @@ class PrintersController extends Controller
 
     public function updateStatus($id)
     {
+
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Printers,id',
+        ])->validate();
+
+
         $order = Printers::find($id);
         if (!$order) {
             return response()->json(['error' => 'Order not found'], 404);
@@ -475,6 +495,12 @@ class PrintersController extends Controller
 
     public function updatePrice($id)
     {
+
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Printers,id',
+        ])->validate();
+
+
         $request = request();
 
         $order = Printers::find($id);
@@ -522,6 +548,7 @@ class PrintersController extends Controller
     }
     public function trash()
     {
+
         $Orders = Printers::onlyTrashed()->with(['customers', 'machines', 'printingprices', 'ordersImgs'])->orderBy('deleted_at', 'desc')->get();
         // We might not need all logic like customers/machines lists if we just display, but consistency helps
         $customers = Customers::all();
@@ -537,6 +564,12 @@ class PrintersController extends Controller
 
     public function restore($id)
     {
+
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Printers,id',
+        ])->validate();
+
+
         $printer = Printers::withTrashed()->find($id); // search in trashed too
         if ($printer && $printer->trashed()) {
             $printer->restore();
@@ -547,6 +580,12 @@ class PrintersController extends Controller
 
     public function forceDelete($id)
     {
+
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Printers,id',
+        ])->validate();
+
+
         $printer = Printers::withTrashed()->find($id);
         if ($printer) {
             // Delete related images from storage?

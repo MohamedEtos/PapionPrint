@@ -2,64 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notifications;
 use Illuminate\Http\Request;
+use App\Models\Notifications;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function getLatest()
+    {
+        $notifications = Notifications::orderBy('created_at', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function ($notify) {
+                $notify->time_ago = $notify->created_at->diffForHumans();
+                // Ensure image path is correct for JS
+                $notify->image_url = $notify->img_path 
+                    ? (\Str::startsWith($notify->img_path, 'data:') ? $notify->img_path : asset('storage/' . $notify->img_path))
+                    : null;
+                return $notify;
+            });
+            
+        $unreadCount = Notifications::where('status', 'unread')
+            ->count();
+
+        return response()->json([
+            'unread_count' => $unreadCount,
+            'notifications' => $notifications
+        ]);
+    }
+
     public function index()
     {
-        //
-    }
+        $notifications = Notifications::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Notifications $notifications)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Notifications $notifications)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Notifications $notifications)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Notifications $notifications)
-    {
-        //
+        return view('notifications.index', compact('notifications'));
     }
 }

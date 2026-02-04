@@ -59,14 +59,14 @@
                                 </li>  
                             </ul>
                         </li>
-                        <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon feather icon-bell"></i><span class="badge badge-pill badge-primary badge-up">{{ $unreadNotificationCount ?? 0 }}</span></a>
+                        <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon feather icon-bell"></i><span class="badge badge-pill badge-primary badge-up" id="notification-badge">{{ $unreadNotificationCount ?? 0 }}</span></a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                                 <li class="dropdown-menu-header">
                                     <div class="dropdown-header m-0 p-2">
-                                        <h3 class="white">{{ $unreadNotificationCount ?? 0 }} New</h3><span class="notification-title">App Notifications</span>
+                                        <h3 class="white" id="notification-header-count">{{ $unreadNotificationCount ?? 0 }} New</h3><span class="notification-title">App Notifications</span>
                                     </div>
                                 </li>
-                                <li class="scrollable-container media-list">
+                                <li class="scrollable-container media-list" id="notification-list" data-url="{{ route('notifications.latest') }}">
                                     @foreach ($notifications as $notification)
                                         <a class="d-flex justify-content-between" href="">
                                             <div class="media d-flex align-items-start">
@@ -82,7 +82,7 @@
                                     </a>
                                 @endforeach
                                 </li>
-                                <li class="dropdown-menu-footer"><a class="dropdown-item p-1 text-center" href="javascript:void(0)">View all notifications</a></li>
+                                <li class="dropdown-menu-footer"><a class="dropdown-item p-1 text-center" href="{{ route('notifications.index') }}">View all notifications</a></li>
                             </ul>
                         </li>
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
@@ -116,3 +116,8 @@
             </div>
         </div>
     </nav>
+
+    @vite('resources/js/notifications.js')
+    <script>
+        // Inline script moved to resources/js/notifications.js
+    </script>

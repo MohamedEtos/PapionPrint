@@ -41,6 +41,7 @@ export default defineConfig({
                 'resources/js/pages/stras.js',
                 'resources/js/pages/laser.js',
                 'resources/js/pages/tarter.js',
+                'resources/js/notifications.js',
             ],
             refresh: true,
         }),

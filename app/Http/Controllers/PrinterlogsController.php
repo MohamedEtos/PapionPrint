@@ -16,6 +16,9 @@ class PrinterlogsController extends Controller
      */
     public function printLog(Request $request)
     {
+
+
+
         if ($request->ajax()) {
             $query = Printers::with(['printingprices', 'ordersImgs', 'customers', 'machines', 'user', 'user2'])
                 ->where('archive', 1);
@@ -96,6 +99,10 @@ class PrinterlogsController extends Controller
 
     public function duplicate($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Printers,id',
+        ])->validate();
+
         $order = Printers::with('ordersImgs')->find($id);
         if (!$order) {
             return response()->json(['error' => 'Order not found'], 404);
