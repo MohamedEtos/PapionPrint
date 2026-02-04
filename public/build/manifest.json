@@ -3,8 +3,8 @@
     "file": "assets/apexcharts-1dz0OY9g.js",
     "name": "apexcharts"
   },
-  "_vendor-yI_sRcxr.js": {
-    "file": "assets/vendor-yI_sRcxr.js",
+  "_vendor-G50tnjl1.js": {
+    "file": "assets/vendor-G50tnjl1.js",
     "name": "vendor"
   },
   "resources/core/css-rtl/core/colors/palette-gradient.css": {
@@ -2175,12 +2175,12 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-DhuGUrtq.js",
+    "file": "assets/app-DYNb7q_k.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_vendor-yI_sRcxr.js",
+      "_vendor-G50tnjl1.js",
       "_apexcharts-1dz0OY9g.js"
     ]
   },

@@ -57,7 +57,9 @@ class BiometricAttendanceController extends Controller
             SUM(overtime_minutes) as total_overtime,
             SUM(absence_deduction) as total_absence,
             SUM(delay_deduction) as total_delay_deduction, 
-            SUM(overtime_pay) as total_overtime_pay_db
+            SUM(overtime_pay) as total_overtime_pay_db,
+            SUM(CASE WHEN status = "absent" THEN 1 ELSE 0 END) as total_absence_days,
+            SUM(CASE WHEN status = "present" THEN 1 ELSE 0 END) as total_attendance_days
         ')
         ->groupBy('biometric_user_id')
         ->get()
@@ -112,6 +114,8 @@ class BiometricAttendanceController extends Controller
                 'total_overtime_minutes' => $sumOvertimeMinutes . ' -> ' . $finalOvertimeMinutes,
                 'total_deductions' => $totalDelayDeduction + $totalAbsenceDeduction,
                 'total_overtime_pay' => $totalOvertimePay,
+                'total_attendance_days' => $stats ? $stats->total_attendance_days : 0,
+                'total_absence_days' => $stats ? $stats->total_absence_days : 0,
                 'net_salary' => $netSalary
             ];
         }

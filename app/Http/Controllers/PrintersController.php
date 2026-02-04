@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Customers;
 use App\Models\Machines;
 use App\Models\User;
+use App\Models\Notifications;
+use DB;
 
 class PrintersController extends Controller
 {
@@ -106,8 +108,9 @@ class PrintersController extends Controller
             'price' => 'السعر',
         ]);
 
+        DB::transaction(function () use ($request) {
 
-
+        
         $customers = Customers::firstOrCreate([
             'name' => $request->customerId,
         ]);
@@ -174,10 +177,23 @@ class PrintersController extends Controller
             }
         }
 
+        $notification = Notifications::create([
+            'user_id' => auth()->id(),
+            'title' => ' اوردر طباعه' . $printer->orderNumber,
+            'img_path' => $request->image_paths[0],
+            'body' => $customers->name .'تم اضافه اوردر طباعه '.$printer->meters .'متر',
+            'type' => 'order',
+            'status' => 'unread',
+        ]);
+
+
+
+
         // Eager load relationships for the frontend response
         $printer->load(['customers', 'machines', 'printingprices', 'ordersImgs']);
-
+        
         return response()->json(['success' => 'Order created successfully', 'order' => $printer]);
+    });
     }
 
 
@@ -189,6 +205,10 @@ class PrintersController extends Controller
 
         if (!$printer) {
             return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        if (request()->ajax()) {
+            return response()->json($printer);
         }
 
         return view('printers.show', compact('printer'));

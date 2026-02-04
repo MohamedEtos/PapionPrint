@@ -246,6 +246,8 @@
                                             <tr>
                                                 <th>الموظف</th>
                                                 <th>الراتب الاساسي</th>
+                                                <th>ايام الحضور</th>
+                                                <th>ايام الغياب</th>
                                                 <th>اجمالي التأخير (دقيقة)</th>
                                                 <th>اجمالي الخصومات</th>
                                                 <th>اجمالي الاضافي (دقيقة)</th>
@@ -258,8 +260,10 @@
                                                 <tr>
                                                     <td>{{ $data['user']->name }}</td>
                                                     <td>{{ number_format($data['user']->base_salary, 2) }}</td>
-                                                    <td class="text-danger">{{ $data['total_delay_minutes'] }}</td>
-                                                    <td class="text-danger">{{ number_format($data['total_deductions'], 2) }}</td>
+                                                    <td class="text-success">{{ $data['total_attendance_days'] }}</td>
+                                                    <td class="text-danger">{{ $data['total_absence_days'] }}</td>
+                                                    <td class="text-warning">{{ $data['total_delay_minutes'] }}</td>
+                                                    <td class="text-warning">{{ number_format($data['total_deductions'], 2) }}</td>
                                                     <td class="text-success">{{ $data['total_overtime_minutes'] }}</td>
                                                     <td class="text-success">{{ number_format($data['total_overtime_pay'], 2) }}</td>
                                                     <td class="font-weight-bold">{{ number_format($data['net_salary'], 2) }}</td>
@@ -281,6 +285,9 @@
 @section('js')
     <script src="{{ asset('core/vendors/js/tables/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('core/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="{{ asset('core/vendors/js/tables/datatable/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('core/vendors/js/tables/datatable/buttons.print.min.js') }}"></script>
     <script src="{{ asset('core/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('core/vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
     
@@ -296,6 +303,11 @@
                     {
                         extend: 'print',
                         text: '<i class="feather icon-printer"></i> طباعة',
+                        className: 'btn btn-white btn-sm'
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="feather icon-file"></i> Excel',
                         className: 'btn btn-white btn-sm'
                     }
                 ]

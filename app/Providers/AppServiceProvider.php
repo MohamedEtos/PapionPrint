@@ -41,7 +41,11 @@ class AppServiceProvider extends ServiceProvider
 
         Schema::defaultStringLength(191);
 
+
         // Register Cart Composer
         \Illuminate\Support\Facades\View::composer('components.navbar', \App\Http\ViewComposers\CartComposer::class);
+        
+        // Register Notification Composer
+        \Illuminate\Support\Facades\View::composer('components.navbar', \App\Http\ViewComposers\NotificationComposer::class);
     }
 }
