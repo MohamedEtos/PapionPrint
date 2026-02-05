@@ -6,14 +6,7 @@ use App\Http\Controllers\PrintersController;
 use App\Http\Controllers\PrinterlogsController;
 use Illuminate\Support\Facades\Mail;
 
-Route::get('/test-mail', function () {
-    Mail::raw('Test mail from LunaBlu SMTP', function ($message) {
-        $message->to('etos7plus@gmail.com')
-                ->subject('SMTP Test');
-    });
 
-    return 'Mail sent';
-});
 
 Auth::routes();
 
