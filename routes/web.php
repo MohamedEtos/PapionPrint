@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PrintersController;
 use App\Http\Controllers\PrinterlogsController;
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -190,6 +191,16 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/generate-absences', [App\Http\Controllers\BiometricAttendanceController::class, 'generateAbsences'])->name('generate_absences');
     });
 
+});
+
+
+Route::get('/test-mail', function () {
+    Mail::raw('Test mail from LunaBlu SMTP', function ($message) {
+        $message->to('etos7plus@gmail.com')
+                ->subject('SMTP Test');
+    });
+
+    return 'Mail sent';
 });
 
 
