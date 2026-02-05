@@ -64,10 +64,17 @@
                                                 <input type="file" name="attendance_file" class="form-control" accept=".dat,.txt" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <button type="submit" class="btn btn-primary mt-2">رفع ومعالجة</button>
+                                        <div class="col-md-6 d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary mt-2 mr-1">رفع ومعالجة</button>
+                                            
+                                            <!-- Clear Button via Form -->
                                         </div>
                                     </div>
+                                </form>
+                                <form action="{{ route('biometric.clear') }}" method="POST" class="d-inline-block" onsubmit="return confirm('هل انت متأكد من مسح جميع سجلات الحضور؟ لا يمكن التراجع عن هذا الاجراء.');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger mt-2">مسح الجدول بالكامل</button>
                                 </form>
                             </div>
                         </section>

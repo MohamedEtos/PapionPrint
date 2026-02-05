@@ -230,19 +230,19 @@ class BiometricAttendanceController extends Controller
                     } elseif ($shiftStart && $shiftEnd) {
                          $punchesCount = count($punches);
                          // Case: Single Punch (Forgot In or Out)
-                         if ($punchesCount == 1) {
+                        if ($punchesCount == 1) {
                              $diffStart = abs($firstPunch->diffInMinutes($shiftStart, false));
                              $diffEnd = abs($firstPunch->diffInMinutes($shiftEnd, false));
                              
                              if ($diffStart < $diffEnd) {
-                                 // Closer to Start -> This is Check-In. Missing Check-Out.
-                                 // Fill Check-Out with Shift End
-                                 $checkOut = $shiftEnd; 
+                                 // Closer to Start -> This is Check-In. Check-Out is MISSING.
+                                 // Change: Leave Check-Out as NULL (or handle specifically) if no info.
+                                 // Logic change request: "Attendance only".
+                                 $checkOut = null; 
                                  $missingPunchType = 'check_out';
                              } else {
-                                 // Closer to End -> This is Check-Out. Missing Check-In.
-                                 // Fill Check-In with Shift Start
-                                 $checkIn = $shiftStart; 
+                                 // Closer to End -> This is Check-Out. Check-In is MISSING.
+                                 $checkIn = null; 
                                  $missingPunchType = 'check_in';
                              }
                          }
@@ -418,6 +418,14 @@ class BiometricAttendanceController extends Controller
         }
         
         return back()->with('success', 'Missing days generated successfully.');
+    }
+
+    public function destroyAll()
+    {
+        // Truncate the table - Deletes ALL records
+        BiometricAttendance::truncate();
+        
+        return redirect()->route('biometric.index')->with('success', 'تم مسح جميع سجلات الحضور بنجاح.');
     }
 
     private function calculateAttendanceAttributes($checkIn, $checkOut, $shiftStart, $shiftEnd, $user, $isFriday)

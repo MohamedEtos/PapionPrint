@@ -192,6 +192,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/upload', [App\Http\Controllers\BiometricAttendanceController::class, 'upload'])->name('upload');
         Route::post('/users/update/{id}', [App\Http\Controllers\BiometricAttendanceController::class, 'updateUser'])->name('users.update');
         Route::post('/generate-absences', [App\Http\Controllers\BiometricAttendanceController::class, 'generateAbsences'])->name('generate_absences');
+        Route::delete('/clear', [App\Http\Controllers\BiometricAttendanceController::class, 'destroyAll'])->name('clear');
     });
 
 });
