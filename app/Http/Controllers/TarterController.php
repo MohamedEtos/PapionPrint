@@ -7,6 +7,7 @@ use App\Models\Customers;
 use App\Models\Tarter;
 use App\Models\TarterLayer;
 use App\Models\TarterPrice;
+use Illuminate\Support\Facades\DB;
 
 class TarterController extends Controller
 {
@@ -56,20 +57,25 @@ class TarterController extends Controller
             $data['image_path'] = $request->file('image')->store('tarter_images', 'public');
         }
 
-        $tarter = Tarter::create($data);
+        DB::transaction(function () use ($request, $data) {
+            $tarter = Tarter::create($data);
 
-        foreach ($request->layers as $layer) {
-            $tarter->layers()->create([
-                'size' => $layer['size'],
-                'count' => $layer['count'],
-            ]);
-        }
+            foreach ($request->layers as $layer) {
+                $tarter->layers()->create([
+                    'size' => $layer['size'],
+                    'count' => $layer['count'],
+                ]);
+            }
+        });
 
         return response()->json(['success' => 'Created successfully']);
     }
 
     public function update(Request $request, $id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:tarters,id',
+        ])->validate();
          $tarter = Tarter::findOrFail($id);
          
           $request->validate([
@@ -93,23 +99,28 @@ class TarterController extends Controller
              $data['image_path'] = $request->file('image')->store('tarter_images', 'public');
         }
 
-        $tarter->update($data);
+        DB::transaction(function () use ($request, $tarter, $data) {
+            $tarter->update($data);
 
-        if($request->has('layers')){
-             $tarter->layers()->delete(); // Simple re-create for layers
-             foreach ($request->layers as $layer) {
-                $tarter->layers()->create([
-                    'size' => $layer['size'],
-                    'count' => $layer['count'],
-                ]);
+            if($request->has('layers')){
+                 $tarter->layers()->delete(); // Simple re-create for layers
+                 foreach ($request->layers as $layer) {
+                    $tarter->layers()->create([
+                        'size' => $layer['size'],
+                        'count' => $layer['count'],
+                    ]);
+                }
             }
-        }
+        });
         
         return response()->json(['success' => 'Updated successfully']);
     }
 
     public function destroy($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:tarters,id',
+        ])->validate();
         $tarter = Tarter::find($id);
         if ($tarter) {
             $tarter->layers()->delete(); // Soft delete due to trait
@@ -121,24 +132,33 @@ class TarterController extends Controller
 
     public function restart($id)
     {
-        $original = Tarter::with('layers')->findOrFail($id);
-        
-        $new = $original->replicate();
-        $new->created_at = now();
-        $new->updated_at = now();
-        $new->save();
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:tarters,id',
+        ])->validate();
+        return DB::transaction(function () use ($id) {
+            $original = Tarter::with('layers')->findOrFail($id);
+            
+            $new = $original->replicate();
+            $new->created_at = now();
+            $new->updated_at = now();
+            $new->save();
 
-        foreach ($original->layers as $layer) {
-            $newLayer = $layer->replicate();
-            $newLayer->tarter_id = $new->id;
-            $newLayer->save();
-        }
+            foreach ($original->layers as $layer) {
+                $newLayer = $layer->replicate();
+                $newLayer->tarter_id = $new->id;
+                $newLayer->save();
+            }
 
-        return response()->json(['success' => 'Order restarted (duplicated) successfully']);
+            return response()->json(['success' => 'Order restarted (duplicated) successfully']);
+        });
     }
 
     public function bulkDelete(Request $request)
     {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:tarters,id',
+        ]);
         $ids = $request->ids;
         if (!is_array($ids) || empty($ids)) {
             return response()->json(['error' => 'No items selected'], 400);
@@ -146,10 +166,12 @@ class TarterController extends Controller
 
         $orders = Tarter::whereIn('id', $ids)->get();
         
-        foreach ($orders as $order) {
-            $order->layers()->delete();
-            $order->delete();
-        }
+        DB::transaction(function () use ($orders) {
+            foreach ($orders as $order) {
+                $order->layers()->delete();
+                $order->delete();
+            }
+        });
 
         return response()->json(['success' => 'Selected orders deleted successfully']);
     }
@@ -167,6 +189,9 @@ class TarterController extends Controller
 
     public function restore($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:tarters,id',
+        ])->validate();
         $tarter = Tarter::onlyTrashed()->find($id);
         if ($tarter) {
             $tarter->restore();
@@ -178,6 +203,9 @@ class TarterController extends Controller
 
     public function forceDelete($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:tarters,id',
+        ])->validate();
          $tarter = Tarter::onlyTrashed()->find($id);
          if ($tarter) {
              $tarter->layers()->forceDelete(); // Permanently delete layers
@@ -198,6 +226,10 @@ class TarterController extends Controller
 
     public function updatePrice(Request $request)
     {
+        $request->validate([
+            'id' => 'required|exists:tarter_prices,id',
+            'price' => 'required|numeric',
+        ]);
         $id = $request->id;
         $price = $request->price;
         

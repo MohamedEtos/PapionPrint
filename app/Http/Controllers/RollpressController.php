@@ -12,6 +12,7 @@ use App\Models\Rollpress;
 use App\Models\Attendance;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RollpressController extends Controller
 {
@@ -93,32 +94,37 @@ class RollpressController extends Controller
             }
         }
 
-        // 3. Create Rollpress Record
-        $rollpress = new Rollpress();
-        
-        if ($request->filled('orderId')) {
-             $rollpress->orderId = $request->orderId;
-        }
+        // 3. Create Rollpress Record w/ Transaction
+        $rollpress = DB::transaction(function () use ($request, $customerId) {
+            $rollpress = new Rollpress();
+            
+            if ($request->filled('orderId')) {
+                 $rollpress->orderId = $request->orderId;
+            }
 
+            $rollpress->customerId = $customerId;
+            $rollpress->fabrictype = $request->fabrictype;
+            $rollpress->fabricsrc = $request->fabricsrc;
+            $rollpress->fabriccode = $request->fabriccode;
+            $rollpress->fabricwidth = $request->fabricwidth;
+            $rollpress->meters = $request->meters;
+            $rollpress->status = 1; 
+            $rollpress->paymentstatus = $request->paymentstatus == '1' ? 1 : 0;
+            $rollpress->papyershild = $request->papyershild;
+            $rollpress->price = $request->price;
+            $rollpress->notes = $request->notes;
+            $rollpress->save();
 
-        $rollpress->customerId = $customerId;
-        $rollpress->fabrictype = $request->fabrictype;
-        $rollpress->fabricsrc = $request->fabricsrc;
-        $rollpress->fabriccode = $request->fabriccode;
-        $rollpress->fabricwidth = $request->fabricwidth;
-        $rollpress->meters = $request->meters;
-        $rollpress->status = 1; 
-        $rollpress->paymentstatus = $request->paymentstatus == '1' ? 1 : 0;
-        $rollpress->papyershild = $request->papyershild;
-        $rollpress->price = $request->price;
-        $rollpress->notes = $request->notes;
-        $rollpress->save();
+            return $rollpress;
+        });
         
         return response()->json(['success' => true, 'rollpress' => $rollpress]);
     }
 
     public function archive(Request $request)
     {
+
+
         if ($request->ajax()) {
             $query = Rollpress::with('customer', 'order.customers', 'order.ordersImgs');
             // Filter by Status (Archive usually means history, so maybe show all? Or just status=1?)
@@ -185,9 +191,15 @@ class RollpressController extends Controller
 
     public function bulkDelete(Request $request)
     {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:Rollpress,id',
+        ]);
         $ids = $request->ids;
         if (!empty($ids)) {
-            Rollpress::whereIn('id', $ids)->delete();
+            DB::transaction(function () use ($ids) {
+                Rollpress::whereIn('id', $ids)->delete();
+            });
             return response()->json(['success' => 'Orders deleted successfully']);
         }
         return response()->json(['error' => 'No orders selected'], 400);
@@ -195,6 +207,10 @@ class RollpressController extends Controller
 
     public function update(Request $request, $id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Rollpress,id',
+        ])->validate();
+                
         $rollpress = Rollpress::find($id);
         if (!$rollpress) {
             return response()->json(['error' => 'Order not found'], 404);
@@ -236,25 +252,27 @@ class RollpressController extends Controller
              }
         }
         
-        $rollpress->customerId = $customerId;
-        $rollpress->fabrictype = $request->fabrictype;
-        $rollpress->fabricsrc = $request->fabricsrc;
-        $rollpress->fabriccode = $request->fabriccode;
-        $rollpress->fabricwidth = $request->fabricwidth;
-        $rollpress->meters = $request->meters;
-        $rollpress->paymentstatus = $request->paymentstatus == '1' ? 1 : 0;
-        $rollpress->papyershild = $request->papyershild;
-        $rollpress->price = $request->price;
-        $rollpress->notes = $request->notes;
-        
-        // Handle Status update if provided, mapping string/int
-        if ($request->filled('status')) {
-             // If incoming is "تم الانتهاء" or "1", set to 1. Else 0.
-             $statusInput = $request->status;
-             $rollpress->status = ($statusInput == '1' || $statusInput == 'تم الانتهاء') ? 1 : 0;
-        }
+        DB::transaction(function () use ($rollpress, $customerId, $request) {
+            $rollpress->customerId = $customerId;
+            $rollpress->fabrictype = $request->fabrictype;
+            $rollpress->fabricsrc = $request->fabricsrc;
+            $rollpress->fabriccode = $request->fabriccode;
+            $rollpress->fabricwidth = $request->fabricwidth;
+            $rollpress->meters = $request->meters;
+            $rollpress->paymentstatus = $request->paymentstatus == '1' ? 1 : 0;
+            $rollpress->papyershild = $request->papyershild;
+            $rollpress->price = $request->price;
+            $rollpress->notes = $request->notes;
+            
+            // Handle Status update if provided, mapping string/int
+            if ($request->filled('status')) {
+                 // If incoming is "تم الانتهاء" or "1", set to 1. Else 0.
+                 $statusInput = $request->status;
+                 $rollpress->status = ($statusInput == '1' || $statusInput == 'تم الانتهاء') ? 1 : 0;
+            }
 
-        $rollpress->save();
+            $rollpress->save();
+        });
         
         return response()->json(['success' => true, 'rollpress' => $rollpress]);
     }
@@ -304,6 +322,9 @@ class RollpressController extends Controller
 
     public function restore($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Rollpress,id',
+        ])->validate();
         $rollpress = Rollpress::withTrashed()->find($id);
         if ($rollpress && $rollpress->trashed()) {
             $rollpress->restore();
@@ -314,6 +335,9 @@ class RollpressController extends Controller
 
     public function forceDelete($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Rollpress,id',
+        ])->validate();
         $rollpress = Rollpress::withTrashed()->find($id);
         if ($rollpress) {
             $rollpress->forceDelete();

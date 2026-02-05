@@ -8,6 +8,7 @@ use App\Models\Printers;
 use App\Models\Customers;
 use App\Models\Machines;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class PrinterlogsController extends Controller
 {
@@ -16,6 +17,9 @@ class PrinterlogsController extends Controller
      */
     public function printLog(Request $request)
     {
+
+
+
         if ($request->ajax()) {
             $query = Printers::with(['printingprices', 'ordersImgs', 'customers', 'machines', 'user', 'user2'])
                 ->where('archive', 1);
@@ -96,24 +100,30 @@ class PrinterlogsController extends Controller
 
     public function duplicate($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:Printers,id',
+        ])->validate();
+
         $order = Printers::with('ordersImgs')->find($id);
         if (!$order) {
             return response()->json(['error' => 'Order not found'], 404);
         }
 
-        $newOrder = $order->replicate();
-        $newOrder->archive = 0;
-        $newOrder->orderNumber = 'ORD-' . time() . '-' . rand(10, 99);
-        $newOrder->status = 'بانتظار اجراء';
-        $newOrder->timeEndOpration = null;
-        $newOrder->save();
+        DB::transaction(function () use ($order) {
+            $newOrder = $order->replicate();
+            $newOrder->archive = 0;
+            $newOrder->orderNumber = 'ORD-' . time() . '-' . rand(10, 99);
+            $newOrder->status = 'بانتظار اجراء';
+            $newOrder->timeEndOpration = null;
+            $newOrder->save();
 
-        // Replicate images
-        foreach ($order->ordersImgs as $img) {
-            $newImg = $img->replicate();
-            $newImg->orderId = $newOrder->id;
-            $newImg->save();
-        }
+            // Replicate images
+            foreach ($order->ordersImgs as $img) {
+                $newImg = $img->replicate();
+                $newImg->orderId = $newOrder->id;
+                $newImg->save();
+            }
+        });
 
         return response()->json(['success' => 'Order duplicated successfully']);
     }

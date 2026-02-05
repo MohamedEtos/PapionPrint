@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customers;
 use App\Models\Stras;
+use Illuminate\Support\Facades\DB;
 
 class StrasController extends Controller
 {
@@ -54,23 +55,28 @@ class StrasController extends Controller
             $data['image_path'] = $request->file('image')->store('stras_images', 'public');
         }
 
-        $stras = Stras::create($data);
+        DB::transaction(function () use ($request, $data) {
+            $stras = Stras::create($data);
 
-        foreach ($request->layers as $layer) {
-            $stras->layers()->create([
-                'size' => $layer['size'],
-                'count' => $layer['count'],
-                // Fetch price if needed, or rely on frontend passing it?
-                // Plan said fetch from master.
-                // For now, let's assume simple creation.
-            ]);
-        }
+            foreach ($request->layers as $layer) {
+                $stras->layers()->create([
+                    'size' => $layer['size'],
+                    'count' => $layer['count'],
+                    // Fetch price if needed, or rely on frontend passing it?
+                    // Plan said fetch from master.
+                    // For now, let's assume simple creation.
+                ]);
+            }
+        });
 
         return response()->json(['success' => 'Created successfully']);
     }
 
     public function update(Request $request, $id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:stras,id',
+        ])->validate();
          // Placeholder for update logic if needed heavily
          // For now, focus on create as per request scenario "Add"
          // But I should implementing update as well.
@@ -97,17 +103,19 @@ class StrasController extends Controller
              $data['image_path'] = $request->file('image')->store('stras_images', 'public');
         }
 
-        $stras->update($data);
+        DB::transaction(function () use ($request, $stras, $data) {
+            $stras->update($data);
 
-        if($request->has('layers')){
-             $stras->layers()->delete(); // Simple re-create for layers
-             foreach ($request->layers as $layer) {
-                $stras->layers()->create([
-                    'size' => $layer['size'],
-                    'count' => $layer['count'],
-                ]);
+            if($request->has('layers')){
+                 $stras->layers()->delete(); // Simple re-create for layers
+                 foreach ($request->layers as $layer) {
+                    $stras->layers()->create([
+                        'size' => $layer['size'],
+                        'count' => $layer['count'],
+                    ]);
+                }
             }
-        }
+        });
         
         return response()->json(['success' => 'Updated successfully']);
     }
@@ -117,6 +125,9 @@ class StrasController extends Controller
 
     public function destroy($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:stras,id',
+        ])->validate();
         $stras = Stras::find($id);
         if ($stras) {
             $stras->layers()->delete(); // Soft delete due to trait
@@ -128,23 +139,32 @@ class StrasController extends Controller
 
     public function restart($id)
     {
-        $original = Stras::with('layers')->findOrFail($id);
-        
-        $new = $original->replicate();
-        $new->created_at = now();
-        $new->updated_at = now();
-        $new->save();
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:stras,id',
+        ])->validate();
+        return DB::transaction(function () use ($id) {
+            $original = Stras::with('layers')->findOrFail($id);
+            
+            $new = $original->replicate();
+            $new->created_at = now();
+            $new->updated_at = now();
+            $new->save();
 
-        foreach ($original->layers as $layer) {
-            $newLayer = $layer->replicate();
-            $newLayer->stras_id = $new->id;
-            $newLayer->save();
-        }
+            foreach ($original->layers as $layer) {
+                $newLayer = $layer->replicate();
+                $newLayer->stras_id = $new->id;
+                $newLayer->save();
+            }
 
-        return response()->json(['success' => 'Order restarted (duplicated) successfully']);
+            return response()->json(['success' => 'Order restarted (duplicated) successfully']);
+        });
     }
     public function bulkDelete(Request $request)
     {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:stras,id',
+        ]);
         $ids = $request->ids;
         if (!is_array($ids) || empty($ids)) {
             return response()->json(['error' => 'No items selected'], 400);
@@ -152,11 +172,12 @@ class StrasController extends Controller
 
         $orders = Stras::whereIn('id', $ids)->get();
         
-        foreach ($orders as $order) {
-            $order->layers()->delete();
-            $order->delete();
-        }
-
+        DB::transaction(function () use ($orders) {
+            foreach ($orders as $order) {
+                $order->layers()->delete();
+                $order->delete();
+            }
+        });
 
         return response()->json(['success' => 'Selected orders deleted successfully']);
     }
@@ -174,6 +195,9 @@ class StrasController extends Controller
 
     public function restore($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:stras,id',
+        ])->validate();
         $stras = Stras::onlyTrashed()->find($id);
         if ($stras) {
             $stras->restore();
@@ -185,6 +209,9 @@ class StrasController extends Controller
 
     public function forceDelete($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:stras,id',
+        ])->validate();
          $stras = Stras::onlyTrashed()->find($id);
          if ($stras) {
              $stras->layers()->forceDelete(); // Permanently delete layers
@@ -205,6 +232,10 @@ class StrasController extends Controller
 
     public function updatePrice(Request $request)
     {
+        $request->validate([
+            'id' => 'required|exists:stras_prices,id',
+            'price' => 'required|numeric',
+        ]);
         $id = $request->id;
         $price = $request->price;
         

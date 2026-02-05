@@ -7,6 +7,7 @@ use App\Models\Customers;
 use App\Models\LaserOrder;
 use App\Models\LaserMaterial;
 use App\Models\LaserPrice;
+use Illuminate\Support\Facades\DB;
 
 class LaserController extends Controller
 {
@@ -75,16 +76,20 @@ class LaserController extends Controller
         }
 
         // Create initial order without costs
-        $order = LaserOrder::create($data);
-
-        // Calculate costs using the helper
-        $this->recalculateOrderCost($order);
+        DB::transaction(function () use ($data, $request) {
+            $order = LaserOrder::create($data);
+            // Calculate costs using the helper
+            $this->recalculateOrderCost($order);
+        });
 
         return response()->json(['success' => 'Created successfully']);
     }
 
     public function update(Request $request, $id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:laser_orders,id',
+        ])->validate();
         $order = LaserOrder::findOrFail($id);
          
         $request->validate([
@@ -123,16 +128,20 @@ class LaserController extends Controller
         }
         
         // Update basic data
-        $order->update($data);
-
-        // Recalculate costs
-        $this->recalculateOrderCost($order);
+        DB::transaction(function () use ($order, $data) {
+             $order->update($data);
+             // Recalculate costs
+             $this->recalculateOrderCost($order);
+        });
         
         return response()->json(['success' => 'Updated successfully']);
     }
 
     public function destroy($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:laser_orders,id',
+        ])->validate();
         $order = LaserOrder::find($id);
         if ($order) {
             $order->delete();
@@ -143,18 +152,27 @@ class LaserController extends Controller
 
     public function restart($id)
     {
-        $original = LaserOrder::findOrFail($id);
-        
-        $new = $original->replicate();
-        $new->created_at = now();
-        $new->updated_at = now();
-        $new->save();
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:laser_orders,id',
+        ])->validate();
+        return DB::transaction(function () use ($id) {
+            $original = LaserOrder::findOrFail($id);
+            
+            $new = $original->replicate();
+            $new->created_at = now();
+            $new->updated_at = now();
+            $new->save();
 
-        return response()->json(['success' => 'Order restarted (duplicated) successfully']);
+            return response()->json(['success' => 'Order restarted (duplicated) successfully']);
+        });
     }
 
     public function bulkDelete(Request $request)
     {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:laser_orders,id',
+        ]);
         $ids = $request->ids;
         if (!is_array($ids) || empty($ids)) {
             return response()->json(['error' => 'No items selected'], 400);
@@ -167,6 +185,10 @@ class LaserController extends Controller
 
     public function bulkRecalculate(Request $request)
     {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:laser_orders,id',
+        ]);
         $ids = $request->ids;
         if (!is_array($ids) || empty($ids)) {
             return response()->json(['error' => 'No items selected'], 400);
@@ -241,6 +263,9 @@ class LaserController extends Controller
 
     public function restore($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:laser_orders,id',
+        ])->validate();
         $order = LaserOrder::onlyTrashed()->find($id);
         if ($order) {
             $order->restore();
@@ -251,6 +276,9 @@ class LaserController extends Controller
 
     public function forceDelete($id)
     {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:laser_orders,id',
+        ])->validate();
          $order = LaserOrder::onlyTrashed()->find($id);
          if ($order) {
              $order->forceDelete();
@@ -269,6 +297,10 @@ class LaserController extends Controller
 
     public function updatePrice(Request $request)
     {
+        $request->validate([
+            'type' => 'required|in:material,global',
+            'price' => 'required|numeric',
+        ]);
         // Handle both Material Prices and Global Prices updates
         $type = $request->type; // 'material' or 'global'
         $id = $request->id;
@@ -278,17 +310,19 @@ class LaserController extends Controller
         if ($type == 'material') {
             $material = LaserMaterial::find($id);
             if($material) {
-                $material->price = $price;
-                if($request->name) $material->name = $request->name;
-                $material->save();
-                
-                // Trigger Recalculation for related orders
-                $orders = LaserOrder::where('material_id', $id)->where('source', 'ap_group')->get();
-                foreach($orders as $order) {
-                    $this->recalculateOrderCost($order);
-                }
+                return DB::transaction(function () use ($material, $price, $request, $id) {
+                     $material->price = $price;
+                     if($request->name) $material->name = $request->name;
+                     $material->save();
+                    
+                     // Trigger Recalculation for related orders
+                     $orders = LaserOrder::where('material_id', $id)->where('source', 'ap_group')->get();
+                     foreach($orders as $order) {
+                         $this->recalculateOrderCost($order);
+                     }
 
-                return response()->json(['success' => 'Material price updated and related orders recalculated']);
+                     return response()->json(['success' => 'Material price updated and related orders recalculated']);
+                });
             }
              
              if(!$id && $request->name) {
@@ -298,22 +332,18 @@ class LaserController extends Controller
         } elseif ($type == 'global') {
              $global = LaserPrice::find($id);
              if ($global) {
-                 $global->price = $price;
-                 $global->save();
+                 return DB::transaction(function () use ($global, $price) {
+                     $global->price = $price;
+                     $global->save();
 
-                 // Trigger Recalculation for ALL orders (since global cost affects all)
-                 // Note: Ideally queue this for later if many orders.
-                 // For now, doing it inline.
-                 
-                // Only ap_group orders might use ceylon/material. 
-                // However, operating_cost affects ALL orders.
-                // Re-calculating all orders.
-                $orders = LaserOrder::all();
-                foreach($orders as $order) {
-                    $this->recalculateOrderCost($order);
-                }
+                     // Trigger Recalculation for ALL orders (since global cost affects all)
+                     $orders = LaserOrder::all();
+                     foreach($orders as $order) {
+                         $this->recalculateOrderCost($order);
+                     }
 
-                 return response()->json(['success' => 'Global price updated and all orders recalculated']);
+                     return response()->json(['success' => 'Global price updated and all orders recalculated']);
+                 });
              }
              
              // Create if not exists (e.g. operating_cost being set for first time)
