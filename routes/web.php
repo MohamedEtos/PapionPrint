@@ -6,14 +6,21 @@ use App\Http\Controllers\PrintersController;
 use App\Http\Controllers\PrinterlogsController;
 use Illuminate\Support\Facades\Mail;
 
+Route::get('/test-mail', function () {
+    Mail::raw('Test mail from LunaBlu SMTP', function ($message) {
+        $message->to('etos7plus@gmail.com')
+                ->subject('SMTP Test');
+    });
 
+    return 'Mail sent';
+});
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::prefix('charts')->group(function () {
         Route::get('/meters', [App\Http\Controllers\ChartController::class, 'getMeterData'])->name('charts.meters');
@@ -197,13 +204,6 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
 });
 
 
-Route::get('/test-mail', function () {
-    Mail::raw('Test mail from LunaBlu SMTP', function ($message) {
-        $message->to('etos7plus@gmail.com')
-                ->subject('SMTP Test');
-    });
 
-    return 'Mail sent';
-});
 
 
