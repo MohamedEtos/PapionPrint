@@ -15,7 +15,7 @@
     <meta name="author" content="PIXINVENT">
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Papion System</title>
 
 
     <link rel="apple-touch-icon" href=" {{  asset('core/images/ico/apple-icon-120.png')}}">

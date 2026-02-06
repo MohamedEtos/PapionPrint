@@ -8,6 +8,8 @@ use App\Services\Charts\OrdersChartService;
 use App\Services\Charts\CustomerChartService;
 use App\Services\Charts\ClientRetentionChartService;
 use App\Services\Charts\ConsumptionChartService;
+use App\Services\Charts\StrasOrdersChartService;
+use App\Services\Charts\TarterOrdersChartService;
 use Carbon\Carbon;
 
 class ChartController extends Controller
@@ -17,13 +19,17 @@ class ChartController extends Controller
     protected $customerChartService;
     protected $clientRetentionChartService;
     protected $consumptionChartService;
+    protected $strasOrdersChartService;
+    protected $tarterOrdersChartService;
 
     public function __construct(
         MeterChartService $meterChartService, 
         OrdersChartService $ordersChartService, 
         CustomerChartService $customerChartService,
         ClientRetentionChartService $clientRetentionChartService,
-        ConsumptionChartService $consumptionChartService
+        ConsumptionChartService $consumptionChartService,
+        StrasOrdersChartService $strasOrdersChartService,
+        TarterOrdersChartService $tarterOrdersChartService
     )
     {
         $this->meterChartService = $meterChartService;
@@ -31,6 +37,8 @@ class ChartController extends Controller
         $this->customerChartService = $customerChartService;
         $this->clientRetentionChartService = $clientRetentionChartService;
         $this->consumptionChartService = $consumptionChartService;
+        $this->strasOrdersChartService = $strasOrdersChartService;
+        $this->tarterOrdersChartService = $tarterOrdersChartService;
     }
 
     public function getCustomersData(CustomerChartService $service)
@@ -279,5 +287,17 @@ class ChartController extends Controller
         $type = $request->input('machine', 'stras');
 
         return response()->json($this->consumptionChartService->getStrasTarterConsumption($period, $type));
+    }
+
+    public function getStrasOrdersData(StrasOrdersChartService $service)
+    {
+        $data = $service->getStrasOrdersData();
+        return response()->json($data);
+    }
+
+    public function getTarterOrdersData(TarterOrdersChartService $service)
+    {
+        $data = $service->getTarterOrdersData();
+        return response()->json($data);
     }
 }

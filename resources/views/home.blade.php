@@ -9,7 +9,7 @@
 @section('content')
     <!-- BEGIN: Header-->
 
-    <ul class="main-search-list-defaultlist d-none">
+    <!-- <ul class="main-search-list-defaultlist d-none">
         <li class="d-flex align-items-center"><a class="pb-25" href="#">
                 <h6 class="text-primary mb-0">Files</h6>
             </a></li>
@@ -85,7 +85,7 @@
         <li class="auto-suggestion d-flex align-items-center justify-content-between cursor-pointer"><a class="d-flex align-items-center justify-content-between w-100 py-50">
                 <div class="d-flex justify-content-start"><span class="mr-75 feather icon-alert-circle"></span><span>No results found.</span></div>
             </a></li>
-    </ul>
+    </ul> -->
     <!-- END: Header-->
 
 
@@ -125,11 +125,11 @@
                                 <div class="card-header d-flex flex-column align-items-start pb-0">
                                     <div class="avatar bg-rgba-success p-50 m-0">
                                         <div class="avatar-content">
-                                            <i class="feather icon-credit-card text-success font-medium-5"></i>
+                                            <i class="feather icon-star text-success font-medium-5"></i>
                                         </div>
                                     </div>
-                                    <h2 class="text-bold-700 mt-1">97.5k</h2>
-                                    <p class="mb-0">Revenue Generated</p>
+                                    <h2 class="text-bold-700 mt-1" id="stras-orders-total">0</h2>
+                                    <p class="mb-0">اوردرات استراس</p>
                                 </div>
                                 <div class="card-content">
                                     <div id="line-area-chart-2"></div>
@@ -141,11 +141,11 @@
                                 <div class="card-header d-flex flex-column align-items-start pb-0">
                                     <div class="avatar bg-rgba-danger p-50 m-0">
                                         <div class="avatar-content">
-                                            <i class="feather icon-shopping-cart text-danger font-medium-5"></i>
+                                            <i class="feather icon-disc text-danger font-medium-5"></i>
                                         </div>
                                     </div>
-                                    <h2 class="text-bold-700 mt-1">36%</h2>
-                                    <p class="mb-0">Quarterly Sales</p>
+                                    <h2 class="text-bold-700 mt-1" id="tarter-orders-total">0</h2>
+                                    <p class="mb-0">اوردرات ترتر</p>
                                 </div>
                                 <div class="card-content">
                                     <div  id="line-area-chart-3"></div>
@@ -287,8 +287,8 @@
                                     </div>
                                 </div>
                                 <div class="card-content">
-                                    <div class="card-body">
-                                        <div id="product-order-chart" class="mb-3"></div>
+                                    <div class="card-body" >
+                                        <div id="product-order-chart" class="mb-1"></div>
                                         <!-- Metric 1: Paper Sublimation -->
                                         <div class="chart-info d-flex justify-content-between mb-1">
                                             <div class="series-info d-flex align-items-center">
@@ -416,72 +416,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title"> Statistics</h4>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between mb-25">
-                                            <div class="browser-info">
-                                                <p class="mb-25">Google Chrome</p>
-                                                <h4>73%</h4>
-                                            </div>
-                                            <div class="stastics-info text-right">
-                                                <span>800 <i class="feather icon-arrow-up text-success"></i></span>
-                                                <span class="text-muted d-block">13:16</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress progress-bar-primary mb-2">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="73" aria-valuemin="73" aria-valuemax="100" style="width:73%"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-25">
-                                            <div class="browser-info">
-                                                <p class="mb-25">Opera</p>
-                                                <h4>8%</h4>
-                                            </div>
-                                            <div class="stastics-info text-right">
-                                                <span>-200 <i class="feather icon-arrow-down text-danger"></i></span>
-                                                <span class="text-muted d-block">13:16</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress progress-bar-primary mb-2">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="8" aria-valuemin="8" aria-valuemax="100" style="width:8%"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-25">
-                                            <div class="browser-info">
-                                                <p class="mb-25">Firefox</p>
-                                                <h4>19%</h4>
-                                            </div>
-                                            <div class="stastics-info text-right">
-                                                <span>100 <i class="feather icon-arrow-up text-success"></i></span>
-                                                <span class="text-muted d-block">13:16</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress progress-bar-primary mb-2">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="19" aria-valuemin="19" aria-valuemax="100" style="width:19%"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-25">
-                                            <div class="browser-info">
-                                                <p class="mb-25">Internet Explorer</p>
-                                                <h4>27%</h4>
-                                            </div>
-                                            <div class="stastics-info text-right">
-                                                <span>-450 <i class="feather icon-arrow-down text-danger"></i></span>
-                                                <span class="text-muted d-block">13:16</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress progress-bar-primary mb-50">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="27" aria-valuemin="27" aria-valuemax="100" style="width:27%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
 
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-lg-4 col-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-end">
@@ -703,7 +641,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </section>
                 <!-- Dashboard Ecommerce ends -->
 

@@ -13,9 +13,10 @@ Auth::routes();
 
 
 Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () {
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    Route::prefix('charts')->group(function () {
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->middleware(['role:super-admin|manager'])->name('home');
+
+    Route::prefix('charts')->middleware(['role:super-admin|manager'])->group(function () {
         Route::get('/meters', [App\Http\Controllers\ChartController::class, 'getMeterData'])->name('charts.meters');
         Route::get('/orders', [App\Http\Controllers\ChartController::class, 'getOrdersData'])->name('charts.orders');
         Route::get('/customers', [App\Http\Controllers\ChartController::class, 'getCustomersData'])->name('charts.customers');
@@ -24,9 +25,11 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/inventory-stock', [App\Http\Controllers\ChartController::class, 'getInventoryStockData'])->name('charts.inventory_stock');
         Route::get('/ink-consumption', [App\Http\Controllers\ChartController::class, 'getInkConsumptionData'])->name('charts.ink_consumption');
         Route::get('/stras-tarter-consumption', [App\Http\Controllers\ChartController::class, 'getStrasTarterConsumptionData'])->name('charts.stras_tarter_consumption');
+        Route::get('/stras-orders', [App\Http\Controllers\ChartController::class, 'getStrasOrdersData'])->name('charts.stras_orders');
+        Route::get('/tarter-orders', [App\Http\Controllers\ChartController::class, 'getTarterOrdersData'])->name('charts.tarter_orders');
     });
 
-    Route::prefix('Rollpress')->group(function () {
+    Route::prefix('Rollpress')->middleware(['role:super-admin|manager|press'])->group(function () {
         Route::get('/addpressorder', [App\Http\Controllers\RollpressController::class, 'index'])->name('AddRollpress');
         Route::get('/presslist', [App\Http\Controllers\RollpressController::class, 'presslist'])->name('presslist');
         Route::post('/store', [App\Http\Controllers\RollpressController::class, 'store'])->name('rollpress.store');
@@ -38,30 +41,30 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::delete('/force-delete/{id}', [App\Http\Controllers\RollpressController::class, 'forceDelete'])->name('rollpress.force_delete');
     });
 
-    Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');
-    Route::post('printers/upload-image', [PrintersController::class, 'uploadImage'])->name('printers.upload.image');
-    Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
-    Route::post('printers/delete/{id}', [PrintersController::class, 'destroy'])->name('printers.delete');
-    Route::post('printers/update-status/{id}', [PrintersController::class, 'updateStatus'])->name('printers.update.status');
-    Route::post('printers/update-price/{id}', [PrintersController::class, 'updatePrice'])->name('printers.update.price');
-    Route::post('printers/bulk-delete', [PrintersController::class, 'bulkDelete'])->name('printers.bulk_delete');
-    Route::get('printers/{id}', [PrintersController::class, 'show'])->name('printers.show');
-    Route::put('printers/{id}', [PrintersController::class, 'update'])->name('printers.update');
+    Route::middleware(['role:super-admin|manager|printer'])->group(function () {
+        Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');
+        Route::post('printers/upload-image', [PrintersController::class, 'uploadImage'])->name('printers.upload.image');
+        Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
+        Route::post('printers/delete/{id}', [PrintersController::class, 'destroy'])->name('printers.delete');
+        Route::post('printers/update-status/{id}', [PrintersController::class, 'updateStatus'])->name('printers.update.status');
+        Route::post('printers/update-price/{id}', [PrintersController::class, 'updatePrice'])->name('printers.update.price');
+        Route::post('printers/bulk-delete', [PrintersController::class, 'bulkDelete'])->name('printers.bulk_delete');
+        Route::get('printers/{id}', [PrintersController::class, 'show'])->name('printers.show');
+        Route::put('printers/{id}', [PrintersController::class, 'update'])->name('printers.update');
+        Route::get('print-log', [PrinterlogsController::class, 'printLog'])->name('print_log');
+        Route::post('printers/duplicate/{id}', [PrinterlogsController::class, 'duplicate'])->name('printers.duplicate');
+        // Trash Routes
+        Route::get('trash/printers', [PrintersController::class, 'trash'])->name('printers.trash');
+        Route::post('printers/restore/{id}', [PrintersController::class, 'restore'])->name('printers.restore');
+        Route::delete('printers/force-delete/{id}', [PrintersController::class, 'forceDelete'])->name('printers.force_delete');
+    });
 
 
 
-    Route::get('print-log', [PrinterlogsController::class, 'printLog'])->name('print_log');
-    Route::post('printers/duplicate/{id}', [PrinterlogsController::class, 'duplicate'])->name('printers.duplicate');
 
 
 
-
-
-    // Trash Routes
-    Route::get('trash/printers', [PrintersController::class, 'trash'])->name('printers.trash');
-    Route::post('printers/restore/{id}', [PrintersController::class, 'restore'])->name('printers.restore');
-    Route::delete('printers/force-delete/{id}', [PrintersController::class, 'forceDelete'])->name('printers.force_delete');
-
+    Route::middleware(['role:super-admin|manager'])->group(function () {
 
     // Roles & Permissions
     Route::get('/roles', [App\Http\Controllers\RolesController::class, 'index'])->name('roles.index');
@@ -75,6 +78,10 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::post('/users/update/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('users.update');
     Route::post('/users/delete/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');
 
+    });
+
+    Route::middleware(['role:super-admin|manager'])->group(function () {
+
     // Inventory Routes
     Route::post('/inventory/consume-ink', [App\Http\Controllers\InventoryController::class, 'consumeInk'])->name('inventory.consumeInk');
     Route::get('/inventory', [App\Http\Controllers\InventoryController::class, 'index'])->name('inventory.index');
@@ -83,6 +90,10 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     // Accounts
     Route::get('/accounts', [App\Http\Controllers\AccountsController::class, 'index'])->name('accounts.index');
     Route::post('/accounts/update-price', [App\Http\Controllers\AccountsController::class, 'updatePrice'])->name('accounts.update_price');
+
+    });
+
+    Route::middleware(['role:super-admin|manager'])->group(function () {
 
     // Settings Routes
     Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
@@ -94,8 +105,15 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::delete('/error-logs/{id}', [App\Http\Controllers\Admin\ErrorLogController::class, 'destroy'])->name('admin.error_logs.destroy');
     Route::post('/error-logs/destroy-all', [App\Http\Controllers\Admin\ErrorLogController::class, 'destroyAll'])->name('admin.error_logs.destroy_all');
 
+    // Machine Pricing Routes
+    Route::get('/machines/pricing', [App\Http\Controllers\MachinesController::class, 'pricing'])->name('machines.pricing');
+    Route::post('/machines/pricing/update', [App\Http\Controllers\MachinesController::class, 'updatePrice'])->name('machines.update_price');
+
+    });
+
+
     // Stras Routes
-    Route::prefix('stras')->group(function () {
+    Route::prefix('stras')->middleware(['role:super-admin|manager|stras'])->group(function () {
         Route::get('/', [App\Http\Controllers\StrasController::class, 'index'])->name('stras.index');
         Route::get('/show/{id}', [App\Http\Controllers\StrasController::class, 'show'])->name('stras.show');
         Route::post('/store', [App\Http\Controllers\StrasController::class, 'store'])->name('stras.store');
@@ -116,7 +134,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
 
 
     // Tarter Routes
-    Route::prefix('tarter')->group(function () {
+    Route::prefix('tarter')->middleware(['role:super-admin|manager|strasAndTarter'])->group(function () {
         Route::get('/', [App\Http\Controllers\TarterController::class, 'index'])->name('tarter.index');
         Route::get('/show/{id}', [App\Http\Controllers\TarterController::class, 'show'])->name('tarter.show');
         Route::post('/store', [App\Http\Controllers\TarterController::class, 'store'])->name('tarter.store');
@@ -135,9 +153,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/pricing/update', [App\Http\Controllers\TarterController::class, 'updatePrice'])->name('tarter.update_price');
     }); 
     
-    // Machine Pricing Routes
-    Route::get('/machines/pricing', [App\Http\Controllers\MachinesController::class, 'pricing'])->name('machines.pricing');
-    Route::post('/machines/pricing/update', [App\Http\Controllers\MachinesController::class, 'updatePrice'])->name('machines.update_price');
+
 
     // Notifications
     Route::get('/notifications/latest', [App\Http\Controllers\NotificationsController::class, 'getLatest'])->name('notifications.latest');
@@ -160,7 +176,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     });
 
     // Laser Routes
-    Route::prefix('laser')->group(function () {
+    Route::prefix('laser')->middleware(['role:super-admin|manager|laser'])->group(function () {
         Route::get('/', [App\Http\Controllers\LaserController::class, 'index'])->name('laser.index');
         Route::get('/show/{id}', [App\Http\Controllers\LaserController::class, 'show'])->name('laser.show');
         Route::post('/store', [App\Http\Controllers\LaserController::class, 'store'])->name('laser.store');
@@ -180,14 +196,16 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/pricing/update', [App\Http\Controllers\LaserController::class, 'updatePrice'])->name('laser.update_price');
     });
 
+    Route::middleware(['role:super-admin|manager|salaries'])->group(function () {
     // Attendance & Payroll
     Route::get('/attendance', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/payroll', [App\Http\Controllers\AttendanceController::class, 'payroll'])->name('payroll.index');
+    });
     Route::post('/attendance/check-in', [App\Http\Controllers\AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
     Route::post('/attendance/check-out', [App\Http\Controllers\AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
-    Route::get('/payroll', [App\Http\Controllers\AttendanceController::class, 'payroll'])->name('payroll.index');
 
     // Biometric Attendance Routes
-    Route::prefix('biometric')->name('biometric.')->group(function () {
+    Route::prefix('biometric')->middleware(['role:super-admin|manager|salaries'])->name('biometric.')->group(function () {
         Route::get('/', [App\Http\Controllers\BiometricAttendanceController::class, 'index'])->name('index');
         Route::post('/upload', [App\Http\Controllers\BiometricAttendanceController::class, 'upload'])->name('upload');
         Route::post('/users/update/{id}', [App\Http\Controllers\BiometricAttendanceController::class, 'updateUser'])->name('users.update');

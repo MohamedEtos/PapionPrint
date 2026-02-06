@@ -303,6 +303,203 @@ $(document).ready(function () {
             }
         });
     }
+
+    // Stras Orders Chart Logic
+    var strasOrderChartoptions = {
+        chart: {
+            height: 100,
+            type: 'area',
+            toolbar: {
+                show: false,
+            },
+            sparkline: {
+                enabled: true
+            },
+            grid: {
+                show: false,
+                padding: {
+                    left: 0,
+                    right: 0
+                }
+            },
+        },
+        colors: ['#28C76F'], // Green for Stras
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 2.5
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 0.9,
+                opacityFrom: 0.7,
+                opacityTo: 0.5,
+                stops: [0, 80, 100]
+            }
+        },
+        series: [{
+            name: 'اوردرات استراس',
+            data: []
+        }],
+        xaxis: {
+            labels: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            }
+        },
+        yaxis: [{
+            y: 0,
+            offsetX: 0,
+            offsetY: 0,
+            padding: { left: 0, right: 0 },
+        }],
+        tooltip: {
+            x: { show: true }
+        },
+    };
+
+    var strasOrderChart;
+    if (document.querySelector("#line-area-chart-2")) {
+        strasOrderChart = new ApexCharts(
+            document.querySelector("#line-area-chart-2"),
+            strasOrderChartoptions
+        );
+        strasOrderChart.render();
+        updateStrasOrdersChart();
+    }
+
+    function updateStrasOrdersChart() {
+        $.ajax({
+            url: '/charts/stras-orders',
+            type: 'GET',
+            cache: false,
+            success: function (response) {
+                if (!response) return;
+                $('#stras-orders-total').text(response.totalOrders || 0);
+
+                if (response.labels) {
+                    strasOrderChart.updateOptions({
+                        xaxis: {
+                            categories: response.labels
+                        }
+                    });
+                }
+
+                var seriesData = (response.series && response.series[0]) ? response.series[0].data : [];
+                strasOrderChart.updateSeries([{
+                    name: 'اوردرات استراس',
+                    data: seriesData
+                }]);
+            },
+            error: function (xhr) {
+                console.error("Error fetching stras orders data", xhr);
+            }
+        });
+    }
+
+    // Tarter Orders Chart Logic
+    var tarterOrderChartoptions = {
+        chart: {
+            height: 100,
+            type: 'area',
+            toolbar: {
+                show: false,
+            },
+            sparkline: {
+                enabled: true
+            },
+            grid: {
+                show: false,
+                padding: {
+                    left: 0,
+                    right: 0
+                }
+            },
+        },
+        colors: [$danger], // Red for Tarter
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 2.5
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 0.9,
+                opacityFrom: 0.7,
+                opacityTo: 0.5,
+                stops: [0, 80, 100]
+            }
+        },
+        series: [{
+            name: 'اوردرات ترتر',
+            data: []
+        }],
+        xaxis: {
+            labels: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            }
+        },
+        yaxis: [{
+            y: 0,
+            offsetX: 0,
+            offsetY: 0,
+            padding: { left: 0, right: 0 },
+        }],
+        tooltip: {
+            x: { show: true }
+        },
+    };
+
+    var tarterOrderChart;
+    if (document.querySelector("#line-area-chart-3")) {
+        tarterOrderChart = new ApexCharts(
+            document.querySelector("#line-area-chart-3"),
+            tarterOrderChartoptions
+        );
+        tarterOrderChart.render();
+        updateTarterOrdersChart();
+    }
+
+    function updateTarterOrdersChart() {
+        $.ajax({
+            url: '/charts/tarter-orders',
+            type: 'GET',
+            cache: false,
+            success: function (response) {
+                if (!response) return;
+                $('#tarter-orders-total').text(response.totalOrders || 0);
+
+                if (response.labels) {
+                    tarterOrderChart.updateOptions({
+                        xaxis: {
+                            categories: response.labels
+                        }
+                    });
+                }
+
+                var seriesData = (response.series && response.series[0]) ? response.series[0].data : [];
+                tarterOrderChart.updateSeries([{
+                    name: 'اوردرات ترتر',
+                    data: seriesData
+                }]);
+            },
+            error: function (xhr) {
+                console.error("Error fetching tarter orders data", xhr);
+            }
+        });
+    }
+
     // Customers Chart Logic
     var $primary = '#7367F0';
     var customersChartoptions = {
@@ -668,7 +865,7 @@ $(document).ready(function () {
         },
         plotOptions: {
             radialBar: {
-                size: 150,
+                size: 130,
                 hollow: {
                     size: '20%'
                 },
