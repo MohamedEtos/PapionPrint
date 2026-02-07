@@ -12,6 +12,11 @@ use DB;
 
 class PrintersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الطباعه');
+
+    }
 
     /**
      * Display a listing of the resource.
@@ -225,8 +230,6 @@ class PrintersController extends Controller
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
             'id' => 'required|exists:Printers,id',
         ])->validate();
-
-
 
 
         $request->validate([

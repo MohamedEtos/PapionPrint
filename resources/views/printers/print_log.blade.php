@@ -50,8 +50,12 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
+                                    @can('حذف الطباعه')
                                     <a class="dropdown-item text-danger bulk-delete-btn" href="#"><i class="feather icon-trash "></i>حذف</a>
+                                    @endcan
+                                    @can('الفواتير')
                                     <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-file-text"></i> انشاء  فاتوره  </a>
+                                    @endcan
                                 </div>
                             </div>
                         </div>

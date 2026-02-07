@@ -12,7 +12,7 @@
                         <div class="card auth-card bg-transparent shadow-none rounded-0 mb-0 w-100">
                             <div class="card-content">
                                 <div class="card-body text-center">
-                                    <img src="{{ asset('core/images/pages/503.png') }}" class="img-fluid align-self-center" alt="branding logo">
+                                    <img src="{{ asset('core/images/pages/500.png') }}" class="img-fluid align-self-center" alt="branding logo">
                                     <h1 class="font-large-2 my-1">503 -   الخادم غير متاح</h1>
                                     <p class="p-2">
                                         عذرا، الخادم غير متاح حاليا

@@ -42,7 +42,7 @@
                             </div>
                         </li>
 
-                        @if(auth()->user()->hasRole(['super-admin','manager']))
+                        @can('الفواتير')
                         <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon feather icon-file-text"></i><span class="badge badge-pill badge-primary badge-up cart-item-count">{{ $cartCount ?? 0 }}</span></a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-cart dropdown-menu-right">
                                 <li class="dropdown-menu-header">
@@ -88,7 +88,7 @@
                             </ul>
                         </li>
 
-                        @endif
+                        @endcan
 
 
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">

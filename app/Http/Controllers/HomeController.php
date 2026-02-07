@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    use \App\Traits\RoleRedirectTrait;
+
     /**
      * Create a new controller instance.
      *
@@ -18,7 +20,9 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(['permission:الاحصائيات']);
     }
+
 
     /**
      * Show the application dashboard.
@@ -32,5 +36,15 @@ class HomeController extends Controller
             ->first();
 
         return view('home', compact('todayAttendance'));
+    }
+
+    /**
+     * Redirect to the appropriate dashboard based on user role.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function dashboard()
+    {
+        return redirect($this->getRedirectPath());
     }
 }

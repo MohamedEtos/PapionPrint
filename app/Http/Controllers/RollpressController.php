@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\DB;
 
 class RollpressController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:المكبس');
+    }
 
     public function index()
     {
@@ -29,18 +33,25 @@ class RollpressController extends Controller
      */
     public function presslist(Request $request)
     {
-        $Orders = Printers::with('printingprices','ordersImgs','rollpress')
+        $ordersQuery = Printers::with('printingprices','ordersImgs','rollpress')
         ->where('archive', '1')
         ->whereHas('machines', function ($query) {
             $query->where('name', 'sublimation');
         })
         ->whereDoesntHave('rollpress', function ($query) {
             $query->where('status', 1);
-        })
-        ->get();
-        $Rolls = Rollpress::with('customer', 'order.customers', 'order.ordersImgs')
-            ->where('status', '!=', 1)
-            ->get();
+        });
+
+        $rollsQuery = Rollpress::with('customer', 'order.customers', 'order.ordersImgs')
+            ->where('status', '!=', 1);
+
+        if (Auth::user()->can('المكبس') && !Auth::user()->can('الفواتير')) {
+            $ordersQuery->take(10);
+            $rollsQuery->take(10);
+        }
+
+        $Orders = $ordersQuery->get();
+        $Rolls = $rollsQuery->get();
         $customers = Customers::all();
         $machines = Machines::all();
 

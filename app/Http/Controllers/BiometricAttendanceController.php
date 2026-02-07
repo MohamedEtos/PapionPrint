@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class BiometricAttendanceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الرواتب');
+    }
     public function index(Request $request)
     {
         $query = BiometricAttendance::with('biometricUser');

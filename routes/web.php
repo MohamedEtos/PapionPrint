@@ -15,6 +15,8 @@ Auth::routes();
 Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->middleware(['permission:الاحصائيات'])->name('home');
+    
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 
     Route::prefix('charts')->middleware(['permission:الاحصائيات'])->group(function () {
         Route::get('/meters', [App\Http\Controllers\ChartController::class, 'getMeterData'])->name('charts.meters');

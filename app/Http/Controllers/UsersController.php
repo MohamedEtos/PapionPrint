@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:super-admin');
+    }
     public function index()
     {
         $users = User::with('roles')->get();

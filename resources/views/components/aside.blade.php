@@ -2,7 +2,7 @@
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
-                <li class="nav-item mr-auto"><a class="navbar-brand" href="{{route('home')}}">
+                <li class="nav-item mr-auto"><a class="navbar-brand" href="{{route('dashboard')}}">
                         <h2 class="brand-text mb-0">Papion System</h2>
                     </a></li>
                 <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
@@ -12,15 +12,13 @@
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 
-                @if(auth()->user()->hasRole(['super-admin','manager']))
-                <li class=" nav-item"><a href="index.html"><i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Papion</span><span class="badge badge badge-warning badge-pill float-right mr-2">2</span></a>
+                <li class=" nav-item"><a href="index.html"><i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Papion</span><span class="badge badge badge-warning badge-pill float-right mr-2"></span></a>
                     <ul class="menu-content">
 
-                        <li class="{{ request()->routeIs('home') ? 'active' : '' }}"><a href="{{route('home')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="eCommerce">الرئيسية</span></a>
+                        <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><a href="{{route('dashboard')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="eCommerce">الرئيسية</span></a>
                         </li>
                     </ul>
                 </li>
-                @endif                
 
                 @if(auth()->user()->can(['الطباعه']))
                 <li class=" navigation-header"><span>الطباعة</span>

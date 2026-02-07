@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class MachinesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الفواتير');
+    }
     public function pricing()
     {
         $machines = Machines::all();

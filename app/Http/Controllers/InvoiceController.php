@@ -20,6 +20,10 @@ use App\Models\Machines;
 
 class InvoiceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الفواتير');
+    }
     public function showCart()
     {
         // Get current user's draft invoice

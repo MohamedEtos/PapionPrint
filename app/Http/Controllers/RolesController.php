@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class RolesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:super-admin');
+    }
     public function index()
     {
         $roles = Role::with('permissions')->get();

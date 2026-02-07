@@ -98,7 +98,9 @@
                                     <td class="product-price" title="{{ $Order->deleted_at }}">{{ $Order->deleted_at->locale('ar')->diffForHumans() }}</td>
                                     <td class="product-action">
                                         <span class="action-restore" data-url="{{ route('printers.restore', $Order->id) }}" title="استرجاع"><i class="feather icon-rotate-ccw"></i></span>
-                                        <span class="action-delete-forever" data-url="{{ route('printers.force_delete', $Order->id) }}" title="حذف نهائي"><i class="feather icon-trash-2"></i></span>
+                                        @can('حذف الطباعه')
+                                            <span class="action-delete-forever" data-url="{{ route('printers.force_delete', $Order->id) }}" title="حذف نهائي"><i class="feather icon-trash-2"></i></span>
+                                        @endcan
                                     </td>
                                 </tr>
                                 @endforeach

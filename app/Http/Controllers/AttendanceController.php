@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الرواتب')->only(['index', 'payroll']);
+        $this->middleware('permission:المكبس')->only(['checkIn', 'checkOut']);
+    }
     public function index()
     {
         if (Auth::user()->hasRole('admin')) {

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class StrasController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الاستراس');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -16,7 +20,13 @@ class StrasController extends Controller
     {
         $customers = Customers::all();
         $prices = \App\Models\StrasPrice::all();
-        $orders = Stras::with(['layers', 'customer'])->orderBy('created_at', 'desc')->get();
+        $query = Stras::with(['layers', 'customer'])->orderBy('created_at', 'desc');
+
+        if (auth()->user()->can('الاستراس') && !auth()->user()->can('الفواتير')) {
+            $query->take(10);
+        }
+
+        $orders = $query->get();
         return view('stras.index',
         [
             'customers' => $customers,

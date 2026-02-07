@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class TarterController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الترتر');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -18,7 +22,13 @@ class TarterController extends Controller
     {
         $customers = Customers::all();
         $prices = TarterPrice::all();
-        $orders = Tarter::with(['layers', 'customer'])->orderBy('created_at', 'desc')->get();
+        $query = Tarter::with(['layers', 'customer'])->orderBy('created_at', 'desc');
+
+        if (auth()->user()->can('الترتر') && !auth()->user()->can('الفواتير')) {
+            $query->take(10);
+        }
+
+        $orders = $query->get();
         return view('tarter.index',
         [
             'customers' => $customers,

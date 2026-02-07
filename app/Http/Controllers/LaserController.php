@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class LaserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الليزر');
+    }
     /**
      * Display a listing of the resource.
      */

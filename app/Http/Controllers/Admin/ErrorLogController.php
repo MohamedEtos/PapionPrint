@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class ErrorLogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:تقارير الاخطاء');
+    }
     public function index()
     {
         $logs = ErrorLog::latest()->paginate(20);

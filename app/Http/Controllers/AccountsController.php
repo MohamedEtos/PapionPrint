@@ -8,6 +8,10 @@ use App\Models\Printingprices;
 
 class AccountsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:المخزن');
+    }
     public function index()
     {
         // Get active orders (not archived) with necessary relationships

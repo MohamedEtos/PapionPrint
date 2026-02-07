@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:الفواتير');
+    }
     public function getLatest()
     {
         $notifications = Notifications::orderBy('created_at', 'desc')

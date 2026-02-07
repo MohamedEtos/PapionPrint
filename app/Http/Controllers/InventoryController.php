@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class InventoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:المخزن');
+    }
     //
     public function consumeInk(Request $request)
     {

@@ -39,6 +39,7 @@ class ChartController extends Controller
         $this->consumptionChartService = $consumptionChartService;
         $this->strasOrdersChartService = $strasOrdersChartService;
         $this->tarterOrdersChartService = $tarterOrdersChartService;
+        $this->middleware('permission:الاحصائيات');
     }
 
     public function getCustomersData(CustomerChartService $service)

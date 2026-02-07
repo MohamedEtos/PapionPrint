@@ -19,6 +19,10 @@
             </div>
         </div>
     </div>
+           <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
     <div class="content-body">
          <div class="card">
             <div class="card-header">
@@ -81,5 +85,8 @@
             </div>
         </div>
     </div>
+</div>
+</div>
+</div>
 </div>
 @endsection

@@ -24,6 +24,17 @@ class PrinterlogsController extends Controller
             $query = Printers::with(['printingprices', 'ordersImgs', 'customers', 'machines', 'user', 'user2'])
                 ->where('archive', 1);
 
+            // Restrict Visibility: printing ONLY -> 10 latest orders
+            if (auth()->check() && auth()->user()->can('الطباعه') && !auth()->user()->can('الفواتير')) {
+                // Get IDs of latest 10
+                $latestIds = Printers::where('archive', 1)
+                    ->orderBy('id', 'desc')
+                    ->take(10)
+                    ->pluck('id');
+                
+                $query->whereIn('id', $latestIds);
+            }
+
             // Date Filter
             if ($request->has('min') && $request->min != '') {
                 $query->whereDate('created_at', '>=', $request->min);
