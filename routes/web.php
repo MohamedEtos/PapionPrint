@@ -42,10 +42,14 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/restore/{id}', [App\Http\Controllers\RollpressController::class, 'restore'])->name('rollpress.restore');
         Route::delete('/force-delete/{id}', [App\Http\Controllers\RollpressController::class, 'forceDelete'])->name('rollpress.force_delete');
             
+
+    });
+
+    Route::middleware(['permission:المكبس'])->group(function () {
         Route::post('/attendance/check-in', [App\Http\Controllers\AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
         Route::post('/attendance/check-out', [App\Http\Controllers\AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
     });
-
+    
     Route::middleware(['permission:الطباعه'])->group(function () {
         Route::get('AddPrintOrders', [PrintersController::class, 'index'])->name('AddPrintOrders');
         Route::post('printers/upload-image', [PrintersController::class, 'uploadImage'])->name('printers.upload.image');
