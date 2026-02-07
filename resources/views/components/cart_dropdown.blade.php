@@ -13,7 +13,7 @@
             }
             $imgUrl = $imgPath ? asset('storage/' . $imgPath) : null;
         @endphp
-        <div class="media align-items-center">
+        <div class="media align-items-center justify-content-between">
             <a class="d-flex" href="{{ route('invoice.create') }}">
                 <div class="media-left d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
                     @if($imgUrl)
@@ -31,7 +31,7 @@
                     </span>
                 </div>
             </a>
-            <div class="media-right" style="padding: 0 10px;">
+            <div class="media-right " style="padding: 0 10px;">
                 <a href="#" class="text-danger remove-cart-item" data-id="{{ $cItem->id }}">
                     <i class="feather icon-trash-2"></i>
                 </a>

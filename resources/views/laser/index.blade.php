@@ -66,9 +66,13 @@
                                     الإجراءات
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
+                                    @if(auth()->user()->can('الفواتير'))
                                     <a class="dropdown-item" href="javascript:void(0)" id="bulk-recalc-btn"><i class="feather icon-refresh-cw"></i> تحديث الاسعار</a>
+                                    @endif
                                     <a class="dropdown-item" href="javascript:void(0)" id="bulk-delete-btn"><i class="feather icon-trash"></i> حذف المحدد</a>
+                                    @if(auth()->user()->can('الفواتير'))
                                     <a class="dropdown-item" href="javascript:void(0)" onclick="window.addToInvoice()"><i class="feather icon-file-plus"></i> اضافة للفاتورة</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -152,7 +156,8 @@
                                 </tr>
                                 @endforeach
                             </tbody>
-                             <tfoot>
+                            @if(auth()->user()->can('الفواتير'))
+                            <tfoot>
                                 <tr>
                                     <td colspan="16">
                                         <div id="laser-calculator-results" class="alert alert-primary mb-0" style="display:none; font-weight: bold; font-size: 1.1em;">
@@ -161,6 +166,7 @@
                                     </td>
                                 </tr>
                             </tfoot>
+                            @endif
                         </table>
                     </div>
                 </section>
@@ -195,7 +201,7 @@
                             <div class="col-md-6 form-group">
                                 <label>المصدر</label>
                                 <select class="form-control" name="source" id="source-select">
-                                    <option value="ap_group">AP Group</option>
+                                    <option value="ap_group">المصنع</option>
                                     <option value="client">العميل</option>
                                 </select>
                             </div>
@@ -258,7 +264,7 @@
                                 <label>ملاحظات</label>
                                 <textarea class="form-control" name="notes"></textarea>
                             </div>
-
+                            @if(auth()->user()->can('الفواتير'))
                              <div class="col-md-12">
                                 <div class="alert alert-info">
                                     <div class="row">
@@ -273,6 +279,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </form>
                 </div>

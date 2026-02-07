@@ -41,6 +41,8 @@
                                 <ul class="search-list search-list-main"></ul>
                             </div>
                         </li>
+
+                        @if(auth()->user()->hasRole(['super-admin','manager']))
                         <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon feather icon-file-text"></i><span class="badge badge-pill badge-primary badge-up cart-item-count">{{ $cartCount ?? 0 }}</span></a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-cart dropdown-menu-right">
                                 <li class="dropdown-menu-header">
@@ -85,6 +87,10 @@
                                 <li class="dropdown-menu-footer"><a class="dropdown-item p-1 text-center" href="{{ route('notifications.index') }}">View all notifications</a></li>
                             </ul>
                         </li>
+
+                        @endif
+
+
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{ Auth::user()->name ?? '-'}}</span><span class="user-status">Available</span></div>
                                 <span>

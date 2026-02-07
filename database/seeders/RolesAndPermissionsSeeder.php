@@ -18,40 +18,34 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create permissions
 
+        $designer = Permission::create(['name' => 'التصميم', 'guard_name' => 'web']);
         $print = Permission::create(['name' => 'الطباعه', 'guard_name' => 'web']);
+        $print = Permission::create(['name' => 'حذف الطباعه', 'guard_name' => 'web']);
+        $print = Permission::create(['name' => 'تعديل الطباعه', 'guard_name' => 'web']);
         $stras = Permission::create(['name' => 'الاستراس', 'guard_name' => 'web']);
+        $stras = Permission::create(['name' => 'حذف الاستراس', 'guard_name' => 'web']);
+        $stras = Permission::create(['name' => 'تعديل الاستراس', 'guard_name' => 'web']);
+        $tarter = Permission::create(['name' => 'الترتر', 'guard_name' => 'web']);
+        $tarter = Permission::create(['name' => 'حذف الترتر', 'guard_name' => 'web']);
+        $tarter = Permission::create(['name' => 'تعديل الترتر', 'guard_name' => 'web']);
         $press = Permission::create(['name' => 'المكبس', 'guard_name' => 'web']);
+        $press = Permission::create(['name' => 'حذف المكبس', 'guard_name' => 'web']);
+        $press = Permission::create(['name' => 'تعديل المكبس', 'guard_name' => 'web']);
         $laser = Permission::create(['name' => 'الليزر', 'guard_name' => 'web']);
+        $laser = Permission::create(['name' => 'حذف الليزر', 'guard_name' => 'web']);
+        $laser = Permission::create(['name' => 'تعديل الليزر', 'guard_name' => 'web']);
         $inventory = Permission::create(['name' => 'المخزن', 'guard_name' => 'web']);
+        $customers = Permission::create(['name' => 'العملاء', 'guard_name' => 'web']);
+        $statistics = Permission::create(['name' => 'الاحصائيات', 'guard_name' => 'web']);
         $invoices = Permission::create(['name' => 'الفواتير', 'guard_name' => 'web']);
         $salaries = Permission::create(['name' => 'الرواتب', 'guard_name' => 'web']);
-        $customers = Permission::create(['name' => 'العملاء', 'guard_name' => 'web']);
+        $error_reports = Permission::create(['name' => 'تقارير الاخطاء', 'guard_name' => 'web']);
 
 
         // create roles and assign created permissions
 
         // this can be done as separate statements
-        $role = Role::create(['name' => 'printer', 'guard_name' => 'web']);
-        $role->givePermissionTo($print,$inventory);
 
-        // or may be done by chaining
-        $role = Role::create(['name' => 'strasAndTarter', 'guard_name' => 'web']);
-        $role->givePermissionTo([$strasAndTarter]);
-
-        $role = Role::create(['name' => 'press', 'guard_name' => 'web']);
-        $role->givePermissionTo([$press]);
-
-        $role = Role::create(['name' => 'laser', 'guard_name' => 'web']);
-        $role->givePermissionTo([$laser]);
-
-        $role = Role::create(['name' => 'salaries', 'guard_name' => 'web']);
-        $role->givePermissionTo([$salaries]);
-
-        $role = Role::create(['name' => 'customers', 'guard_name' => 'web']);
-        $role->givePermissionTo([$customers]);
-
-        $role = Role::create(['name' => 'manager', 'guard_name' => 'web']);
-        $role->givePermissionTo([$print,$strasAndTarter,$press,$laser,$inventory,$invoices,$salaries,$customers]);
 
         $role = Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
         $role->givePermissionTo(Permission::all());

@@ -188,7 +188,9 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" href="javascript:void(0)" id="bulk-delete-btn"><i class="feather icon-trash"></i> حذف المحدد</a>
-                                    <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-file-text"></i> انشاء  فاتوره  </a>
+                                    @if(auth()->user()->can(['الفواتير']))
+                                        <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-file-text"></i> انشاء  فاتوره  </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -271,6 +273,7 @@
                                 @endforeach
 
                             </tbody>
+                            @if(auth()->user()->can(['الفواتير']))
                              <tfoot>
                                 <tr>
                                     <td colspan="10">
@@ -280,6 +283,7 @@
                                     </td>
                                 </tr>
                             </tfoot>
+                            @endif
                         </table>
                     </div> 
                     <!-- dataTable ends -->

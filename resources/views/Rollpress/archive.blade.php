@@ -224,7 +224,9 @@
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item bulk-delete-btn" href="#"><i class="feather icon-trash"></i> جذف </a>
+                        @if(auth()->user()->can('الفواتير'))
                         <a class="dropdown-item add-to-invoice-btn" href="#"><i class="feather icon-file-text"></i> انشاء  فاتوره  </a>
+                        @endif
                     </div>
                 </div>
 

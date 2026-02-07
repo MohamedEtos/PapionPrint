@@ -20,8 +20,18 @@ $(document).ready(function () {
     $('.action-edit').on("click", function (e) {
         e.stopPropagation();
         var $row = $(this).closest('td').parent('tr');
-        var roleId = $row.find('.role_id').val();
-        var roleName = $row.find('.role-name').text();
+        // Use data attributes directly from the button 
+        var roleId = $(this).data('id');
+        var roleName = $(this).data('name');
+
+        // Fallback or additional logic if needed (e.g., getting permissions from row)
+        if (!roleId) {
+             roleId = $row.find('.role_id').val();
+        }
+        if (!roleName) {
+             roleName = $row.find('.role-name').text().trim();
+        }
+        
         var permissions = [];
 
         $row.find('.perm-item').each(function () {

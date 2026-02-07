@@ -12,6 +12,7 @@
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 
+                @if(auth()->user()->hasRole(['super-admin','manager']))
                 <li class=" nav-item"><a href="index.html"><i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Papion</span><span class="badge badge badge-warning badge-pill float-right mr-2">2</span></a>
                     <ul class="menu-content">
 
@@ -19,9 +20,9 @@
                         </li>
                     </ul>
                 </li>
-                
+                @endif                
 
-                @if(auth()->user()->hasRole('printer') || auth()->user()->hasRole('super-admin'))
+                @if(auth()->user()->can(['الطباعه']))
                 <li class=" navigation-header"><span>الطباعة</span>
                 </li>
                 <li class=" nav-item"><a href="#"><i class="feather icon-printer"></i><span class="menu-title" data-i18n="Ecommerce">الطباعة</span></a>
@@ -35,15 +36,18 @@
                         </li>
                         <!-- <li class="{{ request()->routeIs('accounts.index') ? 'active' : '' }}"><a href="{{ route('accounts.index') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Accounts">الحسابات</span></a>
                         </li> -->
+                        @if(auth()->user()->can('الفواتير'))
                         <li class="{{ request()->routeIs('machines.pricing') ? 'active' : '' }}"><a href="{{ route('machines.pricing') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Accounts">اسعار الطباعه</span></a>
                         </li>
+                        @endif
                         <!-- <li><a href="app-ecommerce-wishlist.html"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Wish List">المكبس</span></a>
                         </li> -->
 
                     </ul>
                 </li>
                 @endif
-                @if(auth()->user()->hasRole('press') || auth()->user()->hasRole('super-admin'))
+
+                @if(auth()->user()->can('المكبس'))
                 <li class=" nav-item"><a href="#"><i class="feather icon-sunset"></i><span class="menu-title" data-i18n="Ecommerce">المكبس</span></a>
                     <ul class="menu-content">
                
@@ -57,47 +61,54 @@
                     </ul>
                 </li>
                 @endif
-                @if(auth()->user()->hasRole('stras') || auth()->user()->hasRole('super-admin'))
+
+                @if(auth()->user()->can(['الاستراس']))
                 {{-- Stras Menu Item --}}
                 <li class=" nav-item"><a href="#"><i class="feather icon-star"></i><span class="menu-title" data-i18n="Ecommerce">الاستراس</span></a>
                     <ul class="menu-content">
                         <li class="{{ request()->routeIs('stras.index') ? 'active' : '' }}"><a href="{{route('stras.index')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اوردات الاستراس</span></a>
                         </li>
+                        @if(auth()->user()->can('الفواتير'))
                         <li class="{{ request()->routeIs('stras.pricing') ? 'active' : '' }}"><a href="{{ route('stras.pricing') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اسعار الخامات</span></a>
                         </li>
+                        @endif
                         <li class="{{ request()->routeIs('stras.trash') ? 'active' : '' }}"><a href="{{ route('stras.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
                         </li>
                     </ul>
                 </li>
     
 @endif
-                @if(auth()->user()->hasRole('tarter') || auth()->user()->hasRole('super-admin'))
+                @if(auth()->user()->can(['الترتر']))
                 {{-- Tarter Menu Item --}}
                 <li class=" nav-item"><a href="#"><i class="feather icon-disc"></i><span class="menu-title" data-i18n="Ecommerce">الترتر</span></a>
                     <ul class="menu-content">
                         <li class="{{ request()->routeIs('tarter.index') ? 'active' : '' }}"><a href="{{route('tarter.index')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اوردات الترتر</span></a>
                         </li>
+                        @if(auth()->user()->can('الفواتير'))
                         <li class="{{ request()->routeIs('tarter.pricing') ? 'active' : '' }}"><a href="{{ route('tarter.pricing') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اسعار الخامات</span></a>
                         </li>
+                        @endif
                         <li class="{{ request()->routeIs('tarter.trash') ? 'active' : '' }}"><a href="{{ route('tarter.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
                         </li>
                     </ul>
                 </li>
                 @endif
-                @if(auth()->user()->hasRole('laser') || auth()->user()->hasRole('super-admin'))
+                @if(auth()->user()->can(['الليزر']))
                 {{-- Laser Menu Item --}}
                 <li class=" nav-item"><a href="#"><i class="feather icon-loader"></i><span class="menu-title" data-i18n="Ecommerce">الليزر</span></a>
                     <ul class="menu-content">
                         <li class="{{ request()->routeIs('laser.index') ? 'active' : '' }}"><a href="{{route('laser.index')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اوردات الليزر</span></a>
                         </li>
+                        @if(auth()->user()->can(['الفواتير']))
                         <li class="{{ request()->routeIs('laser.pricing') ? 'active' : '' }}"><a href="{{ route('laser.pricing') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">اسعار الخامات</span></a>
                         </li>
+                        @endif
                         <li class="{{ request()->routeIs('laser.trash') ? 'active' : '' }}"><a href="{{ route('laser.trash') }}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="Shop">سلة المحذوفات</span></a>
                         </li>
                     </ul>
                 </li>
                 @endif
-                @if(auth()->user()->hasRole('inventory') || auth()->user()->hasRole('super-admin'))
+                @if(auth()->user()->can(['المخزن']))
                 <li class=" nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}">
                     <a href="{{ route('inventory.index') }}">
                         <i class="feather icon-box"></i>
@@ -105,7 +116,7 @@
                     </a>
                 </li>
                 @endif
-                @if(auth()->user()->hasRole('invoice') || auth()->user()->hasRole('super-admin'))
+                @if(auth()->user()->can(['الفواتير']))
                 <li class=" nav-item"><a href="#"><i class="feather icon-file-text"></i><span class="menu-title" data-i18n="Ecommerce">الفواتير</span></a>
                     <ul class="menu-content">
 
@@ -126,7 +137,7 @@
                     </ul>
                 </li>
                 @endif
-                @if(auth()->user()->hasRole('users') || auth()->user()->hasRole('super-admin'))
+                @if(auth()->user()->hasRole('super-admin'))
                 <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="Ecommerce">المستخدمين والصلاحيات</span></a>
                     <ul class="menu-content">
                         <li class="{{ request()->routeIs('users.index') ? 'active' : '' }} nav-item"><a href="{{ route('users.index') }}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Users">المستخدمين</span></a>
@@ -138,7 +149,7 @@
                     </ul>
                 </li>
                 @endif
-                @if(auth()->user()->hasRole('salaries') || auth()->user()->hasRole('super-admin'))
+                @if(auth()->user()->can(['الرواتب']))
                 <li class="ac nav-item"><a href="#"><i class="feather icon-dollar-sign"></i><span class="menu-title" data-i18n="Ecommerce">الرواتب</span></a>
                     <ul class="menu-content">
                         <li class=" nav-item {{ request()->routeIs('payroll.*') ? 'active' : '' }}">
@@ -181,7 +192,9 @@
                         <span class="menu-title" data-i18n="Settings">اعدادات الموقع</span>
                     </a>
                 </li>
+                @endif
 
+                @if(auth()->user()->can(['تقارير الاخطاء']))
                 <li class=" nav-item {{ request()->routeIs('admin.error_logs.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.error_logs.index') }}">
                         <i class="feather icon-alert-triangle"></i>
@@ -189,7 +202,7 @@
                     </a>
                 </li>
                 @endif
-                
+                            
 
 
     

@@ -63,53 +63,43 @@ class LoginController extends Controller
         }
         
         // Printer Role - Printing Orders
-        if ($user->hasRole('printer')) {
+        if ($user->can('الطباعه')) {
             return redirect()->route('AddPrintOrders');
         }
         
         // Stras Role - Stras Orders
-        if ($user->hasRole('stras')) {
+        if ($user->can('الاستراس')) {
             return redirect()->route('stras.index');
         }
         
         // Tarter Role - Tarter Orders
-        if ($user->hasRole('tarter')) {
+        if ($user->can('الترتر')) {
             return redirect()->route('tarter.index');
         }
         
         // Press Role - Press Orders
-        if ($user->hasRole('press')) {
+        if ($user->can('المكبس')) {
             return redirect()->route('presslist');
         }
         
         // Laser Role - Laser Orders
-        if ($user->hasRole('laser')) {
+        if ($user->can('الليزر')) {
             return redirect()->route('laser.index');
         }
         
         // Salaries Role - Payroll
-        if ($user->hasRole('salaries')) {
+        if ($user->can('الرواتب')) {
             return redirect()->route('payroll.index');
         }
         
-        // Customers Role - Home (or create specific page)
-        if ($user->hasRole('customers')) {
-            return redirect()->route('home');
-        }
-        
         // Invoice Role - Invoice Page
-        if ($user->hasRole('invoice')) {
+        if ($user->can('الفواتير')) {
             return redirect()->route('invoice.create');
         }
         
         // Inventory Role - Inventory Page
-        if ($user->hasRole('inventory')) {
+        if ($user->can('المخزن')) {
             return redirect()->route('inventory.index');
-        }
-        
-        // Users Management Role
-        if ($user->hasRole('users')) {
-            return redirect()->route('users.index');
         }
         
         // Default redirect to home

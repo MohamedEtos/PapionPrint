@@ -26,7 +26,8 @@
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
 
-                        <!-- Attendance Card -->
+                <!-- Attendance Card -->
+                @if(auth()->user()->can('المكبس') && !auth()->user()->can('الطباعه'))
                 <div class="row">
                     <div class="col-12">
                         <div class="card bg-gradient-primary">
@@ -55,6 +56,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <!-- Attendance Card Ends -->
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
@@ -74,14 +76,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
-                    <div class="form-group breadcrum-right">
-                        <div class="dropdown">
-                            <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather icon-settings"></i></button>
-                            <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Chat</a><a class="dropdown-item" href="#">Email</a><a class="dropdown-item" href="#">Calendar</a></div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
             <div class="content-body">
                 <!-- Form wizard with step validation section start -->
@@ -223,7 +218,9 @@
                                     الإجراءات
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
+                                    @if(auth()->user()->can('الفواتير'))
                                     <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-shopping-cart"></i> اضافة للفاتورة</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
