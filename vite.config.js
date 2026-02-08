@@ -42,6 +42,7 @@ export default defineConfig({
                 'resources/js/pages/laser.js',
                 'resources/js/pages/tarter.js',
                 'resources/js/notifications.js',
+                'resources/js/pages/roles.js',
             ],
             refresh: true,
         }),
