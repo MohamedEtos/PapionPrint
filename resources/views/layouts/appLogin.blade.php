@@ -26,25 +26,9 @@
     <!-- Scripts -->
         <script src="{{ asset('core/vendors/js/vendors.min.js') }}"></script>
 
-    <!-- @vite([  'resources/css/app.css','resources/js/app.js']) -->
+    @vite([  'resources/css/app.css','resources/js/app.js'])
 
-    @vite([
-        'resources/core/vendors/css/vendors-rtl.min.css',
-        'resources/core/css-rtl/bootstrap.css',
-        'resources/core/css-rtl/bootstrap-extended.css',
-        'resources/core/css-rtl/colors.css',
-        'resources/core/css-rtl/components.css',
-        'resources/core/css-rtl/themes/dark-layout.css',
-        'resources/core/css-rtl/themes/semi-dark-layout.css',
-        'resources/core/css-rtl/core/menu/menu-types/vertical-menu.css',
-        'resources/core/css-rtl/core/colors/palette-gradient.css',
-        'resources/core/css-rtl/pages/authentication.css',
-        'resources/core/css-rtl/custom-rtl.css',
 
-        'resources/core/js/core/app-menu.js',
-        'resources/core/js/core/app.js',
-        'resources/core/js/scripts/components.js',
-    ])
 
     @yield('css')
 
