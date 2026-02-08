@@ -2235,6 +2235,12 @@
     "src": "resources/js/pages/presslist.js",
     "isEntry": true
   },
+  "resources/js/pages/roles.js": {
+    "file": "assets/roles-CqD2w3TU.js",
+    "name": "roles",
+    "src": "resources/js/pages/roles.js",
+    "isEntry": true
+  },
   "resources/js/pages/rollpress_archive.js": {
     "file": "assets/rollpress_archive-aiD3qgds.js",
     "name": "rollpress_archive",
