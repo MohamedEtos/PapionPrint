@@ -222,6 +222,7 @@ $(document).ready(function () {
                 padding: {
                     left: 0,
                     right: 0
+                    
                 }
             },
         },

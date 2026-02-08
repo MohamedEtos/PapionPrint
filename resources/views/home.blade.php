@@ -163,8 +163,8 @@
                                     <h2 class="text-bold-700 mt-1" id="orders-received-total">0</h2>
                                     <p class="mb-0">اوردرات طباعه </p>
                                 </div>
-                                <div class="card-content">
-                                    <div  id="line-area-chart-4"></div>
+                                <div class="card-content ">
+                                    <div id="line-area-chart-4"></div>
                                 </div>
                             </div>
                         </div>
