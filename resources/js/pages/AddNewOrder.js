@@ -2,24 +2,71 @@ $(document).ready(function () {
 
   // culculate meters 
 
-  $('#data-copies, #data-height,  #data-price ,#data-pic-copies').on('input', function () {
+  // Calculate & Update Prices
+  $('#data-copies, #data-height, #data-price, #data-pic-copies, #data-machine, #data-pass').on('input change', function () {
     var copies = parseFloat($('#data-copies').val()) || 0;
     var height = parseFloat($('#data-height').val()) || 0;
-    var price = parseFloat($('#data-price').val()) || 0;
 
+    // Get Dynamic Price Per Meter based on Machine & Pass
+    var machineId = $('#data-machine').val();
+    var pass = $('#data-pass').val();
+    var pricePerMeter = parseFloat($('#data-price').val()) || 0; // Default to current input
+
+
+
+    // Separate Handler for updating Price from Machine/Pass selection
+      console.log('Machine/Pass changed');
+      var machineId = $('#data-machine').val();
+      var pass = $('#data-pass').val();
+      console.log('Machine ID:', machineId, 'Pass:', pass);
+
+      if (machineId && window.papionInvData && window.papionInvData.machines) {
+        var machine = window.papionInvData.machines.find(m => m.id == machineId);
+        console.log('Found Machine:', machine);
+        if (machine) {
+          var price = 0;
+          if (pass == 4) {
+            price = parseFloat(machine.price_4_pass);
+          } else if (pass == 6) {
+            price = parseFloat(machine.price_6_pass);
+          } else {
+            price = parseFloat(machine.price_1_pass);
+          }
+          console.log('New Price:', price);
+
+          if (price > 0) {
+            $('#data-price').val(price).trigger('change'); // Trigger change to update totals
+          }
+        }
+      } else {
+        console.warn('Machine Data or ID missing', window.papionInvData);
+      }
+
+
+
+
+
+    // Calculate Meters
     var meters = copies * height;
     $('#data-meters').val((meters / 100));
 
+    // Calculate Total Price
     var total = meters * price;
-    $('#data-total').val(total);
+    $('#data-total').val(total.toFixed(2));
 
 
+    // Calculate Picture Price
     var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
-    var priceperpic = parseFloat(170) || 0;
-    var totalpic = copies * picCopies;
-    var price = (height / 100) / picCopies * priceperpic;
 
-    $('#data-price-pic').text(price);
+    var totalpic = copies * picCopies;
+
+    // Price Per Piece Formula: (Height / 100) / PicCopies * PricePerMeter
+    var pricePerPiece = 0;
+    if (picCopies > 0) {
+      pricePerPiece = (height / 100) / picCopies * price;
+    }
+
+    $('#data-price-pic').text(pricePerPiece.toFixed(2));
     $('#data-total-pic').text(totalpic);
 
     // Disable meters input if valid calculation exists

@@ -169,7 +169,11 @@
                                         </div>
                                         <div class="col-sm-6 data-field-col">
                                             <label for="data-pass">Pass</label>
-                                            <input type="number" class="form-control" id="data-pass" value="1">
+                                            <select class="form-control" id="data-pass">
+                                                <option value="1">1</option>
+                                                <option value="4">4</option>
+                                                <option value="6">6</option>
+                                            </select>
                                         </div>
                                         <div class="col-sm-6 data-field-col">
                                             <label for="data-meters">الأمتار</label>
@@ -307,6 +311,7 @@
         window.papionInvData = {
             inkStocks: @json($inkStocks ?? []),
             paperStocks: @json($paperStocks ?? []),
+            machines: @json($machines ?? []), // Inject machines data
             consumeInkRoute: "{{ route('inventory.consumeInk') }}",
             csrfToken: "{{ csrf_token() }}"
         };
