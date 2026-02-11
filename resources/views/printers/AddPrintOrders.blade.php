@@ -185,7 +185,7 @@
                                             <label for="data-price-pic-muted">  سعر القطعه المتوقع</label>
                                             <span id="data-price-pic" class="">0</span>
                                         </div>
-                                        <div class="col-sm-12 data-field-col">
+                                        <!-- <div class="col-sm-12 data-field-col">
                                             <label for="data-status">حالة الطلب</label>
                                             <select class="form-control" id="data-status">
                                                 <option selected value="بانتظار اجراء">بانتظار اجراء</option>
@@ -193,7 +193,7 @@
                                                 <option value="انتهاء الطباعة">انتهاء الطباعة</option>
                                                 <option value="ملغي">ملغي</option>
                                             </select>
-                                        </div>
+                                        </div> -->
                                         <div class="col-sm-12 data-field-col">
                                             <label for="data-fabric-type">نوع القماش </label>
                                             <input type="text" class="form-control" id="data-fabric-type">
