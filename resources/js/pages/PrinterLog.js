@@ -307,31 +307,47 @@ $(document).ready(function () {
 
   function calculateTotals() {
     var totalMeters = 0;
-    var totalCost = 0;
+    var grandTotalCost = 0;
+    var pieceCostDisplay = '';
+    var isSingleRow = false;
 
     var selectedRows = table.rows({ selected: true }).data();
-    var anyChecked = selectedRows.count() > 0;
+    var count = selectedRows.count();
+    var anyChecked = count > 0;
 
     if (anyChecked) {
+      isSingleRow = (count === 1);
+
       selectedRows.each(function (row) {
         var meters = parseFloat(row.meters) || 0;
-        var pass = parseInt(row.pass) || 0;
-        var machine = row.machines; // Assuming 'machines' object is available
+        var height = parseFloat(row.fileHeight) || 0;
+        var picCopies = parseFloat(row.picInCopies) || 0;
 
-        totalMeters += meters;
+        // Price Calculation Logic
+        // User Requested: Total Cost = Meters * Machine Price (based on pass)
+        // Ignoring printingprices.totalPrice for the Total Cost calculation per user request
 
-        var price = 0;
-        if (machine) {
-          if (pass === 1) {
-            price = parseFloat(machine.price_1_pass) || 0;
-          } else if (pass === 4) {
-            price = parseFloat(machine.price_4_pass) || 0;
-          } else if (pass === 6) {
-            price = parseFloat(machine.price_6_pass) || 0;
-          }
+        var pricePerMeter = 0;
+        if (row.machines) {
+          var pass = parseInt(row.pass) || 0;
+          if (pass === 4) pricePerMeter = parseFloat(row.machines.price_4_pass);
+          else if (pass === 6) pricePerMeter = parseFloat(row.machines.price_6_pass);
+          else pricePerMeter = parseFloat(row.machines.price_1_pass);
         }
 
-        totalCost += meters * price;
+        totalMeters += meters;
+        grandTotalCost += (meters * pricePerMeter);
+
+        // Calculate Price Per Piece for this row
+        // Formula: (Height / 100) / PicCopies * PricePerMeter
+        if (isSingleRow) {
+          if (picCopies > 0 && height > 0) {
+            var onePieceCost = (height / 100) / picCopies * pricePerMeter;
+            pieceCostDisplay = onePieceCost.toFixed(2);
+          } else {
+            pieceCostDisplay = '0.00';
+          }
+        }
       });
 
       var html = '';
@@ -339,8 +355,12 @@ $(document).ready(function () {
         html += '<span class="badge badge-info mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-maximize-2"></i>  طول الورق : ' + totalMeters.toFixed(2) + ' متر</span>';
       }
 
-      if (totalCost > 0) {
-        html += '<span class="badge badge-primary mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-dollar-sign"></i> الاجمالي : ' + totalCost.toFixed(2) + ' جنيه</span>';
+      if (grandTotalCost > 0) {
+        html += '<span class="badge badge-primary mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-dollar-sign"></i> الاجمالي : ' + grandTotalCost.toFixed(2) + ' جنيه</span>';
+      }
+
+      if (isSingleRow && pieceCostDisplay !== '') {
+        html += '<span class="badge badge-success mb-1" style="font-size: 1em; margin-left:15px;"><i class="feather icon-tag"></i> سعر القطعة : ' + pieceCostDisplay + ' جنيه</span>';
       }
 
       $('#printer-log-calculator-results').html(html).slideDown();

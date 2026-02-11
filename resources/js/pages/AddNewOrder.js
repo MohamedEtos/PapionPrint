@@ -43,9 +43,6 @@ $(document).ready(function () {
       }
 
 
-
-
-
     // Calculate Meters
     var meters = copies * height;
     $('#data-meters').val((meters / 100));
@@ -88,6 +85,7 @@ $(document).ready(function () {
 
     if (selectedText.includes('dtf')) {
       $('#data-width').val(58);
+      
       $('#data-pass').val(4).prop('disabled', false);
     } else if (selectedText.includes('sublimation')) {
       $('#data-width').val(150);
