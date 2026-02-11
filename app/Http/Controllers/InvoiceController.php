@@ -122,6 +122,70 @@ class InvoiceController extends Controller
         ]);
     }
 
+    public function addCompositeItem(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'nullable|string',
+            'laser_cost' => 'nullable|numeric|min:0',
+            'tarter_cost' => 'nullable|numeric|min:0',
+            'print_cost' => 'nullable|numeric|min:0',
+            'stras_cost' => 'nullable|numeric|min:0',
+            'other_cost' => 'nullable|numeric|min:0',
+            'quantity' => 'required|numeric|min:0.1'
+        ]);
+
+        $invoice = Invoice::firstOrCreate(
+            ['user_id' => Auth::id() ?? 1, 'status' => 'draft']
+        );
+
+        $laser = $request->laser_cost ?? 0;
+        $tarter = $request->tarter_cost ?? 0;
+        $print = $request->print_cost ?? 0;
+        $stras = $request->stras_cost ?? 0;
+        $other = $request->other_cost ?? 0;
+        $total = $laser + $tarter + $print + $stras + $other;
+
+        $compositeItem = \App\Models\CompositeItem::create([
+            'name' => $request->name,
+            'laser_cost' => $laser,
+            'tarter_cost' => $tarter,
+            'print_cost' => $print,
+            'stras_cost' => $stras,
+            'other_cost' => $other,
+            'total_price' => $total
+        ]);
+
+        InvoiceItem::create([
+            'invoice_id' => $invoice->id,
+            'itemable_id' => $compositeItem->id,
+            'itemable_type' => \App\Models\CompositeItem::class,
+            'custom_price' => $total,
+            'quantity' => $request->quantity,
+            'custom_details' => $request->name // Initial detail
+        ]);
+
+        $this->updateInvoiceTotal($invoice);
+
+        // Refresh Cart Data
+        $invoice->load(['items.itemable']);
+        
+        $invoice->items->each(function ($item) {
+            if ($item->itemable_type === 'App\Models\Printers' && $item->itemable) {
+                $item->itemable->load('ordersImgs');
+            }
+        });
+
+        $cartCount = $invoice->items->count();
+        $cartItems = $invoice->items;
+        $cartHtml = view('components.cart_dropdown', compact('cartItems'))->render();
+
+        return response()->json([
+            'success' => 'Component added',
+            'cart_count' => $cartCount,
+            'cart_html' => $cartHtml
+        ]);
+    }
+
     public function removeItem($id)
     {
         InvoiceItem::destroy($id);
@@ -139,6 +203,8 @@ class InvoiceController extends Controller
                 if ($item->itemable_type === 'App\Models\Printers' && $item->itemable) {
                     $item->itemable->load('ordersImgs');
                 }
+                // Ensure other types are loaded if needed, though 'with' on Invoice query handles most.
+                // CompositeItem has no extra relations to load deeply yet.
             });
             
             $cartCount = $invoice->items->count();
@@ -441,7 +507,9 @@ class InvoiceController extends Controller
             'App\Models\Tarter' => 'tarter',
             'App\Models\Printers' => 'printer',
             'App\Models\Rollpress' => 'rollpress',
-            'App\Models\LaserOrder' => 'laser'
+            'App\Models\Rollpress' => 'rollpress',
+            'App\Models\LaserOrder' => 'laser',
+            'App\Models\CompositeItem' => 'composite'
         ];
         $type = $typeMap[$invoiceItem->itemable_type] ?? 'unknown';
         
@@ -468,7 +536,9 @@ class InvoiceController extends Controller
             'App\Models\Tarter' => 'tarter',
             'App\Models\Printers' => 'printer',
             'App\Models\Rollpress' => 'rollpress',
-            'App\Models\LaserOrder' => 'laser'
+            'App\Models\Rollpress' => 'rollpress',
+            'App\Models\LaserOrder' => 'laser',
+            'App\Models\CompositeItem' => 'composite'
         ];
         $type = $typeMap[$archive->order_type] ?? 'unknown';
         
@@ -485,6 +555,7 @@ class InvoiceController extends Controller
             'printer' => Printers::class,
             'rollpress', 'rollpress_archive' => \App\Models\Rollpress::class,
             'laser' => \App\Models\LaserOrder::class,
+            'composite' => \App\Models\CompositeItem::class,
              default => throw new \Exception("Invalid Type"),
         };
     }
@@ -595,6 +666,10 @@ class InvoiceController extends Controller
             $item = \App\Models\LaserOrder::find($itemId);
             if (!$item) return 0;
             $price = $item->total_cost ?? 0;
+        } elseif ($type === 'composite') {
+            $item = \App\Models\CompositeItem::find($itemId);
+            if (!$item) return 0;
+            $price = $item->total_price ?? 0;
         }
 
         return round($price, 2);

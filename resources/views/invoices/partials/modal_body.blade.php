@@ -68,6 +68,15 @@
                             <th>التفاصيل</th>
                             <th>ملاحظات</th>
                             <th>التاريخ</th>
+                        @elseif($type === 'composite')
+                            <th>الوصف</th>
+                            <th>تكلفة الليزر</th>
+                            <th>تكلفة الترتر</th>
+                            <th>تكلفة الطباعة</th>
+                            <th>تكلفة الاستراس</th>
+                            <th>تكلفة أخرى</th>
+                            <th>الإجمالي</th>
+                            <th>التاريخ</th>
                         @endif
                     </tr>
                 </thead>
@@ -78,6 +87,17 @@
                         @include('tarter.partials.details', ['Record' => $item])
                     @elseif($type === 'laser')
                         @include('laser.partials.details', ['Record' => $item])
+                    @elseif($type === 'composite')
+                        <tr>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->laser_cost }}</td>
+                            <td>{{ $item->tarter_cost }}</td>
+                            <td>{{ $item->print_cost }}</td>
+                            <td>{{ $item->stras_cost }}</td>
+                            <td>{{ $item->other_cost }}</td>
+                            <td>{{ $item->total_price }}</td>
+                            <td>{{ $item->created_at->format('Y-m-d') }}</td>
+                        </tr>
                     @endif
                 </tbody>
             </table>

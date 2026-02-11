@@ -31,7 +31,10 @@
                         'App\Models\Tarter' => 'ترتر',
                         'App\Models\Printers' => 'طباعة',
                         'App\Models\Rollpress' => 'مكبس',
-                        'App\Models\LaserOrder' => 'ليزر'
+                        'App\Models\Printers' => 'طباعة',
+                        'App\Models\Rollpress' => 'مكبس',
+                        'App\Models\LaserOrder' => 'ليزر',
+                        'App\Models\CompositeItem' => 'مجمعة'
                     ];
                     $typeLabel = $typeMap[$item->order_type] ?? class_basename($item->order_type);
                     
@@ -82,6 +85,16 @@
                              $details = 'قماش: ' . ($item->itemable->fabrictype ?? '-');
                         } elseif ($item->order_type === 'App\Models\Printers') {
                              $details = 'ماكينة: ' . ($item->itemable->machines->name ?? '-');
+                        } elseif ($item->order_type === 'App\Models\CompositeItem') {
+                             $comp = $item->itemable;
+                             $details = $comp->name;
+                             $parts = [];
+                             if($comp->laser_cost > 0) $parts[] = 'ليزر: ' . $comp->laser_cost;
+                             if($comp->tarter_cost > 0) $parts[] = 'ترتر: ' . $comp->tarter_cost;
+                             if($comp->print_cost > 0) $parts[] = 'طباعة: ' . $comp->print_cost;
+                             if($comp->stras_cost > 0) $parts[] = 'استراس: ' . $comp->stras_cost;
+                             if($comp->other_cost > 0) $parts[] = 'أخرى: ' . $comp->other_cost;
+                             if(!empty($parts)) $details .= ' (' . implode(' | ', $parts) . ')';
                         }
                     }
                 @endphp
@@ -142,7 +155,8 @@
             'App\Models\Tarter' => 'ترتر',
             'App\Models\Printers' => 'طباعة',
             'App\Models\Rollpress' => 'مكبس',
-            'App\Models\LaserOrder' => 'ليزر'
+            'App\Models\LaserOrder' => 'ليزر',
+            'App\Models\CompositeItem' => 'مجمعة'
         ];
         $tLabel = $typeMap[$item->order_type] ?? 'منتج';
         
@@ -165,6 +179,26 @@
                  $d = 'قماش: ' . ($item->itemable->fabrictype ?? '-');
             } elseif ($item->order_type === 'App\Models\Printers') {
                  $d = 'ماكينة: ' . ($item->itemable->machines->name ?? '-');
+            } elseif ($item->order_type === 'App\Models\CompositeItem') {
+                 $comp = $item->itemable;
+                 $d = $comp->name;
+                 $parts = [];
+                 if($comp->laser_cost > 0) $parts[] = 'ليزر: ' . $comp->laser_cost;
+                 if($comp->tarter_cost > 0) $parts[] = 'ترتر: ' . $comp->tarter_cost;
+                 if($comp->print_cost > 0) $parts[] = 'طباعة: ' . $comp->print_cost;
+                 if($comp->stras_cost > 0) $parts[] = 'استراس: ' . $comp->stras_cost;
+                 if($comp->other_cost > 0) $parts[] = 'أخرى: ' . $comp->other_cost;
+                 if(!empty($parts)) $d .= ' (' . implode(' | ', $parts) . ')';
+            } elseif ($item->order_type === 'App\Models\CompositeItem') {
+                 $comp = $item->itemable;
+                 $d = $comp->name;
+                 $parts = [];
+                 if($comp->laser_cost > 0) $parts[] = 'ليزر: ' . $comp->laser_cost;
+                 if($comp->tarter_cost > 0) $parts[] = 'ترتر: ' . $comp->tarter_cost;
+                 if($comp->print_cost > 0) $parts[] = 'طباعة: ' . $comp->print_cost;
+                 if($comp->stras_cost > 0) $parts[] = 'استراس: ' . $comp->stras_cost;
+                 if($comp->other_cost > 0) $parts[] = 'أخرى: ' . $comp->other_cost;
+                 if(!empty($parts)) $d .= ' (' . implode(' | ', $parts) . ')';
             }
         }
         

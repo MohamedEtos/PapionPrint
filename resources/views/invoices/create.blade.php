@@ -75,6 +75,7 @@
                                 </div>
                             </div>
                              <div class="col-md-6 text-right">
+                                <button class="btn btn-purple mt-2" data-toggle="modal" data-target="#compositeItemModal"> <i class="fa fa-plus-square"></i> إضافة قطعة مجمعة</button>
                                 <button class="btn btn-success mt-2" id="send-whatsapp-btn" onclick="sendWhatsApp()"> <i class="fa fa-whatsapp"></i> ارسال واتس اب</button>
                                 <button class="btn btn-warning mt-2" id="save-invoice-changes"><i class="feather icon-save"></i> حفظ</button>
                                 <button class="btn btn-danger mt-2" onclick="clearCart()"> <i class="fa fa-trash"></i> تفريغ السلة</button>
@@ -162,6 +163,29 @@
                                                     $detailText .= ' - سيليكون';
                                                 }
                                             }
+                                            elseif ($item->itemable_type == 'App\Models\CompositeItem') {
+                                                $typeLabel = 'مجمة'; // Composite
+                                                $comp = $item->itemable;
+                                                $qty = $item->quantity; // Use invoice item quantity
+                                                
+                                                if (!$comp) {
+                                                    $price = 0;
+                                                    $detailText = 'عنصر محذوف';
+                                                } else {
+                                                    $price = $comp->total_price;
+                                                    $detailText = $comp->name;
+                                                    
+                                                    // Build detail text from components
+                                                    $parts = [];
+                                                    if($comp->laser_cost > 0) $parts[] = 'ليزر: ' . $comp->laser_cost;
+                                                    if($comp->tarter_cost > 0) $parts[] = 'ترتر: ' . $comp->tarter_cost;
+                                                    if($comp->print_cost > 0) $parts[] = 'طباعة: ' . $comp->print_cost;
+                                                    if($comp->stras_cost > 0) $parts[] = 'استراس: ' . $comp->stras_cost;
+                                                    if($comp->other_cost > 0) $parts[] = 'أخرى: ' . $comp->other_cost;
+                                                    
+                                                    if(!empty($parts)) $detailText .= ' (' . implode(' | ', $parts) . ')';
+                                                }
+                                            }
 
                                             // Image Handling
                                             $imgPath = null;
@@ -175,19 +199,29 @@
                                                 $imgObj = $item->itemable->ordersImgs->first();
                                                 $imgPath = $imgObj ? $imgObj->path : null;
                                             }
+                                            elseif ($item->itemable_type == 'App\Models\CompositeItem') {
+                                                $imgPath = null; // No image for composite yet
+                                            }
                                             
-                                            $imgUrl = $imgPath ? asset('storage/' . $imgPath) : '';
+                                            $imgUrl = ($imgPath && $imgPath !== '') ? asset('storage/' . $imgPath) : '';
 
                                             // Check for Custom Price Override
                                             if($item->custom_price) {
-                                                $price = $item->custom_price;
-                                            }
-                                            
-                                            // Determine Unit Price for display
-                                            // If effective quantity is > 0, unit price = total / qty
-                                            // Otherwise unit price = total
-                                            $unitPrice = ($qty > 0) ? ($price / $qty) : $price;
-                                            $total = $price; 
+                                                // custom_price is stored as Unit Price
+                                                $unitPrice = $item->custom_price;
+                                                $total = $unitPrice * $qty;
+                                            } else {
+                                                // Default logic based on model type
+                                                if ($item->itemable_type == 'App\Models\CompositeItem') {
+                                                    // CompositeItem store Unit Price in total_price
+                                                    $unitPrice = $price;
+                                                    $total = $unitPrice * $qty;
+                                                } else {
+                                                    // Other types (Laser, Printer) return Total Price from calculatePrice
+                                                    $total = $price;
+                                                    $unitPrice = ($qty > 0) ? ($price / $qty) : $price;
+                                                }
+                                            } 
 
                                             $grandTotal += $total;
                                         @endphp
@@ -243,6 +277,86 @@
     </div>
 </div>
 
+<!-- Composite Item Modal -->
+<div class="modal fade" id="compositeItemModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">إضافة قطعة مجمعة</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="composite-item-form">
+                    <div class="form-group">
+                        <label>الوصف / الاسم</label>
+                        <input type="text" name="name" class="form-control" required placeholder="مثال: فستان سهرة موديل 1">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>تكلفة الليزر</label>
+                                <input type="number" step="0.01" name="laser_cost" class="form-control comp-cost" value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>تكلفة الترتر</label>
+                                <input type="number" step="0.01" name="tarter_cost" class="form-control comp-cost" value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>تكلفة الطباعة</label>
+                                <input type="number" step="0.01" name="print_cost" class="form-control comp-cost" value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>تكلفة الاستراس</label>
+                                <input type="number" step="0.01" name="stras_cost" class="form-control comp-cost" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>تكلفة أخرى (خياطة/تشطيب)</label>
+                                <input type="number" step="0.01" name="other_cost" class="form-control comp-cost" value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>سعر الوحدة الاجمالي</label>
+                                <input type="number" id="comp-unit-price" class="form-control" readonly value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>الكمية</label>
+                                <input type="number" step="1" name="quantity" id="comp-qty" class="form-control" value="1" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>السعر الكلي</label>
+                                <input type="number" id="comp-total-price" class="form-control" readonly value="0">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-primary" id="save-composite-item">إضافة للفاتورة</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Item Details Modal -->
 <div class="modal fade" id="itemDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -289,9 +403,9 @@
 @endsection
 
 @section('js')
-<script>
 
-            <script src="{{ asset('core/vendors/js/extensions/dropzone.min.js') }}"></script>
+
+        <script src="{{ asset('core/vendors/js/extensions/dropzone.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
         <script src="{{ asset('core/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
@@ -591,6 +705,53 @@
             $('#item-details-content').html(response.html);
         }).fail(function() {
             $('#item-details-content').html('<div class="text-danger text-center p-3">حدث خطأ أثناء تحميل التفاصيل</div>');
+        });
+    });
+
+
+
+    $(document).ready(function() {
+        // Composite Item Logic
+        $('.comp-cost, #comp-qty').on('input', function() {
+            var laser = parseFloat($('input[name="laser_cost"]').val()) || 0;
+            var tarter = parseFloat($('input[name="tarter_cost"]').val()) || 0;
+            var print = parseFloat($('input[name="print_cost"]').val()) || 0;
+            var stras = parseFloat($('input[name="stras_cost"]').val()) || 0;
+            var other = parseFloat($('input[name="other_cost"]').val()) || 0;
+            
+            var unitPrice = laser + tarter + print + stras + other;
+            $('#comp-unit-price').val(unitPrice.toFixed(2));
+            
+            var qty = parseFloat($('#comp-qty').val()) || 0;
+            var total = unitPrice * qty;
+            $('#comp-total-price').val(total.toFixed(2));
+        });
+
+        $('#save-composite-item').click(function() {
+            var $btn = $(this);
+            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> جاري الإضافة...');
+            
+            var data = $('#composite-item-form').serialize();
+            data += '&_token={{ csrf_token() }}';
+            
+            $.post('/invoices/add-composite-item', data, function(response) {
+                toastr.success('تمت إضافة القطعة بنجاح');
+                $('#compositeItemModal').modal('hide');
+                // Reset form
+                $('#composite-item-form')[0].reset();
+                $('#comp-unit-price').val(0);
+                $('#comp-total-price').val(0);
+                
+                location.reload(); 
+                
+            }).fail(function(xhr) {
+                $btn.prop('disabled', false).html('إضافة للفاتورة');
+                var errorMsg = 'حدث خطأ';
+                if(xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg += ': ' + xhr.responseJSON.message;
+                }
+                toastr.error(errorMsg);
+            });
         });
     });
 </script>

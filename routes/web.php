@@ -190,6 +190,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/archive-details/{id}', [App\Http\Controllers\InvoiceController::class, 'getArchiveDetails'])->name('invoice.archive_details');
         Route::get('/invoice-details/{id}', [App\Http\Controllers\InvoiceController::class, 'getInvoiceDetails'])->name('invoice.invoice_details');
         Route::get('/item-details/{id}', [App\Http\Controllers\InvoiceController::class, 'getItemDetails'])->name('invoice.item_details');
+        Route::post('/add-composite-item', [App\Http\Controllers\InvoiceController::class, 'addCompositeItem'])->name('invoice.add_composite_item');
     });
 
     // Laser Routes
