@@ -15,32 +15,32 @@ $(document).ready(function () {
 
 
     // Separate Handler for updating Price from Machine/Pass selection
-      console.log('Machine/Pass changed');
-      var machineId = $('#data-machine').val();
-      var pass = $('#data-pass').val();
-      console.log('Machine ID:', machineId, 'Pass:', pass);
+    console.log('Machine/Pass changed');
+    var machineId = $('#data-machine').val();
+    var pass = $('#data-pass').val();
+    console.log('Machine ID:', machineId, 'Pass:', pass);
 
-      if (machineId && window.papionInvData && window.papionInvData.machines) {
-        var machine = window.papionInvData.machines.find(m => m.id == machineId);
-        console.log('Found Machine:', machine);
-        if (machine) {
-          var price = 0;
-          if (pass == 4) {
-            price = parseFloat(machine.price_4_pass);
-          } else if (pass == 6) {
-            price = parseFloat(machine.price_6_pass);
-          } else {
-            price = parseFloat(machine.price_1_pass);
-          }
-          console.log('New Price:', price);
-
-          if (price > 0) {
-            $('#data-price').val(price).trigger('change'); // Trigger change to update totals
-          }
+    if (machineId && window.papionInvData && window.papionInvData.machines) {
+      var machine = window.papionInvData.machines.find(m => m.id == machineId);
+      console.log('Found Machine:', machine);
+      if (machine) {
+        var price = 0;
+        if (pass == 4) {
+          price = parseFloat(machine.price_4_pass);
+        } else if (pass == 6) {
+          price = parseFloat(machine.price_6_pass);
+        } else {
+          price = parseFloat(machine.price_1_pass);
         }
-      } else {
-        console.warn('Machine Data or ID missing', window.papionInvData);
+        console.log('New Price:', price);
+
+        if (price > 0) {
+          $('#data-price').val(price).trigger('change'); // Trigger change to update totals
+        }
       }
+    } else {
+      console.warn('Machine Data or ID missing', window.papionInvData);
+    }
 
 
     // Calculate Meters
@@ -85,7 +85,7 @@ $(document).ready(function () {
 
     if (selectedText.includes('dtf')) {
       $('#data-width').val(58);
-      
+
       $('#data-pass').val(4).prop('disabled', false);
     } else if (selectedText.includes('sublimation')) {
       $('#data-width').val(150);
@@ -209,6 +209,7 @@ $(document).ready(function () {
           $('#data-price').val(order.printingprices.totalPrice);
         }
         $('#data-notes').val(order.notes);
+        $('#data-price-pic').text(order.manufacturing_cost || 0);
 
         // Populate Images in Dropzone
         uploadedImagePaths = []; // Clear current
@@ -406,6 +407,8 @@ $(document).ready(function () {
 
     var url = "/printers/store";
     var type = "POST";
+    var manufacturing_cost = parseFloat($('#data-price-pic').text()) || 0;
+
     var data = {
       customerId: customerId,
       machineId: machineId,
@@ -419,6 +422,7 @@ $(document).ready(function () {
       price: price,
       fabric_type: fabric_type,
       notes: notes,
+      manufacturing_cost: manufacturing_cost,
       image_paths: uploadedImagePaths,
       _token: $('meta[name="csrf-token"]').attr('content')
     };

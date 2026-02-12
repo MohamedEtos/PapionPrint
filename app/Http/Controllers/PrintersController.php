@@ -134,6 +134,7 @@ class PrintersController extends Controller
             'status' => $request->status ?? 'بانتظار اجراء',
             'notes' => $request->notes,
             'fabric_type' => $request->fabric_type,
+            'manufacturing_cost' => $request->manufacturing_cost ?? 0,
             'designerId' => auth()->id() ,
         ]);
 
@@ -353,6 +354,7 @@ class PrintersController extends Controller
         if ($request->filled('pass')) $printer->pass = $request->pass;
         if ($request->filled('meters')) $printer->meters = $request->meters;
         if ($request->filled('notes')) $printer->notes = $request->notes;
+        if ($request->filled('manufacturing_cost')) $printer->manufacturing_cost = $request->manufacturing_cost;
         if ($request->filled('fabric_type')) $printer->fabric_type = $request->fabric_type;
 
         // Auto Advance Status if requested

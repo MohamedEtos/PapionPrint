@@ -27,6 +27,7 @@ class Printers extends Model
         'notes',
         'fabric_type',
         'archive',
+        'manufacturing_cost',
         'timeEndOpration',
     ];
     public function customers()
