@@ -75,10 +75,10 @@
                                 </div>
                             </div>
                              <div class="col-md-6 text-right">
-                                <button class="btn btn-purple mt-2" data-toggle="modal" data-target="#compositeItemModal"> <i class="fa fa-plus-square"></i> إضافة فاتوره</button>
-                                <button class="btn btn-success mt-2" id="send-whatsapp-btn" onclick="sendWhatsApp()"> <i class="fa fa-whatsapp"></i> ارسال واتس اب</button>
+                                <button class="btn btn-info mt-2" data-toggle="modal" data-target="#compositeItemModal"> <i class="feather icon-plus-square"></i> إضافة فاتوره</button>
+                                <button class="btn btn-success mt-2" id="send-whatsapp-btn" onclick="sendWhatsApp()"> <i class="feather icon-trending-up"></i> ارسال واتس اب</button>
                                 <button class="btn btn-warning mt-2" id="save-invoice-changes"><i class="feather icon-save"></i> حفظ</button>
-                                <button class="btn btn-danger mt-2" onclick="clearCart()"> <i class="fa fa-trash"></i> تفريغ السلة</button>
+                                <button class="btn btn-danger mt-2" onclick="clearCart()"> <i class="feather icon-trash"></i> تفريغ السلة</button>
                             </div>
                         </div>
 
@@ -443,7 +443,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
                 <button type="button" class="btn btn-success" id="confirm-send-whatsapp">
-                    <i class="fa fa-whatsapp"></i> إرسال وتحديث الحالة
+                    <i class="feather icon-trending-up"></i> إرسال
                 </button>
             </div>
         </div>
