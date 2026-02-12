@@ -97,7 +97,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php $grandTotal = 0; @endphp
+                                    @php 
+                                        $grandTotal = 0; 
+                                        $totalUnitPrice = 0;
+                                    @endphp
                                     @foreach($prods as $item)
                                         @php
                                             $detailText = '';
@@ -137,9 +140,25 @@
                                             }
                                             elseif ($item->itemable_type == 'App\Models\Printers') {
                                                 $typeLabel = 'طباعة';
-                                                $unitLabel = 'متر';
+                                                $unitLabel = ($item->unit_type === 'piece') ? 'قطعة' : 'متر';
                                                 $printer = $item->itemable;
-                                                $qty = $printer->meters;
+                                                
+                                                if (!$printer) {
+                                                    // Handle case where printer is deleted or not found
+                                                    $qty = 0;
+                                                    $price = 0;
+                                                    $detailText = 'Item Deleted';
+                                                    // Skip or show error
+                                                    continue; 
+                                                }
+                                                
+                                                if ($item->unit_type === 'piece') {
+                                                    $files = $printer->fileCopies ?? 1;
+                                                    $pics = $printer->picInCopies ?? 1;
+                                                    $qty = $files * $pics;
+                                                } else {
+                                                    $qty = $printer->meters ; // Default to meters
+                                                }
                                                 $linkUrl = route('printers.show', $printer->id);
                                                 // Price logic: check stored price or machine price
                                                 $detailText = $printer->machines->name . ' (' . $printer->pass . ' pass)';
@@ -248,6 +267,7 @@
                                             } 
 
                                             $grandTotal += $total;
+                                            $totalUnitPrice += $unitPrice;
                                         @endphp
                                         <tr data-img-url="{{ $imgUrl }}">
                                             <td style="width: 60px;" class="view-details-btn cursor-pointer" data-id="{{ $item->id }}" title="عرض التفاصيل">
@@ -281,13 +301,19 @@
                                             <td class="item-total">{{ round($total, 2) }}</td>
                                             <td>
                                                 <a href="{{ route('invoice.remove', $item->id) }}" class="text-danger"><i class="feather icon-trash"></i></a>
+                                                @if($item->itemable_type == 'App\Models\Printers')
+                                                    <a href="#" class="text-info ml-1 toggle-unit-btn" data-id="{{ $item->id }}" data-current-unit="{{ $item->unit_type ?? 'meter' }}" title="تحويل الوحدة (متر/قطعة)">
+                                                        <i class="feather icon-refresh-cw"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="5" class="text-right">الاجمالي الكلي</th>
+                                        <th colspan="4" class="text-right">الاجمالي الكلي</th>
+                                        <th id="total-unit-price">{{ round($totalUnitPrice, 2) }}</th>
                                         <th id="grand-total">{{ round($grandTotal, 2) }}</th>
                                         <th></th>
                                     </tr>
@@ -346,7 +372,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>تكلفة أخرى (خياطة/تشطيب)</label>
+                                <label>تكلفة أخرى</label>
                                 <input type="number" step="0.01" name="other_cost" class="form-control comp-cost" value="0">
                             </div>
                         </div>
@@ -729,6 +755,29 @@
             $('#item-details-content').html(response.html);
         }).fail(function() {
             $('#item-details-content').html('<div class="text-danger text-center p-3">حدث خطأ أثناء تحميل التفاصيل</div>');
+        });
+    });
+
+    // Toggle Unit Type (Printer)
+    $(document).on('click', '.toggle-unit-btn', function(e) {
+        e.preventDefault();
+        var $btn = $(this);
+        var itemId = $btn.data('id');
+        var currentUnit = $btn.data('current-unit');
+        var newUnit = (currentUnit === 'meter') ? 'piece' : 'meter';
+        
+        $btn.html('<i class="feather icon-loader fa-spin"></i>');
+        
+        $.post('/invoices/update-item', {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            item_id: itemId,
+            unit_type: newUnit
+        }, function(response) {
+            toastr.success('تم تحويل الوحدة بنجاح');
+            location.reload(); 
+        }).fail(function(xhr) {
+            $btn.html('<i class="feather icon-refresh-cw"></i>');
+            toastr.error('حدث خطأ أثناء التحويل');
         });
     });
 

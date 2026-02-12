@@ -284,7 +284,8 @@ class InvoiceController extends Controller
             'custom_price' => 'nullable|numeric',
             'custom_details' => 'nullable|string',
             'sent_date' => 'nullable|date',
-            'sent_status' => 'nullable|in:pending,sent,delivered'
+            'sent_status' => 'nullable|in:pending,sent,delivered',
+            'unit_type' => 'nullable|in:meter,piece'
         ]);
 
         $item = InvoiceItem::find($request->item_id);
@@ -307,6 +308,31 @@ class InvoiceController extends Controller
         
         if ($request->has('sent_status')) {
             $item->sent_status = $request->sent_status;
+        }
+
+        if ($request->has('unit_type')) {
+            $item->unit_type = $request->unit_type;
+            
+            // Recalculate price and quantity based on unit type
+            if ($item->itemable_type === 'App\Models\Printers' && $item->itemable) {
+                if ($request->unit_type === 'piece') {
+                    $item->custom_price = $item->itemable->manufacturing_cost ?? 0;
+                    $files = $item->itemable->fileCopies ?? 1;
+                    $pics = $item->itemable->picInCopies ?? 1;
+                    $item->quantity = $files * $pics;
+                } else {
+                    // Revert to meter price
+                     $machine = $item->itemable->machines;
+                     $uPrice = 0;
+                     if($machine) {
+                         if($item->itemable->pass == 1) $uPrice = $machine->price_1_pass;
+                         elseif($item->itemable->pass == 4) $uPrice = $machine->price_4_pass;
+                         elseif($item->itemable->pass == 6) $uPrice = $machine->price_6_pass;
+                     }
+                     $item->custom_price = $uPrice;
+                     $item->quantity = $item->itemable->meters ?? 0;
+                }
+            }
         }
         
         $item->save();

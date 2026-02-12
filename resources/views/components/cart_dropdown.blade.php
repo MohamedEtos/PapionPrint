@@ -3,13 +3,15 @@
         @php
             // Get product image
             $imgPath = null;
-            if ($cItem->itemable_type == 'App\Models\Stras') {
-                $imgPath = $cItem->itemable->image_path ?? null;
-            } elseif ($cItem->itemable_type == 'App\Models\Tarter') {
-                $imgPath = $cItem->itemable->image_path ?? null;
-            } elseif ($cItem->itemable_type == 'App\Models\Printers') {
-                $imgObj = $cItem->itemable->ordersImgs->first();
-                $imgPath = $imgObj ? $imgObj->path : null;
+            if ($cItem->itemable) {
+                if ($cItem->itemable_type == 'App\Models\Stras') {
+                    $imgPath = $cItem->itemable->image_path ?? null;
+                } elseif ($cItem->itemable_type == 'App\Models\Tarter') {
+                    $imgPath = $cItem->itemable->image_path ?? null;
+                } elseif ($cItem->itemable_type == 'App\Models\Printers') {
+                    $imgObj = $cItem->itemable->ordersImgs->first();
+                    $imgPath = $imgObj ? $imgObj->path : null;
+                }
             }
             $imgUrl = $imgPath ? asset('storage/' . $imgPath) : null;
         @endphp
