@@ -19,6 +19,10 @@ $(document).ready(function () {
                 name: 'invoice_id'
             },
             {
+                data: 'user_id',
+                name: 'user_id'
+            },
+            {
                 data: 'customer_name',
                 name: 'customer_name'
             },

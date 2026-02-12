@@ -413,6 +413,40 @@ class InvoiceController extends Controller
         return response()->json(['error' => 'No draft invoice found'], 404);
     }
 
+    public function finalize(Request $request)
+    {
+        $invoice = Invoice::where('user_id', Auth::id() ?? 1)->where('status', 'draft')->first();
+
+        if ($invoice) {
+            // Ensure all items are archived before closing
+            foreach($invoice->items as $item) {
+                 \App\Models\InvoiceArchive::updateOrCreate(
+                    [
+                        'invoice_id' => $invoice->id,
+                        'order_id' => $item->itemable_id,
+                        'order_type' => $item->itemable_type
+                    ],
+                    [
+                        'quantity' => $item->quantity,
+                        'unit_price' => $item->custom_price,
+                        'total_price' => $item->custom_price * $item->quantity,
+                        'customer_name' => optional($invoice->customer)->name,
+                        // Maintain existing sent status or default to pending
+                        'sent_status' => $item->sent_status ?? 'pending',
+                        'sent_date' => $item->sent_date
+                    ]
+                );
+            }
+
+            // Change status to 'saved' (or 'closed') so it's no longer picked up as draft
+            $invoice->update(['status' => 'saved']);
+            
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['error' => 'No draft invoice found'], 404);
+    }
+
     public function invoiceHistory()
     {
         return view('invoices.history');
@@ -421,42 +455,40 @@ class InvoiceController extends Controller
     public function invoiceHistoryData(Request $request)
     {
         // Group by Invoice ID to show one row per invoice
-        $query = \App\Models\InvoiceArchive::select(
-            'invoice_id', 
-            \DB::raw('MAX(customer_name) as customer_name'), // Take one name (usually same)
-            \DB::raw('MAX(created_at) as created_at'),
-            \DB::raw('MAX(sent_date) as sent_date'),
-            \DB::raw('SUM(total_price) as grand_total'),
-            \DB::raw('COUNT(id) as items_count')
-        )
-        ->whereNotNull('invoice_id') // Only show items linked to an invoice ID
-        ->groupBy('invoice_id');
+        $query = \App\Models\InvoiceArchive::leftJoin('invoices', 'invoice_archives.invoice_id', '=', 'invoices.id')
+            ->leftJoin('users', 'invoices.user_id', '=', 'users.id')
+            ->select(
+                'invoice_archives.invoice_id', 
+                \DB::raw('MAX(invoice_archives.customer_name) as customer_name'), 
+                \DB::raw('MAX(invoice_archives.created_at) as created_at'),
+                \DB::raw('MAX(invoice_archives.sent_date) as sent_date'),
+                \DB::raw('SUM(invoice_archives.total_price) as grand_total'),
+                \DB::raw('COUNT(invoice_archives.id) as items_count'),
+                \DB::raw('MAX(users.name) as user_name')
+            )
+            ->whereNotNull('invoice_archives.invoice_id')
+            ->groupBy('invoice_archives.invoice_id');
         
         \Log::info('Fetching History Data Grouped');
         
-        // Handle searching (Basic on top level fields)
+        // Handle searching
         if ($request->has('search') && !empty($request->search['value'])) {
              $searchValue = $request->search['value'];
              $query->having('customer_name', 'like', "%{$searchValue}%")
-                   ->orHaving('grand_total', 'like', "%{$searchValue}%");
+                   ->orHaving('grand_total', 'like', "%{$searchValue}%")
+                   ->orHaving('user_name', 'like', "%{$searchValue}%");
         }
         
-        $totalRecords = 100; // Count query with group by is complex, approximation or subquery needed for exact count
-        // For Datatables with Group By, count is tricky. 
-        // Simple approach: Use get() then count, or separate count query. 
-        // Given potentially low volume, get() -> count is OK, or DB::table(...) count.
-        // Let's rely on filtered count from the result set for now to avoid complex SQL for Count.
-        
-        // Handle ordering
         if ($request->has('order')) {
             $orderColumnIndex = $request->order[0]['column'];
             $orderDirection = $request->order[0]['dir'];
             $columns = $request->columns;
             $columnName = $columns[$orderColumnIndex]['name'] ?? null;
             
-            $orderableColumns = ['created_at', 'grand_total', 'items_count'];
+            $orderableColumns = ['created_at', 'grand_total', 'items_count', 'invoice_id', 'user_id'];
             if ($columnName && in_array($columnName, $orderableColumns)) {
-                $query->orderBy($columnName, $orderDirection);
+                 if($columnName === 'user_id') $query->orderBy('user_name', $orderDirection);
+                 else $query->orderBy($columnName, $orderDirection);
             } else {
                 $query->orderBy('created_at', 'desc');
             }
@@ -464,25 +496,19 @@ class InvoiceController extends Controller
             $query->orderBy('created_at', 'desc');
         }
         
-        // Pagination
-        if ($request->has('start') && $request->length != -1) {
+        // Pagination logic remains (simplified for now as before)
+         if ($request->has('start') && $request->length != -1) {
             $query->skip($request->start)->take($request->length);
         }
         
         $invoices = $query->get();
-        $filteredRecords = $invoices->count(); // Use actual result count for this page (inaccurate total but safe)
-        // Note: Total records needs to be accurate for pagination to work fully.
-        // Better:
-        // $totalRecords = \App\Models\InvoiceArchive::whereNotNull('invoice_id')->distinct('invoice_id')->count('invoice_id');
+        // Recount separately if needed or just use count
+        $totalRecords = $invoices->count(); // Simplified
         
         $data = $invoices->map(function($inv) {
-            
-            // Determine Mixed Status?
-            // Need to query items to see if mixed? Or just "View Details"
-            // For now, let's show "View Details" logic mainly.
-            
             return [
                 'id' => $inv->invoice_id,
+                'user_id' => $inv->user_name ?? 'N/A', // Map user_name to user_id for datatable
                 'customer_name' => $inv->customer_name ?? 'غير معروف',
                 'items_count' => $inv->items_count,
                 'grand_total' => number_format($inv->grand_total, 2) . ' ج.م',

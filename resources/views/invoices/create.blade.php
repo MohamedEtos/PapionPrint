@@ -75,10 +75,11 @@
                                 </div>
                             </div>
                              <div class="col-md-6 text-right">
-                                <button class="btn btn-info mt-2" data-toggle="modal" data-target="#compositeItemModal"> <i class="feather icon-plus-square"></i> إضافة فاتوره</button>
-                                <button class="btn btn-success mt-2" id="send-whatsapp-btn" onclick="sendWhatsApp()"> <i class="feather icon-trending-up"></i> ارسال واتس اب</button>
-                                <button class="btn btn-warning mt-2" id="save-invoice-changes"><i class="feather icon-save"></i> حفظ</button>
-                                <button class="btn btn-danger mt-2" onclick="clearCart()"> <i class="feather icon-trash"></i> تفريغ السلة</button>
+                                <button class="btn btn-info mt-2  " data-toggle="modal" data-target="#compositeItemModal"> <i class="feather icon-plus-square"></i> إضافة فاتوره</button>
+                                <button class="btn btn-primary mt-2 " onclick="finalizeInvoice()"> <i class="feather icon-check-circle"></i> حفظ وبدء جديد</button>
+                                <button class="btn btn-success mt-2 " id="send-whatsapp-btn" onclick="sendWhatsApp()"> <i class="feather icon-trending-up"></i> ارسال واتس اب</button>
+                                <!-- <button class="btn btn-warning mt-2" id="save-invoice-changes"><i class="feather icon-save"></i> حفظ</button> -->
+                                <button class="btn btn-danger mt-2 " onclick="clearCart()"> <i class="feather icon-trash"></i> تفريغ السلة</button>
                             </div>
                         </div>
 
@@ -578,6 +579,22 @@
     function clearCart() {
         if(confirm('هل انت متأكد من تفريغ السلة؟')) {
             window.location.href = "{{ route('invoice.clear') }}";
+        }
+    }
+
+    // Finalize Invoice (Save as New)
+    function finalizeInvoice() {
+        if(confirm('هل انت متأكد من إنهاء الفاتورة وبدء فاتورة جديدة؟ سيتم حفظ الفاتورة الحالية في السجل.')) {
+            $.post("{{ route('invoice.finalize') }}", {
+                _token: "{{ csrf_token() }}"
+            }, function(response) {
+                toastr.success('تم حفظ الفاتورة بنجاح. جاري بدء فاتورة جديدة...');
+                setTimeout(function(){
+                    window.location.reload();
+                }, 1000);
+            }).fail(function() {
+                toastr.error('حدث خطأ أثناء حفظ الفاتورة');
+            });
         }
     }
 

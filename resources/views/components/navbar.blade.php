@@ -47,7 +47,7 @@
                             <ul class="dropdown-menu dropdown-menu-media dropdown-cart dropdown-menu-right">
                                 <li class="dropdown-menu-header">
                                     <div class="dropdown-header m-0 p-2">
-                                        <h3 class="white"><span class="cart-item-count">{{ $cartCount ?? 0 }}</span><span class="mx-50">Items</span></h3><span class="notification-title">In Your Invoice</span>
+                                        <h3 class="white"><span class="cart-item-count">{{ $cartCount ?? 0 }}</span><span class="mx-50">فاتوره</span></h3><span class="notification-title">فواتير مجمعه</span>
                                     </div>
                                 </li>
                                 <li class="scrollable-container media-list" id="cart-dropdown-items">
@@ -56,7 +56,7 @@
                                 <li class="dropdown-menu-footer">
                                     <div class="d-flex justify-content-between align-items-center w-100">
                                         <a class="dropdown-item p-1 text-center text-primary w-50" href="{{ route('invoice.create') }}"><i class="feather icon-shopping-cart align-middle"></i><span class="align-middle text-bold-600">الذهاب الي الفواتير</span></a>
-                                        <a class="dropdown-item p-1 text-center text-danger w-50 clear-cart-btn" href="#"><i class="feather icon-trash align-middle"></i><span class="align-middle text-bold-600">Clear Cart</span></a>
+                                        <a class="dropdown-item p-1 text-center text-danger w-50 clear-cart-btn" href="#"><i class="feather icon-trash align-middle"></i><span class="align-middle text-bold-600">مسح الفواتير</span></a>
                                     </div>
                                 </li>  
                             </ul>
