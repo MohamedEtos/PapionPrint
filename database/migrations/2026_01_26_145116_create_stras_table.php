@@ -19,7 +19,7 @@ return new class extends Migration
             $table->double('width')->nullable();
             $table->integer('cards_count')->nullable();
             $table->integer('pieces_per_card')->nullable();
-            $table->integer('manufacturing_cost')->nullable();
+            $table->decimal('manufacturing_cost', 10, 4)->nullable();
             $table->string('image_path')->nullable();
             $table->text('notes')->nullable();
             $table->softDeletes();

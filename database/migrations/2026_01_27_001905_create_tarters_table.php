@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('width', 8, 2)->nullable();
             $table->integer('cards_count')->nullable();
             $table->integer('pieces_per_card')->nullable();
-            $table->integer('manufacturing_cost')->nullable();
+            $table->decimal('manufacturing_cost', 10, 4)->nullable();
             $table->integer('machine_time')->default(0)->nullable(); // Machine operation time in minutes
             $table->string('image_path')->nullable();
             $table->text('notes')->nullable();

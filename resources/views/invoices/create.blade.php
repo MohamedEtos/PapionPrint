@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                              <div class="col-md-6 text-right">
-                                <button class="btn btn-purple mt-2" data-toggle="modal" data-target="#compositeItemModal"> <i class="fa fa-plus-square"></i> إضافة قطعة مجمعة</button>
+                                <button class="btn btn-purple mt-2" data-toggle="modal" data-target="#compositeItemModal"> <i class="fa fa-plus-square"></i> إضافة فاتوره</button>
                                 <button class="btn btn-success mt-2" id="send-whatsapp-btn" onclick="sendWhatsApp()"> <i class="fa fa-whatsapp"></i> ارسال واتس اب</button>
                                 <button class="btn btn-warning mt-2" id="save-invoice-changes"><i class="feather icon-save"></i> حفظ</button>
                                 <button class="btn btn-danger mt-2" onclick="clearCart()"> <i class="fa fa-trash"></i> تفريغ السلة</button>
@@ -114,7 +114,7 @@
                                                 $stras = $item->itemable;
                                                 $qty = $stras->cards_count * $stras->pieces_per_card; // Total pieces
                                                 $linkUrl = route('stras.show', $stras->id);
-                                                $price = 0; // Need calculation logic
+                                                $price = ($stras->manufacturing_cost ?? 0) * $qty; 
                                                 
                                                 // Detailed Description
                                                 $layersInfo = $stras->layers->map(function($l) {
@@ -127,6 +127,7 @@
                                                 $tarter = $item->itemable;
                                                 $qty = $tarter->cards_count * $tarter->pieces_per_card;
                                                 $linkUrl = route('tarter.show', $tarter->id);
+                                                $price = ($tarter->manufacturing_cost ?? 0);
                                                 
                                                 // Detailed Description
                                                 $layersInfo = $tarter->layers->map(function($l) {
@@ -142,7 +143,23 @@
                                                 $linkUrl = route('printers.show', $printer->id);
                                                 // Price logic: check stored price or machine price
                                                 $detailText = $printer->machines->name . ' (' . $printer->pass . ' pass)';
-                                                $price = $printer->printingprices->totalPrice ?? 0;
+                                                
+                                                // Calculate Unit Price based on pass
+                                                $machine = $printer->machines;
+                                                $uPrice = 0;
+                                                if($printer->pass == 1) $uPrice = $machine->price_1_pass;
+                                                elseif($printer->pass == 4) $uPrice = $machine->price_4_pass;
+                                                elseif($printer->pass == 6) $uPrice = $machine->price_6_pass;
+                                                
+                                                $price = $uPrice * $qty; // Keep $price as Total for compatibility with downstream logic (line 221)
+                                                // User asked to "make the price the unit price". 
+                                                // If I set $price = $uPrice, line 221 ($total = $price) becomes ($total = unit). Wrong.
+                                                // Unless I change downstream.
+                                                // Let's change downstream logic to differentiate or handle implicit unit vs total.
+                                                // Actually, best to just satisfy "make the price the unit price" implies they want to SEE unit price or use it variable?
+                                                // If I set $price = $uPrice here, I MUST update line 221.
+                                                
+                                                $price = $uPrice; // As requested, $price is now Unit Price for printer.
                                             }
                                             elseif ($item->itemable_type == 'App\Models\Rollpress') {
                                                 $typeLabel = 'مكبس';
@@ -217,9 +234,16 @@
                                                     $unitPrice = $price;
                                                     $total = $unitPrice * $qty;
                                                 } else {
-                                                    // Other types (Laser, Printer) return Total Price from calculatePrice
-                                                    $total = $price;
-                                                    $unitPrice = ($qty > 0) ? ($price / $qty) : $price;
+                                                    // Other types (Laser) return Total Price in $price
+                                                    // Printer returns Unit Price in $price (modified above)
+                                                    
+                                                    if ($item->itemable_type == 'App\Models\Printers') {
+                                                        $unitPrice = $price;
+                                                        $total = $unitPrice * $qty;
+                                                    } else {
+                                                        $total = $price;
+                                                        $unitPrice = ($qty > 0) ? ($price / $qty) : $price;
+                                                    }
                                                 }
                                             } 
 
@@ -282,7 +306,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">إضافة قطعة مجمعة</h5>
+                <h5 class="modal-title">إضافة فاتوره</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

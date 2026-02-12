@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('meters', 10, 2);
             $table->string('status')->default('It hasnt started');
             $table->string('paymentStatus')->default('unpaid');
-            $table->integer('manufacturing_cost')->nullable();
+            $table->decimal('manufacturing_cost', 10, 4)->nullable();
             $table->foreignId('designerId')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('operatorId')->nullable()->constrained('users')->cascadeOnDelete();
             $table->text('notes')->nullable();

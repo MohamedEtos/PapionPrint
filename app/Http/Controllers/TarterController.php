@@ -56,9 +56,10 @@ class TarterController extends Controller
             'layers.*.size' => 'required|string',
             'layers.*.count' => 'required|numeric',
             'image' => 'nullable|image',
+            'manufacturing_cost' => 'nullable|numeric',
         ]);
 
-        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'machine_time', 'notes']);
+        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'machine_time', 'notes', 'manufacturing_cost']);
         if($request->has('customerId')){
             $data['customer_id'] = $request->customerId;
         }
@@ -97,9 +98,10 @@ class TarterController extends Controller
             'machine_time' => 'nullable|integer',
             'layers' => 'nullable|array',
             'image' => 'nullable|image',
+            'manufacturing_cost' => 'nullable|numeric',
         ]);
 
-        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'machine_time', 'notes']);
+        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'machine_time', 'notes', 'manufacturing_cost']);
 
         if($request->has('customerId')){
             $data['customer_id'] = $request->customerId;

@@ -19,6 +19,7 @@ class Tarter extends Model
         'machine_time',
         'image_path',
         'notes',
+        'manufacturing_cost',
     ];
 
     public function customer()

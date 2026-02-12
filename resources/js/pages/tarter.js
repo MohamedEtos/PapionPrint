@@ -209,6 +209,53 @@ $(document).ready(function () {
         formData.append('cards_count', $('#data-cards-count').val());
         formData.append('pieces_per_card', $('#data-pieces-per-card').val());
         formData.append('machine_time', $('#data-machine-time').val()); // Added Machine Time
+
+        // --- Calculate Manufacturing Cost ---
+        var height = parseFloat($('#data-height').val()) || 0;
+        var width = parseFloat($('#data-width').val()) || 0;
+        var cards_count = parseFloat($('#data-cards-count').val()) || 0;
+        var pieces_per_card = parseFloat($('#data-pieces-per-card').val()) || 0;
+        var machine_time = parseFloat($('#data-machine-time').val()) || 0;
+
+        var pricesMap = { needle: {}, paper: {}, global: {}, machine: 0 };
+        if (window.tarterPrices) {
+            window.tarterPrices.forEach(function (p) {
+                if (p.type === 'needle') pricesMap.needle[p.size] = parseFloat(p.price) || 0;
+                else if (p.type === 'paper') {
+                    var num = p.size.replace(/\D/g, '');
+                    if (num) pricesMap.paper[num] = parseFloat(p.price) || 0;
+                } else if (p.type === 'global' && p.size === 'operating_cost') {
+                    pricesMap.global.op_cost = parseFloat(p.price) || 0;
+                } else if (p.type === 'machine_time_cost') {
+                    pricesMap.machine = parseFloat(p.price) || 0;
+                }
+            });
+        }
+
+        var w = Math.round(width);
+        var paperPrice = pricesMap.paper[w] || 0;
+        var cardPaperCost = (height / 100) * paperPrice;
+        var opCost = pricesMap.global.op_cost || 0;
+        var layersCost = 0;
+
+        $('#layers-container .layer-row').each(function (index, element) {
+            var size = $(element).find('.layer-size').val();
+            var count = parseFloat($(element).find('.layer-count').val()) || 0;
+            if (size && count) {
+                var unitPrice = pricesMap.needle[size] || 0;
+                layersCost += (count * unitPrice);
+            }
+        });
+
+        var perCardCost = cardPaperCost + opCost + layersCost;
+        var totalCardCost = perCardCost * cards_count;
+        var totalMachineCost = machine_time * pricesMap.machine;
+        var grandTotal = totalCardCost + totalMachineCost;
+
+        var totalPieces = cards_count * pieces_per_card;
+        var manufacturing_cost = totalPieces > 0 ? (grandTotal / totalPieces) : 0;
+
+        formData.append('manufacturing_cost', manufacturing_cost.toFixed(4));
         formData.append('notes', $('#data-notes').val());
 
         // Layers

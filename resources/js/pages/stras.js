@@ -222,6 +222,43 @@ $(document).ready(function () {
         formData.append('cards_count', $('#data-cards-count').val());
         formData.append('pieces_per_card', $('#data-pieces-per-card').val());
         formData.append('notes', $('#data-notes').val());
+        // --- Calculate Manufacturing Cost ---
+        var height = parseFloat($('#data-height').val()) || 0;
+        var width = parseFloat($('#data-width').val()) || 0;
+        var pieces_per_card = parseFloat($('#data-pieces-per-card').val()) || 0;
+
+        var pricesMap = { stras: {}, paper: {}, global: {} };
+        if (window.strasPrices) {
+            window.strasPrices.forEach(function (p) {
+                if (p.type === 'stras') pricesMap.stras[p.size] = parseFloat(p.price) || 0;
+                else if (p.type === 'paper') {
+                    var num = p.size.replace(/\D/g, '');
+                    if (num) pricesMap.paper[num] = parseFloat(p.price) || 0;
+                } else if (p.type === 'global' && p.size === 'operating_cost') {
+                    pricesMap.global.op_cost = parseFloat(p.price) || 0;
+                }
+            });
+        }
+
+        var w = Math.round(width);
+        var paperPrice = pricesMap.paper[w] || 0;
+        var cardPaperCost = (height / 100) * paperPrice;
+        var opCost = pricesMap.global.op_cost || 0;
+        var strasCost = 0;
+
+        $('#layers-container .layer-row').each(function (index, element) {
+            var size = $(element).find('.layer-size').val();
+            var count = parseFloat($(element).find('.layer-count').val()) || 0;
+            if (size && count) {
+                var unitPrice = pricesMap.stras[size] || 0;
+                strasCost += (count * unitPrice);
+            }
+        });
+
+        var rowCardCost = cardPaperCost + opCost + strasCost;
+        var manufacturing_cost = pieces_per_card > 0 ? (rowCardCost / pieces_per_card) : 0;
+
+        formData.append('manufacturing_cost', manufacturing_cost.toFixed(4));
 
         // Layers
         $('#layers-container .layer-row').each(function (index, element) {

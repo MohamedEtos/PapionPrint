@@ -18,6 +18,7 @@ class Stras extends Model
         'pieces_per_card',
         'image_path',
         'notes',
+        'manufacturing_cost',
     ];
 
     public function order()

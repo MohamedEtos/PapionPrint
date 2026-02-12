@@ -53,9 +53,10 @@ class StrasController extends Controller
             'layers.*.size' => 'required|string',
             'layers.*.count' => 'required|numeric',
             'image' => 'nullable|image',
+            'manufacturing_cost' => 'nullable|numeric',
         ]);
 
-        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
+        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes', 'manufacturing_cost']);
 
         if($request->has('customerId')){
             $data['customerId'] = $request->customerId;
@@ -101,9 +102,10 @@ class StrasController extends Controller
             'pieces_per_card' => 'nullable|integer',
             'layers' => 'nullable|array',
             'image' => 'nullable|image',
+            'manufacturing_cost' => 'nullable|numeric',
         ]);
 
-        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes']);
+        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes', 'manufacturing_cost']);
         
         if($request->has('customerId')){
              $data['customerId'] = $request->customerId;

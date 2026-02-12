@@ -576,73 +576,12 @@ class InvoiceController extends Controller
             $item = Stras::with('layers')->find($itemId);
             if (!$item) return 0;
             
-            $prices = StrasPrice::all();
-            $pricesMap = [
-                'stras' => [],
-                'paper' => [],
-                'global' => []
-            ];
-            foreach ($prices as $p) {
-                if ($p->type === 'stras') $pricesMap['stras'][$p->size] = (float)$p->price;
-                elseif ($p->type === 'paper') $pricesMap['paper'][(int)preg_replace('/[^0-9]/', '', $p->size)] = (float)$p->price;
-                elseif ($p->type === 'global' && $p->size === 'operating_cost') $pricesMap['global']['op_cost'] = (float)$p->price;
-            }
-
-            $cardsCount = $item->cards_count ?? 0;
-            if ($cardsCount > 0) {
-                // Paper Cost
-                $paperPrice = $pricesMap['paper'][round($item->width ?? 0)] ?? 0;
-                $cardPaperCost = ($item->height / 100) * $paperPrice;
-                
-                // Op Cost
-                $opCost = $pricesMap['global']['op_cost'] ?? 0;
-                
-                $rowCardCost = $cardPaperCost + $opCost;
-                
-                // Layers
-                foreach ($item->layers as $layer) {
-                     $unitPrice = $pricesMap['stras'][$layer->size] ?? 0;
-                     $rowCardCost += ($layer->count * $unitPrice);
-                }
-                
-                $price = $rowCardCost * $cardsCount;
-            }
+            return $item->manufacturing_cost ?? 0;
 
         } elseif ($type === 'tarter') {
-            $item = Tarter::with('layers')->find($itemId);
+            $item = Tarter::find($itemId);
             if (!$item) return 0;
-
-            $prices = TarterPrice::all();
-            $pricesMap = [
-                'needle' => [],
-                'paper' => [],
-                'global' => [],
-                'machine' => 0
-            ];
-            foreach ($prices as $p) {
-                if ($p->type === 'needle') $pricesMap['needle'][$p->size] = (float)$p->price;
-                elseif ($p->type === 'paper') $pricesMap['paper'][(int)preg_replace('/[^0-9]/', '', $p->size)] = (float)$p->price;
-                elseif ($p->type === 'global' && $p->size === 'operating_cost') $pricesMap['global']['op_cost'] = (float)$p->price;
-                elseif ($p->type === 'machine_time_cost') $pricesMap['machine'] = (float)$p->price;
-            }
-
-            $cardsCount = $item->cards_count ?? 0;
-            if ($cardsCount > 0) {
-                $paperPrice = $pricesMap['paper'][round($item->width ?? 0)] ?? 0;
-                $cardPaperCost = ($item->height / 100) * $paperPrice;
-                $opCost = $pricesMap['global']['op_cost'] ?? 0;
-                
-                $rowCardCost = $cardPaperCost + $opCost;
-
-                foreach ($item->layers as $layer) {
-                     $unitPrice = $pricesMap['needle'][$layer->size] ?? 0;
-                     $rowCardCost += ($layer->count * $unitPrice);
-                }
-                
-                $price = ($rowCardCost * $cardsCount);
-            }
-            // Add Machine Time Cost
-            $price += ($item->machine_time * $pricesMap['machine']);
+            return $item->manufacturing_cost ?? 0;
 
         } elseif ($type === 'printer') {
             $item = Printers::with('machines')->find($itemId);
@@ -655,7 +594,7 @@ class InvoiceController extends Controller
                  elseif ($item->pass == 4) $unitPrice = $machine->price_4_pass;
                  elseif ($item->pass == 6) $unitPrice = $machine->price_6_pass;
                  
-                 $price = ($item->meters ?? 0) * $unitPrice;
+                 return $unitPrice;
             }
 
         } elseif ($type === 'rollpress') {
