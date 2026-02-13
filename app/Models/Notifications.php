@@ -14,6 +14,7 @@ class Notifications extends Model
         'body',
         'type',
         'status',
+        'link',
     ];
 
     public function user()

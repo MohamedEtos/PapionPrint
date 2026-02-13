@@ -16,8 +16,23 @@ class Customers extends Model
         return $this->hasMany(Printers::class,'customerId');
     }
 
-    public function rollpresses()
+    public function lasers()
     {
-        return $this->hasMany(Rollpress::class, 'customerId');
+        return $this->hasMany(LaserOrder::class, 'customer_id');
+    }
+
+    public function stras()
+    {
+        return $this->hasMany(Stras::class, 'customerId');
+    }
+
+    public function tarters()
+    {
+        return $this->hasMany(Tarter::class, 'customer_id');
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'customer_id');
     }
 }

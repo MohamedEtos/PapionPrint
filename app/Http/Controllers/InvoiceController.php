@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 namespace App\Http\Controllers;
 
@@ -429,6 +429,17 @@ class InvoiceController extends Controller
             // Mark the invoice itself as sent so a new draft is created next time
             $invoice->update(['status' => 'sent']);
 
+             // Notification
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'فاتورة واتساب #' . $invoice->id,
+                'img_path' => null, // Maybe add icon?
+                'body' => optional($invoice->customer)->name . ' تم ارسال الفاتورة عبر واتساب',
+                'type' => 'invoice',
+                'status' => 'unread',
+                 'link' => route('invoice.history'), // Link to history as it is sent
+            ]);
+
             return response()->json(['success' => true]);
         }
         return response()->json(['error' => 'No draft invoice found'], 404);
@@ -462,6 +473,17 @@ class InvoiceController extends Controller
             // Change status to 'saved' (or 'closed') so it's no longer picked up as draft
             $invoice->update(['status' => 'saved']);
             
+             // Notification
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تم حفظ فاتورة #' . $invoice->id,
+                'img_path' => null,
+                'body' => optional($invoice->customer)->name . ' تم حفظ الفاتورة بنجاح',
+                'type' => 'invoice',
+                'status' => 'unread',
+                'link' => route('invoice.history'), // Link to history
+            ]);
+
             return response()->json(['success' => true]);
         }
 

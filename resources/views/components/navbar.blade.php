@@ -36,7 +36,7 @@
                         <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon feather icon-search"></i></a>
                             <div class="search-input">
                                 <div class="search-input-icon"><i class="feather icon-search primary"></i></div>
-                                <input class="input" type="text" placeholder="البحث" tabindex="-1" data-search="template-list">
+                                <input class="input" type="text" placeholder="البحث" tabindex="-1">
                                 <div class="search-input-close"><i class="feather icon-x"></i></div>
                                 <ul class="search-list search-list-main"></ul>
                             </div>
@@ -70,15 +70,15 @@
                                 </li>
                                 <li class="scrollable-container media-list" id="notification-list" data-url="{{ route('notifications.latest') }}">
                                     @foreach ($notifications as $notification)
-                                        <a class="d-flex justify-content-between" href="">
+                                        <a class="d-flex justify-content-between" href="{{ $notification->link ?? '#' }}">
                                             <div class="media d-flex align-items-start">
-                                                <div class="media-left"><img src="{{ asset('storage/' . $notification->img_path) }}" alt="" class="rounded-circle" width="35" height="35"></div>
+                                                <div class="media-left"><img src="{{ $notification->img_path ? asset('storage/' . $notification->img_path) : asset('assets/images/logo/papion.png') }}" alt="" class="rounded-circle" width="35" height="35"></div>
                                                 <div class="media-body">
                                                     <h6 class="primary media-heading">{{ $notification->title  ?? '-'}}</h6>
                                                     <small class="notification-text"> {{ $notification->body  ?? '-'}}</small>
                                                 </div>
                                             <small>
-                                                <time class="media-meta " datetime="2015-06-11T18:29:20+08:00">{{ $notification->created_at->diffForHumans() }}</time>
+                                                <time class="media-meta " datetime="{{ $notification->created_at }}">{{ $notification->created_at->diffForHumans() }}</time>
                                             </small>
                                             </div>
                                     </a>
@@ -128,4 +128,70 @@
     @vite('resources/js/notifications.js')
     <script>
         // Inline script moved to resources/js/notifications.js
+
+        // Customer Search Logic
+        $(document).ready(function() {
+            var searchInput = $('.navbar-nav .nav-search .input');
+            var searchList = $('.navbar-nav .nav-search .search-list-main');
+            var searchContainer = $('.navbar-nav .nav-search .search-input');
+            
+            // Debounce function
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+
+            // Input Handler
+            searchInput.on('input', debounce(function() {
+                var query = $(this).val();
+                
+                if (query.length < 2) {
+                    searchList.html('').hide();
+                    searchContainer.removeClass('open');
+                    return;
+                }
+
+                $.get("{{ route('customers.search') }}", { q: query }, function(data) {
+                     var html = '';
+                     if (data.length > 0) {
+                         data.forEach(function(customer) {
+                             var url = "{{ route('customers.show', ':id') }}".replace(':id', customer.id);
+                             html += '<li class="auto-suggestion d-flex align-items-center justify-content-between cursor-pointer" onclick="window.location.href=\'' + url + '\'">' +
+                                     '<a class="d-flex align-items-center justify-content-between w-100" href="' + url + '">' +
+                                        '<div class="d-flex align-items-center justify-content-start">' +
+                                            '<span class="mr-2"><i class="feather icon-user"></i></span>' +
+                                            '<span>' + customer.name + '</span>' +
+                                        '</div>' +
+                                        '<span class="text-muted small">' + (customer.phone || '') + '</span>' +
+                                     '</a>' +
+                                     '</li>';
+                         });
+                     } else {
+                         html = '<li class="auto-suggestion d-flex align-items-center justify-content-between cursor-pointer"><a><div class="d-flex align-items-center justify-content-start"><span class="mr-2"><i class="feather icon-alert-circle"></i></span><span>لا توجد نتائج</span></div></a></li>';
+                     }
+                     
+                     searchList.html(html).show();
+                     searchContainer.addClass('open');
+                });
+            }, 300));
+
+            // Close when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.search-input').length && !$(e.target).closest('.nav-link-search').length) {
+                    searchList.hide();
+                    searchContainer.removeClass('open');
+                }
+            });
+            
+             // Close on Escape
+             $(document).on('keydown', function(e) {
+                if (e.key === "Escape") {
+                     searchList.hide();
+                     searchContainer.removeClass('open');
+                }
+            });
+        });
     </script>

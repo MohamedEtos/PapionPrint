@@ -37,10 +37,13 @@ class TarterController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
         $tarter = Tarter::with(['layers', 'customer'])->findOrFail($id);
-        return response()->json($tarter);
+        if($request->ajax()){
+             return response()->json($tarter);
+        }
+        return view('tarter.show', compact('tarter'));
     }
 
     public function store(Request $request)
@@ -81,6 +84,18 @@ class TarterController extends Controller
                     'count' => $layer['count'],
                 ]);
             }
+
+            // Notification
+            $customer = Customers::find($data['customer_id']);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'اوردر ترتر #' . $tarter->id,
+                'img_path' => $tarter->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم انشاء اوردر ترتر جديد',
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('tarter.show', $tarter->id),
+            ]);
         });
 
         return response()->json(['success' => 'Created successfully']);
@@ -89,7 +104,7 @@ class TarterController extends Controller
     public function update(Request $request, $id)
     {
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:tarters,id',
+            'id' => 'required|exists:tarter,id',
         ])->validate();
          $tarter = Tarter::findOrFail($id);
          
@@ -130,6 +145,18 @@ class TarterController extends Controller
                     ]);
                 }
             }
+
+            // Notification
+            $customer = Customers::find($tarter->customer_id);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تحديث اوردر ترتر #' . $tarter->id,
+                'img_path' => $tarter->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات',
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('tarter.show', $tarter->id),
+            ]);
         });
         
         return response()->json(['success' => 'Updated successfully']);
@@ -138,12 +165,25 @@ class TarterController extends Controller
     public function destroy($id)
     {
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:tarters,id',
+            'id' => 'required|exists:tarter,id',
         ])->validate();
         $tarter = Tarter::find($id);
         if ($tarter) {
             $tarter->layers()->delete(); // Soft delete due to trait
             $tarter->delete(); // Soft delete due to trait
+
+             // Notification
+             $customer = Customers::find($tarter->customer_id);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'حذف اوردر ترتر #' . $tarter->id,
+                'img_path' => $tarter->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم حذف الاوردر (سلة المهملات)',
+                'type' => 'alert',
+                'status' => 'unread',
+                 'link' => route('tarter.trash'),
+            ]);
+
             return response()->json(['success' => 'Deleted successfully']);
         }
         return response()->json(['error' => 'Not found'], 404);
@@ -152,7 +192,7 @@ class TarterController extends Controller
     public function restart($id)
     {
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:tarters,id',
+            'id' => 'required|exists:tarter,id',
         ])->validate();
         return DB::transaction(function () use ($id) {
             $original = Tarter::with('layers')->findOrFail($id);
@@ -167,6 +207,18 @@ class TarterController extends Controller
                 $newLayer->tarter_id = $new->id;
                 $newLayer->save();
             }
+
+            // Notification
+            $customer = Customers::find($new->customer_id);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تكرار اوردر ترتر #' . $new->id,
+                'img_path' => $new->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم تكرار الاوردر من #' . $original->id,
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('tarter.show', $new->id),
+            ]);
 
             return response()->json(['success' => 'Order restarted (duplicated) successfully']);
         });

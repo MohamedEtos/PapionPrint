@@ -414,8 +414,22 @@ class PrintersController extends Controller
             ]);
         }
 
+
+
+        $notification = Notifications::create([
+            'user_id' => auth()->id(),
+            'title' => ' اوردر طباعه' . $printer->orderNumber,
+            'img_path' => $request->image_paths[0] ?? null,
+            'body' => $customer->name .'تم تحديث اوردر طباعه ' .' '. $printer->meters .' '.'متر',
+            'type' => 'order',
+            'status' => 'unread',
+            'link' => route('printers.show', $printer->id),
+        ]);
+
         // Return updated object with relations
         $printer->load(['customers', 'machines', 'printingprices', 'ordersImgs']);
+
+
 
         
         return response()->json(['success' => 'Order updated successfully', 'order' => $printer]);
@@ -439,6 +453,19 @@ class PrintersController extends Controller
         $printer = Printers::find($id);
         if ($printer) {
             $printer->delete();
+
+             // Notification
+             $customer = Customers::find($printer->customerId);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'حذف اوردر طباعه #' . $printer->orderNumber,
+                'img_path' => $printer->ordersImgs->first()->path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم حذف الاوردر (سلة المهملات)',
+                'type' => 'alert',
+                'status' => 'unread',
+                'link' => route('printers.trash'),
+            ]);
+
             return response()->json(['success' => 'Order deleted successfully']);
         }
         return response()->json(['error' => 'Order not found'], 404);
@@ -464,6 +491,51 @@ class PrintersController extends Controller
     }
 
     
+    public function restart($id)
+    {
+        \Illuminate\Support\Facades\Validator::make(['id' => $id], [
+            'id' => 'required|exists:printers,id',
+        ])->validate();
+
+        return DB::transaction(function () use ($id) {
+            $original = Printers::with(['printingprices', 'ordersImgs'])->findOrFail($id);
+            
+            $new = $original->replicate();
+            $new->orderNumber = 'ORD-' . time(); // Generate new order number
+            $new->status = 'بانتظار اجراء'; // Reset status
+            $new->created_at = now();
+            $new->updated_at = now();
+            $new->save();
+
+            // Replicate Price
+            if($original->printingprices) {
+                $newPrice = $original->printingprices->replicate();
+                $newPrice->orderId = $new->id;
+                $newPrice->save();
+            }
+
+            // Replicate Images
+            foreach($original->ordersImgs as $img) {
+                $newImg = $img->replicate();
+                $newImg->orderId = $new->id;
+                $newImg->save();
+            }
+
+            // Notification
+            $customer = Customers::find($new->customerId);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تكرار اوردر طباعه #' . $new->orderNumber,
+                'img_path' => $new->ordersImgs->first()->path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم تكرار الاوردر من #' . $original->orderNumber,
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('printers.show', $new->id),
+            ]);
+
+            return response()->json(['success' => 'Order restarted (duplicated) successfully']);
+        });
+    }
 
     public function updateStatus($id)
     {

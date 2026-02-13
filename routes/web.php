@@ -231,6 +231,13 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::delete('/clear', [App\Http\Controllers\BiometricAttendanceController::class, 'destroyAll'])->name('clear');
     });
 
+    // Customer Routes
+    Route::prefix('customers')->middleware(['permission:العملاء'])->group(function () {
+        Route::get('/', [App\Http\Controllers\CustomerController::class, 'index'])->name('customers.index');
+        Route::get('/search', [App\Http\Controllers\CustomerController::class, 'search'])->name('customers.search');
+        Route::get('/{id}', [App\Http\Controllers\CustomerController::class, 'show'])->name('customers.show');
+    });
+
 });
 
 

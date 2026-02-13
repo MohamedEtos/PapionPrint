@@ -36,10 +36,13 @@ class LaserController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
         $order = LaserOrder::with(['material', 'customer'])->findOrFail($id);
-        return response()->json($order);
+        if($request->ajax()){
+             return response()->json($order);
+        }
+        return view('laser.show', compact('order'));
     }
 
     public function store(Request $request)
@@ -81,6 +84,18 @@ class LaserController extends Controller
             $order = LaserOrder::create($data);
             // Calculate costs using the helper
             $this->recalculateOrderCost($order);
+
+            // Notification
+            $customer = Customers::find($data['customer_id']);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'اوردر ليزر #' . $order->id,
+                'img_path' => $order->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم انشاء اوردر ليزر جديد',
+                'type' => 'order', // Or laser?
+                'status' => 'unread',
+                'link' => route('laser.show', $order->id),
+            ]);
         });
 
         return response()->json(['success' => 'Created successfully']);
@@ -130,6 +145,18 @@ class LaserController extends Controller
              $order->update($data);
              // Recalculate costs
              $this->recalculateOrderCost($order);
+
+             // Notification
+            $customer = Customers::find($order->customer_id);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تحديث اوردر ليزر #' . $order->id,
+                'img_path' => $order->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات',
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('laser.show', $order->id),
+            ]);
         });
         
         return response()->json(['success' => 'Updated successfully']);
@@ -143,6 +170,19 @@ class LaserController extends Controller
         $order = LaserOrder::find($id);
         if ($order) {
             $order->delete();
+
+             // Notification
+             $customer = Customers::find($order->customer_id);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'حذف اوردر ليزر #' . $order->id,
+                'img_path' => $order->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم حذف الاوردر (سلة المهملات)',
+                'type' => 'alert',
+                'status' => 'unread',
+                 'link' => route('laser.trash'),
+            ]);
+
             return response()->json(['success' => 'Deleted successfully']);
         }
         return response()->json(['error' => 'Not found'], 404);
@@ -160,6 +200,18 @@ class LaserController extends Controller
             $new->created_at = now();
             $new->updated_at = now();
             $new->save();
+
+             // Notification
+             $customer = Customers::find($new->customer_id);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تكرار اوردر ليزر #' . $new->id,
+                'img_path' => $new->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم تكرار الاوردر من #' . $original->id,
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('laser.show', $new->id),
+            ]);
 
             return response()->json(['success' => 'Order restarted (duplicated) successfully']);
         });

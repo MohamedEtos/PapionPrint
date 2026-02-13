@@ -115,7 +115,7 @@ class PrinterlogsController extends Controller
             'id' => 'required|exists:printers,id',
         ])->validate();
 
-        $order = Printers::with('ordersImgs')->find($id);
+        $order = Printers::with(['ordersImgs', 'customers'])->find($id);
         if (!$order) {
             return response()->json(['error' => 'Order not found'], 404);
         }
@@ -126,6 +126,8 @@ class PrinterlogsController extends Controller
             $newOrder->orderNumber = 'ORD-' . time() . '-' . rand(10, 99);
             $newOrder->status = 'بانتظار اجراء';
             $newOrder->timeEndOpration = null;
+            $newOrder->created_at = now();
+            $newOrder->updated_at = now();
             $newOrder->save();
 
             // Replicate images
@@ -134,6 +136,18 @@ class PrinterlogsController extends Controller
                 $newImg->orderId = $newOrder->id;
                 $newImg->save();
             }
+
+             // Notification
+             $customer = $order->customers;
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تكرار اوردر طباعه #' . $newOrder->orderNumber,
+                'img_path' => $newOrder->ordersImgs->first()->path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم تكرار الاوردر من #' . $order->orderNumber,
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('printers.show', $newOrder->id),
+            ]);
         });
 
         return response()->json(['success' => 'Order duplicated successfully']);

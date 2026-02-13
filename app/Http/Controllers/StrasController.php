@@ -35,10 +35,13 @@ class StrasController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
         $stras = Stras::with(['layers', 'customer'])->findOrFail($id);
-        return response()->json($stras);
+        if($request->ajax()){
+             return response()->json($stras);
+        }
+        return view('stras.show', compact('stras'));
     }
 
     public function store(Request $request)
@@ -81,6 +84,18 @@ class StrasController extends Controller
                     // For now, let's assume simple creation.
                 ]);
             }
+
+            // Notification
+            $customer = Customers::find($data['customerId']);
+            \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'اوردر استراس #' . $stras->id,
+                'img_path' => $stras->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم انشاء اوردر استراس جديد',
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('stras.show', $stras->id),
+            ]);
         });
 
         return response()->json(['success' => 'Created successfully']);
@@ -133,6 +148,18 @@ class StrasController extends Controller
                     ]);
                 }
             }
+
+            // Notification
+            $customer = Customers::find($stras->customerId);
+            \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تحديث اوردر استراس #' . $stras->id,
+                'img_path' => $stras->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات',
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('stras.show', $stras->id),
+            ]);
         });
         
         return response()->json(['success' => 'Updated successfully']);
@@ -150,6 +177,24 @@ class StrasController extends Controller
         if ($stras) {
             $stras->layers()->delete(); // Soft delete due to trait
             $stras->delete(); // Soft delete due to trait
+
+             // Notification
+             $customer = Customers::find($stras->customerId);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'حذف اوردر استراس #' . $stras->id,
+                'img_path' => $stras->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم حذف الاوردر (سلة المهملات)',
+                'type' => 'alert', // Alert for delete
+                'status' => 'unread',
+                'link' => route('stras.trash'), // Link to trash? Or nowhere? Let's link to trash for now or just null. 
+                // A deleted item can't be shown. But maybe link to Trash page?
+                // Or just no link.
+                // User said "put link on EVERY notification".
+                // If I link to trash, it's a list.
+                // Let's link to trash index.
+            ]);
+
             return response()->json(['success' => 'Deleted successfully test']);
         }
         return response()->json(['error' => 'Not found'], 404);
@@ -173,6 +218,18 @@ class StrasController extends Controller
                 $newLayer->stras_id = $new->id;
                 $newLayer->save();
             }
+
+            // Notification
+            $customer = Customers::find($new->customerId);
+             \App\Models\Notifications::create([
+                'user_id' => auth()->id(),
+                'title' => 'تكرار اوردر استراس #' . $new->id,
+                'img_path' => $new->image_path ?? null,
+                'body' => ($customer->name ?? 'عميل') . ' تم تكرار الاوردر من #' . $original->id,
+                'type' => 'order',
+                'status' => 'unread',
+                'link' => route('stras.show', $new->id),
+            ]);
 
             return response()->json(['success' => 'Order restarted (duplicated) successfully']);
         });

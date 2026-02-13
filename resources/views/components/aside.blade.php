@@ -17,6 +17,7 @@
 
                         <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><a href="{{route('dashboard')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="eCommerce">الرئيسية</span></a>
                         </li>
+
                     </ul>
                 </li>
 
@@ -106,6 +107,13 @@
                     </ul>
                 </li>
                 @endif
+
+
+
+
+
+
+
                 @if(auth()->user()->can(['المخزن']))
                 <li class=" nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}">
                     <a href="{{ route('inventory.index') }}">
@@ -135,6 +143,14 @@
                     </ul>
                 </li>
                 @endif
+
+
+
+                @if(auth()->user()->can(['العملاء']))
+                        <li class="{{ request()->routeIs('customers.index') ? 'active' : '' }}"><a href="{{route('customers.index')}}"><i class="feather icon-user"></i><span class="menu-item" data-i18n="Customers">العملاء</span></a>
+                        </li>
+                @endif
+
                 @if(auth()->user()->hasRole('super-admin'))
                 <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="Ecommerce">المستخدمين والصلاحيات</span></a>
                     <ul class="menu-content">
