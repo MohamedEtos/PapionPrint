@@ -59,9 +59,8 @@ class RollpressController extends Controller
         $todayAttendance = Attendance::where('user_id', Auth::id())
         ->where('date', Carbon::today())
         ->first();
+        return view('Rollpress.presslist', 
 
-
-        return view('rollpress.presslist',
         [   
             'todayAttendance' => $todayAttendance,
             'Orders'=>$Orders,
@@ -196,8 +195,8 @@ class RollpressController extends Controller
         }
         
         $customers = Customers::all();
+        return view('Rollpress.archive', ['customers' => $customers]);
 
-        return view('rollpress.archive', ['customers' => $customers]);
     }
 
     public function bulkDelete(Request $request)
@@ -327,8 +326,8 @@ class RollpressController extends Controller
         }
         
         $customers = Customers::all();
+        return view('Rollpress.trash', ['customers' => $customers]);
 
-        return view('rollpress.trash', ['customers' => $customers]);
     }
 
     public function restore($id)
