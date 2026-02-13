@@ -179,12 +179,15 @@ $(document).ready(function () {
     // Customer Autocomplete Logic
     $('#customer-name-input').on('input change', function () {
         var customerName = $(this).val();
-        var option = $('#customers-list option[value="' + customerName + '"]');
+        var id = '';
+        var option = $('#customers-list option').filter(function () {
+            return $(this).val() === customerName;
+        });
+
         if (option.length > 0) {
-            $('#customer-id-input').val(option.data('id'));
-        } else {
-            $('#customer-id-input').val(''); // New customer
+            id = option.data('id');
         }
+        $('#customer-id-input').val(id);
     });
 
     // Image Paste Logic

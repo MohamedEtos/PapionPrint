@@ -26,6 +26,17 @@ $(document).ready(function () {
         }
     });
 
+    // --- Customer Datalist Input Handler ---
+    $(document).on('input', '#data-customer-view', function () {
+        var val = $(this).val();
+        var id = '';
+        var opt = $('#customers-list option').filter(function () {
+            return $(this).val() === val;
+        });
+        if (opt.length > 0) id = opt.attr('data-id');
+        $('#data-customer').val(id);
+    });
+
     $(".steps-validation").steps({
         headerTag: "h6",
         bodyTag: "fieldset",
@@ -209,13 +220,16 @@ $(document).ready(function () {
         var customerId = $('#data-customer').val();
         // If user typed name but didn't select from datalist, try to find ID
         var customerName = $('#data-customer-view').val();
-        if (!customerId) {
-            var opt = $('#customers-list option[value="' + customerName + '"]');
+        if (!customerId && customerName) {
+            // More robust search than Attribute Selector which breaks on quotes
+            var opt = $('#customers-list option').filter(function () {
+                return $(this).val() === customerName;
+            });
             if (opt.length > 0) customerId = opt.attr('data-id');
         }
 
         formData.append('customerId', customerId || '');
-        // formData.append('customerName', customerName); // Backend might not need name if ID is validated
+        formData.append('customer_name', customerName); // Send name for new customers
 
         formData.append('height', $('#data-height').val());
         formData.append('width', $('#data-width').val());

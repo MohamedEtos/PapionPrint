@@ -656,8 +656,40 @@
         $.post("{{ route('invoice.mark_sent') }}", {
             _token: "{{ csrf_token() }}"
         }, function(response) {
-            toastr.success('تم تحديث حالة الفاتورة الى "تم الارسال"');
             $('#whatsappPreviewModal').modal('hide');
+            toastr.success('تم تحديث حالة الفاتورة الى "تم الارسال"');
+
+            // Auto Clear Timer
+            let timerInterval;
+            Swal.fire({
+                title: 'تم الإرسال بنجاح!',
+                html: 'سيتم تفريغ السلة وبدء فاتورة جديدة خلال <b></b> ثانية.',
+                timer: 10000,
+                showCancelButton: true,
+                confirmButtonText: 'تفريغ الآن',
+                cancelButtonText: 'إلغاء التفريغ',
+                confirmButtonColor: '#d33',
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                    timerInterval = setInterval(() => {
+                        const content = Swal.getContent();
+                        if (content) {
+                            const b = content.querySelector('b');
+                            if (b) {
+                                b.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
+                            }
+                        }
+                    }, 100);
+                },
+                onClose: () => {
+                    clearInterval(timerInterval);
+                }
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer || result.value) {
+                    // Timer finished OR User clicked "Clear Now"
+                    window.location.href = "{{ route('invoice.clear') }}";
+                }
+            });
         });
     });
 

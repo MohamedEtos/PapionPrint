@@ -9,13 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StrasLayer extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
+    
 
     protected $fillable = [
         'stras_id',
         'size',
         'count',
         'price',
+        'sFactory',
+        'SoftDeletes',
     ];
 
     public function stras()

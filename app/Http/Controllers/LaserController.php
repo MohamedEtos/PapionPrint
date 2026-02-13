@@ -39,7 +39,7 @@ class LaserController extends Controller
     public function show($id)
     {
         $order = LaserOrder::with(['material', 'customer'])->findOrFail($id);
-        return view('laser.show', compact('order'));
+        return response()->json($order);
     }
 
     public function store(Request $request)
@@ -64,10 +64,7 @@ class LaserController extends Controller
         if($request->has('customerId') && $request->customerId){
             $data['customer_id'] = $request->customerId;
         } elseif($request->has('customerName') && $request->customerName) {
-            $customer = Customers::where('name', $request->customerName)->first();
-            if(!$customer) {
-                $customer = Customers::create(['name' => $request->customerName]);
-            }
+            $customer = Customers::firstOrCreate(['name' => $request->customerName]);
             $data['customer_id'] = $customer->id;
         }
 
@@ -116,10 +113,7 @@ class LaserController extends Controller
         if($request->has('customerId') && $request->customerId){
              $data['customer_id'] = $request->customerId;
         } elseif($request->has('customerName') && $request->customerName) {
-            $customer = Customers::where('name', $request->customerName)->first();
-            if(!$customer) {
-                $customer = Customers::create(['name' => $request->customerName]);
-            }
+            $customer = Customers::firstOrCreate(['name' => $request->customerName]);
             $data['customer_id'] = $customer->id;
         }
 

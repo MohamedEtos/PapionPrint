@@ -78,6 +78,10 @@
                                                             <input type="hidden" id="data-customer">
                                                         </div>
                                                     </div>
+                                                    <script>
+                                                        // Inline script to ensure binding works immediately or move to main js
+                                                        // We will implement this in the main JS file active right now.
+                                                    </script>
                                                      <div class="col-md-6">
                                                         <div class="form-group">
                                                              <label for="data-height ">الطول</label>
@@ -96,16 +100,18 @@
                                                              <input type="number" class="form-control" id="data-required-pieces" placeholder="ادخال لحساب عدد الكروت">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                             <label for="data-cards-count">عدد الكروت </label>
-                                                             <input type="number" class="form-control required " id="data-cards-count" name="cards_count" >
-                                                        </div>
-                                                    </div>
+
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                              <label for="data-pieces-per-card">عدد القطع في الكارت </label>
                                                              <input type="number" class="form-control required " id="data-pieces-per-card" name="pieces_per_card" >
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                             <label for="data-cards-count">عدد الكروت </label>
+                                                             <input type="number" class="form-control required " id="data-cards-count" name="cards_count" >
                                                         </div>
                                                     </div>
                                                 </div>

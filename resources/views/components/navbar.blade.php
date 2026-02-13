@@ -19,7 +19,7 @@
                             <li class="nav-item d-none d-lg-block"><a class="nav-link bookmark-star"><i class="ficon feather icon-star warning"></i></a>
                                 <div class="bookmark-input search-input">
                                     <div class="bookmark-input-icon"><i class="feather icon-search primary"></i></div>
-                                    <input class="form-control input" type="text" placeholder="Explore Vuexy..." tabindex="0" data-search="template-list">
+                                    <input class="form-control input" type="text" placeholder="البحث" tabindex="0" data-search="template-list">
                                     <ul class="search-list search-list-bookmark"></ul>
                                 </div>
                                 <!-- select.bookmark-select-->
@@ -36,7 +36,7 @@
                         <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon feather icon-search"></i></a>
                             <div class="search-input">
                                 <div class="search-input-icon"><i class="feather icon-search primary"></i></div>
-                                <input class="input" type="text" placeholder="Explore Vuexy..." tabindex="-1" data-search="template-list">
+                                <input class="input" type="text" placeholder="البحث" tabindex="-1" data-search="template-list">
                                 <div class="search-input-close"><i class="feather icon-x"></i></div>
                                 <ul class="search-list search-list-main"></ul>
                             </div>
@@ -92,7 +92,8 @@
 
 
                         <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{ Auth::user()->name ?? '-'}}</span><span class="user-status">Available</span></div>
+<div class="user-nav d-sm-flex d-none"><span class="user-name text-bold-600">{{ Auth::user()->name ?? '-'}}</span><span class="user-status">{{ Auth::user()->roles->pluck('name')[0] ?? '' }}
+</span></div>
                                 <span>
                                     <div class="round d-flex justify-content-center align-items-center bg-primary text-white" style="width: 40px; height: 40px; font-weight: bold; border-radius: 50%;">
                                         @php

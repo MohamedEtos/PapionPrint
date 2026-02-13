@@ -131,7 +131,7 @@
                                     </td>
                                     <td>{{ $Record->customer->name ?? '-' }}</td>
                                     <td>{{ $Record->material->name ?? '-' }}</td>
-                                    <td>{{ $Record->source == 'ap_group' ? 'AP Group' : 'العميل' }}</td>
+        <td><span class='badge {{ $Record->source == 'ap_group' ? 'badge-primary' : 'badge-warning' }}'>{{ $Record->source == 'ap_group' ? 'AP Group' : 'العميل' }}</span></td>
                                     <td>{{ $Record->height }}</td>
                                     <td>{{ $Record->width }}</td>
                                     <td>{{ $Record->pieces_per_section }}</td>

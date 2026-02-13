@@ -187,7 +187,7 @@ class PrintersController extends Controller
             'user_id' => auth()->id(),
             'title' => ' اوردر طباعه' . $printer->orderNumber,
             'img_path' => $request->image_paths[0] ?? null,
-            'body' => $customers->name .'تم اضافه اوردر طباعه '.$printer->meters .'متر',
+            'body' => $customers->name .'تم اضافه اوردر طباعه ' .' '. $printer->meters .' '.'متر',
             'type' => 'order',
             'status' => 'unread',
         ]);

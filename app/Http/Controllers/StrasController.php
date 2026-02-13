@@ -38,13 +38,13 @@ class StrasController extends Controller
     public function show($id)
     {
         $stras = Stras::with(['layers', 'customer'])->findOrFail($id);
-        return view('stras.show', compact('stras'));
+        return response()->json($stras);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'customerId' => 'nullable|exists:customers,id',
+            'customer_name' => 'nullable|string|max:255',
             'height' => 'nullable|numeric',
             'width' => 'nullable|numeric',
             'cards_count' => 'nullable|integer',
@@ -58,8 +58,11 @@ class StrasController extends Controller
 
         $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes', 'manufacturing_cost']);
 
-        if($request->has('customerId')){
+        if($request->has('customerId') && $request->customerId != null){
             $data['customerId'] = $request->customerId;
+        } elseif ($request->has('customer_name') && $request->customer_name != null) {
+            $customer = Customers::firstOrCreate(['name' => $request->customer_name]);
+            $data['customerId'] = $customer->id;
         }
 
         if ($request->hasFile('image')) {
@@ -95,7 +98,7 @@ class StrasController extends Controller
          $stras = Stras::findOrFail($id);
          
           $request->validate([
-            'customerId' => 'nullable|exists:customers,id',
+            'customer_name' => 'nullable|string|max:255',
             'height' => 'nullable|numeric',
             'width' => 'nullable|numeric',
             'cards_count' => 'nullable|integer',
@@ -107,8 +110,11 @@ class StrasController extends Controller
 
         $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes', 'manufacturing_cost']);
         
-        if($request->has('customerId')){
+        if($request->has('customerId') && $request->customerId != null){
              $data['customerId'] = $request->customerId;
+        } elseif ($request->has('customer_name') && $request->customer_name != null) {
+            $customer = Customers::firstOrCreate(['name' => $request->customer_name]);
+            $data['customerId'] = $customer->id;
         }
         
         if ($request->hasFile('image')) {
@@ -119,7 +125,7 @@ class StrasController extends Controller
             $stras->update($data);
 
             if($request->has('layers')){
-                 $stras->layers()->delete(); // Simple re-create for layers
+                 $stras->layers()->forceDelete(); // Force delete to clear old layers and avoid restore conflicts
                  foreach ($request->layers as $layer) {
                     $stras->layers()->create([
                         'size' => $layer['size'],

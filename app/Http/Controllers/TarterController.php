@@ -40,13 +40,13 @@ class TarterController extends Controller
     public function show($id)
     {
         $tarter = Tarter::with(['layers', 'customer'])->findOrFail($id);
-        return view('tarter.show', compact('tarter'));
+        return response()->json($tarter);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'customerId' => 'nullable|exists:customers,id',
+            'customer_name' => 'nullable|string|max:255',
             'height' => 'nullable|numeric',
             'width' => 'nullable|numeric',
             'cards_count' => 'nullable|integer',
@@ -60,8 +60,12 @@ class TarterController extends Controller
         ]);
 
         $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'machine_time', 'notes', 'manufacturing_cost']);
-        if($request->has('customerId')){
+        
+        if($request->has('customerId') && $request->customerId != null){
             $data['customer_id'] = $request->customerId;
+        } elseif ($request->has('customer_name') && $request->customer_name != null) {
+            $customer = Customers::firstOrCreate(['name' => $request->customer_name]);
+            $data['customer_id'] = $customer->id;
         }
 
         if ($request->hasFile('image')) {
@@ -90,7 +94,7 @@ class TarterController extends Controller
          $tarter = Tarter::findOrFail($id);
          
           $request->validate([
-            'customerId' => 'nullable|exists:customers,id',
+            'customer_name' => 'nullable|string|max:255',
             'height' => 'nullable|numeric',
             'width' => 'nullable|numeric',
             'cards_count' => 'nullable|integer',
@@ -103,8 +107,11 @@ class TarterController extends Controller
 
         $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'machine_time', 'notes', 'manufacturing_cost']);
 
-        if($request->has('customerId')){
+        if($request->has('customerId') && $request->customerId != null){
             $data['customer_id'] = $request->customerId;
+        } elseif ($request->has('customer_name') && $request->customer_name != null) {
+            $customer = Customers::firstOrCreate(['name' => $request->customer_name]);
+            $data['customer_id'] = $customer->id;
         }
         
         if ($request->hasFile('image')) {
@@ -115,7 +122,7 @@ class TarterController extends Controller
             $tarter->update($data);
 
             if($request->has('layers')){
-                 $tarter->layers()->delete(); // Simple re-create for layers
+                 $tarter->layers()->forceDelete(); // Force delete logic as per fix
                  foreach ($request->layers as $layer) {
                     $tarter->layers()->create([
                         'size' => $layer['size'],

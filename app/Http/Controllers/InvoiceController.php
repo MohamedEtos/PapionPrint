@@ -84,7 +84,28 @@ class InvoiceController extends Controller
 
             // Calculate Price - pass normalized type for price calculation
             $priceCalcType = ($type === 'rollpress_archive') ? 'rollpress' : $type;
-            $customPrice = $this->calculatePrice($priceCalcType, $itemId);
+            
+            $customPrice = 0;
+            $quantity = 1;
+
+            if ($type === 'laser') {
+                $laserOrder = \App\Models\LaserOrder::find($itemId);
+                if ($laserOrder) {
+                    // Calculate effective unit price based on Total Cost / Required Pieces
+                    if ($laserOrder->required_pieces > 0) {
+                         $customPrice = $laserOrder->total_cost / $laserOrder->required_pieces;
+                    } else {
+                         $customPrice = $laserOrder->manufacturing_cost;
+                    }
+                    // Round to 2 decimals if needed, or keep precision? User said 2.31 which implies rounding or specific precision. 
+                    // Let's keep it raw or round to 2 standard.
+                    // $customPrice = round($customPrice, 2); 
+                    
+                    $quantity = $laserOrder->required_pieces;
+                }
+            } else {
+                $customPrice = $this->calculatePrice($priceCalcType, $itemId);
+            }
 
             InvoiceItem::firstOrCreate([
                 'invoice_id' => $invoice->id,
@@ -92,7 +113,7 @@ class InvoiceController extends Controller
                 'itemable_type' => $modelClass
             ], [
                 'custom_price' => $customPrice,
-                'quantity' => 1
+                'quantity' => $quantity
             ]);
         }
 
