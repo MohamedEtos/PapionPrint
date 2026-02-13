@@ -229,7 +229,7 @@ class PrintersController extends Controller
     {
 
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:Printers,id',
+            'id' => 'required|exists:printers,id',
         ])->validate();
 
 
@@ -432,7 +432,7 @@ class PrintersController extends Controller
     {
 
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:Printers,id',
+            'id' => 'required|exists:printers,id',
         ])->validate();
 
 
@@ -451,7 +451,7 @@ class PrintersController extends Controller
 
         \Illuminate\Support\Facades\Validator::make(['ids' => $request->ids], [
             'ids' => 'required|array',
-            'ids.*' => 'exists:Printers,id',
+            'ids.*' => 'exists:printers,id',
         ])->validate();
 
 
@@ -469,7 +469,7 @@ class PrintersController extends Controller
     {
 
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:Printers,id',
+            'id' => 'required|exists:printers,id',
         ])->validate();
 
 
@@ -502,7 +502,7 @@ class PrintersController extends Controller
     {
 
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:Printers,id',
+            'id' => 'required|exists:printers,id',
         ])->validate();
 
 
@@ -571,7 +571,7 @@ class PrintersController extends Controller
     {
 
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:Printers,id',
+            'id' => 'required|exists:printers,id',
         ])->validate();
 
 
@@ -587,7 +587,7 @@ class PrintersController extends Controller
     {
 
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:Printers,id',
+            'id' => 'required|exists:printers,id',
         ])->validate();
 
 

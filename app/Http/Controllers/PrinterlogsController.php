@@ -112,7 +112,7 @@ class PrinterlogsController extends Controller
     public function duplicate($id)
     {
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:Printers,id',
+            'id' => 'required|exists:printers,id',
         ])->validate();
 
         $order = Printers::with('ordersImgs')->find($id);
