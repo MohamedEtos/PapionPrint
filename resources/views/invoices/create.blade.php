@@ -576,10 +576,22 @@
     });
 
     // Clear Cart
+    // Clear Cart
     function clearCart() {
-        if(confirm('هل انت متأكد من تفريغ السلة؟')) {
-            window.location.href = "{{ route('invoice.clear') }}";
-        }
+        Swal.fire({
+            title: 'هل انت متأكد؟',
+            text: "سيتم حذف جميع العناصر من السلة الحالية!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'نعم، تفريغ السلة',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.value) {
+                window.location.href = "{{ route('invoice.clear') }}";
+            }
+        });
     }
 
     // Finalize Invoice (Save as New)
