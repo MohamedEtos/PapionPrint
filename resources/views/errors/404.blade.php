@@ -17,28 +17,7 @@
                                     <p class="p-2">
                                         عذرا، الصفحة التي تبحث عنها غير موجودة
                                     </p>
-                                    <a class="btn btn-primary btn-lg mt-2" href="
-                                        @if (Auth::user()->can('الاحصائيات'))
-                                            {{ route('dashboard') }}
-                                        @elseif (Auth::user()->can('مصمم'))
-                                            {{ route('AddPrintOrders') }}
-                                        @elseif (Auth::user()->can('المكبس'))
-                                            {{ route('AddRollpress') }}
-                                        @elseif (Auth::user()->can('الطباعه'))
-                                            {{ route('AddPrintOrders') }}
-                                        @elseif (Auth::user()->can('الفواتير'))
-                                            {{ route('invoice.history') }}
-                                        @elseif (Auth::user()->can('الليزر'))
-                                            {{ route('laser.index') }}
-                                        @elseif (Auth::user()->can('الاستراس'))
-                                            {{ route('stras.index') }}
-                                        @elseif (Auth::user()->can('الترتر'))
-                                            {{ route('tarter.index') }}
-                                        @else
-                                            {{ route('home') }}
-                                        @endif
-                                    
-                                    ">Back to Home</a>
+                                    <a class="btn btn-primary btn-lg mt-2" href="{{ route('dashboard') }}">Back to Home</a>
                                 </div>
                             </div>
                         </div>
