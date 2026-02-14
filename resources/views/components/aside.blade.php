@@ -2,7 +2,27 @@
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
-                <li class="nav-item mr-auto"><a class="navbar-brand" href="{{route('dashboard')}}">
+                <li class="nav-item mr-auto"><a class="navbar-brand" href="
+                @if (Auth::user()->can('الاحصائيات'))
+                                            {{ route('dashboard') }}
+                                        @elseif (Auth::user()->can('مصمم'))
+                                            {{ route('AddPrintOrders') }}
+                                        @elseif (Auth::user()->can('المكبس'))
+                                            {{ route('AddRollpress') }}
+                                        @elseif (Auth::user()->can('الطباعه'))
+                                            {{ route('AddPrintOrders') }}
+                                        @elseif (Auth::user()->can('الفواتير'))
+                                            {{ route('invoice.history') }}
+                                        @elseif (Auth::user()->can('الليزر'))
+                                            {{ route('laser.index') }}
+                                        @elseif (Auth::user()->can('الاستراس'))
+                                            {{ route('stras.index') }}
+                                        @elseif (Auth::user()->can('الترتر'))
+                                            {{ route('tarter.index') }}
+                                        @else
+                                            {{ route('home') }}
+                                        @endif
+                                        ">
                         <h2 class="brand-text mb-0">Papion System</h2>
                     </a></li>
                 <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
@@ -12,10 +32,50 @@
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                 
-                <li class=" nav-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Papion</span><span class="badge badge badge-warning badge-pill float-right mr-2"></span></a>
+                <li class=" nav-item"><a href="
+                @if (Auth::user()->can('الاحصائيات'))
+                                            {{ route('dashboard') }}
+                                        @elseif (Auth::user()->can('مصمم'))
+                                            {{ route('AddPrintOrders') }}
+                                        @elseif (Auth::user()->can('المكبس'))
+                                            {{ route('AddRollpress') }}
+                                        @elseif (Auth::user()->can('الطباعه'))
+                                            {{ route('AddPrintOrders') }}
+                                        @elseif (Auth::user()->can('الفواتير'))
+                                            {{ route('invoice.history') }}
+                                        @elseif (Auth::user()->can('الليزر'))
+                                            {{ route('laser.index') }}
+                                        @elseif (Auth::user()->can('الاستراس'))
+                                            {{ route('stras.index') }}
+                                        @elseif (Auth::user()->can('الترتر'))
+                                            {{ route('tarter.index') }}
+                                        @else
+                                            {{ route('home') }}
+                                        @endif
+                "><i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Papion</span><span class="badge badge badge-warning badge-pill float-right mr-2"></span></a>
                     <ul class="menu-content">
 
-                        <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><a href="{{route('dashboard')}}"><i class="feather icon-circle"></i><span class="menu-item" data-i18n="eCommerce">الرئيسية</span></a>
+                        <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><a href="
+                                        @if (Auth::user()->can('الاحصائيات'))
+                                            {{ route('dashboard') }}
+                                        @elseif (Auth::user()->can('مصمم'))
+                                            {{ route('AddPrintOrders') }}
+                                        @elseif (Auth::user()->can('المكبس'))
+                                            {{ route('AddRollpress') }}
+                                        @elseif (Auth::user()->can('الطباعه'))
+                                            {{ route('AddPrintOrders') }}
+                                        @elseif (Auth::user()->can('الفواتير'))
+                                            {{ route('invoice.history') }}
+                                        @elseif (Auth::user()->can('الليزر'))
+                                            {{ route('laser.index') }}
+                                        @elseif (Auth::user()->can('الاستراس'))
+                                            {{ route('stras.index') }}
+                                        @elseif (Auth::user()->can('الترتر'))
+                                            {{ route('tarter.index') }}
+                                        @else
+                                            {{ route('home') }}
+                                        @endif
+                        "><i class="feather icon-circle"></i><span class="menu-item" data-i18n="eCommerce">الرئيسية</span></a>
                         </li>
 
                     </ul>
