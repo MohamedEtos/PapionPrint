@@ -45,6 +45,7 @@ export default defineConfig({
                 'resources/js/pages/roles.js',
                 'resources/js/pages/rollpress_trash.js',
                 'resources/js/pages/presslist.js',
+                'resources/js/customer-profile.js',
             ],
             refresh: true,
         }),
