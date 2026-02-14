@@ -43,6 +43,8 @@ export default defineConfig({
                 'resources/js/pages/tarter.js',
                 'resources/js/notifications.js',
                 'resources/js/pages/roles.js',
+                'resources/js/pages/rollpress_trash.js',
+                'resources/js/pages/presslist.js',
             ],
             refresh: true,
         }),

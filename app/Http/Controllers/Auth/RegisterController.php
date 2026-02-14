@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
+
+ 
+
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -35,9 +38,9 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+   public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('permission:المستخدمين');
     }
 
     /**

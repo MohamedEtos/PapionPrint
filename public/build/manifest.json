@@ -2247,6 +2247,12 @@
     "src": "resources/js/pages/rollpress_archive.js",
     "isEntry": true
   },
+  "resources/js/pages/rollpress_trash.js": {
+    "file": "assets/rollpress_trash-Dbkd68Jm.js",
+    "name": "rollpress_trash",
+    "src": "resources/js/pages/rollpress_trash.js",
+    "isEntry": true
+  },
   "resources/js/pages/stras.js": {
     "file": "assets/stras-BuLkQt2_.js",
     "name": "stras",

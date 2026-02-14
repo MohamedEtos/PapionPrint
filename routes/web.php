@@ -69,7 +69,6 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     });
 
     Route::middleware(['permission:الفواتير'])->group(function () {
-        
         // Machine Pricing Routes
         Route::get('/machines/pricing', [App\Http\Controllers\MachinesController::class, 'pricing'])->name('machines.pricing');
         Route::post('/machines/pricing/update', [App\Http\Controllers\MachinesController::class, 'updatePrice'])->name('machines.update_price');
