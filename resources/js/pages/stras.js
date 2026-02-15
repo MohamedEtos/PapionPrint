@@ -379,7 +379,7 @@ $(document).ready(function () {
             if (data.customer) $('#data-customer-view').val(data.customer.name);
 
             $('#data-height').val(data.height);
-            $('#data-width').val(data.width);
+            $('#data-width').val(Math.round(data.width));
             $('#data-cards-count').val(data.cards_count);
             $('#data-pieces-per-card').val(data.pieces_per_card);
             $('#data-notes').val(data.notes);

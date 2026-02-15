@@ -220,7 +220,7 @@
                 @if(auth()->user()->can(['تقارير الاخطاء']))
                 <li class=" nav-item {{ request()->routeIs('activity-logs.*') ? 'active' : '' }}">
                     <a href="{{ route('activity-logs.index') }}">
-                        <i class="feather icon-alert-triangle"></i>
+                        <i class="feather icon-cpu"></i>
                         <span class="menu-title" data-i18n="Error Logs">System logs </span>
                     </a>
                 </li>

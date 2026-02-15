@@ -91,7 +91,11 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                              <label for="data-width">العرض</label>
-                                                             <input type="number" step="0.01" class="form-control required " value="24" id="data-width" name="width">
+                                                             <select class="form-control required" id="data-width" name="width">
+                                                                <option value="24">24</option>
+                                                                <option value="32">32</option>
+                                                                <option value="40">40</option>
+                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
