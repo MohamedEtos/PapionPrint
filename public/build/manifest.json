@@ -2184,6 +2184,12 @@
       "_apexcharts-1dz0OY9g.js"
     ]
   },
+  "resources/js/customer-profile.js": {
+    "file": "assets/customer-profile-C3ctKdex.js",
+    "name": "customer-profile",
+    "src": "resources/js/customer-profile.js",
+    "isEntry": true
+  },
   "resources/js/images.js": {
     "file": "assets/images-l0sNRNKZ.js",
     "name": "images",
@@ -2245,6 +2251,12 @@
     "file": "assets/rollpress_archive-aiD3qgds.js",
     "name": "rollpress_archive",
     "src": "resources/js/pages/rollpress_archive.js",
+    "isEntry": true
+  },
+  "resources/js/pages/rollpress_trash.js": {
+    "file": "assets/rollpress_trash-Dbkd68Jm.js",
+    "name": "rollpress_trash",
+    "src": "resources/js/pages/rollpress_trash.js",
     "isEntry": true
   },
   "resources/js/pages/stras.js": {

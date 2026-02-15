@@ -11,7 +11,8 @@
         <div class="shadow-bottom"></div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                
+            
+                @can('الاحصائيات')
                 <li class=" nav-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i><span class="menu-title" data-i18n="Dashboard">Papion</span><span class="badge badge badge-warning badge-pill float-right mr-2"></span></a>
                     <ul class="menu-content">
 
@@ -20,7 +21,7 @@
 
                     </ul>
                 </li>
-
+                @endcan
                 @if(auth()->user()->can(['الطباعه']))
                 <li class=" navigation-header"><span>الطباعة</span>
                 </li>

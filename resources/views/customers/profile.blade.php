@@ -150,9 +150,9 @@
                                             </div>
                                         @endif
                                     </td>
-                                    <td>
-                                         <button type="button" class="btn btn-sm btn-primary view-invoice-btn" data-id="{{ $invoice->id }}"><i class="feather icon-eye"></i> عرض</button>
-                                    </td>
+                                     <td>
+                                         <button type="button" class="btn btn-sm btn-primary view-invoice-btn" data-url="{{ route('invoice.invoice_details', $invoice->id) }}"><i class="feather icon-eye"></i> عرض</button>
+                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -166,8 +166,8 @@
             <div class="card-header">
                 <h4 class="card-title"> الطلبات</h4>
             </div>
-             <div class="card-content">
-                <div class="table-responsive">
+            <div class="card-content">
+                <div class="table-responsive" id="orders-table-container" data-add-route="{{ route('invoice.add') }}">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
@@ -191,6 +191,9 @@
                                 <td>{{ $order['details'] }}</td>
                                 <td>
                                     <a href="{{ $order['link'] }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="feather icon-external-link"></i> فتح</a>
+                                    <button class="btn btn-sm btn-outline-success add-to-invoice" data-id="{{ $order['id'] }}" data-type="{{ strtolower($order['type']) }}">
+                                        <i class="feather icon-plus-circle"></i> إضافة للفاتورة
+                                    </button>
                                 </td>
                             </tr>
                             @endforeach
@@ -223,20 +226,5 @@
 @endsection
 
 @section('js')
-<script>
-    $(document).ready(function() {
-        $('.view-invoice-btn').click(function() {
-            var id = $(this).data('id');
-            $('#invoiceDetailsModal').modal('show');
-            $('#invoice-details-content').html('<div class="text-center p-3"><i class="feather icon-loader fa-spin fa-2x"></i> جار التحميل...</div>');
-            
-            var url = "{{ route('invoice.invoice_details', ':id') }}";
-            url = url.replace(':id', id);
-
-            $.get(url, function(response) {
-                 $('#invoice-details-content').html(response.html);
-            });
-        });
-    });
-</script>
+    @vite('resources/js/customer-profile.js')
 @endsection
