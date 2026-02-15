@@ -238,6 +238,11 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/{id}', [App\Http\Controllers\CustomerController::class, 'show'])->name('customers.show');
     });
 
+    // activityLog
+    Route::prefix('activity-logs')->middleware(['permission:تقارير الاخطاء'])->group(function () {
+    Route::get('/system-logs', [App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-logs.index');
+    });
+
 });
 
 

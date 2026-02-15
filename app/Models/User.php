@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, \Spatie\Activitylog\Traits\LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -55,5 +55,12 @@ class User extends Authenticatable
             'joining_date' => 'date',
             'resignation_date' => 'date',
         ];
+    }
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
     }
 }

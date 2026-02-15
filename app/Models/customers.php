@@ -35,4 +35,13 @@ class Customers extends Model
     {
         return $this->hasMany(Invoice::class, 'customer_id');
     }
+
+    use \Spatie\Activitylog\Traits\LogsActivity;
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
+    }
 }

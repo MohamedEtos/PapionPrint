@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Printers extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, \Spatie\Activitylog\Traits\LogsActivity;
     protected $fillable = [
         'orderNumber',
         'customerId',
@@ -57,5 +57,12 @@ class Printers extends Model
     public function rollpress()
     {
         return $this->hasOne(Rollpress::class, 'orderId');
+    }
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
     }
 }

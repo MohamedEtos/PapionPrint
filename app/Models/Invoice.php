@@ -20,4 +20,13 @@ class Invoice extends Model
     {
         return $this->belongsTo(Customers::class, 'customer_id');
     }
+
+    use \Spatie\Activitylog\Traits\LogsActivity;
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
+    }
 }
