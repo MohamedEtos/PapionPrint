@@ -43,4 +43,13 @@ class NotificationsController extends Controller
 
         return view('notifications.index', compact('notifications'));
     }
+
+    public function markAllAsRead()
+    {
+        Notifications::where('user_id', Auth::id())
+            ->where('status', 'unread')
+            ->update(['status' => 'read']);
+
+        return response()->json(['success' => true]);
+    }
 }

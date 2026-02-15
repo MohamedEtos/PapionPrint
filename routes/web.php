@@ -174,6 +174,7 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         // Notifications
         Route::get('/notifications/latest', [App\Http\Controllers\NotificationsController::class, 'getLatest'])->name('notifications.latest');
         Route::get('/notifications', [App\Http\Controllers\NotificationsController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationsController::class, 'markAllAsRead'])->name('notifications.markAllRead');
     });
     
     Route::prefix('invoices')->middleware(['permission:الفواتير'])->group(function () {

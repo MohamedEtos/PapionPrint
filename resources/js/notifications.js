@@ -55,4 +55,47 @@ document.addEventListener('DOMContentLoaded', function () {
                 .catch(error => console.error('Error fetching notifications:', error));
         }, 10000); // 10 seconds
     }
+
+    // Mark All Read Logic
+    const markAllReadBtn = document.getElementById('mark-all-read');
+    if (markAllReadBtn) {
+        markAllReadBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = this.dataset.url;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                return;
+            }
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reset Badge
+                    const badge = document.getElementById('notification-badge');
+                    if (badge) badge.innerText = '0';
+                    
+                    // Reset Header
+                    const headerCount = document.getElementById('notification-header-count');
+                    if (headerCount) headerCount.innerText = '0 New';
+
+                    // Visually mark current list as read
+                    const listItems = document.querySelectorAll('#notification-list .media-heading.primary');
+                    listItems.forEach(el => {
+                        el.classList.remove('primary');
+                    });
+                }
+            })
+            .catch(error => console.error('Error marking all as read:', error));
+        });
+    }
 });
