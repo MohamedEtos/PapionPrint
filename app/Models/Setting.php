@@ -17,4 +17,17 @@ class Setting extends Model
         'info_color',
         'dark_color',
     ];
+
+
+
+        use \Spatie\Activitylog\Traits\LogsActivity;
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
+    }
+
+
 }

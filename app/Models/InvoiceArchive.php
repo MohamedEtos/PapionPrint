@@ -22,4 +22,6 @@ class InvoiceArchive extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
+
+    
 }

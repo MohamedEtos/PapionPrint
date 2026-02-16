@@ -16,4 +16,16 @@ class Stock extends Model
         'quantity',
         'unit',
     ];
+
+
+        use \Spatie\Activitylog\Traits\LogsActivity;
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
+    }
+
+
 }
