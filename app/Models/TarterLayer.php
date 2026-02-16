@@ -21,4 +21,12 @@ class TarterLayer extends Model
     {
         return $this->belongsTo(Tarter::class);
     }
+
+
+        public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
+    }
 }

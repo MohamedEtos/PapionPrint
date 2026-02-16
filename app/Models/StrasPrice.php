@@ -15,4 +15,12 @@ class StrasPrice extends Model
         'price',
         'type', // stras, paper, global
     ];
+
+
+        public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
+    }
 }

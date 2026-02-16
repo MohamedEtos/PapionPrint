@@ -40,7 +40,8 @@ class Rollpress extends Model
     {
         return \Spatie\Activitylog\LogOptions::defaults()
         ->logAll()
-        
+        ->logOnlyDirty();
+    }
 
 
 }

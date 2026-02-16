@@ -25,4 +25,12 @@ class StrasLayer extends Model
     {
         return $this->belongsTo(Stras::class, 'stras_id');
     }
+
+
+        public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+        ->logAll()
+        ->logOnlyDirty();
+    }
 }
