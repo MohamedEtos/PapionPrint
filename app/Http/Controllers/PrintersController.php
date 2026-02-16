@@ -450,8 +450,23 @@ class PrintersController extends Controller
         ])->validate();
 
 
-        $printer = Printers::find($id);
+        $printer = Printers::with('machines')->find($id);
         if ($printer) {
+            
+            // Return Stock
+            if ($printer->machines && $printer->meters > 0) {
+                $machineName = strtolower($printer->machines->name);
+                $type = (str_contains($machineName, 'dtf') || str_contains($machineName, 'DTF')) ? 'dtf' : 'sublimation';
+                
+                $stock = \App\Models\Stock::where('type', 'paper')
+                            ->where('machine_type', $type)
+                            ->first();
+                
+                if ($stock) {
+                    $stock->increment('quantity', $printer->meters);
+                }
+            }
+
             $printer->delete();
 
              // Notification
@@ -484,7 +499,23 @@ class PrintersController extends Controller
 
         $ids = $request->ids;
         if (!empty($ids)) {
-            Printers::whereIn('id', $ids)->delete();
+            $orders = Printers::with('machines')->whereIn('id', $ids)->get();
+            foreach ($orders as $order) {
+                 // Return Stock
+                 if ($order->machines && $order->meters > 0) {
+                    $machineName = strtolower($order->machines->name);
+                    $type = (str_contains($machineName, 'dtf') || str_contains($machineName, 'DTF')) ? 'dtf' : 'sublimation';
+                    
+                    $stock = \App\Models\Stock::where('type', 'paper')
+                                ->where('machine_type', $type)
+                                ->first();
+                    
+                    if ($stock) {
+                        $stock->increment('quantity', $order->meters);
+                    }
+                }
+                $order->delete();
+            }
             return response()->json(['success' => 'Orders deleted successfully']);
         }
         return response()->json(['error' => 'No orders selected'], 400);
@@ -498,7 +529,7 @@ class PrintersController extends Controller
         ])->validate();
 
         return DB::transaction(function () use ($id) {
-            $original = Printers::with(['printingprices', 'ordersImgs'])->findOrFail($id);
+            $original = Printers::with(['printingprices', 'ordersImgs', 'machines'])->findOrFail($id);
             
             $new = $original->replicate();
             $new->orderNumber = 'ORD-' . time(); // Generate new order number
@@ -519,6 +550,43 @@ class PrintersController extends Controller
                 $newImg = $img->replicate();
                 $newImg->orderId = $new->id;
                 $newImg->save();
+            }
+
+            // Deduct Paper Stock
+            if ($original->machines && $new->meters > 0) {
+                $machineName = strtolower($original->machines->name);
+                $type = (str_contains($machineName, 'dtf') || str_contains($machineName, 'DTF')) ? 'dtf' : 'sublimation';
+                
+                // DEBUG LOG
+                \Illuminate\Support\Facades\Log::info('Restart Order Stock Deduct:', [
+                    'order_id' => $new->id,
+                    'machine' => $machineName,
+                    'type' => $type,
+                    'meters' => $new->meters
+                ]);
+
+                $stock = \App\Models\Stock::where('type', 'paper')
+                            ->where('machine_type', $type)
+                            ->first();
+                
+                if ($stock) {
+                    $stock->decrement('quantity', $new->meters);
+                    \Illuminate\Support\Facades\Log::info('Stock decremented', ['new_qty' => $stock->quantity]);
+
+                } else {
+                        \App\Models\Stock::create([
+                            'type' => 'paper',
+                            'machine_type' => $type,
+                            'quantity' => -($new->meters),
+                            'unit' => 'meter'
+                        ]);
+                        \Illuminate\Support\Facades\Log::info('Stock created negative');
+                }
+            } else {
+                 \Illuminate\Support\Facades\Log::info('Restart Stock Skip:', [
+                    'has_machine' => !!$original->machines,
+                    'meters' => $new->meters
+                ]);
             }
 
             // Notification

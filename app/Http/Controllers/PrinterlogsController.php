@@ -115,7 +115,7 @@ class PrinterlogsController extends Controller
             'id' => 'required|exists:printers,id',
         ])->validate();
 
-        $order = Printers::with(['ordersImgs', 'customers'])->find($id);
+        $order = Printers::with(['ordersImgs', 'customers', 'machines'])->find($id);
         if (!$order) {
             return response()->json(['error' => 'Order not found'], 404);
         }
@@ -135,6 +135,27 @@ class PrinterlogsController extends Controller
                 $newImg = $img->replicate();
                 $newImg->orderId = $newOrder->id;
                 $newImg->save();
+            }
+
+            // Deduct Paper Stock
+            if ($order->machines && $newOrder->meters > 0) {
+                $machineName = strtolower($order->machines->name);
+                $type = (str_contains($machineName, 'dtf') || str_contains($machineName, 'DTF')) ? 'dtf' : 'sublimation';
+                
+                $stock = \App\Models\Stock::where('type', 'paper')
+                            ->where('machine_type', $type)
+                            ->first();
+                
+                if ($stock) {
+                    $stock->decrement('quantity', $newOrder->meters);
+                } else {
+                     \App\Models\Stock::create([
+                         'type' => 'paper',
+                         'machine_type' => $type,
+                         'quantity' => -($newOrder->meters),
+                         'unit' => 'meter'
+                     ]);
+                }
             }
 
              // Notification
