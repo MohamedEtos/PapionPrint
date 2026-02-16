@@ -348,7 +348,20 @@ $(document).ready(function () {
             if (data.customer) $('#data-customer-view').val(data.customer.name);
 
             $('#data-height').val(data.height);
+
+            // Handle Width - Append if not exists
+            var widthExists = false;
+            $('#data-width option').each(function () {
+                if (this.value == data.width) {
+                    widthExists = true;
+                    return false;
+                }
+            });
+            if (!widthExists && data.width) {
+                $('#data-width').append(new Option(data.width, data.width));
+            }
             $('#data-width').val(data.width);
+
             $('#data-cards-count').val(data.cards_count);
             $('#data-pieces-per-card').val(data.pieces_per_card);
             $('#data-machine-time').val(data.machine_time); // Populate Machine Time
@@ -387,12 +400,20 @@ $(document).ready(function () {
 
                     // Generate options from window.tarterPrices
                     var options = '';
+                    var sizeExists = false;
+                    var savedSize = String(layer.size).trim();
+
                     if (window.tarterPrices) {
                         window.tarterPrices.forEach(function (p) {
                             if (p.type === 'needle') {
                                 options += `<option value="${p.size}">${p.size}</option>`;
+                                if (String(p.size).trim() == savedSize) sizeExists = true;
                             }
                         });
+                    }
+
+                    if (!sizeExists && layer.size) {
+                        options += `<option value="${layer.size}">${layer.size}</option>`;
                     }
 
                     if (options === '') {

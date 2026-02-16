@@ -104,7 +104,7 @@ class TarterController extends Controller
     public function update(Request $request, $id)
     {
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:tarter,id',
+            'id' => 'required|exists:tarters,id',
         ])->validate();
          $tarter = Tarter::findOrFail($id);
          
@@ -165,7 +165,7 @@ class TarterController extends Controller
     public function destroy($id)
     {
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:tarter,id',
+            'id' => 'required|exists:tarters,id',
         ])->validate();
         $tarter = Tarter::find($id);
         if ($tarter) {
@@ -192,7 +192,7 @@ class TarterController extends Controller
     public function restart($id)
     {
         \Illuminate\Support\Facades\Validator::make(['id' => $id], [
-            'id' => 'required|exists:tarter,id',
+            'id' => 'required|exists:tarters,id',
         ])->validate();
         return DB::transaction(function () use ($id) {
             $original = Tarter::with('layers')->findOrFail($id);
