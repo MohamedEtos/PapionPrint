@@ -152,6 +152,13 @@
                         </li>
                 @endif
 
+                <li class=" nav-item {{ request()->routeIs('mail.*') ? 'active' : '' }}">
+                    <a href="{{ route('mail.index') }}">
+                        <i class="feather icon-mail"></i>
+                        <span class="menu-title" data-i18n="Email">البريد الإلكتروني</span>
+                    </a>
+                </li>
+
                 @if(auth()->user()->hasRole('super-admin'))
                 <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title" data-i18n="Ecommerce">المستخدمين والصلاحيات</span></a>
                     <ul class="menu-content">

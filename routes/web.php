@@ -243,6 +243,16 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
     Route::get('/system-logs', [App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-logs.index');
     });
 
+
+    // Email System Routes
+    Route::prefix('mail')->group(function () {
+        Route::get('/', [App\Http\Controllers\MailController::class, 'index'])->name('mail.index');
+        Route::get('/sent', [App\Http\Controllers\MailController::class, 'sent'])->name('mail.sent');
+        Route::get('/create', [App\Http\Controllers\MailController::class, 'create'])->name('mail.create');
+        Route::post('/store', [App\Http\Controllers\MailController::class, 'store'])->name('mail.store');
+        Route::get('/{id}', [App\Http\Controllers\MailController::class, 'show'])->name('mail.show');
+    });
+
 });
 
 
