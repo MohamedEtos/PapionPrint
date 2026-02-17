@@ -5,7 +5,7 @@
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
-            <div class="content-header row">
+            <div class="content-header ">
 <div class="content-body">
     <div class="row">
         <div class="col-12">
