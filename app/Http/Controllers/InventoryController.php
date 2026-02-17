@@ -139,8 +139,17 @@ class InventoryController extends Controller
             return;
         }
 
+        // Fetch currently available materials
+        $stocks = \App\Models\Stock::all();
+        $materialsList = "";
+        foreach ($stocks as $stock) {
+            $typeTrans = $stock->type === 'paper' ? 'ورق' : ($stock->type === 'ink' ? 'حبر' : $stock->type);
+            $detail = $stock->machine_type . ($stock->color ? ' - ' . $stock->color : '');
+            $materialsList .= "- $typeTrans ($detail): {$stock->quantity} {$stock->unit}\n";
+        }
+
         $subject = "تنبيه: مخزون منخفض - $itemName";
-        $body = "تحذير: مستوى المخزون للصنف **$itemName** منخفض.\n\nالكمية الحالية: **$quantity**\n\nيرجى طلب إعادة المخزون في أقرب وقت ممكن.";
+        $body = "تحذير: مستوى المخزون للصنف **$itemName** منخفض.\n\nالكمية الحالية: **$quantity**\n\nيرجى طلب إعادة المخزون في أقرب وقت ممكن.\n\n**الخامات الموجوده حاليا:**\n$materialsList";
 
         foreach ($emails as $email) {
             try {
