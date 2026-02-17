@@ -139,8 +139,8 @@ class InventoryController extends Controller
             return;
         }
 
-        $subject = "Low Stock Alert: $itemName";
-        $body = "Warning: The stock level for **$itemName** is low.\n\nCurrent Quantity: **$quantity**\n\nPlease replenish the stock as soon as possible.";
+        $subject = "تنبيه: مخزون منخفض - $itemName";
+        $body = "تحذير: مستوى المخزون للصنف **$itemName** منخفض.\n\nالكمية الحالية: **$quantity**\n\nيرجى طلب إعادة المخزون في أقرب وقت ممكن.";
 
         foreach ($emails as $email) {
             try {
