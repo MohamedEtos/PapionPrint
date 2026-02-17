@@ -29,7 +29,7 @@ class PrinterlogsController extends Controller
                 // Get IDs of latest 10
                 $latestIds = Printers::where('archive', 1)
                     ->orderBy('id', 'desc')
-                    ->take(10)
+                    ->take(30)
                     ->pluck('id');
                 
                 $query->whereIn('id', $latestIds);
