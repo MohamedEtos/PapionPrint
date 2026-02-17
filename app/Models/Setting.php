@@ -16,6 +16,7 @@ class Setting extends Model
         'warning_color',
         'info_color',
         'dark_color',
+        'inventory_alert_emails',
     ];
 
 

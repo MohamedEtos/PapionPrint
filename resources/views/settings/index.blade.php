@@ -52,6 +52,12 @@
                             ألوان القالب
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex py-75" id="account-pill-inventory" data-toggle="pill" href="#account-vertical-inventory" aria-expanded="false">
+                            <i class="feather icon-bell mr-50 font-medium-3"></i>
+                            تنبيهات المخزون
+                        </a>
+                    </li>
                 </ul>
             </div>
             <!-- right content section -->
@@ -149,6 +155,18 @@
                                                     <div class="controls">
                                                         <label for="dark-color">اللون الداكن (Dark)</label>
                                                         <input type="color" class="form-control" id="dark-color" name="dark_color" value="{{ $setting->dark_color ?? '#1E1E1E' }}" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="account-vertical-inventory" role="tabpanel" aria-labelledby="account-pill-inventory" aria-expanded="false">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label for="inventory-alert-emails">البريد الإلكتروني للتنبيهات (يفصل بينهم بفاصلة ,)</label>
+                                                        <textarea class="form-control" id="inventory-alert-emails" name="inventory_alert_emails" rows="3" placeholder="email1@example.com, email2@example.com">{{ $setting->inventory_alert_emails }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>

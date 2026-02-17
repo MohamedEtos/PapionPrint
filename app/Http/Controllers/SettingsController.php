@@ -36,6 +36,7 @@ class SettingsController extends Controller
             'info_color' => 'required|string|max:7',
             'dark_color' => 'required|string|max:7',
             'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'inventory_alert_emails' => 'nullable|string',
         ]);
 
         $setting = Setting::first();
@@ -48,7 +49,8 @@ class SettingsController extends Controller
             'danger_color',
             'warning_color',
             'info_color',
-            'dark_color'
+            'dark_color',
+            'inventory_alert_emails'
         ]);
 
         if ($request->hasFile('site_logo')) {
