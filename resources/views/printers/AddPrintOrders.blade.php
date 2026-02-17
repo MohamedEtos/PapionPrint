@@ -58,7 +58,9 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
+                                    @can('حذف الطباعه')
                                     <a class="dropdown-item text-danger bulk-delete-btn" href="#"><i class="feather icon-trash "></i>حذف</a>
+                                    @endcan
                                     <a class="dropdown-item" href="#"><i class="feather icon-archive"></i>ارشفة</a>
                                 </div>
                             </div>
@@ -106,8 +108,12 @@
                                     <!-- <td class="product-price">{{ optional($Order->printingprices)->pricePerMeter }}</td> -->
                                     <td class="product-price" title="{{ $Order->created_at }}">{{ $Order->created_at->locale('ar')->diffForHumans() }}</td>
                                     <td class="product-action">
+                                        @can('تعديل الطباعه')
                                         <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
+                                        @endcan
+                                        @can('حذف الطباعه')
                                         <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
+                                        @endcan
 
                                     </td>
                                 </tr>

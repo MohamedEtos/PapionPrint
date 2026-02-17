@@ -76,14 +76,19 @@ $(document).ready(function () {
             {
                 targets: 1, // Actions
                 render: function (data, type, full, meta) {
-                    return `<div class="btn-group" role="group">
-                        <button type="button" class="btn btn-icon btn-flat-primary edit-btn" title="تعديل" data-id="${full.id}">
+                    let actions = '<div class="btn-group" role="group">';
+                    if (window.permissions && window.permissions.canEdit) {
+                        actions += `<button type="button" class="btn btn-icon btn-flat-primary edit-btn" title="تعديل" data-id="${full.id}">
                             <i class="feather icon-edit"></i>
-                        </button>
-                        <button type="button" class="btn btn-icon btn-flat-danger delete-btn" title="حذف" data-id="${full.id}">
+                        </button>`;
+                    }
+                    if (window.permissions && window.permissions.canDelete) {
+                        actions += `<button type="button" class="btn btn-icon btn-flat-danger delete-btn" title="حذف" data-id="${full.id}">
                             <i class="feather icon-trash-2"></i>
-                        </button>
-                    </div>`;
+                        </button>`;
+                    }
+                    actions += '</div>';
+                    return actions;
                 }
             },
             {

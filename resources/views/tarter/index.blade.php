@@ -200,7 +200,9 @@
                                     الإجراءات
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
+                                    @can('حذف الترتر')
                                     <a class="dropdown-item" href="javascript:void(0)" id="bulk-delete-btn"><i class="feather icon-trash"></i> حذف المحدد</a>
+                                    @endcan
                                     <a class="dropdown-item" href="javascript:void(0)" onclick="addToInvoice()"><i class="feather icon-file-text"></i> انشاء  فاتوره  </a>
                                 </div>
                             </div>
@@ -281,8 +283,12 @@
                                     <td class="product-category">{{ $Record->notes ?? '-' }}</td>
                                     <td class="product-price" title="{{ $Record->created_at }}">{{ $Record->created_at ? $Record->created_at->locale('ar')->diffForHumans() : '-' }}</td>
                                     <td class="product-action">
+                                        @can('تعديل الترتر')
                                         <span class="action-edit" onclick="editTarter({{ $Record->id }})"><i class="feather icon-edit"></i></span>
+                                        @endcan
+                                        @can('حذف الترتر')
                                         <span class="action-delete" onclick="deleteTarter({{ $Record->id }})"><i class="feather icon-trash"></i></span>
+                                        @endcan
                                         <span class="action-restart" onclick="restartTarter({{ $Record->id }})" title="إعادة تشغيل"><i class="feather icon-refresh-cw"></i></span>
                                     </td>
                                 </tr>

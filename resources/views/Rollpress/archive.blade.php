@@ -223,7 +223,9 @@
                         Actions
                     </button>
                     <div class="dropdown-menu">
+                        @can('حذف المكبس')
                         <a class="dropdown-item bulk-delete-btn" href="#"><i class="feather icon-trash"></i> جذف </a>
+                        @endcan
                         @if(auth()->user()->can('الفواتير'))
                         <a class="dropdown-item add-to-invoice-btn" href="#"><i class="feather icon-file-text"></i> انشاء  فاتوره  </a>
                         @endif
@@ -250,5 +252,11 @@
     <script src="{{ asset('core/js/scripts/modal/components-modal.js') }}"></script>
 
     @vite('resources/js/pages/rollpress_archive.js')
+    <script>
+        window.permissions = {
+            canEdit: @json(auth()->user()->can('تعديل المكبس')),
+            canDelete: @json(auth()->user()->can('حذف المكبس'))
+        };
+    </script>
 
 @endsection
