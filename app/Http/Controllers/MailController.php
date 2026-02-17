@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Webklex\IMAP\Facades\Client;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Mail\GeneralMail;
 
 class MailController extends Controller
 {
@@ -94,14 +95,13 @@ class MailController extends Controller
         ]);
 
         try {
-            Mail::raw($request->body, function ($message) use ($request) {
-                $message->to($request->to)
-                        ->subject($request->subject);
-            });
+            Mail::to($request->to)->send(new GeneralMail($request->subject, $request->body));
             
             return redirect()->route('mail.index')->with('success', 'Email sent successfully!');
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to send email: ' . $e->getMessage());
         }
     }
+
+
 }

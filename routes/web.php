@@ -253,6 +253,10 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/{id}', [App\Http\Controllers\MailController::class, 'show'])->name('mail.show');
     });
 
+    Route::get('/mail-template-preview', function () {
+        return new App\Mail\GeneralMail('Test Email Subject', "This is a test email body.\n\nIt supports multi-line content.");
+    });
+
 });
 
 
