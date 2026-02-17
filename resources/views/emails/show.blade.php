@@ -14,7 +14,7 @@
                         <div class="email-meta mb-2">
                             <p><strong>From:</strong> {{ $message->getFrom()[0]->mail ?? 'Unknown' }}</p>
                             <p><strong>To:</strong> {{ $message->getTo()[0]->mail ?? 'Unknown' }}</p>
-                            <p><strong>Date:</strong> {{ $message->getDate()->format('M d, Y H:i') }}</p>
+                            <p><strong>Date:</strong> {{ optional($message->getDate()->first())->format('M d, Y H:i') }}</p>
                         </div>
                         <hr>
                         <div class="email-body mt-3">

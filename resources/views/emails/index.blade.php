@@ -58,7 +58,7 @@
                                                     {{ $message->getFrom()[0]->mail ?? 'Unknown' }}
                                                 @endif
                                             </td>
-                                            <td>{{ $message->getDate()->format('M d, Y H:i') }}</td>
+                                            <td>{{ optional($message->getDate()->first())->format('M d, Y H:i') }}</td>
                                             <td>
                                                 <a href="{{ route('mail.show', $message->getUid()) }}" class="btn btn-sm btn-outline-primary">
                                                     <i class="feather icon-eye"></i> View
