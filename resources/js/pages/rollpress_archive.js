@@ -93,6 +93,7 @@ $(document).ready(function () {
             },
             {
                 targets: 2, // Image
+                className: 'product-img',
                 render: function (data, type, full, meta) {
                     // Check order images. full.order.orders_imgs
                     let imgPath = '/core/images/elements/apple-watch.png'; // Fallback
@@ -374,5 +375,19 @@ $(document).ready(function () {
         $('form.steps-validation')[0].reset();
         $('.new-data-title').text('تعديل طلب');
     }
+
+    // Image Zoom Logic
+    $(document).on('click', '.product-img img', function () {
+        var src = $(this).attr('src');
+        if (src) {
+            $('#enlarged-image').attr('src', src);
+            $('#imageZoomModal').modal('show');
+        }
+    });
+
+    // Close Zoom Modal
+    $('.close-zoom').on('click', function () {
+        $('#imageZoomModal').modal('hide');
+    });
 
 });

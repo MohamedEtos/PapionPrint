@@ -774,4 +774,18 @@ $(document).ready(function () {
         });
     }
 
+    // Image Zoom Logic
+    $(document).on('click', '.product-img img', function () {
+        var src = $(this).attr('src');
+        if (src) {
+            $('#enlarged-image').attr('src', src);
+            $('#imageZoomModal').modal('show');
+        }
+    });
+
+    // Close Zoom Modal
+    $('.close-zoom').on('click', function () {
+        $('#imageZoomModal').modal('hide');
+    });
+
 });

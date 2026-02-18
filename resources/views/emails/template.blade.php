@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             -webkit-text-size-adjust: none;
+            direction: rtl;
         }
         .container {
             max-width: 600px;
@@ -55,7 +56,7 @@
         }
     </style>
 </head>
-<body>
+<body dir="rtl">
     <div class="container">
         <div class="header">
             <h1>{{ config('app.name') }}</h1>

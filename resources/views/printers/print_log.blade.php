@@ -123,6 +123,19 @@
     </div>
     <!-- END: Content-->
 
+    <!-- Image Zoom Modal -->
+    <div class="modal fade" id="imageZoomModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content" style="background: transparent; border: none; box-shadow: none;">
+                <div class="modal-body text-center p-0">
+                    <img id="enlarged-image" src="" style="max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                    <button type="button" class="btn btn-icon btn-sm btn-white close-zoom" style="position: absolute; top: -15px; right: -15px; background: white; border-radius: 50%; opacity: 1; padding: 5px;">
+                        <i class="feather icon-x" style="color: black; font-weight: bold;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
