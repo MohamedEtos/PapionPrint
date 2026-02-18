@@ -155,7 +155,7 @@ class StrasController extends Controller
                 'user_id' => auth()->id(),
                 'title' => 'تحديث اوردر استراس #' . $stras->id,
                 'img_path' => $stras->image_path ?? null,
-                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات',
+                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات ',
                 'type' => 'order',
                 'status' => 'unread',
                 'link' => route('stras.show', $stras->id),

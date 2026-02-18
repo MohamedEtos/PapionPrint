@@ -152,7 +152,7 @@ class LaserController extends Controller
                 'user_id' => auth()->id(),
                 'title' => 'تحديث اوردر ليزر #' . $order->id,
                 'img_path' => $order->image_path ?? null,
-                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات',
+                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات ',
                 'type' => 'order',
                 'status' => 'unread',
                 'link' => route('laser.show', $order->id),

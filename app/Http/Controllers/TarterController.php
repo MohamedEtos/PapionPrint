@@ -152,7 +152,7 @@ class TarterController extends Controller
                 'user_id' => auth()->id(),
                 'title' => 'تحديث اوردر ترتر #' . $tarter->id,
                 'img_path' => $tarter->image_path ?? null,
-                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات',
+                'body' => ($customer->name ?? 'عميل') . ' تم تحديث البيانات ',
                 'type' => 'order',
                 'status' => 'unread',
                 'link' => route('tarter.show', $tarter->id),
