@@ -2203,13 +2203,13 @@
     "isEntry": true
   },
   "resources/js/pages/AddNewOrder.js": {
-    "file": "assets/AddNewOrder-B33pnsPq.js",
+    "file": "assets/AddNewOrder-B4_L4oXV.js",
     "name": "AddNewOrder",
     "src": "resources/js/pages/AddNewOrder.js",
     "isEntry": true
   },
   "resources/js/pages/PrinterLog.js": {
-    "file": "assets/PrinterLog-CoGsRgij.js",
+    "file": "assets/PrinterLog-B8nbzRmC.js",
     "name": "PrinterLog",
     "src": "resources/js/pages/PrinterLog.js",
     "isEntry": true
@@ -2236,7 +2236,7 @@
     "isEntry": true
   },
   "resources/js/pages/presslist.js": {
-    "file": "assets/presslist-4dnmqInN.js",
+    "file": "assets/presslist-QI9r7BVg.js",
     "name": "presslist",
     "src": "resources/js/pages/presslist.js",
     "isEntry": true
@@ -2248,7 +2248,7 @@
     "isEntry": true
   },
   "resources/js/pages/rollpress_archive.js": {
-    "file": "assets/rollpress_archive-DpNYiG5Y.js",
+    "file": "assets/rollpress_archive-DdI1FQzY.js",
     "name": "rollpress_archive",
     "src": "resources/js/pages/rollpress_archive.js",
     "isEntry": true
@@ -2260,13 +2260,13 @@
     "isEntry": true
   },
   "resources/js/pages/stras.js": {
-    "file": "assets/stras-BFuaKhZi.js",
+    "file": "assets/stras-CRyHQ02G.js",
     "name": "stras",
     "src": "resources/js/pages/stras.js",
     "isEntry": true
   },
   "resources/js/pages/tarter.js": {
-    "file": "assets/tarter-Cp1pE7uq.js",
+    "file": "assets/tarter-E9kWbrzd.js",
     "name": "tarter",
     "src": "resources/js/pages/tarter.js",
     "isEntry": true
