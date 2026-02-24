@@ -14,8 +14,14 @@ class PrintersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:الطباعه');
+        // Methods that press operators (المكبس) also need access to
+        $pressMethods = ['show', 'update', 'updateStatus'];
 
+        // For press-related methods: allow EITHER "الطباعه" OR "المكبس"
+        $this->middleware('permission:الطباعه|المكبس', ['only' => $pressMethods]);
+
+        // For all other methods: require "الطباعه" only
+        $this->middleware('permission:الطباعه', ['except' => $pressMethods]);
     }
 
     /**

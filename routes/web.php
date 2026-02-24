@@ -41,13 +41,13 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/trash', [App\Http\Controllers\RollpressController::class, 'trash'])->name('rollpress.trash');
         Route::post('/restore/{id}', [App\Http\Controllers\RollpressController::class, 'restore'])->name('rollpress.restore');
         Route::delete('/force-delete/{id}', [App\Http\Controllers\RollpressController::class, 'forceDelete'])->name('rollpress.force_delete');
-            
 
     });
 
     Route::middleware(['permission:المكبس'])->group(function () {
         Route::post('/attendance/check-in', [App\Http\Controllers\AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
         Route::post('/attendance/check-out', [App\Http\Controllers\AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
+
     });
     
     Route::middleware(['permission:الطباعه'])->group(function () {
@@ -55,17 +55,21 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('printers/upload-image', [PrintersController::class, 'uploadImage'])->name('printers.upload.image');
         Route::post('printers/store', [PrintersController::class, 'store'])->name('printers.store');
         Route::post('printers/delete/{id}', [PrintersController::class, 'destroy'])->name('printers.delete');
-        Route::post('printers/update-status/{id}', [PrintersController::class, 'updateStatus'])->name('printers.update.status');
         Route::post('printers/update-price/{id}', [PrintersController::class, 'updatePrice'])->name('printers.update.price');
         Route::post('printers/bulk-delete', [PrintersController::class, 'bulkDelete'])->name('printers.bulk_delete');
-        Route::get('printers/{id}', [PrintersController::class, 'show'])->name('printers.show');
-        Route::put('printers/{id}', [PrintersController::class, 'update'])->name('printers.update');
         Route::get('print-log', [PrinterlogsController::class, 'printLog'])->name('print_log');
         Route::post('printers/duplicate/{id}', [PrinterlogsController::class, 'duplicate'])->name('printers.duplicate');
         // Trash Routes
         Route::get('trash/printers', [PrintersController::class, 'trash'])->name('printers.trash');
         Route::post('printers/restore/{id}', [PrintersController::class, 'restore'])->name('printers.restore');
         Route::delete('printers/force-delete/{id}', [PrintersController::class, 'forceDelete'])->name('printers.force_delete');
+    });
+
+    // Routes accessible by EITHER الطباعه OR المكبس
+    Route::middleware(['permission:الطباعه|المكبس'])->group(function () {
+        Route::get('printers/{id}', [PrintersController::class, 'show'])->name('printers.show');
+        Route::put('printers/{id}', [PrintersController::class, 'update'])->name('printers.update');
+        Route::post('printers/update-status/{id}', [PrintersController::class, 'updateStatus'])->name('printers.update.status');
     });
 
     Route::middleware(['permission:الفواتير'])->group(function () {

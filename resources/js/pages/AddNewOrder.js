@@ -101,6 +101,7 @@ $(document).ready(function () {
 
   // Global variable to track edit state
   var editingOrderId = null;
+  var isStatusAdvanceMode = false; // true when form opened via status-toggle (بانتظار اجراء)
 
   function resetForm() {
     $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes, #data-fabric-type').val('');
@@ -111,6 +112,7 @@ $(document).ready(function () {
       myDropzone.removeAllFiles();
     }
     editingOrderId = null;
+    isStatusAdvanceMode = false;
     $('.new-data-title h4').text('اضافه اذن تشغيل');
     $('#saveDataBtn').text('Add Data');
   }
@@ -235,6 +237,7 @@ $(document).ready(function () {
         $('#data-total-pic').text(totalpic);
 
         editingOrderId = order.id;
+        isStatusAdvanceMode = false; // Normal edit - do NOT advance status
         $('.new-data-title h4').text('تعديل البيانات');
         $('#saveDataBtn').text('حفظ التعديلات');
 
@@ -418,7 +421,6 @@ $(document).ready(function () {
       picInCopies: picInCopies,
       pass: pass,
       meters: meters,
-      status: status,
       price: price,
       fabric_type: fabric_type,
       notes: notes,
@@ -430,7 +432,14 @@ $(document).ready(function () {
     if (editingOrderId) {
       url = "/printers/" + editingOrderId;
       data._method = 'PUT';
-      data.auto_advance_status = true;
+      // Only advance status when form was opened via status-toggle (بانتظار اجراء)
+      if (isStatusAdvanceMode) {
+        data.auto_advance_status = true;
+      }
+      // Note: status field is NOT sent to avoid overwriting it accidentally
+    } else {
+      // Only set status on NEW order creation
+      data.status = status;
     }
 
     $.ajax({
@@ -569,6 +578,7 @@ $(document).ready(function () {
           $('#data-notes').val(order.notes);
 
           editingOrderId = order.id;
+          isStatusAdvanceMode = true; // Status-advance edit - DO advance status
           $('.new-data-title h4').text('تحديث الطلب وبدات الطباعة');
           $('#saveDataBtn').text('تحديث وبدء');
 
