@@ -245,6 +245,8 @@ $(document).ready(function () {
             var $row = $('input.roll_id[value="' + editingOrderId + '"]').closest('tr');
             table.row($row).remove().draw();
           }
+                location.reload();
+
 
         } catch (err) {
           console.error("Error updating UI:", err);
