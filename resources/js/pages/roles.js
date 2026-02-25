@@ -51,7 +51,6 @@ $(document).ready(function () {
 
         $(".add-new-data").addClass("show");
         $(".overlay-bg").addClass("show");
-                location.reload();
 
     });
 
@@ -148,7 +147,6 @@ $(document).ready(function () {
                     location.reload(); // Simple reload to refresh table, or append row dynamically if preferred
                 });
 
-                location.reload();
                 
 
                 $(".add-new-data").removeClass("show");
