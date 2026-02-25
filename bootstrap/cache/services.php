@@ -32,9 +32,11 @@
     28 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     29 => 'Termwind\\Laravel\\TermwindServiceProvider',
     30 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
-    31 => 'Spatie\\Permission\\PermissionServiceProvider',
-    32 => 'Webklex\\IMAP\\Providers\\LaravelServiceProvider',
-    33 => 'App\\Providers\\AppServiceProvider',
+    31 => 'Spatie\\Backup\\BackupServiceProvider',
+    32 => 'Spatie\\Permission\\PermissionServiceProvider',
+    33 => 'Spatie\\SignalAwareCommand\\SignalAwareCommandServiceProvider',
+    34 => 'Webklex\\IMAP\\Providers\\LaravelServiceProvider',
+    35 => 'App\\Providers\\AppServiceProvider',
   ),
   'eager' => 
   array (
@@ -54,9 +56,11 @@
     13 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     14 => 'Termwind\\Laravel\\TermwindServiceProvider',
     15 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
-    16 => 'Spatie\\Permission\\PermissionServiceProvider',
-    17 => 'Webklex\\IMAP\\Providers\\LaravelServiceProvider',
-    18 => 'App\\Providers\\AppServiceProvider',
+    16 => 'Spatie\\Backup\\BackupServiceProvider',
+    17 => 'Spatie\\Permission\\PermissionServiceProvider',
+    18 => 'Spatie\\SignalAwareCommand\\SignalAwareCommandServiceProvider',
+    19 => 'Webklex\\IMAP\\Providers\\LaravelServiceProvider',
+    20 => 'App\\Providers\\AppServiceProvider',
   ),
   'deferred' => 
   array (

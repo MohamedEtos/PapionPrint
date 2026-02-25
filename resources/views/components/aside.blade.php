@@ -217,6 +217,12 @@
                         <span class="menu-title" data-i18n="Settings">اعدادات الموقع</span>
                     </a>
                 </li>
+                <li class=" nav-item {{ request()->routeIs('backups.index') ? 'active' : '' }}">
+                    <a href="{{ route('backups.index') }}">
+                        <i class="feather icon-database"></i>
+                        <span class="menu-title" data-i18n="Backups">نسخ احتياطي</span>
+                    </a>
+                </li>
                 @endif
 
                 @if(auth()->user()->can(['تقارير الاخطاء']))

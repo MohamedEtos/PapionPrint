@@ -97,6 +97,13 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/users/update/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('users.update');
         Route::post('/users/delete/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');
 
+        // Backup Management
+        Route::get('/backups', [App\Http\Controllers\BackupController::class, 'index'])->name('backups.index');
+        Route::post('/backups/create', [App\Http\Controllers\BackupController::class, 'create'])->name('backups.create');
+        Route::get('/backups/download/{file_name}', [App\Http\Controllers\BackupController::class, 'download'])->name('backups.download');
+        Route::delete('/backups/delete/{file_name}', [App\Http\Controllers\BackupController::class, 'destroy'])->name('backups.destroy');
+        Route::post('/backups/send-email/{file_name}', [App\Http\Controllers\BackupController::class, 'sendEmail'])->name('backups.send_email');
+
     });
 
     Route::middleware(['permission:المخزن'])->group(function () {
