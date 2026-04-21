@@ -28,6 +28,10 @@ class LaserOrder extends Model
         'is_migrated',
     ];
 
+    protected $casts = [
+        'is_migrated' => 'boolean',
+    ];
+
     public function customer()
     {
         return $this->belongsTo(Customers::class, 'customer_id');

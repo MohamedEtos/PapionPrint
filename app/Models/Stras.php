@@ -22,6 +22,10 @@ class Stras extends Model
         'is_migrated',
     ];
 
+    protected $casts = [
+        'is_migrated' => 'boolean',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Printers::class, 'orderId');

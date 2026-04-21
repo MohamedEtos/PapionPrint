@@ -31,6 +31,10 @@ class Printers extends Model
         'is_migrated',
         'timeEndOpration',
     ];
+
+    protected $casts = [
+        'is_migrated' => 'boolean',
+    ];
     public function customers()
     {
         return $this->belongsTo(Customers::class, 'customerId');
