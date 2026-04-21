@@ -146,14 +146,15 @@ $(document).ready(function () {
             type: 'GET',
             cache: false,
             success: function (response) {
-                // Update Chart and Series in one go for smoother animation
+                // Update Chart options first, then series separately to avoid ApexCharts internal error
                 inkChart.updateOptions({
                     colors: response.colors,
                     xaxis: {
                         categories: response.labels
-                    },
-                    series: response.ink_series
-                });
+                    }
+                }, false, false);
+
+                inkChart.updateSeries(response.ink_series || []);
 
                 // Update Paper Stock
                 $('#paper-stock-sub').text(response.paper.sublimation);
@@ -222,7 +223,7 @@ $(document).ready(function () {
                 padding: {
                     left: 0,
                     right: 0
-                    
+
                 }
             },
         },

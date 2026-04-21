@@ -21,7 +21,7 @@ class BackupController extends Controller
     public function index()
     {
         $backups = [];
-        $path = storage_path('app/private/Laravel');
+        $path = storage_path('app/private/PapionSystem');
 
         if (File::exists($path)) {
             $files = File::allFiles($path);
@@ -56,7 +56,7 @@ class BackupController extends Controller
 
     public function download($file_name)
     {
-        $path = storage_path('app/private/Laravel/' . $file_name);
+        $path = storage_path('app/private/PapionSystem/' . $file_name);
 
         if (File::exists($path)) {
             return response()->download($path);
@@ -67,7 +67,7 @@ class BackupController extends Controller
 
     public function destroy($file_name)
     {
-        $path = storage_path('app/private/Laravel/' . $file_name);
+        $path = storage_path('app/private/PapionSystem/' . $file_name);
 
         if (File::exists($path)) {
             File::delete($path);
@@ -79,7 +79,7 @@ class BackupController extends Controller
 
     public function sendEmail($file_name)
     {
-        $path = storage_path('app/private/Laravel/' . $file_name);
+        $path = storage_path('app/private/PapionSystem/' . $file_name);
 
         if (!File::exists($path)) {
             return redirect()->back()->with('error', 'الملف غير موجود');
