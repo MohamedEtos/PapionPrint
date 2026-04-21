@@ -21,6 +21,7 @@ class Rollpress extends Model
         'papyershild',
         'price',
         'notes',
+        'is_migrated',
     ];
 
     public function order()

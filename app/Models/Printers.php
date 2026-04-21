@@ -28,6 +28,7 @@ class Printers extends Model
         'fabric_type',
         'archive',
         'manufacturing_cost',
+        'is_migrated',
         'timeEndOpration',
     ];
     public function customers()

@@ -19,6 +19,7 @@ class Stras extends Model
         'image_path',
         'notes',
         'manufacturing_cost',
+        'is_migrated',
     ];
 
     public function order()

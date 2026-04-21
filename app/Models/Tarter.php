@@ -20,6 +20,7 @@ class Tarter extends Model
         'image_path',
         'notes',
         'manufacturing_cost',
+        'is_migrated',
     ];
 
     public function customer()
