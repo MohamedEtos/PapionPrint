@@ -41,6 +41,8 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/trash', [App\Http\Controllers\RollpressController::class, 'trash'])->name('rollpress.trash');
         Route::post('/restore/{id}', [App\Http\Controllers\RollpressController::class, 'restore'])->name('rollpress.restore');
         Route::delete('/force-delete/{id}', [App\Http\Controllers\RollpressController::class, 'forceDelete'])->name('rollpress.force_delete');
+        Route::post('/toggle-migrate/{id}', [App\Http\Controllers\RollpressController::class, 'toggleMigrate'])->name('rollpress.toggle_migrate');
+
 
     });
 
@@ -63,6 +65,8 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('trash/printers', [PrintersController::class, 'trash'])->name('printers.trash');
         Route::post('printers/restore/{id}', [PrintersController::class, 'restore'])->name('printers.restore');
         Route::delete('printers/force-delete/{id}', [PrintersController::class, 'forceDelete'])->name('printers.force_delete');
+        Route::post('printers/toggle-migrate/{id}', [PrinterlogsController::class, 'toggleMigrate'])->name('printers.toggle_migrate');
+
     });
 
     // Routes accessible by EITHER الطباعه OR المكبس
@@ -152,6 +156,8 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/trash', [App\Http\Controllers\StrasController::class, 'trash'])->name('stras.trash');
         Route::post('/restore/{id}', [App\Http\Controllers\StrasController::class, 'restore'])->name('stras.restore');
         Route::delete('/force-delete/{id}', [App\Http\Controllers\StrasController::class, 'forceDelete'])->name('stras.force_delete');
+        Route::post('/toggle-migrate/{id}', [App\Http\Controllers\StrasController::class, 'toggleMigrate'])->name('stras.toggle_migrate');
+
         
         // Pricing
         Route::get('/pricing', [App\Http\Controllers\StrasController::class, 'pricing'])->name('stras.pricing');
@@ -173,6 +179,8 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/trash', [App\Http\Controllers\TarterController::class, 'trash'])->name('tarter.trash');
         Route::post('/restore/{id}', [App\Http\Controllers\TarterController::class, 'restore'])->name('tarter.restore');
         Route::delete('/force-delete/{id}', [App\Http\Controllers\TarterController::class, 'forceDelete'])->name('tarter.force_delete');
+        Route::post('/toggle-migrate/{id}', [App\Http\Controllers\TarterController::class, 'toggleMigrate'])->name('tarter.toggle_migrate');
+
         
         // Pricing
         Route::get('/pricing', [App\Http\Controllers\TarterController::class, 'pricing'])->name('tarter.pricing');
@@ -220,6 +228,8 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::get('/trash', [App\Http\Controllers\LaserController::class, 'trash'])->name('laser.trash');
         Route::post('/restore/{id}', [App\Http\Controllers\LaserController::class, 'restore'])->name('laser.restore');
         Route::delete('/force-delete/{id}', [App\Http\Controllers\LaserController::class, 'forceDelete'])->name('laser.force_delete');
+        Route::post('/toggle-migrate/{id}', [App\Http\Controllers\LaserController::class, 'toggleMigrate'])->name('laser.toggle_migrate');
+
         
         // Pricing
         Route::get('/pricing', [App\Http\Controllers\LaserController::class, 'pricing'])->name('laser.pricing');

@@ -774,7 +774,37 @@ $(document).ready(function () {
         });
     }
 
+    // Toggle Migrate
+    $(document).on('click', '.migrate-btn', function (e) {
+        e.preventDefault();
+        var $btn = $(this);
+        var url = $btn.data('url');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: { _token: $('meta[name="csrf-token"]').attr('content') },
+            success: function (response) {
+                if (response.success) {
+                    if (response.is_migrated) {
+                        $btn.css('color', '#28c76f').attr('title', 'تم الترحيل');
+                        $btn.find('i').removeClass('icon-circle').addClass('icon-check-circle');
+                        toastr.success('تم الترحيل بنجاح');
+                    } else {
+                        $btn.css('color', '#626262').attr('title', 'ترحيل');
+                        $btn.find('i').removeClass('icon-check-circle').addClass('icon-circle');
+                        toastr.info('تم إلغاء الترحيل');
+                    }
+                }
+            },
+            error: function (xhr) {
+                toastr.error('حدث خطأ أثناء تغيير حالة الترحيل');
+            }
+        });
+    });
+
     // Image Zoom Logic
+
     $(document).on('click', '.product-img img', function () {
         var src = $(this).attr('src');
         if (src) {

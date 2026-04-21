@@ -355,5 +355,12 @@ class RollpressController extends Controller
         }
         return response()->json(['error' => 'Order not found'], 404);
     }
+    public function toggleMigrate($id)
+    {
+        $order = Rollpress::findOrFail($id);
+        $order->is_migrated = !$order->is_migrated;
+        $order->save();
+        return response()->json(['success' => true, 'is_migrated' => $order->is_migrated]);
+    }
 
 }

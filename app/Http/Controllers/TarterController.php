@@ -312,4 +312,12 @@ class TarterController extends Controller
         }
          return response()->json(['error' => 'Not found'], 404);
     }
+
+    public function toggleMigrate($id)
+    {
+        $order = Tarter::findOrFail($id);
+        $order->is_migrated = !$order->is_migrated;
+        $order->save();
+        return response()->json(['success' => true, 'is_migrated' => $order->is_migrated]);
+    }
 }

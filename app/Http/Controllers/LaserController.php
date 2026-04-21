@@ -405,4 +405,12 @@ class LaserController extends Controller
 
         return response()->json(['error' => 'Update failed'], 400);
     }
+
+    public function toggleMigrate($id)
+    {
+        $order = LaserOrder::findOrFail($id);
+        $order->is_migrated = !$order->is_migrated;
+        $order->save();
+        return response()->json(['success' => true, 'is_migrated' => $order->is_migrated]);
+    }
 }

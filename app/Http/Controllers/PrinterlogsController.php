@@ -171,7 +171,14 @@ class PrinterlogsController extends Controller
             ]);
         });
 
-        return response()->json(['success' => 'Order duplicated successfully']);
+    }
+
+    public function toggleMigrate($id)
+    {
+        $order = Printers::findOrFail($id);
+        $order->is_migrated = !$order->is_migrated;
+        $order->save();
+        return response()->json(['success' => true, 'is_migrated' => $order->is_migrated]);
     }
 
 }

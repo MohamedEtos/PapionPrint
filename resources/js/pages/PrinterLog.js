@@ -46,10 +46,15 @@ $(document).ready(function () {
         targets: 1, // Actions
         orderable: false,
         render: function (data, type, full, meta) {
+          let migrateBtn = `<button type="button" class="btn btn-icon btn-flat-${full.is_migrated ? 'success' : 'secondary'} migrate-btn" title="${full.is_migrated ? 'تم الترحيل' : 'ترحيل'}" data-id="${full.id}" data-url="/printers/toggle-migrate/${full.id}">
+                             <i class="feather icon-${full.is_migrated ? 'check-circle' : 'circle'}"></i>
+                         </button>`;
           return `<button type="button" class="btn btn-icon btn-flat-primary duplicate-order-btn" title="إعادة تشغيل" data-id="${full.id}">
                             <i class="feather icon-copy"></i>
-                        </button>`;
+                        </button>` + migrateBtn;
+
         }
+
       },
       {
         targets: 2, // Image
@@ -234,6 +239,40 @@ $(document).ready(function () {
             });
           }
         });
+      }
+    });
+  });
+
+  // Toggle Migrate
+  $(document).on('click', '.migrate-btn', function (e) {
+    e.preventDefault();
+    var $btn = $(this);
+    var orderId = $btn.data('id');
+    var url = $btn.data('url');
+
+    $.ajax({
+      url: url,
+      type: 'POST',
+      data: {
+        _token: $('meta[name="csrf-token"]').attr('content')
+      },
+      success: function (response) {
+        if (response.success) {
+          if (response.is_migrated) {
+            $btn.removeClass('btn-flat-secondary').addClass('btn-flat-success').attr('title', 'تم الترحيل');
+            $btn.find('i').removeClass('icon-circle').addClass('icon-check-circle');
+            toastr.success('تم الترحيل بنجاح');
+          } else {
+            $btn.removeClass('btn-flat-success').addClass('btn-flat-secondary').attr('title', 'ترحيل');
+            $btn.find('i').removeClass('icon-check-circle').addClass('icon-circle');
+            toastr.info('تم إلغاء الترحيل');
+          }
+          // Optionally redraw table if order matters, but here we just update UI
+          // table.draw(false); 
+        }
+      },
+      error: function (xhr) {
+        toastr.error('حدث خطأ أثناء تغيير حالة الترحيل');
       }
     });
   });
