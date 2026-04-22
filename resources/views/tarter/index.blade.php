@@ -290,9 +290,11 @@
                                         <span class="action-delete" onclick="deleteTarter({{ $Record->id }})"><i class="feather icon-trash"></i></span>
                                         @endcan
                                         <span class="action-restart" onclick="restartTarter({{ $Record->id }})" title="إعادة تشغيل"><i class="feather icon-refresh-cw"></i></span>
+                                        @can('الفواتير')
                                         <span class="action-migrate migrate-btn" data-id="{{ $Record->id }}" data-url="{{ route('tarter.toggle_migrate', $Record->id) }}" title="{{ $Record->is_migrated ? 'تم الترحيل' : 'ترحيل' }}" style="cursor: pointer; margin-right: 5px; color: {{ $Record->is_migrated ? '#28c76f' : '#626262' }}">
                                             <i class="feather icon-{{ $Record->is_migrated ? 'check-circle' : 'circle' }}"></i>
                                         </span>
+                                        @endcan
                                     </td>
 
                                 </tr>

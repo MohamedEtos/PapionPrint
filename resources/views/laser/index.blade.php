@@ -152,9 +152,11 @@
                                          <span class="action-edit" onclick="editLaserOrder({{ $Record->id }})"><i class="feather icon-edit"></i></span>
                                          <span class="action-delete" onclick="deleteLaserOrder({{ $Record->id }})"><i class="feather icon-trash"></i></span>
                                          <span class="action-restart" onclick="restartLaserOrder({{ $Record->id }})" title="إعادة تشغيل"><i class="feather icon-refresh-cw"></i></span>
+                                         @can('الفواتير')
                                          <span class="action-migrate migrate-btn" data-id="{{ $Record->id }}" data-url="{{ route('laser.toggle_migrate', $Record->id) }}" title="{{ $Record->is_migrated ? 'تم الترحيل' : 'ترحيل' }}" style="cursor: pointer; margin-right: 5px; color: {{ $Record->is_migrated ? '#28c76f' : '#626262' }}">
                                              <i class="feather icon-{{ $Record->is_migrated ? 'check-circle' : 'circle' }}"></i>
                                          </span>
+                                         @endcan
                                     </td>
                                 </tr>
                                 @endforeach

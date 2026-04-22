@@ -87,9 +87,12 @@ $(document).ready(function () {
                             <i class="feather icon-trash-2"></i>
                         </button>`;
                     }
-                    let migrateBtn = `<button type="button" class="btn btn-icon btn-flat-${full.is_migrated ? 'success' : 'secondary'} migrate-btn" title="${full.is_migrated ? 'تم الترحيل' : 'ترحيل'}" data-id="${full.id}" data-url="/Rollpress/toggle-migrate/${full.id}">
+                    let migrateBtn = '';
+                    if (window.permissions && window.permissions.canMigrate) {
+                        migrateBtn = `<button type="button" class="btn btn-icon btn-flat-${full.is_migrated ? 'success' : 'secondary'} migrate-btn" title="${full.is_migrated ? 'تم الترحيل' : 'ترحيل'}" data-id="${full.id}" data-url="/Rollpress/toggle-migrate/${full.id}">
                              <i class="feather icon-${full.is_migrated ? 'check-circle' : 'circle'}"></i>
                          </button>`;
+                    }
                     actions += migrateBtn + '</div>';
                     return actions;
 

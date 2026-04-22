@@ -150,6 +150,9 @@
 
         <script>
             var assetPath = "{{ asset('') }}";
+            window.permissions = {
+                canMigrate: @json(auth()->user()->can('الفواتير'))
+            };
         </script>
         @vite('resources/js/pages/PrinterLog.js')
 

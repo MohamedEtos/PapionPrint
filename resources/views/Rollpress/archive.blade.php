@@ -268,7 +268,8 @@
     <script>
         window.permissions = {
             canEdit: @json(auth()->user()->can('تعديل المكبس')),
-            canDelete: @json(auth()->user()->can('حذف المكبس'))
+            canDelete: @json(auth()->user()->can('حذف المكبس')),
+            canMigrate: @json(auth()->user()->can('الفواتير'))
         };
     </script>
 

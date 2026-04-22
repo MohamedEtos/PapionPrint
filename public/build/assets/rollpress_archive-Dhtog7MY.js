@@ -2,9 +2,9 @@ $(document).ready(function(){var i=$(".steps-validation").show();$(".steps-valid
                             <i class="feather icon-edit"></i>
                         </button>`),window.permissions&&window.permissions.canDelete&&(s+=`<button type="button" class="btn btn-icon btn-flat-danger delete-btn" title="حذف" data-id="${e.id}">
                             <i class="feather icon-trash-2"></i>
-                        </button>`);let r=`<button type="button" class="btn btn-icon btn-flat-${e.is_migrated?"success":"secondary"} migrate-btn" title="${e.is_migrated?"تم الترحيل":"ترحيل"}" data-id="${e.id}" data-url="/Rollpress/toggle-migrate/${e.id}">
+                        </button>`);let r="";return window.permissions&&window.permissions.canMigrate&&(r=`<button type="button" class="btn btn-icon btn-flat-${e.is_migrated?"success":"secondary"} migrate-btn" title="${e.is_migrated?"تم الترحيل":"ترحيل"}" data-id="${e.id}" data-url="/Rollpress/toggle-migrate/${e.id}">
                              <i class="feather icon-${e.is_migrated?"check-circle":"circle"}"></i>
-                         </button>`;return s+=r+"</div>",s}},{targets:2,className:"product-img",render:function(t,a,e,n){let s="/core/images/elements/apple-watch.png";return e.order&&e.order.orders_imgs&&e.order.orders_imgs.length>0&&(s="/storage/"+e.order.orders_imgs[0].path),`<img style="height: 50px;" src="${s}" alt="Img">`}},{targets:9,render:function(t,a,e,n){var s=t==1?"تم الانتهاء":"جاري العمل",r=t==1?"chip-success":"chip-warning";return`<div class="chip ${r}">
+                         </button>`),s+=r+"</div>",s}},{targets:2,className:"product-img",render:function(t,a,e,n){let s="/core/images/elements/apple-watch.png";return e.order&&e.order.orders_imgs&&e.order.orders_imgs.length>0&&(s="/storage/"+e.order.orders_imgs[0].path),`<img style="height: 50px;" src="${s}" alt="Img">`}},{targets:9,render:function(t,a,e,n){var s=t==1?"تم الانتهاء":"جاري العمل",r=t==1?"chip-success":"chip-warning";return`<div class="chip ${r}">
                       <div class="chip-body">
                         <div class="chip-text">${s}</div>
                       </div>

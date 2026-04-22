@@ -46,9 +46,13 @@ $(document).ready(function () {
         targets: 1, // Actions
         orderable: false,
         render: function (data, type, full, meta) {
-          let migrateBtn = `<button type="button" class="btn btn-icon btn-flat-${full.is_migrated ? 'success' : 'secondary'} migrate-btn" title="${full.is_migrated ? 'تم الترحيل' : 'ترحيل'}" data-id="${full.id}" data-url="/printers/toggle-migrate/${full.id}">
+          let migrateBtn = '';
+          if (window.permissions && window.permissions.canMigrate) {
+              migrateBtn = `<button type="button" class="btn btn-icon btn-flat-${full.is_migrated ? 'success' : 'secondary'} migrate-btn" title="${full.is_migrated ? 'تم الترحيل' : 'ترحيل'}" data-id="${full.id}" data-url="/printers/toggle-migrate/${full.id}">
                              <i class="feather icon-${full.is_migrated ? 'check-circle' : 'circle'}"></i>
                          </button>`;
+          }
+
           return `<button type="button" class="btn btn-icon btn-flat-primary duplicate-order-btn" title="إعادة تشغيل" data-id="${full.id}">
                             <i class="feather icon-copy"></i>
                         </button>` + migrateBtn;
