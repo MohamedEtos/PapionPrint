@@ -209,6 +209,7 @@ class StrasController extends Controller
             $original = Stras::with('layers')->findOrFail($id);
             
             $new = $original->replicate();
+            $new->is_migrated = 0; // Reset migration status
             $new->created_at = now();
             $new->updated_at = now();
             $new->save();

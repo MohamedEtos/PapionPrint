@@ -383,28 +383,58 @@ $(document).ready(function () {
         e.preventDefault();
         var $btn = $(this);
         var url = $btn.data('url');
+        var isMigrated = $btn.attr('title') === 'تم الترحيل';
 
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: { _token: $('meta[name="csrf-token"]').attr('content') },
-            success: function (response) {
-                if (response.success) {
-                    if (response.is_migrated) {
-                        $btn.removeClass('btn-flat-secondary').addClass('btn-flat-success').attr('title', 'تم الترحيل');
-                        $btn.find('i').removeClass('icon-circle').addClass('icon-check-circle');
-                        toastr.success('تم الترحيل بنجاح');
-                    } else {
-                        $btn.removeClass('btn-flat-success').addClass('btn-flat-secondary').attr('title', 'ترحيل');
-                        $btn.find('i').removeClass('icon-check-circle').addClass('icon-circle');
-                        toastr.info('تم إلغاء الترحيل');
+        function doToggle() {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { _token: $('meta[name="csrf-token"]').attr('content') },
+                success: function (response) {
+                    if (response.success) {
+                        if (response.is_migrated) {
+                            $btn.removeClass('btn-flat-secondary').addClass('btn-flat-success').attr('title', 'تم الترحيل');
+                            $btn.find('i').removeClass('icon-circle').addClass('icon-check-circle');
+                            toastr.success('تم الترحيل بنجاح');
+                        } else {
+                            $btn.removeClass('btn-flat-success').addClass('btn-flat-secondary').attr('title', 'ترحيل');
+                            $btn.find('i').removeClass('icon-check-circle').addClass('icon-circle');
+                            toastr.info('تم إلغاء الترحيل');
+                        }
+                    }
+                },
+                error: function (xhr) {
+                    toastr.error('حدث خطأ أثناء تغيير حالة الترحيل');
+                }
+            });
+        }
+
+        if (isMigrated) {
+            var confirmCode = Math.floor(1000 + Math.random() * 9000).toString();
+            Swal.fire({
+                title: 'تأكيد إلغاء الترحيل',
+                html: '<p>لإلغاء الترحيل، أدخل الرمز التالي:</p><h2 style="letter-spacing:8px;font-weight:bold;color:#d33;">' + confirmCode + '</h2>',
+                input: 'text',
+                inputPlaceholder: 'أدخل الرمز هنا',
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد',
+                cancelButtonText: 'إلغاء',
+                confirmButtonClass: 'btn btn-danger',
+                cancelButtonClass: 'btn btn-secondary ml-1',
+                buttonsStyling: false,
+                inputValidator: function (value) {
+                    if (value !== confirmCode) {
+                        return 'الرمز غير صحيح! حاول مرة أخرى';
                     }
                 }
-            },
-            error: function (xhr) {
-                toastr.error('حدث خطأ أثناء تغيير حالة الترحيل');
-            }
-        });
+            }).then(function (result) {
+                if (result.value) {
+                    doToggle();
+                }
+            });
+        } else {
+            doToggle();
+        }
     });
 
     function resetForm() {

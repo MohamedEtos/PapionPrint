@@ -126,6 +126,7 @@ class PrinterlogsController extends Controller
             $newOrder->orderNumber = 'ORD-' . time() . '-' . rand(10, 99);
             $newOrder->status = 'بانتظار اجراء';
             $newOrder->timeEndOpration = null;
+            $newOrder->is_migrated = 0; // Reset migration status
             $newOrder->created_at = now();
             $newOrder->updated_at = now();
             $newOrder->save();

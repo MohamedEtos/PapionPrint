@@ -540,6 +540,7 @@ class PrintersController extends Controller
             $new = $original->replicate();
             $new->orderNumber = 'ORD-' . time(); // Generate new order number
             $new->status = 'بانتظار اجراء'; // Reset status
+            $new->is_migrated = 0; // Reset migration status
             $new->created_at = now();
             $new->updated_at = now();
             $new->save();
