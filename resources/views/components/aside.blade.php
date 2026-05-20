@@ -196,6 +196,12 @@
                                 <span class="menu-title" data-i18n="Biometric">نظام البصمة</span>
                             </a>
                         </li>
+                        <li class=" nav-item {{ request()->is('biometric*') && request()->query('tab') == 'loans' ? 'active' : '' }}">
+                            <a href="{{ route('biometric.index') }}#loans" onclick="setTimeout(()=>{ $('#loans-tab').tab('show'); }, 100);">
+                                <i class="feather icon-credit-card"></i>
+                                <span class="menu-title" data-i18n="Loans">سلف الموظفين</span>
+                            </a>
+                        </li>
        
                     </ul>
                 </li>

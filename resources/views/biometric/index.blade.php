@@ -9,6 +9,54 @@
         'resources/core/css-rtl/pages/data-list-view.css',
         'resources/core/css-rtl/custom-rtl.css',
     ])
+    <style>
+        /* Loan system custom styles */
+        .loan-badge {
+            background: linear-gradient(135deg, #7367f0, #7367f0);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+        .salary-card {
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 8px;
+            border-left: 4px solid #7367f0;
+            background: #f8f7ff;
+        }
+        .loan-row-card {
+            background: #fff5f5;
+            border: 1px solid #ffcccc;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .net-salary-highlight {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #28c76f;
+        }
+        .net-salary-negative {
+            color: #7367f0 !important;
+        }
+        .loan-deduction-col {
+            color: #7367f0;
+            font-weight: 600;
+        }
+        .tab-loans-indicator {
+            background: #7367f0;
+            color: white;
+            border-radius: 50%;
+            padding: 1px 6px;
+            font-size: 0.7rem;
+            margin-right: 4px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -42,12 +90,20 @@
                         <a class="nav-link" id="payroll-tab" data-toggle="tab" href="#payroll" role="tab" aria-selected="false">تقرير الرواتب</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" id="loans-tab" data-toggle="tab" href="#loans" role="tab" aria-selected="false">
+                            @if($allLoans->count() > 0)
+                                <span class="tab-loans-indicator">{{ $allLoans->count() }}</span>
+                            @endif
+                             السلف
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" id="employees-tab" data-toggle="tab" href="#employees" role="tab" aria-selected="false">الموظفين واعدادات الورديات</a>
                     </li>
                 </ul>
 
                 <div class="tab-content">
-                    <!-- Attendance Tab -->
+                    <!-- =================== Attendance Tab =================== -->
                     <div class="tab-pane active" id="attendance" role="tabpanel">
                         <!-- Upload Section -->
                         <section class="card mb-2">
@@ -66,8 +122,6 @@
                                         </div>
                                         <div class="col-md-6 d-flex align-items-center">
                                             <button type="submit" class="btn btn-primary mt-2 mr-1">رفع ومعالجة</button>
-                                            
-                                            <!-- Clear Button via Form -->
                                         </div>
                                     </div>
                                 </form>
@@ -117,7 +171,7 @@
                         <!-- Data Table -->
                         <div class="card">
                            <div class="card-body">
-                                 <div class="table-responsive">
+                                <div class="table-responsive">
                                     <table class="table data-list-view">
                                         <thead>
                                             <tr>
@@ -174,7 +228,7 @@
                         </div>
                     </div>
 
-                    <!-- Employees Tab -->
+                    <!-- =================== Employees Tab =================== -->
                     <div class="tab-pane" id="employees" role="tabpanel">
                         <div class="card">
                             <div class="card-header">
@@ -228,9 +282,9 @@
                         </div>
                     </div>
 
-                    <!-- Payroll Tab -->
+                    <!-- =================== Payroll Tab =================== -->
                     <div class="tab-pane" id="payroll" role="tabpanel">
-                         <!-- Absences Generation Button -->
+                        <!-- Absences Generation Button -->
                         <div class="row mb-2">
                              <div class="col-12">
                                 <form action="{{ route('biometric.generate_absences') }}" method="POST">
@@ -244,7 +298,10 @@
 
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">تقرير الرواتب الشهرية</h4>
+                                <h4 class="card-title">
+                                    تقرير الرواتب الشهرية &mdash;
+                                    <span class="text-primary">{{ date('F', mktime(0,0,0,$filterMonth,1)) }} {{ $filterYear }}</span>
+                                </h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -256,16 +313,17 @@
                                                 <th>ايام الحضور</th>
                                                 <th>ايام الغياب</th>
                                                 <th>اجمالي التأخير (دقيقة)</th>
-                                                <th>اجمالي الخصومات</th>
+                                                <th>خصومات التأخير/الغياب</th>
                                                 <th>اجمالي الاضافي (دقيقة)</th>
                                                 <th>قيمة الاضافي</th>
+                                                <th class="text-danger">خصم السلف</th>
                                                 <th>صافي الراتب</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($payrollData as $data)
                                                 <tr>
-                                                    <td>{{ $data['user']->name }}</td>
+                                                    <td><strong>{{ $data['user']->name }}</strong></td>
                                                     <td>{{ number_format($data['user']->base_salary, 2) }}</td>
                                                     <td class="text-success">{{ $data['total_attendance_days'] }}</td>
                                                     <td class="text-danger">{{ $data['total_absence_days'] }}</td>
@@ -273,7 +331,18 @@
                                                     <td class="text-warning">{{ number_format($data['total_deductions'], 2) }}</td>
                                                     <td class="text-success">{{ $data['total_overtime_minutes'] }}</td>
                                                     <td class="text-success">{{ number_format($data['total_overtime_pay'], 2) }}</td>
-                                                    <td class="font-weight-bold">{{ number_format($data['net_salary'], 2) }}</td>
+                                                    <td class="loan-deduction-col">
+                                                        @if($data['total_loan_deduction'] > 0)
+                                                            <span class="loan-badge">- {{ number_format($data['total_loan_deduction'], 2) }}</span>
+                                                        @else
+                                                            <span class="text-muted">—</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <span class="net-salary-highlight {{ $data['net_salary'] < 0 ? 'net-salary-negative' : '' }}">
+                                                            {{ number_format($data['net_salary'], 2) }}
+                                                        </span>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -282,6 +351,159 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- =================== LOANS TAB =================== -->
+                    <div class="tab-pane" id="loans" role="tabpanel">
+                        <div class="row">
+                            <!-- Add Loan Form -->
+                            <div class="col-md-4">
+                                <div class="card shadow-sm">
+                                    <div class="card-header" style="background: linear-gradient(135deg,#7367f0,#7367f0); border-radius: 8px 8px 0 0;">
+                                        <h4 class="card-title text-white mb-1">
+                                            <i class="feather icon-plus-circle mr-1 mb-2"></i> إضافة سلفة جديدة
+                                        </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="{{ route('biometric.loans.store') }}" method="POST">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">الموظف <span class="text-danger">*</span></label>
+                                                <select name="biometric_user_id" class="form-control" required>
+                                                    <option value="">-- اختر الموظف --</option>
+                                                    @foreach($biometricUsers as $u)
+                                                        <option value="{{ $u->id }}">{{ $u->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">مبلغ السلفة (ج.م) <span class="text-danger">*</span></label>
+                                                <input type="number" name="amount" class="form-control" step="0.01" min="1" placeholder="مثال: 500" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">الشهر المراد الخصم فيه <span class="text-danger">*</span></label>
+                                                <select name="month" class="form-control" required>
+                                                    @for($i = 1; $i <= 12; $i++)
+                                                        <option value="{{ $i }}" {{ $filterMonth == $i ? 'selected' : '' }}>{{ date('F', mktime(0,0,0,$i,1)) }}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">السنة <span class="text-danger">*</span></label>
+                                                <select name="year" class="form-control" required>
+                                                    @for($i = 2024; $i <= 2030; $i++)
+                                                        <option value="{{ $i }}" {{ $filterYear == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">ملاحظات</label>
+                                                <textarea name="notes" class="form-control" rows="2" placeholder="سبب السلفة (اختياري)..."></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-block text-white" style="background: linear-gradient(135deg,#7367f0,#7367f0); border-radius: 8px 8px ;">
+                                                <i class="feather icon-check-circle  mr-1"></i> حفظ السلفة وخصمها من الراتب
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Loans Listing -->
+                            <div class="col-md-8">
+                                <div class="card shadow-sm">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h4 class="card-title mb-0">
+                                            سلف شهر {{ date('F', mktime(0,0,0,$filterMonth,1)) }} {{ $filterYear }}
+                                        </h4>
+                                        <span class="badge badge-danger badge-pill">{{ $allLoans->count() }} سلفة</span>
+                                    </div>
+                                    <div class="card-body">
+                                        @if($allLoans->isEmpty())
+                                            <div class="text-center py-4">
+                                                <i class="feather icon-inbox" style="font-size:3rem; color:#ccc;"></i>
+                                                <p class="text-muted mt-2">لا توجد سلف مسجلة لهذا الشهر.</p>
+                                            </div>
+                                        @else
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-bordered">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>الموظف</th>
+                                                            <th>المبلغ</th>
+                                                            <th>الشهر / السنة</th>
+                                                            <th>الملاحظات</th>
+                                                            <th>التاريخ</th>
+                                                            <th>حذف</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($allLoans as $loan)
+                                                            <tr>
+                                                                <td>{{ $loop->iteration }}</td>
+                                                                <td>
+                                                                    <strong>{{ $loan->biometricUser->name ?? '—' }}</strong>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="loan-badge">{{ number_format($loan->amount, 2) }} ج.م</span>
+                                                                </td>
+                                                                <td>
+                                                                    {{ date('F', mktime(0,0,0,$loan->month,1)) }} {{ $loan->year }}
+                                                                </td>
+                                                                <td>{{ $loan->notes ?: '—' }}</td>
+                                                                <td>{{ $loan->created_at->format('Y-m-d') }}</td>
+                                                                <td>
+                                                                    <form action="{{ route('biometric.loans.destroy', $loan->id) }}" method="POST"
+                                                                          onsubmit="return confirm('هل تريد حذف هذه السلفة؟ سيتأثر الراتب.');">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                                            <i class="feather icon-trash-2"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr class="table-danger">
+                                                            <td colspan="2"><strong>الإجمالي</strong></td>
+                                                            <td colspan="5"><strong class="text-danger">{{ number_format($allLoans->sum('amount'), 2) }} ج.م</strong></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <!-- Per-employee summary -->
+                                @if($allLoans->isNotEmpty())
+                                    <div class="card mt-2 shadow-sm">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">ملخص السلف لكل موظف</h5>
+                                        </div>
+                                        <div class="card-body p-2">
+                                            @foreach($allLoans->groupBy('biometric_user_id') as $userId => $userLoans)
+                                                <div class="salary-card">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <strong>{{ $userLoans->first()->biometricUser->name ?? '—' }}</strong>
+                                                            <small class="text-muted d-block">{{ $userLoans->count() }} سلفة</small>
+                                                        </div>
+                                                        <span class="loan-badge" style="font-size:1rem; padding: 5px 14px;">
+                                                            {{ number_format($userLoans->sum('amount'), 2) }} ج.م
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <!-- =================== END LOANS TAB =================== -->
+
                 </div>
 
             </div>
@@ -319,6 +541,16 @@
                     }
                 ]
             });
+
+            // Auto-switch to loans tab if 'loans' anchor in URL
+            if (window.location.hash === '#loans') {
+                $('#loans-tab').tab('show');
+            }
+
+            // Show loans tab if success flash came from a loan store/delete
+            @if(session('success') && str_contains(session('success'), 'سلف'))
+                $('#loans-tab').tab('show');
+            @endif
         });
     </script>
 @endsection

@@ -250,6 +250,9 @@ Route::namespace('App\Http\Controllers')->middleware('auth')->group(function () 
         Route::post('/users/update/{id}', [App\Http\Controllers\BiometricAttendanceController::class, 'updateUser'])->name('users.update');
         Route::post('/generate-absences', [App\Http\Controllers\BiometricAttendanceController::class, 'generateAbsences'])->name('generate_absences');
         Route::delete('/clear', [App\Http\Controllers\BiometricAttendanceController::class, 'destroyAll'])->name('clear');
+        // Loan Routes
+        Route::post('/loans/store', [App\Http\Controllers\EmployeeLoanController::class, 'store'])->name('loans.store');
+        Route::delete('/loans/{id}', [App\Http\Controllers\EmployeeLoanController::class, 'destroy'])->name('loans.destroy');
     });
 
     // Customer Routes

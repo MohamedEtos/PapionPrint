@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BiometricAttendance;
 use App\Models\BiometricUser;
+use App\Models\EmployeeLoan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +70,24 @@ class BiometricAttendanceController extends Controller
         ->get()
         ->keyBy('biometric_user_id');
 
+        // --- Loans: Fetch SUM of loans per user for the current month/year ---
+        $filterMonth = $request->get('month', Carbon::now()->month);
+        $filterYear  = $request->get('year', Carbon::now()->year);
+
+        $loansAggregates = EmployeeLoan::selectRaw('biometric_user_id, SUM(amount) as total_loans')
+            ->where('month', $filterMonth)
+            ->where('year', $filterYear)
+            ->groupBy('biometric_user_id')
+            ->get()
+            ->keyBy('biometric_user_id');
+
+        // Fetch all loans for the loans tab listing
+        $allLoans = EmployeeLoan::with('biometricUser')
+            ->where('month', $filterMonth)
+            ->where('year', $filterYear)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $payrollData = [];
         foreach ($biometricUsers as $u) {
             // Get stats from Aggregate or 0
@@ -85,17 +104,15 @@ class BiometricAttendanceController extends Controller
             $finalOvertimeMinutes = 0;
             
             if ($balance > 0) {
-                // Net Surplus (Overtime)
                 $finalOvertimeMinutes = $balance;
                 $finalDelayMinutes = 0;
             } else {
-                // Net Deficit (Delay)
                 $finalOvertimeMinutes = 0;
                 $finalDelayMinutes = abs($balance);
             }
             
             // Calculate Financials based on FINAL NET values
-            $workingHours = 9; // Default
+            $workingHours = 9;
             if ($u->shift_start && $u->shift_end) {
                  $start = Carbon::parse($u->shift_start);
                  $end = Carbon::parse($u->shift_end);
@@ -107,24 +124,34 @@ class BiometricAttendanceController extends Controller
                  $minuteRate = ($u->base_salary / 30 / $workingHours / 60);
             }
 
-            $totalDelayDeduction = $finalDelayMinutes * $minuteRate; // 1.0x
-            $totalOvertimePay = $finalOvertimeMinutes * $minuteRate * ($u->overtime_rate ?? 1.5); // 1.5x
+            $totalDelayDeduction = $finalDelayMinutes * $minuteRate;
+            $totalOvertimePay = $finalOvertimeMinutes * $minuteRate * ($u->overtime_rate ?? 1.5);
+
+            // --- Deduct Loans ---
+            $totalLoanDeduction = $loansAggregates->has($u->id)
+                ? $loansAggregates->get($u->id)->total_loans
+                : 0;
             
-            $netSalary = $u->base_salary - $totalDelayDeduction - $totalAbsenceDeduction + $totalOvertimePay;
+            $netSalary = $u->base_salary
+                - $totalDelayDeduction
+                - $totalAbsenceDeduction
+                - $totalLoanDeduction
+                + $totalOvertimePay;
             
             $payrollData[$u->id] = [
-                'user' => $u,
-                'total_delay_minutes' => $sumDelayMinutes . ' -> ' . $finalDelayMinutes, 
-                'total_overtime_minutes' => $sumOvertimeMinutes . ' -> ' . $finalOvertimeMinutes,
-                'total_deductions' => $totalDelayDeduction + $totalAbsenceDeduction,
-                'total_overtime_pay' => $totalOvertimePay,
+                'user'                  => $u,
+                'total_delay_minutes'   => $sumDelayMinutes . ' -> ' . $finalDelayMinutes, 
+                'total_overtime_minutes'=> $sumOvertimeMinutes . ' -> ' . $finalOvertimeMinutes,
+                'total_deductions'      => $totalDelayDeduction + $totalAbsenceDeduction,
+                'total_overtime_pay'    => $totalOvertimePay,
                 'total_attendance_days' => $stats ? $stats->total_attendance_days : 0,
-                'total_absence_days' => $stats ? $stats->total_absence_days : 0,
-                'net_salary' => $netSalary
+                'total_absence_days'    => $stats ? $stats->total_absence_days : 0,
+                'total_loan_deduction'  => $totalLoanDeduction,
+                'net_salary'            => $netSalary,
             ];
         }
 
-        return view('biometric.index', compact('attendances', 'biometricUsers', 'payrollData'));
+        return view('biometric.index', compact('attendances', 'biometricUsers', 'payrollData', 'allLoans', 'filterMonth', 'filterYear'));
     }
 
     public function upload(Request $request)

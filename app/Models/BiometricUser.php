@@ -22,4 +22,9 @@ class BiometricUser extends Model
     {
         return $this->hasMany(BiometricAttendance::class, 'biometric_user_id');
     }
+
+    public function loans()
+    {
+        return $this->hasMany(\App\Models\EmployeeLoan::class, 'biometric_user_id');
+    }
 }
