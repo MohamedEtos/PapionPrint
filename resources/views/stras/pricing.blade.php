@@ -115,7 +115,16 @@
                                     <tbody>
                                         @foreach($otherPrices as $price)
                                         <tr>
-                                            <td>{{ $price->size == 'operating_cost' ? 'تشغيل' : $price->size }}</td>
+                                            <td>
+                                                @if($price->size == 'operating_cost')
+                                                    تشغيل
+                                                @elseif($price->size == 'multi_layer_cost')
+                                                    تعدد المراحل
+                                                    <br><small class="text-muted">تُضاف فقط للكروت ذات مرحلتين أو أكثر</small>
+                                                @else
+                                                    {{ $price->size }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 <input type="number" step="0.001" class="form-control price-input" data-id="{{ $price->id }}" value="{{ $price->price }}">
                                             </td>

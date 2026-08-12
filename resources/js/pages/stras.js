@@ -250,6 +250,8 @@ $(document).ready(function () {
                     if (num) pricesMap.paper[num] = parseFloat(p.price) || 0;
                 } else if (p.type === 'global' && p.size === 'operating_cost') {
                     pricesMap.global.op_cost = parseFloat(p.price) || 0;
+                } else if (p.type === 'global' && p.size === 'multi_layer_cost') {
+                    pricesMap.global.multi_layer_cost = parseFloat(p.price) || 0;
                 }
             });
         }
@@ -259,6 +261,7 @@ $(document).ready(function () {
         var cardPaperCost = (height / 100) * paperPrice;
         var opCost = pricesMap.global.op_cost || 0;
         var strasCost = 0;
+        var validLayersCount = 0;
 
         $('#layers-container .layer-row').each(function (index, element) {
             var size = $(element).find('.layer-size').val();
@@ -266,10 +269,14 @@ $(document).ready(function () {
             if (size && count) {
                 var unitPrice = pricesMap.stras[size] || 0;
                 strasCost += (count * unitPrice);
+                validLayersCount++;
             }
         });
 
-        var rowCardCost = cardPaperCost + opCost + strasCost;
+        // Add multi-layer cost if order has 2+ layers
+        var multiLayerCost = (validLayersCount >= 2) ? (pricesMap.global.multi_layer_cost || 0) : 0;
+
+        var rowCardCost = cardPaperCost + opCost + strasCost + multiLayerCost;
         var manufacturing_cost = pieces_per_card > 0 ? (rowCardCost / pieces_per_card) : 0;
 
         formData.append('manufacturing_cost', manufacturing_cost.toFixed(4));
@@ -647,6 +654,8 @@ $(document).ready(function () {
                     if (num) pricesMap.paper[num] = parseFloat(p.price) || 0;
                 } else if (p.type === 'global' && p.size === 'operating_cost') {
                     pricesMap.global.op_cost = parseFloat(p.price) || 0;
+                } else if (p.type === 'global' && p.size === 'multi_layer_cost') {
+                    pricesMap.global.multi_layer_cost = parseFloat(p.price) || 0;
                 }
             });
         }
@@ -688,6 +697,7 @@ $(document).ready(function () {
             rowCardCost += opCost;
 
             var layersData = $row.data('layers');
+            var validRowLayersCount = 0;
             if (layersData) {
                 if (typeof layersData === 'string') {
                     try {
@@ -706,8 +716,16 @@ $(document).ready(function () {
                     totals[size] += count; // Accumulate global count for badge
 
                     var unitPrice = pricesMap.stras[size] || 0;
-                    rowCardCost += (count * unitPrice);
+                    if (count > 0) {
+                        rowCardCost += (count * unitPrice);
+                        validRowLayersCount++;
+                    }
                 });
+            }
+
+            // 4. Multi-layer cost (only if 2+ layers)
+            if (validRowLayersCount >= 2) {
+                rowCardCost += (pricesMap.global.multi_layer_cost || 0);
             }
 
             var rowTotal = (rowCardCost * cardsCount);
