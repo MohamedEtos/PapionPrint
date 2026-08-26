@@ -22,7 +22,7 @@ class LaserController extends Controller
     {
         $customers = Customers::all();
         $materials = LaserMaterial::all();
-        $orders = LaserOrder::with(['material', 'customer'])->orderBy('created_at', 'desc')->get();
+        $orders = LaserOrder::with(['material', 'customer'])->orderBy('created_at', 'desc')->orderBy('id', 'desc')->get();
         // Fetch global settings like operating cost for frontend usage if needed
         $operatingCost = LaserPrice::where('name', 'operating_cost')->value('price') ?? 0;
         $ceylonPrice = LaserPrice::where('name', 'ceylon_price')->value('price') ?? 0;

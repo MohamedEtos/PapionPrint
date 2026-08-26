@@ -20,7 +20,7 @@ $(document).ready(function () {
         select: {
             style: "multi"
         },
-        order: [[1, "desc"]],
+        order: [],
         bInfo: false,
         pageLength: 4,
         buttons: [

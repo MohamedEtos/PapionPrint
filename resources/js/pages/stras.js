@@ -273,8 +273,8 @@ $(document).ready(function () {
             }
         });
 
-        // Add multi-layer cost if order has 2+ layers
-        var multiLayerCost = (validLayersCount >= 2) ? (pricesMap.global.multi_layer_cost || 0) : 0;
+        // Add multi-layer cost for each extra layer beyond 1
+        var multiLayerCost = (validLayersCount > 1) ? ((validLayersCount - 1) * (pricesMap.global.multi_layer_cost || 0)) : 0;
 
         var rowCardCost = cardPaperCost + opCost + strasCost + multiLayerCost;
         var manufacturing_cost = pieces_per_card > 0 ? (rowCardCost / pieces_per_card) : 0;
@@ -723,9 +723,9 @@ $(document).ready(function () {
                 });
             }
 
-            // 4. Multi-layer cost (only if 2+ layers)
-            if (validRowLayersCount >= 2) {
-                rowCardCost += (pricesMap.global.multi_layer_cost || 0);
+            // 4. Multi-layer cost (for each extra layer beyond 1)
+            if (validRowLayersCount > 1) {
+                rowCardCost += ((validRowLayersCount - 1) * (pricesMap.global.multi_layer_cost || 0));
             }
 
             var rowTotal = (rowCardCost * cardsCount);

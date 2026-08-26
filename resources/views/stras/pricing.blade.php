@@ -120,7 +120,7 @@
                                                     تشغيل
                                                 @elseif($price->size == 'multi_layer_cost')
                                                     تعدد المراحل
-                                                    <br><small class="text-muted">تُضاف فقط للكروت ذات مرحلتين أو أكثر</small>
+                                                    <br><small class="text-muted">تُضاف عن كل مرحلة إضافية فوق المرحلة الأولى </small>
                                                 @else
                                                     {{ $price->size }}
                                                 @endif
