@@ -89,6 +89,13 @@ $(document).ready(function () {
         }
       },
       {
+        targets: 3, // Model Number (orderNumber)
+        render: function (data, type, full, meta) {
+          if (!data || data.startsWith('ORD-')) return '-';
+          return '<span class="badge badge-light-primary">' + data + '</span>';
+        }
+      },
+      {
         targets: 14, // Created At
         render: function (data, type, full, meta) {
           if (!data) return '';

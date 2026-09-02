@@ -104,7 +104,7 @@ $(document).ready(function () {
   var isStatusAdvanceMode = false; // true when form opened via status-toggle (بانتظار اجراء)
 
   function resetForm() {
-    $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes, #data-fabric-type').val('');
+    $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes, #data-fabric-type, #data-model-number').val('');
     $('#data-status').val('waiting');
     $('#data-pass').val('1');
     uploadedImagePaths = [];
@@ -212,6 +212,9 @@ $(document).ready(function () {
         }
         $('#data-notes').val(order.notes);
         $('#data-price-pic').text(order.manufacturing_cost || 0);
+        // Set model number (only if it's not auto-generated)
+        var orderNum = order.orderNumber || '';
+        $('#data-model-number').val(orderNum.startsWith('ORD-') ? '' : orderNum);
 
         // Populate Images in Dropzone
         uploadedImagePaths = []; // Clear current
@@ -426,6 +429,7 @@ $(document).ready(function () {
       notes: notes,
       manufacturing_cost: manufacturing_cost,
       image_paths: uploadedImagePaths,
+      orderNumber: $('#data-model-number').val() || null,
       _token: $('meta[name="csrf-token"]').attr('content')
     };
 
@@ -572,6 +576,7 @@ $(document).ready(function () {
           $('#data-meters').val(order.meters);
           $('#data-fabric-type').val(order.fabric_type);
           $('#data-status').val(order.status);
+          $('#data-model-number').val(order.orderNumber || '');
           if (order.printingprices) {
             $('#data-price').val(order.printingprices.totalPrice);
           }

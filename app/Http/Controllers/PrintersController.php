@@ -127,7 +127,7 @@ class PrintersController extends Controller
         ]);
         // Demonstration Logic
         $printer = Printers::create([
-            'orderNumber' => 'ORD-' . time(),
+            'orderNumber' => $request->filled('orderNumber') ? $request->orderNumber : '-',
             'customerId' => $customers->id,
             'machineId' => $request->machineId,
             'fileHeight' => $request->fileHeight ?? 0,
@@ -362,6 +362,7 @@ class PrintersController extends Controller
         if ($request->filled('notes')) $printer->notes = $request->notes;
         if ($request->filled('manufacturing_cost')) $printer->manufacturing_cost = $request->manufacturing_cost;
         if ($request->filled('fabric_type')) $printer->fabric_type = $request->fabric_type;
+        if ($request->filled('orderNumber')) $printer->orderNumber = $request->orderNumber;
 
         // Auto Advance Status if requested
         if ($request->boolean('auto_advance_status') && trim($printer->status) == 'بانتظار اجراء') {

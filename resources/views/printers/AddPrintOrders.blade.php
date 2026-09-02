@@ -139,6 +139,10 @@
                                 <div class="data-fields px-2 mt-3">
                                     <div class="row">
                                         <div class="col-sm-12 data-field-col">
+                                            <label for="data-model-number">رقم الموديل <small class="text-muted">(اختياري)</small></label>
+                                            <input type="text" class="form-control" id="data-model-number" placeholder="أدخل رقم الموديل...">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
                                             <label for="data-customer-view">اسم العميل</label>
                                             <input type="text" class="form-control" name="name" id="data-customer-view" list="customers-list" placeholder="ابحث عن العميل...">
                                             <datalist id="customers-list">
