@@ -35,5 +35,11 @@ class StrasPricesSeeder extends Seeder
             ['size' => 'operating_cost', 'type' => 'global'],
             ['price' => 2.00] // Default value
         );
+
+        // Multi Layer Cost (Global)
+        \App\Models\StrasPrice::firstOrCreate(
+            ['size' => 'multi_layer_cost', 'type' => 'global'],
+            ['price' => 2.00] // Default value
+        );
     }
 }

@@ -299,6 +299,15 @@ class StrasController extends Controller
 
     public function pricing()
     {
+        \App\Models\StrasPrice::firstOrCreate(
+            ['size' => 'operating_cost', 'type' => 'global'],
+            ['price' => 2.00]
+        );
+        \App\Models\StrasPrice::firstOrCreate(
+            ['size' => 'multi_layer_cost', 'type' => 'global'],
+            ['price' => 1.00]
+        );
+
         $strasPrices = \App\Models\StrasPrice::where('type', 'stras')->get();
         $paperPrices = \App\Models\StrasPrice::where('type', 'paper')->get();
         $otherPrices = \App\Models\StrasPrice::where('type', 'global')->get();
