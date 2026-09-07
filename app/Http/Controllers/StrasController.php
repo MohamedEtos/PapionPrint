@@ -48,6 +48,7 @@ class StrasController extends Controller
     {
         $request->validate([
             'customer_name' => 'nullable|string|max:255',
+            'model_number' => 'nullable|string|max:255',
             'height' => 'nullable|numeric',
             'width' => 'nullable|numeric',
             'cards_count' => 'nullable|integer',
@@ -59,7 +60,7 @@ class StrasController extends Controller
             'manufacturing_cost' => 'nullable|numeric',
         ]);
 
-        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes', 'manufacturing_cost']);
+        $data = $request->only(['model_number', 'height', 'width', 'cards_count', 'pieces_per_card', 'notes', 'manufacturing_cost']);
 
         if($request->has('customerId') && $request->customerId != null){
             $data['customerId'] = $request->customerId;
@@ -114,6 +115,7 @@ class StrasController extends Controller
          
           $request->validate([
             'customer_name' => 'nullable|string|max:255',
+            'model_number' => 'nullable|string|max:255',
             'height' => 'nullable|numeric',
             'width' => 'nullable|numeric',
             'cards_count' => 'nullable|integer',
@@ -123,7 +125,7 @@ class StrasController extends Controller
             'manufacturing_cost' => 'nullable|numeric',
         ]);
 
-        $data = $request->only(['height', 'width', 'cards_count', 'pieces_per_card', 'notes', 'manufacturing_cost']);
+        $data = $request->only(['model_number', 'height', 'width', 'cards_count', 'pieces_per_card', 'notes', 'manufacturing_cost']);
         
         if($request->has('customerId') && $request->customerId != null){
              $data['customerId'] = $request->customerId;

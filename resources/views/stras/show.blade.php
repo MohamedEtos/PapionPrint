@@ -37,6 +37,7 @@
                             $grandTotal = ($layersTotal * $stras->cards_count) + $operatingCost;
                         @endphp
                         <h6>التفاصيل</h6>
+                        <p><strong>رقم الموديل:</strong> {{ $stras->model_number ?? '-' }}</p>
                         <p><strong>الارتفاع:</strong> {{ $stras->height }}</p>
                         <p><strong>العرض:</strong> {{ $stras->width }}</p>
                         <p><strong>عدد الكروت:</strong> {{ $stras->cards_count }}</p>

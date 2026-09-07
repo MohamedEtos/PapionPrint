@@ -204,7 +204,7 @@ $(document).ready(function () {
     });
 
     function resetForm() {
-        $('#data-customer, #data-customer-view, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes, #data-height, #data-cards-count, #data-pieces-per-card, #data-required-pieces').val('');
+        $('#data-customer, #data-customer-view, #data-model-number, #data-fabric-type, #data-source, #data-code, #data-width, #data-paper-shield, #data-meters, #data-price, #data-notes, #data-height, #data-cards-count, #data-pieces-per-card, #data-required-pieces').val('');
         $('#data-status').val('بانتظار اجراء');
         $('#data-payment-status').val('0');
         $('#data-image-upload').val('');
@@ -231,6 +231,7 @@ $(document).ready(function () {
         formData.append('customerId', customerId || '');
         formData.append('customer_name', customerName); // Send name for new customers
 
+        formData.append('model_number', $('#data-model-number').val() || '');
         formData.append('height', $('#data-height').val());
         formData.append('width', $('#data-width').val());
         formData.append('cards_count', $('#data-cards-count').val());
@@ -385,6 +386,7 @@ $(document).ready(function () {
             $('#data-customer').val(data.customerId);
             if (data.customer) $('#data-customer-view').val(data.customer.name);
 
+            $('#data-model-number').val(data.model_number || '');
             $('#data-height').val(data.height);
             $('#data-width').val(Math.round(data.width));
             $('#data-cards-count').val(data.cards_count);

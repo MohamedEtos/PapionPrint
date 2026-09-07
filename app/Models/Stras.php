@@ -12,6 +12,7 @@ class Stras extends Model
     protected $fillable = [
         'orderId',
         'customerId',
+        'model_number',
         'height',
         'width',
         'cards_count',

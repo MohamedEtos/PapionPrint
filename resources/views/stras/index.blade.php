@@ -78,10 +78,13 @@
                                                             <input type="hidden" id="data-customer">
                                                         </div>
                                                     </div>
-                                                    <script>
-                                                        // Inline script to ensure binding works immediately or move to main js
-                                                        // We will implement this in the main JS file active right now.
-                                                    </script>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="data-model-number">رقم الموديل</label>
+                                                            <input type="text" class="form-control" id="data-model-number" name="model_number" placeholder="أدخل رقم الموديل">
+                                                        </div>
+                                                     </div>
+
                                                      <div class="col-md-6">
                                                         <div class="form-group">
                                                              <label for="data-height ">الطول</label>
@@ -224,8 +227,11 @@
                                     </th>
                                     <th>صورة</th>
                                     <th>اسم العميل</th>
+                                    <th>رقم الموديل</th>
                                     <th>الطول</th>
                                     <th>العرض</th>
+                                    <th> كرت</th>
+                                    <th>القطع/كرت</th>
                                     <th>اجمالي القطع</th>
                                     <th>المراحل</th>
                                     <th>ملاحظات</th>
@@ -240,7 +246,8 @@
                                     data-height="{{ $Record->height }}" 
                                     data-width="{{ $Record->width }}"
                                     data-cards-count="{{ $Record->cards_count }}" 
-                                    data-pieces-per-card="{{ $Record->pieces_per_card }}">
+                                    data-pieces-per-card="{{ $Record->pieces_per_card }}"
+                                    data-model-number="{{ $Record->model_number }}">
                                     <td>
                                         <div class="vs-checkbox-con vs-checkbox-primary">
                                             <input type="checkbox" class="stras-checkbox">
@@ -260,8 +267,11 @@
                                         @endif
                                     </td>
                                     <td class="product-name">{{ $Record->customer->name ?? '-' }} </td>
+                                    <td class="product-category">{{ $Record->model_number ?? '-' }}</td>
                                     <td class="product-category">{{ $Record->height ?? '-' }}</td>
                                     <td class="product-category">{{ $Record->width ?? '-' }}</td>
+                                    <td class="product-category">{{ $Record->cards_count ?? '-' }}</td>
+                                    <td class="product-category">{{ $Record->pieces_per_card ?? '-' }}</td>
                                     <td class="product-category">
                                         @if($Record->cards_count && $Record->pieces_per_card)
                                             {{ $Record->cards_count * $Record->pieces_per_card }}
@@ -298,7 +308,7 @@
                             @if(auth()->user()->can(['الفواتير']))
                              <tfoot>
                                 <tr>
-                                    <td colspan="10">
+                                    <td colspan="13">
                                         <div id="stras-calculator-results" class="alert alert-primary mb-0" style="display:none; font-weight: bold; font-size: 1.1em;">
                                             <!-- Totals will appear here -->
                                         </div>
