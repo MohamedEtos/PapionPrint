@@ -25,27 +25,27 @@ class ActivityLogController extends Controller
             if ($event === 'created') {
                 $query->where(function ($q) {
                     $q->where('description', 'like', '%create%')
-                      ->orWhere('description', 'like', '%إضافة%')
-                      ->orWhere('description', 'like', '%اصافة%')
-                      ->orWhere('event', 'created');
+                        ->orWhere('description', 'like', '%إضافة%')
+                        ->orWhere('description', 'like', '%اصافة%')
+                        ->orWhere('event', 'created');
                 });
             } elseif ($event === 'updated') {
                 $query->where(function ($q) {
                     $q->where('description', 'like', '%update%')
-                      ->orWhere('description', 'like', '%تعديل%')
-                      ->orWhere('description', 'like', '%تحديث%')
-                      ->orWhere('event', 'updated');
+                        ->orWhere('description', 'like', '%تعديل%')
+                        ->orWhere('description', 'like', '%تحديث%')
+                        ->orWhere('event', 'updated');
                 });
             } elseif ($event === 'deleted') {
                 $query->where(function ($q) {
                     $q->where('description', 'like', '%delete%')
-                      ->orWhere('description', 'like', '%حذف%')
-                      ->orWhere('event', 'deleted');
+                        ->orWhere('description', 'like', '%حذف%')
+                        ->orWhere('event', 'deleted');
                 });
             } else {
                 $query->where(function ($q) use ($event) {
                     $q->where('description', 'like', '%' . $event . '%')
-                      ->orWhere('event', 'like', '%' . $event . '%');
+                        ->orWhere('event', 'like', '%' . $event . '%');
                 });
             }
         }
@@ -72,18 +72,18 @@ class ActivityLogController extends Controller
             'total' => Activity::count(),
             'created' => Activity::where(function ($q) {
                 $q->where('description', 'like', '%create%')
-                  ->orWhere('description', 'like', '%إضافة%')
-                  ->orWhere('event', 'created');
+                    ->orWhere('description', 'like', '%إضافة%')
+                    ->orWhere('event', 'created');
             })->count(),
             'updated' => Activity::where(function ($q) {
                 $q->where('description', 'like', '%update%')
-                  ->orWhere('description', 'like', '%تعديل%')
-                  ->orWhere('event', 'updated');
+                    ->orWhere('description', 'like', '%تعديل%')
+                    ->orWhere('event', 'updated');
             })->count(),
             'deleted' => Activity::where(function ($q) {
                 $q->where('description', 'like', '%delete%')
-                  ->orWhere('description', 'like', '%حذف%')
-                  ->orWhere('event', 'deleted');
+                    ->orWhere('description', 'like', '%حذف%')
+                    ->orWhere('event', 'deleted');
             })->count(),
         ];
 
@@ -92,7 +92,8 @@ class ActivityLogController extends Controller
 
     public static function getModelLabel($subjectType)
     {
-        if (!$subjectType) return 'عام / نظام';
+        if (!$subjectType)
+            return 'عام / نظام';
 
         $map = [
             'User' => 'مستخدم',
@@ -238,11 +239,11 @@ class ActivityLogController extends Controller
         $subject = $activity->subject;
 
         if ($subject) {
-            $identifier = $subject->name 
-                ?? $subject->title 
-                ?? $subject->customer_name 
-                ?? $subject->code 
-                ?? $subject->order_number 
+            $identifier = $subject->name
+                ?? $subject->title
+                ?? $subject->customer_name
+                ?? $subject->code
+                ?? $subject->order_number
                 ?? $subject->id;
 
             return [
@@ -329,7 +330,7 @@ class ActivityLogController extends Controller
 
         if (empty($old) && empty($attributes)) {
             if (is_array($props) || is_object($props)) {
-                $flat = array_diff_key((array)$props, array_flip(['old', 'attributes']));
+                $flat = array_diff_key((array) $props, array_flip(['old', 'attributes']));
                 if (!empty($flat)) {
                     $attributes = $flat;
                 }
@@ -341,7 +342,8 @@ class ActivityLogController extends Controller
         if (!empty($old) && !empty($attributes)) {
             $allKeys = array_unique(array_merge(array_keys($old), array_keys($attributes)));
             foreach ($allKeys as $key) {
-                if ($key === 'updated_at') continue;
+                if ($key === 'updated_at')
+                    continue;
 
                 $oldVal = $old[$key] ?? null;
                 $newVal = $attributes[$key] ?? null;
@@ -359,7 +361,8 @@ class ActivityLogController extends Controller
             return ['type' => 'update', 'rows' => $rows];
         } elseif (!empty($attributes)) {
             foreach ($attributes as $key => $val) {
-                if ($key === 'created_at' || $key === 'updated_at') continue;
+                if ($key === 'created_at' || $key === 'updated_at')
+                    continue;
                 $rows[] = [
                     'field' => self::getFieldLabel($key),
                     'raw_key' => $key,
@@ -545,11 +548,16 @@ class ActivityLogController extends Controller
         }
 
         if (!$subject && in_array($basename, ['LaserOrder', 'Stras', 'Tarter', 'Printers', 'Customer'])) {
-            if ($basename === 'LaserOrder') $url = route('laser.index');
-            elseif ($basename === 'Stras') $url = route('stras.index');
-            elseif ($basename === 'Tarter') $url = route('tarter.index');
-            elseif ($basename === 'Printers') $url = route('AddPrintOrders');
-            elseif ($basename === 'Customer') $url = route('customers.index');
+            if ($basename === 'LaserOrder')
+                $url = route('laser.index');
+            elseif ($basename === 'Stras')
+                $url = route('stras.index');
+            elseif ($basename === 'Tarter')
+                $url = route('tarter.index');
+            elseif ($basename === 'Printers')
+                $url = route('AddPrintOrders');
+            elseif ($basename === 'Customer')
+                $url = route('customers.index');
 
             $canView = false;
         }

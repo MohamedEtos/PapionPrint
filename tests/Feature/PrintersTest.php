@@ -19,8 +19,16 @@ class PrintersTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Create a user and log them in for all tests
-        $this->user = User::factory()->create();
+        
+        $this->user = User::factory()->create([
+            'username' => 'testadmin_' . uniqid()
+        ]);
+        
+        $p1 = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'الطباعه', 'guard_name' => 'web']);
+        $p2 = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'تعديل الطباعه', 'guard_name' => 'web']);
+        $p3 = \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'حذف الطباعه', 'guard_name' => 'web']);
+        
+        $this->user->givePermissionTo([$p1, $p2, $p3]);
         $this->actingAs($this->user);
     }
 

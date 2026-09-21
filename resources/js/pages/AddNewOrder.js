@@ -288,7 +288,8 @@ $(document).ready(function () {
           success: function (response) {
             console.log("Order deleted:", response);
             $row.fadeOut(function () {
-              $(this).remove();
+              var dt = $('.data-thumb-view').DataTable();
+              dt.row($row).remove().draw(false);
             });
             Swal.fire({
               type: 'success',
@@ -512,11 +513,9 @@ $(document).ready(function () {
                                 <span class=" hover_action action-edit "><i class="feather icon-edit"></i></span>
                                 <span class=" hover_action action-delete text-danger " ><i class="feather icon-trash"></i></span>
                             </td>
-                        </tr>
-                    `;
-            // <span class=" hover_action action-info " data-toggle="modal" data-target="#xlarge"><i class="feather icon-file"></i></span>
-
-            $('table.data-thumb-view tbody').append(newRow);
+                        </tr>`;
+            var dt = $('.data-thumb-view').DataTable();
+            dt.row.add($(newRow)).draw(false);
           }
         } catch (err) {
           console.error("Error updating UI:", err);

@@ -115,6 +115,117 @@
                     </div>
                     <!-- dataTable ends -->
 
+                    <!-- add new sidebar starts -->
+                    <div class="add-new-data-sidebar">
+                        <div class="overlay-bg"></div>
+                        <div class="add-new-data">
+                            <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+                                <div>
+                                    <h4 class="text-uppercase">تعديل أمر الطباعة</h4>
+                                </div>
+                                <div class="hide-data-sidebar">
+                                    <i class="feather icon-x"></i>
+                                </div>
+                            </div>
+                            <div class="data-items pb-3">
+                                <div class="data-fields px-2 mt-3">
+                                    <div class="row">
+                                        <input type="hidden" id="edit-order-id">
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-model-number">رقم الموديل <small class="text-muted">(اختياري)</small></label>
+                                            <input type="text" class="form-control" id="data-model-number" placeholder="أدخل رقم الموديل...">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-customer-view">اسم العميل</label>
+                                            <input type="text" class="form-control" name="name" id="data-customer-view" list="customers-list" placeholder="ابحث عن العميل...">
+                                            <datalist id="customers-list">
+                                                @foreach($customers->unique('name') as $customer)
+                                                    <option data-id="{{ $customer->id }}" value="{{ $customer->name }}">
+                                                @endforeach
+                                            </datalist>
+                                            <input type="hidden" id="data-customer">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-category">الماكينة</label>
+                                            <select class="form-control" id="data-machine">
+                                                <option value="">اختر الماكينة</option>
+                                                @foreach($machines as $machine)
+                                                    <option value="{{ $machine->id }}">{{ $machine->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-height">الطول</label>
+                                            <input type="number" step="0.01" class="form-control" id="data-height">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-width">العرض</label>
+                                            <input type="number" step="0.01" class="form-control" id="data-width">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-copies">نسخ الملف</label>
+                                            <input type="number" class="form-control" id="data-copies">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-pic-copies">صور في النسخة</label>
+                                            <input type="number" class="form-control" id="data-pic-copies">
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-pass">Pass</label>
+                                            <select class="form-control" id="data-pass">
+                                                <option value="1">1</option>
+                                                <option value="4">4</option>
+                                                <option value="6">6</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6 data-field-col">
+                                            <label for="data-meters">الأمتار</label>
+                                            <input type="number" step="0.01" class="form-control" id="data-meters">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-status">حالة الطلب</label>
+                                            <select class="form-control" id="data-status">
+                                                <option value="بانتظار اجراء">بانتظار اجراء</option>
+                                                <option value="بدات الطباعة">بدات الطباعة</option>
+                                                <option value="انتهاء الطباعة">انتهاء الطباعة</option>
+                                                <option value="ملغي">ملغي</option>
+                                            </select>
+                                        </div>
+                                        <div class="col12 data-field-col text-muted">
+                                            <label for="data-meters text-muted">اجمالي القطع</label>
+                                            <span id="data-total-pic" class="">0</span>
+                                            <label for="data-price-pic-muted"> سعر القطعه المتوقع</label>
+                                            <span id="data-price-pic" class="">0</span>
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-fabric-type">نوع القماش</label>
+                                            <input type="text" class="form-control" id="data-fabric-type">
+                                        </div>
+                                        <div class="col-sm-12 data-field-col">
+                                            <label for="data-notes">ملاحظات</label>
+                                            <textarea class="form-control" id="data-notes"></textarea>
+                                        </div>
+                                        <div class="col-sm-12 data-field-col data-list-upload">
+                                            <form action="{{ route('printers.upload.image') }}" method="POST" enctype="multipart/form-data" class="dropzone dropzone-area" id="dataListUpload">
+                                                @csrf
+                                                <div class="dz-message">Upload Image</div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+                                <div class="add-data-btn">
+                                    <button type="submit" class="btn btn-primary" id="saveDataBtn">حفظ التعديلات</button>
+                                </div>
+                                <div class="cancel-data-btn">
+                                    <button class="btn btn-outline-danger">إلغاء</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- add new sidebar ends -->
+
                 </section>
                 <!-- Data list view end -->
 
@@ -151,10 +262,15 @@
         <script>
             var assetPath = "{{ asset('') }}";
             window.permissions = {
-                canMigrate: @json(auth()->user()->can('الفواتير'))
+                canMigrate: @json(auth()->user()->can('الفواتير')),
+                canEdit: @json(auth()->user()->can('تعديل الطباعه'))
+            };
+            window.papionInvData = {
+                machines: @json($machines)
             };
         </script>
         @vite('resources/js/pages/PrinterLog.js')
 
 
 @endsection
+

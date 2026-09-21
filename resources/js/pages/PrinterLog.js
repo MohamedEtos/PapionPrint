@@ -46,6 +46,13 @@ $(document).ready(function () {
         targets: 1, // Actions
         orderable: false,
         render: function (data, type, full, meta) {
+          let editBtn = '';
+          if (window.permissions && window.permissions.canEdit) {
+              editBtn = `<button type="button" class="btn btn-icon btn-flat-info action-edit edit-order-btn" title="تعديل" data-id="${full.id}">
+                          <i class="feather icon-edit"></i>
+                      </button>`;
+          }
+
           let migrateBtn = '';
           if (window.permissions && window.permissions.canMigrate) {
               migrateBtn = `<button type="button" class="btn btn-icon btn-flat-${full.is_migrated ? 'success' : 'secondary'} migrate-btn" title="${full.is_migrated ? 'تم الترحيل' : 'ترحيل'}" data-id="${full.id}" data-url="/printers/toggle-migrate/${full.id}">
@@ -53,7 +60,7 @@ $(document).ready(function () {
                          </button>`;
           }
 
-          return `<button type="button" class="btn btn-icon btn-flat-primary duplicate-order-btn" title="إعادة تشغيل" data-id="${full.id}">
+          return editBtn + `<button type="button" class="btn btn-icon btn-flat-primary duplicate-order-btn" title="إعادة تشغيل" data-id="${full.id}">
                             <i class="feather icon-copy"></i>
                         </button>` + migrateBtn;
 
@@ -498,6 +505,276 @@ $(document).ready(function () {
   // Close Zoom Modal
   $('.close-zoom').on('click', function () {
     $('#imageZoomModal').modal('hide');
+  });
+
+  // ==========================================
+  // --- Edit Order Sidebar Logic & Dropzone ---
+  // ==========================================
+  var editingOrderId = null;
+  var uploadedImagePaths = [];
+
+  // Calculate & Update Prices in edit sidebar
+  $('#data-copies, #data-height, #data-price, #data-pic-copies, #data-machine, #data-pass').on('input change', function () {
+    var copies = parseFloat($('#data-copies').val()) || 0;
+    var height = parseFloat($('#data-height').val()) || 0;
+
+    var machineId = $('#data-machine').val();
+    var pass = $('#data-pass').val();
+    var price = parseFloat($('#data-price').val()) || 0;
+
+    if (machineId && window.papionInvData && window.papionInvData.machines) {
+      var machine = window.papionInvData.machines.find(m => m.id == machineId);
+      if (machine) {
+        if (pass == 4) {
+          price = parseFloat(machine.price_4_pass);
+        } else if (pass == 6) {
+          price = parseFloat(machine.price_6_pass);
+        } else {
+          price = parseFloat(machine.price_1_pass);
+        }
+        if (price > 0) {
+          $('#data-price').val(price);
+        }
+      }
+    }
+
+    var meters = copies * height;
+    $('#data-meters').val((meters / 100).toFixed(2));
+
+    var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
+    var totalpic = copies * picCopies;
+    var pricePerPiece = 0;
+    if (picCopies > 0 && price > 0) {
+      pricePerPiece = (height / 100) / picCopies * price;
+    }
+
+    $('#data-price-pic').text(pricePerPiece.toFixed(2));
+    $('#data-total-pic').text(totalpic);
+
+    if (copies > 0 && height > 0) {
+      $('#data-meters').prop('disabled', true);
+    } else {
+      $('#data-meters').prop('disabled', false);
+    }
+  });
+
+  // Handle Machine Selection in Sidebar
+  $('#data-machine').on('change', function () {
+    var selectedText = $(this).find("option:selected").text().toLowerCase();
+
+    if (selectedText.includes('dtf')) {
+      $('#data-width').val(58);
+      $('#data-pass').val(4).prop('disabled', false);
+    } else if (selectedText.includes('sublimation')) {
+      $('#data-width').val(150);
+      $('#data-pass').val(1).prop('disabled', true);
+    } else {
+      $('#data-pass').prop('disabled', false);
+    }
+  });
+
+  // Customer Datalist Input Handler
+  $(document).on('input', '#data-customer-view', function () {
+    var val = $(this).val();
+    var id = '';
+    var opt = $('#customers-list option').filter(function () {
+      return $(this).val() === val;
+    });
+    if (opt.length > 0) id = opt.attr('data-id');
+    $('#data-customer').val(id);
+  });
+
+  // Dropzone setup
+  Dropzone.autoDiscover = false;
+  if (Dropzone.instances.length > 0) {
+    Dropzone.instances.forEach(dz => dz.destroy());
+  }
+
+  try {
+    var myDropzone = new Dropzone("#dataListUpload", {
+      url: "/printers/upload-image",
+      paramName: "file",
+      maxFiles: 10,
+      acceptedFiles: '.jpg,.jpeg,.png,.gif,.tiff,.tif,.webp',
+      addRemoveLinks: true,
+      resizeHeight: 110,
+      resizeMimeType: 'image/webp',
+      resizeQuality: 0.9,
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      success: function (file, response) {
+        file.serverFileName = response.path;
+        uploadedImagePaths.push(response.path);
+        toastr.success("تم رفع الصورة بنجاح");
+      },
+      removedfile: function (file) {
+        if (file.previewElement != null && file.previewElement.parentNode != null) {
+          file.previewElement.parentNode.removeChild(file.previewElement);
+        }
+        var path = file.serverFileName;
+        if (path) {
+          var index = uploadedImagePaths.indexOf(path);
+          if (index !== -1) {
+            uploadedImagePaths.splice(index, 1);
+          }
+        }
+      },
+      error: function (file, response) {
+        toastr.error("فشل رفع الصورة: " + (response ? response.message : ''));
+      }
+    });
+  } catch (e) {
+    console.warn("Dropzone init warning:", e);
+  }
+
+  function resetEditForm() {
+    $('#data-customer, #data-customer-view, #data-machine, #data-height, #data-width, #data-copies, #data-pic-copies, #data-pass, #data-meters, #data-price, #data-notes, #data-fabric-type, #data-model-number, #edit-order-id').val('');
+    $('#data-status').val('بانتظار اجراء');
+    $('#data-pass').val('1');
+    $('#data-price-pic').text('0');
+    $('#data-total-pic').text('0');
+    uploadedImagePaths = [];
+    if (typeof myDropzone !== 'undefined' && myDropzone) {
+      myDropzone.removeAllFiles(true);
+    }
+    editingOrderId = null;
+  }
+
+  // Open Edit Sidebar
+  $(document).on("click", ".edit-order-btn, .action-edit", function (e) {
+    e.stopPropagation();
+    var orderId = $(this).data('id');
+    if (!orderId) {
+      var $row = $(this).closest('tr');
+      orderId = $row.find('.order_id').val();
+    }
+
+    if (!orderId) return;
+
+    $.ajax({
+      url: "/printers/" + orderId,
+      type: "GET",
+      success: function (order) {
+        $('#edit-order-id').val(order.id);
+        $('#data-customer-view').val(order.customers ? order.customers.name : '');
+        $('#data-machine').val(order.machineId);
+        $('#data-height').val(order.fileHeight);
+        $('#data-width').val(order.fileWidth);
+        $('#data-copies').val(order.fileCopies);
+        $('#data-pic-copies').val(order.picInCopies);
+        $('#data-fabric-type').val(order.fabric_type);
+        $('#data-pass').val(order.pass);
+        $('#data-meters').val(order.meters);
+        $('#data-status').val(order.status);
+        if (order.printingprices) {
+          $('#data-price').val(order.printingprices.totalPrice);
+        }
+        $('#data-notes').val(order.notes);
+        $('#data-price-pic').text(order.manufacturing_cost || 0);
+
+        var orderNum = order.orderNumber || '';
+        $('#data-model-number').val(orderNum.startsWith('ORD-') ? '' : orderNum);
+
+        // Populate Images in Dropzone
+        uploadedImagePaths = [];
+        if (typeof myDropzone !== 'undefined' && myDropzone) {
+          myDropzone.removeAllFiles(true);
+          if (order.orders_imgs && order.orders_imgs.length > 0) {
+            order.orders_imgs.forEach(function (img) {
+              var mockFile = { name: "Image", size: 12345, serverFileName: img.path };
+              myDropzone.emit("addedfile", mockFile);
+              myDropzone.emit("thumbnail", mockFile, "/storage/" + img.path);
+              myDropzone.emit("complete", mockFile);
+              myDropzone.files.push(mockFile);
+              uploadedImagePaths.push(img.path);
+            });
+          }
+        }
+
+        var copies = parseFloat($('#data-copies').val()) || 0;
+        var picCopies = parseFloat($('#data-pic-copies').val()) || 0;
+        $('#data-total-pic').text(copies * picCopies);
+
+        editingOrderId = order.id;
+
+        $(".add-new-data").addClass("show");
+        $(".overlay-bg").addClass("show");
+      },
+      error: function (xhr) {
+        console.error("Error fetching order:", xhr);
+        toastr.error("تعذر جلب تفاصيل الطلب.", "خطأ");
+      }
+    });
+  });
+
+  // Close Edit Sidebar
+  $(document).on("click", ".hide-data-sidebar, .cancel-data-btn, .overlay-bg", function (e) {
+    e.stopPropagation();
+    $(".add-new-data").removeClass("show");
+    $(".overlay-bg").removeClass("show");
+    resetEditForm();
+  });
+
+  // Save Edit Data Button Handler
+  $('#saveDataBtn').on('click', function (e) {
+    e.preventDefault();
+    if (!editingOrderId) return;
+
+    var customerId = $('#data-customer-view').val();
+    var machineId = $('#data-machine').val();
+    var height = $('#data-height').val();
+    var width = $('#data-width').val();
+    var copies = $('#data-copies').val();
+    var picInCopies = $('#data-pic-copies').val();
+    var pass = $('#data-pass').val();
+    var meters = $('#data-meters').val();
+    var status = $('#data-status').val();
+    var fabric_type = $('#data-fabric-type').val();
+    var price = $('#data-price').val();
+    var notes = $('#data-notes').val();
+    var manufacturing_cost = parseFloat($('#data-price-pic').text()) || 0;
+
+    var postData = {
+      _method: 'PUT',
+      customerId: customerId,
+      machineId: machineId,
+      fileHeight: height,
+      fileWidth: width,
+      fileCopies: copies,
+      picInCopies: picInCopies,
+      pass: pass,
+      meters: meters,
+      status: status,
+      price: price,
+      fabric_type: fabric_type,
+      notes: notes,
+      manufacturing_cost: manufacturing_cost,
+      image_paths: uploadedImagePaths,
+      orderNumber: $('#data-model-number').val() || null,
+      _token: $('meta[name="csrf-token"]').attr('content')
+    };
+
+    $.ajax({
+      url: "/printers/" + editingOrderId,
+      type: "POST",
+      data: postData,
+      success: function (response) {
+        toastr.success("تم تحديث أمر الطباعة بنجاح", "تمت العملية بنجاح");
+        $(".add-new-data").removeClass("show");
+        $(".overlay-bg").removeClass("show");
+        resetEditForm();
+        table.draw(false);
+      },
+      error: function (xhr) {
+        console.error("Error updating order:", xhr);
+        var message = "حدث خطأ أثناء حفظ التعديلات.";
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          message = xhr.responseJSON.message;
+        }
+        toastr.error(message, "خطأ");
+      }
+    });
   });
 
 });
